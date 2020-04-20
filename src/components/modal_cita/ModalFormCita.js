@@ -62,7 +62,7 @@ const ModalFormCita = (props) => {
     tratamientos,
     horarios,
     valuesTipoCita,
-    valuesAsistio,
+    valuesStatus,
     onChangeSesion,
     onChangePrecio,
   } = props; 
@@ -159,7 +159,7 @@ const ModalFormCita = (props) => {
               
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-asistiio">Asistio</InputLabel>
+                  <InputLabel id="simple-select-outlined-asistiio">Estado</InputLabel>
                   <Select
                     labelId="simple-select-outlined-asistiio"
                     id="simple-select-outlined-asistiio"
@@ -167,7 +167,7 @@ const ModalFormCita = (props) => {
                     error={Boolean(errors.asistio)}
                     onChange={onChangeAsistio}
                     label="Tipo cita" >
-                        {valuesAsistio.sort().map((item, index) => <MenuItem key={index} value={item.nombre}>{item.nombre}</MenuItem>)}
+                        {valuesStatus.sort().map((item, index) => <MenuItem key={index} value={item.nombre}>{item.nombre}</MenuItem>)}
                   </Select>
                 </FormControl>
               </Grid>

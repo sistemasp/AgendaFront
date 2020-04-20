@@ -47,7 +47,8 @@ const ModalFormPaciente = (props) => {
     onClickCancel,
     onClickGuardar,
     onClickGuardarAgendar,
-    open
+    open,
+    dataComplete
   } = props;
 
   return (
@@ -90,6 +91,10 @@ const ModalFormPaciente = (props) => {
                 label="Fecha de nacimiento"
                 value={values.fecha_nacimiento}
                 onChange={handleChange}
+                inputProps={{
+                  maxLength: "10",
+                  placeholder: "dd/mm/aaaa"
+                }}
                 variant="outlined" />
               </Grid>
               <Grid item xs={12}>

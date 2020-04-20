@@ -9,11 +9,13 @@ const validationSchema = Yup.object({
   apellidos: Yup.string("Ingresa los apellidos")
         .required("Los nombres del pacientes son requeridos"),
   fecha_nacimiento: Yup.string("Ingresa la fecha de nacimiento")
-        .required("Los nombres del pacientes son requeridos"),
+        .required("La fecha de nacimiento es requerida")
+        .length(10),
   direccion: Yup.string("Ingresa la direccion")
         .required("Los nombres del pacientes son requeridos"),
   telefono: Yup.string("Ingresa el telefono")
-        .required("Los nombres del pacientes son requeridos"),
+        .required("Los nombres del pacientes son requeridos")
+        .min(8),
 });
 
 const ModalPaciente = (props) => {
@@ -34,6 +36,9 @@ const ModalPaciente = (props) => {
     telefono: paciente.telefono 
   }
 
+  const dataComplete = !values.nombres || !values.apellidos 
+    || !values.fecha_nacimiento || !values.direccion || !values.telefono;
+
   return (
     <Formik
       initialValues={values}
@@ -47,6 +52,7 @@ const ModalPaciente = (props) => {
         paciente={paciente}
         onClickGuardar={onClickGuardar}
         onClickGuardarAgendar={onClickGuardarAgendar}
+        dataComplete={dataComplete}
         {...props} />
       }
     </Formik>
