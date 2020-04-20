@@ -1,0 +1,1 @@
+export const REACT_APP_RESPONSE_CODE_OK = 200;
