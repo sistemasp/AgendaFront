@@ -70,7 +70,7 @@ const ModalCita = (props) => {
     { "nombre": "INSTAGRAM" },
   ];
 
-  const valuesAsistio = [
+  const valuesStatus = [
     { "nombre": "ASISTIO" },
     { "nombre": "NO ASISTIO" },
     { "nombre": "CANCELO" },
@@ -92,9 +92,10 @@ const ModalCita = (props) => {
     }
     const loadHorariosByServicio = async() => {
       const splitDate = (cita.fecha).split('/');
-      const response = await findScheduleByDateAndSucursalAndService(splitDate[0], (splitDate[1] - 1), splitDate[2], cita.sucursal._id, cita.servicio);
+      const response = await findScheduleByDateAndSucursalAndService(splitDate[0], splitDate[1], splitDate[2], cita.sucursal._id, cita.servicio);
       if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-          setHorarios(response.data);
+        response.data.push({hora: values.hora});
+        setHorarios(response.data);
       }
   }
 
@@ -207,7 +208,7 @@ const ModalCita = (props) => {
         tratamientos={tratamientos}
         horarios={horarios}
         valuesTipoCita={valuesTipoCita}
-        valuesAsistio={valuesAsistio}
+        valuesStatus={valuesStatus}
         onChangeSesion={handleChangeSesion}
         onChangePrecio={handleChangePrecio}
         {...props} />

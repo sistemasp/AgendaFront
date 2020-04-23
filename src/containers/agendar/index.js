@@ -84,7 +84,7 @@ const Agendar = (props) => {
         { title: 'Recepcionista', field: 'recepcionista' },
         { title: 'Tipo Cita', field: 'tipo_cita' },
         { title: 'Quien confirma', field: 'quien_confirma' },
-        { title: 'Asistio', field: 'asistio' },
+        { title: 'Estado', field: 'asistio' },
         { title: 'Precio', field: 'precio_moneda' },
         { title: 'Tiempo (minutos)', field: 'tiempo' },
     ];
@@ -147,8 +147,6 @@ const Agendar = (props) => {
         const dia = date ? date.getDate() : values.fecha_show.getDate();
         const mes = Number(date ? date.getMonth() : values.fecha_show.getMonth()) + 1;
         const anio = date ? date.getFullYear() : values.fecha_show.getFullYear();
-        console.log("VALUES", values);
-        console.log("LOADHORARIOS", dia, mes, anio, sucursal, values.servicio);
         const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, values.servicio);
         if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
             setHorarios(response.data);
