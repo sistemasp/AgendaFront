@@ -37,7 +37,7 @@ const Agendar = (props) => {
 
     const {
         paciente,
-        recepcionista,
+        empleado,
         setPacienteAgendado,
         sucursal,
     } = props;
@@ -81,9 +81,9 @@ const Agendar = (props) => {
         { title: 'Servicio', field: 'servicio' },
         { title: 'Tratamientos', field: 'show_tratamientos' },
         { title: 'Numero Sesion', field: 'numero_sesion' },
-        { title: 'Recepcionista', field: 'recepcionista' },
+        { title: 'Quien agenda', field: 'quien_agenda.nombre' },
         { title: 'Tipo Cita', field: 'tipo_cita' },
-        { title: 'Quien confirma', field: 'quien_confirma' },
+        { title: 'Quien confirma', field: 'quien_confirma.nombre' },
         { title: 'Estado', field: 'asistio' },
         { title: 'Precio', field: 'precio_moneda' },
         { title: 'Tiempo (minutos)', field: 'tiempo' },
@@ -157,8 +157,6 @@ const Agendar = (props) => {
         const dia = date ? date.getDate() : values.fecha_show.getDate();
         const mes = Number(date ? date.getMonth() : values.fecha_show.getMonth()) + 1;
         const anio = date ? date.getFullYear() : values.fecha_show.getFullYear();
-        console.log("VALUES", values);
-        console.log("LOADHORARIOS", dia, mes, anio, sucursal, values.servicio);
         const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, servicio);
         if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
             setHorarios(response.data);
@@ -171,7 +169,6 @@ const Agendar = (props) => {
         setValues({
             ...values,
             servicio: e.target.value,
-            tratamiento: '',
             fecha_show: '',
             fecha: '',
             hora: '',
@@ -257,7 +254,7 @@ const Agendar = (props) => {
     const handleClickAgendar = async(data) => {
         setIsLoading(true);
         data.tipo_cita = 'CITADO';
-        data.recepcionista = recepcionista;
+        data.quien_agenda = empleado._id;
         data.sucursal = sucursal;
         data.numero_sesion = 1;
         data.asistio = 'PENDIENTE';
@@ -346,7 +343,7 @@ const Agendar = (props) => {
                     actions={actions}
                     cita={cita}
                     openModal={openModal}
-                    recepcionista={recepcionista}
+                    empleado={empleado}
                     onClickCancel={handleCloseModal}
                     loadCitas={loadCitas}
                     {...props} />

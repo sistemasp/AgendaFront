@@ -50,7 +50,7 @@ const Citas = (props) => {
         setIsLoading(true);
         loadCitas();
         setIsLoading(false);
-    }, []);
+    }, [sucursal]);
 
     return (
         <Fragment>

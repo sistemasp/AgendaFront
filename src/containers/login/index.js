@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Formik } from "formik";
 import { showAllOffices } from "../../services";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { findRecepcionistByEmployeeNumber } from "../../services";
+import { findEmployeeByEmployeeNumber } from "../../services";
 import { LoginContainer } from "./login";
 import Paper from "@material-ui/core/Paper";
 import { withRouter } from 'react-router-dom';
@@ -55,10 +55,10 @@ const LoginForm = (props) => {
   };
 
   const submit = async(data) => {
-    const response = await findRecepcionistByEmployeeNumber(data.employee_number);
+    const response = await findEmployeeByEmployeeNumber(data.employee_number);
     if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK && response.data !== '' ) {
       if (response.data ) {
-        history.push('/menu', { recepcionista: response.data.nombre, sucursal: data.sucursal });
+        history.push('/menu', { empleado: response.data, sucursal: data.sucursal });
       }
     }
   };
