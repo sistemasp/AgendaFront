@@ -64,7 +64,7 @@ export const MenuContainer = props => {
         onChangeTab,
         value,
         onClickAgendar,
-        recepcionista,
+        empleado,
         sucursal,
         onClickLogout
     } = props;
@@ -75,7 +75,7 @@ export const MenuContainer = props => {
                 <Toolbar>
 
                     <Typography variant="h6" className={classes.title}>
-                        {`Sucuarsal: ${sucursal.nombre} - ${recepcionista}`}
+                        {`Sucuarsal: ${sucursal.nombre} - ${empleado.nombre} ( ${empleado.rol.nombre} )`}
                     </Typography>
                     <Button 
                         color="secondary"
@@ -99,7 +99,7 @@ export const MenuContainer = props => {
                 <Agendar 
                     paciente={pacienteAgendado}
                     setPacienteAgendado={setPacienteAgendado}
-                    recepcionista={recepcionista}
+                    empleado={empleado}
                     sucursal={sucursal._id} />
             </TabPanel>
             <TabPanel value={value} index={2}>

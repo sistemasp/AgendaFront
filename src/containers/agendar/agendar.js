@@ -47,7 +47,7 @@ export const AgendarContainer = (props) => {
         isValid,
         isSubmitting,
         onChangePrecio,
-        recepcionista,
+        empleado,
         disableDate,
         // TABLE DATES PROPERTIES
         titulo,
@@ -83,7 +83,7 @@ export const AgendarContainer = (props) => {
                     servicios={servicios}
                     tratamientos={tratamientos}
                     horarios={horarios}
-                    recepcionista={recepcionista}
+                    empleado={empleado}
                     loadCitas={loadCitas} /> : ''
             }
             <Paper>

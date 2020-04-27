@@ -77,7 +77,7 @@ export const LoginContainer = (props) => {
 						color="primary"
 						variant="contained"
 						onClick={handleSubmit}
-						disabled={!isValid} >
+						disabled={!isValid || !values.employee_number || !values.sucursal.nombre} >
 						Entrar
 					</Button>
 				</Grid>

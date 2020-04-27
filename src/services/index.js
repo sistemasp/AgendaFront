@@ -245,6 +245,20 @@ export const findRecepcionistByEmployeeNumber = async(employeeNumber) => {
     }
 }
 
+// EMPLEADOS
+
+export const findEmployeeByEmployeeNumber = async(employeeNumber) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/empleado/number/${employeeNumber}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findEmployeeByEmployeeNumber', error);
+    }
+}
+
 // SUCURSALES
 
 export const showAllOffices = async() => {
