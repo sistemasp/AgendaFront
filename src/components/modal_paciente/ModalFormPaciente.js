@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
-import { TextField, Button, Grid, Input, FormControl, InputLabel } from '@material-ui/core';
+import { TextField, Button, Grid } from '@material-ui/core';
 
 function getModalStyle() {
   const top = 50;
@@ -48,7 +48,6 @@ const ModalFormPaciente = (props) => {
     onClickGuardar,
     onClickGuardarAgendar,
     open,
-    dataComplete
   } = props;
 
   return (

@@ -7,7 +7,7 @@ const MenuMain = (props) => {
     const [value, setValue] = useState(0);
 
     const { 
-        recepcionista,
+        empleado,
         sucursal,
     } = props.location.state;
 
@@ -25,7 +25,7 @@ const MenuMain = (props) => {
     }
 
     const handleLogout = () => {
-        history.push('/', { recepcionista: '', sucursal: {} });
+        history.push('/', { empleado: {}, sucursal: {} });
     }
 
     return (
@@ -34,7 +34,7 @@ const MenuMain = (props) => {
             setPacienteAgendado={setPacienteAgendado}
             onChangeTab={handleChangeTab}
             onClickAgendar={handleAgendar}
-            recepcionista={recepcionista}
+            empleado={empleado}
             sucursal={sucursal}
             onClickLogout={handleLogout}
             value={value}/>

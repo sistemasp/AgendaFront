@@ -35,7 +35,7 @@ const ModalCita = (props) => {
     open,
     onClose,
     cita,
-    recepcionista,
+    empleado,
     loadCitas,
   } = props;
 
@@ -54,7 +54,7 @@ const ModalCita = (props) => {
     servicio: cita.servicio,
     tratamientos: cita.tratamientos,
     numero_sesion: cita.numero_sesion,
-    recepcionista: cita.recepcionista,
+    quien_agenda: cita.quien_agenda,
     tipo_cita: cita.tipo_cita,
     confirmo: cita.confirmo,
     quien_confirma: cita.quien_confirma,
@@ -170,7 +170,7 @@ const ModalCita = (props) => {
   }
 
   const handleOnClickActualizarCita = async(event, rowData) => {
-    rowData.quien_confirma = recepcionista;
+    rowData.quien_confirma = empleado._id;
     rowData.tiempo = getTimeToTratamiento(rowData.tratamientos);
     await updateDate(cita._id, rowData);
     onClose();
