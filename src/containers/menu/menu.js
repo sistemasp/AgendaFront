@@ -10,6 +10,7 @@ import Pacientes from '../pacientes/index';
 import Citas from '../citas/index';
 import Agendar from '../agendar/index';
 import { Button, Toolbar } from '@material-ui/core';
+import Reportes from '../reportes/index';
 
 
 function TabPanel(props) {
@@ -88,6 +89,7 @@ export const MenuContainer = props => {
                     <Tab label="Pacientes" {...a11yProps(0)} />
                     <Tab label="Agendar cita" {...a11yProps(1)} />
                     <Tab label="Citas" {...a11yProps(2)} />
+                    <Tab label="Reportes" {...a11yProps(3)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
@@ -104,6 +106,10 @@ export const MenuContainer = props => {
             </TabPanel>
             <TabPanel value={value} index={2}>
                 <Citas 
+                    sucursal={sucursal._id}/>
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+                <Reportes 
                     sucursal={sucursal._id}/>
             </TabPanel>
         </div>
