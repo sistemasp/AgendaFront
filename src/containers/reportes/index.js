@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { ReportesContainer } from "./reportes";
-import { findDatesByDateAndSucursal } from "../../services";
+import { findDatesByRangeDateAndSucursal } from "../../services";
 import { Backdrop, CircularProgress } from "@material-ui/core";
 import { toFormatterCurrency, addZero } from "../../utils/utils";
 
@@ -39,6 +39,7 @@ const Reportes = (props) => {
   });
 
     const columns = [
+        { title: 'Fecha', field: 'fecha' },
         { title: 'Hora', field: 'hora' },
         { title: 'Paciente', field: 'paciente_nombre' },
         { title: 'Telefono', field: 'paciente.telefono' },
@@ -70,13 +71,16 @@ const Reportes = (props) => {
             fontWeight: 'bolder',
             fontSize: '18px'
         },
-        exportButton: true
+        exportAllData: true,
+        exportButton: true,
+        exportDelimiter: ';'
     }
 
     useEffect(() => {
 
         const loadCitas = async() => {
-            const response = await findDatesByDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
+            const response = await findDatesByRangeDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(),
+                date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
             
             if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK ) {
                 await response.data.forEach( item => {
@@ -101,27 +105,31 @@ const Reportes = (props) => {
         const anio = date.getFullYear();
         setStartDate({
             fecha_show: date,
-            fecha: `${dia}/${mes}/${anio}`   
+            fecha: `${dia}/${mes}/${anio}`
         });
-        await loadCitas(date);
         setIsLoading(false);
     };
 
     const handleChangeEndDate = async(date) => {
-      setIsLoading(true);
-      const dia = addZero(date.getDate());
-      const mes = addZero(date.getMonth() + 1);
-      const anio = date.getFullYear();
-      setEndDate({
-          fecha_show: date,
-          fecha: `${dia}/${mes}/${anio}`   
-      });
-      await loadCitas(date);
-      setIsLoading(false);
-  };
+        setIsLoading(true);
+        const dia = addZero(date.getDate());
+        const mes = addZero(date.getMonth() + 1);
+        const anio = date.getFullYear();
+        setEndDate({
+            fecha_show: date,
+            fecha: `${dia}/${mes}/${anio}`
+        });
+        
+        setIsLoading(false);
+    };
 
-    const loadCitas = async(filterDate) => {
-        const response = await findDatesByDateAndSucursal(filterDate.getDate(), (filterDate.getMonth() + 1), filterDate.getFullYear(), sucursal);
+    const handleReportes = async() => {
+        await loadCitas(startDate.fecha_show, endDate.fecha_show);
+    }
+
+    const loadCitas = async(startDate, endDate) => {
+        const response = await findDatesByRangeDateAndSucursal(startDate.getDate(), (startDate.getMonth() + 1), startDate.getFullYear(),
+            endDate.getDate(), (endDate.getMonth() + 1), endDate.getFullYear(), sucursal);
         if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK ) {
             response.data.forEach( item => {
                 item.precio_moneda = toFormatterCurrency(item.precio);
@@ -153,6 +161,7 @@ const Reportes = (props) => {
               citas={citas}
               actions={actions}
               loadCitas={loadCitas}
+              onClickReportes={handleReportes}
               {...props} />
             : <Backdrop className={classes.backdrop} open={isLoading} >
                 <CircularProgress color="inherit" />

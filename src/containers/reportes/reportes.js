@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import { Paper } from '@material-ui/core';
+import { Paper, Button } from '@material-ui/core';
 import TableComponent from '../../components/table/TableComponent';
 
 
@@ -14,6 +14,7 @@ export const ReportesContainer = (props) => {
 		onChangeEndDate,
 		startDate,
 		endDate,
+		onClickReportes,
         // TABLE DATES PROPERTIES
         titulo,
         columns,
@@ -73,6 +74,14 @@ export const ReportesContainer = (props) => {
 							</Grid>
 						</MuiPickersUtilsProvider>
 					</Grid>
+					<Grid item xs={12} sm={2}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => onClickReportes()} >
+                            Obtener datos
+                        </Button>
+                    </Grid>
 				</Grid>
             </Paper>
 
