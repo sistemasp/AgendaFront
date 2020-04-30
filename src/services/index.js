@@ -193,6 +193,18 @@ export const findDatesByDateAndSucursal = async(dia, mes, anio, sucursalId) => {
     }
 }
 
+export const findDatesByRangeDateAndSucursal = async(diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cita/fecha_inicio/${diai}/${mesi}/${anioi}/fecha_fin/${diaf}/${mesf}/${aniof}/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findDatesByRangeDateAndSucursal', error);
+    }
+}
+
 export const findHistoricByPaciente = async(pacienteId) => {
     try {
         const response = await axios({
