@@ -60,6 +60,7 @@ const ModalCita = (props) => {
     quien_confirma: cita.quien_confirma,
     asistio: cita.asistio,
     precio: cita.precio,
+    motivos: cita.motivos,
   });
 
   const valuesTipoCita = [
@@ -75,6 +76,7 @@ const ModalCita = (props) => {
     { "nombre": "NO ASISTIO" },
     { "nombre": "CANCELO" },
     { "nombre": "REAGENDO" },
+    { "nombre": "PENDIENTE" },
   ];
 
   useEffect(() => {
@@ -185,6 +187,10 @@ const ModalCita = (props) => {
     setValues({...values, precio: e.target.value});
   };
 
+  const handleChangeMotivos = e => {
+    setValues({...values, motivos: e.target.value});
+  }
+
   return (
     <Formik
       enableReinitialize
@@ -211,6 +217,7 @@ const ModalCita = (props) => {
         valuesStatus={valuesStatus}
         onChangeSesion={handleChangeSesion}
         onChangePrecio={handleChangePrecio}
+        onChangeMotivos={handleChangeMotivos}
         {...props} />
       }
     </Formik>

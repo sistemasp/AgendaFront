@@ -65,6 +65,7 @@ const ModalFormCita = (props) => {
     valuesStatus,
     onChangeSesion,
     onChangePrecio,
+    onChangeMotivos,
   } = props; 
   
   return (
@@ -77,10 +78,7 @@ const ModalFormCita = (props) => {
           <form onSubmit={handleSubmit}>
             <Grid container spacing={1}>
               <Grid item xs={12}>
-                <h3>{values.paciente_nombre}</h3>
-              </Grid>
-              <Grid item xs={12}>
-                <h4>{values.telefono}</h4>
+                <h3>{values.paciente_nombre} ({values.telefono})</h3>
               </Grid>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
@@ -141,7 +139,6 @@ const ModalFormCita = (props) => {
                 </FormControl>
               </Grid>
               
-              
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
                   <InputLabel id="simple-select-outlined-tipo-cita">Tipo cita</InputLabel>
@@ -172,6 +169,21 @@ const ModalFormCita = (props) => {
                 </FormControl>
               </Grid>
               
+              {
+                values.asistio === 'CANCELO' || values.asistio === 'REAGENDO' || values.asistio === 'NO ASISTIO' ?
+                <Grid item xs={12}>
+                  <TextField
+                    className={classes.textField}
+                    name="motivos"
+                    //helperText={touched.numero_sesion ? errors.numero_sesion : ""}
+                    error={Boolean(errors.motivos)}
+                    label="Motivos"
+                    value={values.motivos}
+                    onChange={onChangeMotivos}
+                    variant="outlined" />
+                </Grid> : ''
+              }
+
               <Grid item xs={12}>
                 <TextField
                   className={classes.textField}

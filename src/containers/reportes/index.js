@@ -39,7 +39,7 @@ const Reportes = (props) => {
   });
 
     const columns = [
-        { title: 'Fecha', field: 'fecha' },
+        { title: 'Fecha', field: 'fecha_show' },
         { title: 'Hora', field: 'hora' },
         { title: 'Paciente', field: 'paciente_nombre' },
         { title: 'Telefono', field: 'paciente.telefono' },
@@ -50,6 +50,7 @@ const Reportes = (props) => {
         { title: 'Tipo Cita', field: 'tipo_cita' },
         { title: 'Quien confirma', field: 'quien_confirma.nombre' },
         { title: 'Estado', field: 'asistio' },
+        { title: 'Motivos', field: 'motivos' },
         { title: 'Precio', field: 'precio_moneda' },
         { title: 'Tiempo (minutos)', field: 'tiempo' },
     ];
@@ -89,6 +90,9 @@ const Reportes = (props) => {
                     item.show_tratamientos = item.tratamientos.map(tratamiento => {
                         return `${tratamiento.nombre}, `;
                     });
+
+                    const splitDate = (item.fecha).split('/');
+                    item.fecha_show = `${addZero(splitDate[0])}/${addZero(splitDate[1])}/${splitDate[2]}`;
                 });
                 setCitas(response.data);
             }
@@ -138,6 +142,9 @@ const Reportes = (props) => {
                 item.show_tratamientos = item.tratamientos.map(tratamiento => {
                     return `${tratamiento.nombre}, `;
                 });
+                
+                const splitDate = (item.fecha).split('/');
+                item.fecha_show = `${addZero(splitDate[0])}/${addZero(splitDate[1])}/${splitDate[2]}`;
             });
             setCitas(response.data);
         }

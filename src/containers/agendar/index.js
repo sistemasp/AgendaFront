@@ -306,11 +306,12 @@ const Agendar = (props) => {
     }
 
     const actions = [
+        new Date(anio, mes - 1, dia) < filterDate.fecha_show  ? 
         {
             icon: EditIcon,
             tooltip: 'Editar cita',
             onClick: handleOnClickEditarCita
-        }
+        } : ''
     ];
 
     return (

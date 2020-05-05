@@ -67,8 +67,9 @@ const Pacientes = (props) => {
             fontWeight: 'bolder',
             fontSize: '18px'
         },
-        exportButton: true
-
+        exportAllData: true,
+        exportButton: false,
+        exportDelimiter: ';'
     }
 
     const handleOpen = () => {
