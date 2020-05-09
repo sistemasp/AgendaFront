@@ -271,6 +271,18 @@ export const findEmployeeByEmployeeNumber = async(employeeNumber) => {
     }
 }
 
+export const findEmployeesByRolId = async(rolId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/empleado/rol/${rolId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findEmployeesByRolId', error);
+    }
+}
+
 // SUCURSALES
 
 export const showAllOffices = async() => {

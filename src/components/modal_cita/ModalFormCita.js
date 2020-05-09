@@ -54,6 +54,8 @@ const ModalFormCita = (props) => {
     onChangeHora,
     onChangeTipoCita,
     onChangeAsistio,
+    onChangePromovendedor,
+    onChangeCosmetologa,
     isValid,
     onClickCancel,
     onClickActualizarCita,
@@ -61,6 +63,8 @@ const ModalFormCita = (props) => {
     servicios,
     tratamientos,
     horarios,
+    promovendedores,
+    cosmetologas,
     valuesTipoCita,
     valuesStatus,
     onChangeSesion,
@@ -150,6 +154,36 @@ const ModalFormCita = (props) => {
                     onChange={onChangeTipoCita}
                     label="Tipo cita" >
                         {valuesTipoCita.sort().map((item, index) => <MenuItem key={index} value={item.nombre}>{item.nombre}</MenuItem>)}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12}>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="simple-select-outlined-promovendedor">Promovendedor</InputLabel>
+                  <Select
+                    labelId="simple-select-outlined-promovendedor"
+                    id="simple-select-outlined-promovendedor"
+                    value={values.promovendedor}
+                    error={Boolean(errors.promovendedor)}
+                    onChange={onChangePromovendedor}
+                    label="Tipo cita" >
+                        {promovendedores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12}>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="simple-select-outlined-cosmetologa">Cosmetologa</InputLabel>
+                  <Select
+                    labelId="simple-select-outlined-cosmetologa"
+                    id="simple-select-outlined-cosmetologa"
+                    value={values.cosmetologa}
+                    error={Boolean(errors.cosmetologa)}
+                    onChange={onChangeCosmetologa}
+                    label="Tipo cita" >
+                        {cosmetologas.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                   </Select>
                 </FormControl>
               </Grid>

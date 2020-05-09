@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllServices, findTreatmentByServicio, getAllSchedules, findScheduleByDateAndSucursalAndService, updateDate } from "../../services";
+import { getAllServices, findTreatmentByServicio, getAllSchedules, findScheduleByDateAndSucursalAndService, updateDate, findEmployeesByRolId } from "../../services";
 import * as Yup from "yup";
 import ModalFormCita from './ModalFormCita';
 import { Formik } from 'formik';
@@ -44,6 +44,8 @@ const ModalCita = (props) => {
   const [servicios, setServicios] = useState([]);
   const [tratamientos, setTratamientos] = useState([]);
   const [horarios, setHorarios] = useState([]);
+  const [promovendedores, setPromovendedores] = useState([]);
+  const [cosmetologas, setCosmetologas] = useState([]);
   const [values, setValues] = useState({
     fecha: cita.fecha,
     fecha_show: new Date(splitDate[2], (splitDate[1] - 1), splitDate[0]),
@@ -58,6 +60,8 @@ const ModalCita = (props) => {
     tipo_cita: cita.tipo_cita,
     confirmo: cita.confirmo,
     quien_confirma: cita.quien_confirma,
+    promovendedor: cita.promovendedora,
+    cosmetologa: cita.cosmetologa,
     asistio: cita.asistio,
     precio: cita.precio,
     motivos: cita.motivos,
@@ -79,6 +83,9 @@ const ModalCita = (props) => {
     { "nombre": "PENDIENTE" },
   ];
 
+  const promovendedorRolId = '5ea71352f7a5bb059cbc0027';
+  const cosmetologaRolId = '5ea7135df7a5bb059cbc0028';
+
   useEffect(() => {
     const loadServicios = async() => {
         const response = await getAllServices();
@@ -99,12 +106,28 @@ const ModalCita = (props) => {
         response.data.push({hora: values.hora});
         setHorarios(response.data);
       }
-  }
+    }
+
+    const loadPromovendedores = async() => {
+      const response = await findEmployeesByRolId(promovendedorRolId);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setPromovendedores(response.data);
+      }
+    }
+
+    const loadCosmetologas = async() => {
+      const response = await findEmployeesByRolId(cosmetologaRolId);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setCosmetologas(response.data);
+      }
+    }
 
     loadServicios();
     loadTratamientos();
     loadHorariosByServicio();
-  }, [cita]);
+    loadPromovendedores();
+    loadCosmetologas();
+  }, [cita, promovendedorRolId, cosmetologaRolId]);
 
   const loadTratamientos = async(servicio) => {
     const response = await findTreatmentByServicio(servicio);
@@ -152,6 +175,14 @@ const ModalCita = (props) => {
 
   const handleChangeTipoCita = e => {
       setValues({...values, tipo_cita: e.target.value});
+  }
+
+  const handleChangePromovendedor = e => {
+    setValues({...values, promovendedor: e.target.value});
+  }
+
+  const handleChangeCosmetologa = e => {
+    setValues({...values, cosmetologa: e.target.value});
   }
 
   const handleChangeAsistio = e => {
@@ -210,9 +241,13 @@ const ModalCita = (props) => {
         onChangeHora={(e) => handleChangeHora(e)}
         onChangeTipoCita={(e) => handleChangeTipoCita(e)}
         onChangeAsistio={(e) => handleChangeAsistio(e)}
+        onChangePromovendedor={(e) => handleChangePromovendedor(e)}
+        onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
         servicios={servicios}
         tratamientos={tratamientos}
         horarios={horarios}
+        promovendedores={promovendedores}
+        cosmetologas={cosmetologas}
         valuesTipoCita={valuesTipoCita}
         valuesStatus={valuesStatus}
         onChangeSesion={handleChangeSesion}

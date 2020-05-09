@@ -84,6 +84,8 @@ const Agendar = (props) => {
         { title: 'Quien agenda', field: 'quien_agenda.nombre' },
         { title: 'Tipo Cita', field: 'tipo_cita' },
         { title: 'Quien confirma', field: 'quien_confirma.nombre' },
+        { title: 'Promovendedor', field: 'promovendedor_nombre' },
+        { title: 'Cosmetologa', field: 'cosmetologa_nombre' },
         { title: 'Estado', field: 'asistio' },
         { title: 'Precio', field: 'precio_moneda' },
         { title: 'Tiempo (minutos)', field: 'tiempo' },
@@ -123,6 +125,8 @@ const Agendar = (props) => {
                 await response.data.forEach( item => {
                     item.precio_moneda = toFormatterCurrency(item.precio);
                     item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
+                    item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
+                    item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR'; 
                     item.show_tratamientos = item.tratamientos.map(tratamiento => {
                         return `${tratamiento.nombre}, `;
                     });
@@ -228,8 +232,10 @@ const Agendar = (props) => {
         if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK ) {
             response.data.forEach( item => {
                 item.precio_moneda = toFormatterCurrency(item.precio);
-
                 item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
+                item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
+                item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR'; 
+
                 item.show_tratamientos = item.tratamientos.map(tratamiento => {
                     return `${tratamiento.nombre}, `;
                 });
