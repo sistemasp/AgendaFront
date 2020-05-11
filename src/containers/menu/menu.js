@@ -11,6 +11,7 @@ import Citas from '../citas/index';
 import Agendar from '../agendar/index';
 import { Button, Toolbar } from '@material-ui/core';
 import Reportes from '../reportes/index';
+import ModalPassword from '../../components/modal_password';
 
 
 function TabPanel(props) {
@@ -67,21 +68,43 @@ export const MenuContainer = props => {
         onClickAgendar,
         empleado,
         sucursal,
-        onClickLogout
+        onClickLogout,
+        onClickCambioPassword,
+        open,
+        onClose,
+        onOpen,
+        setMessage,
+        setSeverity,
+        setOpenAlert,
     } = props;
 
     return (
         <div className={classes.root}>
+            {
+                open ? 
+                <ModalPassword
+                    open={open}
+                    onClose={onClose}
+                    empleado={empleado}
+                    onClickLogout={onClickLogout}
+                    onClickCambioPassword={onClickCambioPassword} 
+                    setMessage={setMessage}
+                    setSeverity={setSeverity}
+                    setOpenAlert={setOpenAlert} /> : ''
+            }
             <AppBar position="static">
                 <Toolbar>
-
                     <Typography variant="h6" className={classes.title}>
                         {`Sucuarsal: ${sucursal.nombre} - ${empleado.nombre} ( ${empleado.rol.nombre} )`}
                     </Typography>
                     <Button 
+                        color="default"
+                        variant="contained"
+                        onClick={onOpen}>Cambiar Contraseña</Button>
+                    <Button 
                         color="secondary"
                         variant="contained"
-                        onClick={onClickLogout}> Cerrar Sesion</Button>
+                        onClick={onClickLogout}>Cerrar Sesion</Button>
                 </Toolbar>
             </AppBar>
             <AppBar position="static">

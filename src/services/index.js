@@ -271,6 +271,18 @@ export const findEmployeeByEmployeeNumber = async(employeeNumber) => {
     }
 }
 
+export const loginEmployee = async(employeeNumber, password) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/empleado/login/${employeeNumber}/${password}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('loginEmployee', error);
+    }
+}
+
 export const findEmployeesByRolId = async(rolId) => {
     try {
         const response = await axios({
@@ -280,6 +292,19 @@ export const findEmployeesByRolId = async(rolId) => {
         return response;
     } catch (error) {
         console.log('findEmployeesByRolId', error);
+    }
+}
+
+export const updateEmployee = async(employeeId, employee) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/empleado/${employeeId}`,
+            method: 'PUT',
+            data: employee
+        });
+        return response;
+    } catch (error) {
+        console.log('updateEmployee', error);
     }
 }
 
