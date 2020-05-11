@@ -1,7 +1,9 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { FormControl, InputLabel, Select, makeStyles, MenuItem, Paper, Grid } from "@material-ui/core";
+import { FormControl, InputLabel, Select, makeStyles, MenuItem, Paper, Grid, InputAdornment, IconButton, OutlinedInput } from "@material-ui/core";
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -16,7 +18,13 @@ const useStyles = makeStyles(theme => ({
     },
     button: {
         width: '100%',
-    }
+	},
+	margin: {
+		margin: theme.spacing(1),
+	},
+	textField: {
+		width: '25ch',
+	},
 }));
 
 export const LoginContainer = (props) => {
@@ -28,10 +36,13 @@ export const LoginContainer = (props) => {
 		errors,
 		touched,
 		handleSubmit,
-		handleChange,
+		handleChangeNumber,
+		handleChangePassword,
 		isValid,
 		sucursales,
 		onChangeSucursal,
+		handleClickShowPassword,
+		handleMouseDownPassword,
 		//setFieldTouched
 	} = props;
 	// console.table(props);
@@ -41,7 +52,7 @@ export const LoginContainer = (props) => {
 		handleChange(e);
 		setFieldTouched(name, true, false);
     };*/
-    
+
 	return (
 		<Paper>
 			<Grid container className={classes.root} justify="center" spacing={3}>
@@ -68,8 +79,32 @@ export const LoginContainer = (props) => {
 						error={Boolean(errors.employee_number)}
 						label="Numero de empleado"
 						value={values.employee_number}
-						onChange={handleChange}
+						onChange={handleChangeNumber}
 						variant="outlined" />
+				</Grid>
+				<Grid item xs={12} sm={2}>
+					<FormControl className={classes.margin, classes.textField} variant="outlined">
+					<InputLabel htmlFor="outlined-adornment-password">Contraseña</InputLabel>
+					<OutlinedInput
+						id="outlined-adornment-password"
+						type={values.showPassword ? 'text' : 'password'}
+						value={values.password}
+						onChange={handleChangePassword}
+						endAdornment={
+						<InputAdornment position="end">
+							<IconButton
+							aria-label="toggle password visibility"
+							onClick={handleClickShowPassword}
+							onMouseDown={handleMouseDownPassword}
+							edge="end"
+							>
+							{values.showPassword ? <Visibility /> : <VisibilityOff />}
+							</IconButton>
+						</InputAdornment>
+						}
+						labelWidth={70}
+					/>
+					</FormControl>
 				</Grid>
 				<Grid item xs={12} sm={2}>
 					<Button
