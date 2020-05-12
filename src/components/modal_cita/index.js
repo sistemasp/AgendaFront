@@ -83,8 +83,8 @@ const ModalCita = (props) => {
     { "nombre": "PENDIENTE" },
   ];
 
-  const promovendedorRolId = '5ea71352f7a5bb059cbc0027';
-  const cosmetologaRolId = '5ea7135df7a5bb059cbc0028';
+  const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
+  const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
 
   useEffect(() => {
     const loadServicios = async() => {
