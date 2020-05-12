@@ -76,10 +76,7 @@ const LoginForm = (props) => {
     setValues({ ...values, password: e.target.value });
   }
 
-  const handleClickShowPassword = (severity, message) => {
-    setOpenAlert(true);
-    setSeverity(severity);
-    setMessage(message);
+  const handleClickShowPassword = () => {
 		setValues({ ...values, showPassword: !values.showPassword });
 	};
 
