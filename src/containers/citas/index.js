@@ -34,7 +34,8 @@ const Citas = (props) => {
                 id: cita._id,
                 title: tratamientos,
                 start: startDate,
-                end: endDate
+                end: endDate,
+                servicio: cita.servicio
             }
         });
     }

@@ -24,6 +24,32 @@ export const CitasContainer = (props) => {
         event: 'Evento',
     };
 
+    const colorLaser = '#FFBD00';
+    const colorAparatologia = '#00FFEE';
+    const colorFacial = '#EFCCFF';
+
+    const eventPropGetter = (event, start, end, isSelected) => {
+        let color = '#000000';
+        if (event.servicio === 'APARATOLOGÍA') {
+            color = colorAparatologia;
+        } else if (event.servicio === 'FACIAL') {
+            color = colorFacial;
+        } else if (event.servicio === 'LÁSER') {
+            color = colorLaser;
+        }
+
+        let newStyle = {
+            backgroundColor: color,
+            color: 'black',
+            borderRadius: "5px"
+        };
+    
+        return {
+            className: "",
+            style: newStyle
+        };
+    }
+
     return (
         <div style={{ height: '950pt'}}>
             <Calendar
@@ -32,7 +58,8 @@ export const CitasContainer = (props) => {
                 endAccessor="end"
                 defaultDate={moment().toDate()}
                 localizer={localizer}
-                messages={messages} />
+                messages={messages}
+                eventPropGetter={eventPropGetter} />
         </div>
     );
 }
