@@ -65,6 +65,7 @@ const ModalCita = (props) => {
     asistio: cita.asistio,
     precio: cita.precio,
     motivos: cita.motivos,
+    observaciones: cita.observaciones
   });
 
   const valuesTipoCita = [
@@ -189,6 +190,10 @@ const ModalCita = (props) => {
     setValues({...values, asistio: e.target.value});
   }
 
+  const handleChangeObservaciones = e => {
+    setValues({...values, observaciones: e.target.value});
+  }
+
   const getTimeToTratamiento = (tratamientos) => {
     tratamientos.sort( (a, b) => {
         if (a.tiempo < b.tiempo) return 1;
@@ -253,6 +258,7 @@ const ModalCita = (props) => {
         onChangeSesion={handleChangeSesion}
         onChangePrecio={handleChangePrecio}
         onChangeMotivos={handleChangeMotivos}
+        onChangeObservaciones={handleChangeObservaciones}
         {...props} />
       }
     </Formik>

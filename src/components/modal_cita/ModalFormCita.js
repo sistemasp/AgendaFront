@@ -70,6 +70,7 @@ const ModalFormCita = (props) => {
     onChangeSesion,
     onChangePrecio,
     onChangeMotivos,
+    onChangeObservaciones,
   } = props; 
   
   return (
@@ -241,6 +242,18 @@ const ModalFormCita = (props) => {
                   value={values.numero_sesion}
                   type='Number'
                   onChange={onChangeSesion}
+                  variant="outlined" />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  className={classes.textField}
+                  name="observaciones"
+                  //helperText={touched.observaciones ? errors.observaciones : ""}
+                  error={Boolean(errors.observaciones)}
+                  label="Observaciones"
+                  value={values.observaciones}
+                  onChange={onChangeObservaciones}
                   variant="outlined" />
               </Grid>
 

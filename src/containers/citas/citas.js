@@ -24,9 +24,9 @@ export const CitasContainer = (props) => {
         event: 'Evento',
     };
 
-    const colorLaser = '#FFBD00';
-    const colorAparatologia = '#00FFEE';
-    const colorFacial = '#EFCCFF';
+    const colorLaser = '#23F34B';
+    const colorAparatologia = '#239DF3';
+    const colorFacial = '#E560FF';
 
     const eventPropGetter = (event, start, end, isSelected) => {
         let color = '#000000';

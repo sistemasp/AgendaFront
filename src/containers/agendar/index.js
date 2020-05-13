@@ -89,6 +89,7 @@ const Agendar = (props) => {
         { title: 'Estado', field: 'asistio' },
         { title: 'Precio', field: 'precio_moneda' },
         { title: 'Tiempo (minutos)', field: 'tiempo' },
+        { title: 'Observaciones', field: 'observaciones' },
     ];
 
     const options = {
