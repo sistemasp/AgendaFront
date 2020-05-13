@@ -55,6 +55,7 @@ const Reportes = (props) => {
         { title: 'Motivos', field: 'motivos' },
         { title: 'Precio', field: 'precio_moneda' },
         { title: 'Tiempo (minutos)', field: 'tiempo' },
+        { title: 'Observaciones', field: 'observaciones'},
     ];
 
     const options = {
