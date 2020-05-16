@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { AgendarContainer } from "./agendar";
-import { getAllServices, findTreatmentByServicio, findScheduleByDateAndSucursalAndService, findDatesByDateAndSucursal, createDate } from "../../services";
+import { getAllServices, findTreatmentByServicio, findScheduleByDateAndSucursalAndService, findDatesByDateAndSucursal, createDate, findEmployeesByRolId } from "../../services";
 import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
@@ -47,6 +47,7 @@ const Agendar = (props) => {
     const [servicios, setServicios] = useState([]);
     const [tratamientos, setTratamientos] = useState([]);
     const [horarios, setHorarios] = useState([]);
+    const [doctores, setDoctores] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [disableDate, setDisableDate] = useState(true);
     const [values, setValues] = useState({
@@ -58,7 +59,7 @@ const Agendar = (props) => {
         paciente: `${paciente._id}`,
         precio: '',
         tipo_cita: '',
-        citado: '',
+        citado: ''
     });
     const [citas, setCitas] = useState([]);
     const [openModal, setOpenModal] = useState(false);
@@ -85,12 +86,15 @@ const Agendar = (props) => {
         { title: 'Tipo Cita', field: 'tipo_cita' },
         { title: 'Quien confirma', field: 'quien_confirma.nombre' },
         { title: 'Promovendedor', field: 'promovendedor_nombre' },
+        { title: 'Dermatologo', field: 'dermatologo_nombre' },
         { title: 'Cosmetologa', field: 'cosmetologa_nombre' },
         { title: 'Estado', field: 'asistio' },
         { title: 'Precio', field: 'precio_moneda' },
         { title: 'Tiempo (minutos)', field: 'tiempo' },
         { title: 'Observaciones', field: 'observaciones' },
     ];
+
+    const doctorRolId = process.env.REACT_APP_DOCTOR_ROL_ID;
 
     const options = {
         rowStyle: rowData => {
@@ -127,7 +131,8 @@ const Agendar = (props) => {
                     item.precio_moneda = toFormatterCurrency(item.precio);
                     item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
                     item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-                    item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR'; 
+                    item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
+                    item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
                     item.show_tratamientos = item.tratamientos.map(tratamiento => {
                         return `${tratamiento.nombre}, `;
                     });
@@ -135,9 +140,18 @@ const Agendar = (props) => {
                 setCitas(response.data);
             }
         }
+
+        const loadDoctores = async() => {
+            const response = await findEmployeesByRolId(doctorRolId);
+            if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+                setDoctores(response.data);
+            }
+        }
+
         setIsLoading(true);
         loadCitas();
         loadServicios();
+        loadDoctores();
         setIsLoading(false);
     }, [sucursal]);
 
@@ -236,7 +250,7 @@ const Agendar = (props) => {
                 item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
                 item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
                 item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR'; 
-
+                item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO'; 
                 item.show_tratamientos = item.tratamientos.map(tratamiento => {
                     return `${tratamiento.nombre}, `;
                 });
@@ -291,6 +305,10 @@ const Agendar = (props) => {
 
     const handleChangePrecio = (e) => {
         setValues({...values, precio: e.target.value});
+    }
+
+    const handleChangeDoctors = (e) => {
+        setValues({...values, dermatologo: e.target.value});
     }
 
     const handleCloseAlert = () => {
@@ -354,6 +372,8 @@ const Agendar = (props) => {
                     empleado={empleado}
                     onClickCancel={handleCloseModal}
                     loadCitas={loadCitas}
+                    doctores={doctores}
+                    onChangeDoctors={(e) => handleChangeDoctors(e)}
                     {...props} />
                 }
             </Formik> : 
