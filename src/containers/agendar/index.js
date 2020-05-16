@@ -108,7 +108,7 @@ const Agendar = (props) => {
             }
         },
         headerStyle: {
-            backgroundColor: '#5DADE2',
+            backgroundColor: '#2BA6C6',
             color: '#FFF',
             fontWeight: 'bolder',
             fontSize: '18px'

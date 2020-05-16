@@ -51,10 +51,13 @@ const useStyles = makeStyles(theme => ({
     },
     menuButton: {
         marginRight: theme.spacing(2),
-      },
-      title: {
+    },
+    title: {
         flexGrow: 1,
-      },
+    },
+    bar: {
+        backgroundColor: "#2BA6C6",
+    }
 }));
 
 export const MenuContainer = props => {
@@ -92,7 +95,7 @@ export const MenuContainer = props => {
                     setSeverity={setSeverity}
                     setOpenAlert={setOpenAlert} /> : ''
             }
-            <AppBar position="static">
+            <AppBar className={classes.bar} position="static">
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
                         {`Sucuarsal: ${sucursal.nombre} - ${empleado.nombre} ( ${empleado.rol.nombre} )`}
@@ -107,7 +110,7 @@ export const MenuContainer = props => {
                         onClick={onClickLogout}>Cerrar Sesion</Button>
                 </Toolbar>
             </AppBar>
-            <AppBar position="static">
+            <AppBar className={classes.bar} position="static">
                 <Tabs value={value} onChange={onChangeTab} aria-label="simple tabs">
                     <Tab label="Pacientes" {...a11yProps(0)} />
                     <Tab label="Agendar cita" {...a11yProps(1)} />

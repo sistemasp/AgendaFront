@@ -20,6 +20,9 @@ const styles = theme => ({
   },
   container: {
     maxWidth: "200px"
+  },
+  title: {
+    color: "#2BA6C6"
   }
 });
 
@@ -38,7 +41,6 @@ const LoginForm = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [values, setValues] = useState({
     employee_number: '',
-    sucursal: {},
     password: '',
     showPassword: false
   });
@@ -106,9 +108,9 @@ const LoginForm = (props) => {
   return (
     <Fragment>
       <img src={bannerMePiel} alt='banner' />
-      <h1>Iniciar sesión</h1>
+      <h1>INICIAR SESIÓN</h1>
           <Grid container className={classes.root} justify="center" spacing={3}>
-            <Grid item xs={2}>
+            <Grid item xs={3}>
               <Formik
                 enableReinitialize
                 initialValues={values}

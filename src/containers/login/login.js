@@ -17,13 +17,13 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(2),
     },
     button: {
-        width: '100%',
+		width: '100%'
 	},
 	margin: {
 		margin: theme.spacing(1),
 	},
 	textField: {
-		width: '25ch',
+		width: '80%',
 	},
 }));
 
@@ -74,6 +74,7 @@ export const LoginContainer = (props) => {
 				</Grid>
 				<Grid item xs={12}>
 					<TextField
+						className={classes.textField}
 						name="employee_number"
 						helperText={touched.employee_number ? errors.employee_number : ""}
 						error={Boolean(errors.employee_number)}
@@ -83,7 +84,7 @@ export const LoginContainer = (props) => {
 						variant="outlined" />
 				</Grid>
 				<Grid item xs={12}>
-					<FormControl className={classes.margin, classes.textField} variant="outlined">
+					<FormControl className={classes.textField} variant="outlined">
 					<InputLabel htmlFor="outlined-adornment-password">Contraseña</InputLabel>
 					<OutlinedInput
 						id="outlined-adornment-password"
@@ -108,7 +109,7 @@ export const LoginContainer = (props) => {
 				</Grid>
 				<Grid item xs={12}>
 					<Button
-						className={classes.textField}
+						className={classes.button, classes.textField}
 						type="submit"
 						color="primary"
 						variant="contained"

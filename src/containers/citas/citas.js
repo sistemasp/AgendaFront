@@ -25,8 +25,9 @@ export const CitasContainer = (props) => {
     };
 
     const colorLaser = '#23F34B';
-    const colorAparatologia = '#239DF3';
+    const colorAparatologia = '#349CC4';
     const colorFacial = '#E560FF';
+    const textColor = "#FFFFFF";
 
     const eventPropGetter = (event, start, end, isSelected) => {
         let color = '#000000';
@@ -40,8 +41,8 @@ export const CitasContainer = (props) => {
 
         let newStyle = {
             backgroundColor: color,
-            color: 'black',
-            borderRadius: "5px"
+            color: textColor,
+            borderRadius: "5px",
         };
     
         return {
