@@ -56,8 +56,8 @@ export const LoginContainer = (props) => {
 	return (
 		<Paper>
 			<Grid container className={classes.root} justify="center" spacing={3}>
-				<Grid item xs={12} sm={2}>
-					<FormControl variant="outlined" className={classes.formControl}>
+				<Grid item xs={12}>
+					<FormControl variant="outlined" className={classes.margin, classes.textField}>
 						<InputLabel id="simple-select-outlined-sucursal">Sucursales</InputLabel>
 						<Select
 							labelId="simple-select-outlined-sucursal"
@@ -72,7 +72,7 @@ export const LoginContainer = (props) => {
 						</Select>
 					</FormControl>
 				</Grid>
-				<Grid item xs={12} sm={2}>
+				<Grid item xs={12}>
 					<TextField
 						name="employee_number"
 						helperText={touched.employee_number ? errors.employee_number : ""}
@@ -82,7 +82,7 @@ export const LoginContainer = (props) => {
 						onChange={handleChangeNumber}
 						variant="outlined" />
 				</Grid>
-				<Grid item xs={12} sm={2}>
+				<Grid item xs={12}>
 					<FormControl className={classes.margin, classes.textField} variant="outlined">
 					<InputLabel htmlFor="outlined-adornment-password">Contraseña</InputLabel>
 					<OutlinedInput
@@ -106,13 +106,14 @@ export const LoginContainer = (props) => {
 					/>
 					</FormControl>
 				</Grid>
-				<Grid item xs={12} sm={2}>
+				<Grid item xs={12}>
 					<Button
+						className={classes.textField}
 						type="submit"
 						color="primary"
 						variant="contained"
 						onClick={handleSubmit}
-						disabled={!isValid || !values.employee_number || !values.sucursal.nombre} >
+						disabled={!isValid || !values.employee_number || !values.sucursal.nombre || !values.password} >
 						Entrar
 					</Button>
 				</Grid>
