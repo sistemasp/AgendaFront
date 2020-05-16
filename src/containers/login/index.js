@@ -4,11 +4,11 @@ import { showAllOffices } from "../../services";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { loginEmployee } from "../../services";
 import { LoginContainer } from "./login";
-import Paper from "@material-ui/core/Paper";
 import { withRouter } from 'react-router-dom';
 import * as Yup from "yup";
-import { Snackbar } from "@material-ui/core";
+import { Snackbar, Grid } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
+import bannerMePiel from './../../bannerMePiel.PNG';
 
 const styles = theme => ({
   paper: {
@@ -105,24 +105,27 @@ const LoginForm = (props) => {
 
   return (
     <Fragment>
-        <Paper elevation={1} className={classes.paper}>
-          <h1>Iniciar sesión</h1>
-          <Formik
-            enableReinitialize
-            initialValues={values}
-            validationSchema={validationSchema}
-            onSubmit={submit}>
-            {props => <LoginContainer 
-              sucursales={sucursales}
-              isLoading={isLoading}
-              handleChangeNumber={(e) => handleChangeNumber(e)}
-              handleChangePassword={(e) => handleChangePassword(e)}
-              onChangeSucursal={(e) => handleChangeSucursal(e)}
-              handleClickShowPassword={handleClickShowPassword}
-              handleMouseDownPassword={(e) => handleMouseDownPassword(e)}
-              {...props} />}
-          </Formik>
-        </Paper>
+      <img src={bannerMePiel} alt='banner' />
+      <h1>Iniciar sesión</h1>
+          <Grid container className={classes.root} justify="center" spacing={3}>
+            <Grid item xs={2}>
+              <Formik
+                enableReinitialize
+                initialValues={values}
+                validationSchema={validationSchema}
+                onSubmit={submit}>
+                {props => <LoginContainer 
+                  sucursales={sucursales}
+                  isLoading={isLoading}
+                  handleChangeNumber={(e) => handleChangeNumber(e)}
+                  handleChangePassword={(e) => handleChangePassword(e)}
+                  onChangeSucursal={(e) => handleChangeSucursal(e)}
+                  handleClickShowPassword={handleClickShowPassword}
+                  handleMouseDownPassword={(e) => handleMouseDownPassword(e)}
+                  {...props} />}
+              </Formik>
+            </Grid>
+          </Grid>
         <Snackbar open={openAlert} autoHideDuration={5000} onClose={handleCloseAlert}>
             <Alert onClose={handleCloseAlert} severity={severity}>
                 {message}
