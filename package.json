@@ -20,6 +20,7 @@
     "react-export-excel": "^0.5.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
+    "react-select-search": "^2.0.1",
     "react-text-mask": "^5.4.3",
     "yup": "^0.28.3"
   },

@@ -65,12 +65,14 @@ const ModalFormCita = (props) => {
     horarios,
     promovendedores,
     cosmetologas,
+    doctores,
     valuesTipoCita,
     valuesStatus,
     onChangeSesion,
     onChangePrecio,
     onChangeMotivos,
     onChangeObservaciones,
+    onChangeDoctors,
   } = props; 
   
   return (
@@ -108,6 +110,20 @@ const ModalFormCita = (props) => {
                   placeholder="Selecciona tratamientos"
                   selectedValues={values.tratamientos} // Preselected value to persist in dropdown
                   /> 
+              </Grid>
+              <Grid item xs={12}>
+                  <FormControl variant="outlined" className={classes.formControl}>                
+                      <InputLabel id="simple-select-outlined-hora">Dermatologo</InputLabel>
+                      <Select
+                          labelId="simple-select-outlined-dermatologo"
+                          id="simple-select-outlined-dermatologo"
+                          value={values.dermatologo}
+                          error={Boolean(errors.dermatologo)}
+                          onChange={onChangeDoctors}
+                          label="Dermatoogo" >
+                          {doctores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+                      </Select>
+                  </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>

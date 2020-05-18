@@ -46,6 +46,7 @@ const ModalCita = (props) => {
   const [horarios, setHorarios] = useState([]);
   const [promovendedores, setPromovendedores] = useState([]);
   const [cosmetologas, setCosmetologas] = useState([]);
+  const [doctores, setDoctores] = useState([]);
   const [values, setValues] = useState({
     fecha: cita.fecha,
     fecha_show: new Date(splitDate[2], (splitDate[1] - 1), splitDate[0]),
@@ -65,7 +66,8 @@ const ModalCita = (props) => {
     asistio: cita.asistio,
     precio: cita.precio,
     motivos: cita.motivos,
-    observaciones: cita.observaciones
+    observaciones: cita.observaciones,
+    dermatologo: cita.dermatologo
   });
 
   const valuesTipoCita = [
@@ -86,6 +88,7 @@ const ModalCita = (props) => {
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
   const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
+  const doctorRolId = process.env.REACT_APP_DOCTOR_ROL_ID;
 
   useEffect(() => {
     const loadServicios = async() => {
@@ -123,12 +126,20 @@ const ModalCita = (props) => {
       }
     }
 
+    const loadDoctores = async() => {
+      const response = await findEmployeesByRolId(doctorRolId);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+          setDoctores(response.data);
+      }
+    }
+
     loadServicios();
     loadTratamientos();
     loadHorariosByServicio();
     loadPromovendedores();
     loadCosmetologas();
-  }, [cita, promovendedorRolId, cosmetologaRolId]);
+    loadDoctores();
+  }, [cita, promovendedorRolId, cosmetologaRolId, doctorRolId]);
 
   const loadTratamientos = async(servicio) => {
     const response = await findTreatmentByServicio(servicio);
@@ -227,6 +238,10 @@ const ModalCita = (props) => {
     setValues({...values, motivos: e.target.value});
   }
 
+  const handleChangeDoctors = (e) => {
+    setValues({...values, dermatologo: e.target.value});
+  }
+
   return (
     <Formik
       enableReinitialize
@@ -248,11 +263,13 @@ const ModalCita = (props) => {
         onChangeAsistio={(e) => handleChangeAsistio(e)}
         onChangePromovendedor={(e) => handleChangePromovendedor(e)}
         onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
+        onChangeDoctors={(e) => handleChangeDoctors(e)}
         servicios={servicios}
         tratamientos={tratamientos}
         horarios={horarios}
         promovendedores={promovendedores}
         cosmetologas={cosmetologas}
+        doctores={doctores}
         valuesTipoCita={valuesTipoCita}
         valuesStatus={valuesStatus}
         onChangeSesion={handleChangeSesion}
