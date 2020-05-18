@@ -1,9 +1,9 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { FormControl, InputLabel, Select, makeStyles, MenuItem, Paper, Grid, InputAdornment, IconButton, OutlinedInput } from "@material-ui/core";
+import { FormControl, InputLabel, Select, makeStyles, MenuItem, Paper, Grid, InputAdornment, IconButton, OutlinedInput, createMuiTheme, ThemeProvider } from "@material-ui/core";
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { ButtonCustom } from "../../components/basic/ButtonCustom";
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -17,13 +17,15 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(2),
     },
     button: {
-		width: '100%'
+		width: '80%',
+		color: '#FFFFFF'
 	},
 	margin: {
 		margin: theme.spacing(1),
 	},
 	textField: {
 		width: '80%',
+		
 	},
 }));
 
@@ -108,15 +110,14 @@ export const LoginContainer = (props) => {
 					</FormControl>
 				</Grid>
 				<Grid item xs={12}>
-					<Button
-						className={classes.button, classes.textField}
+					<ButtonCustom 
+						className={classes.button}
 						type="submit"
 						color="primary"
 						variant="contained"
 						onClick={handleSubmit}
-						disabled={!isValid || !values.employee_number || !values.sucursal.nombre || !values.password} >
-						Entrar
-					</Button>
+						disabled={!isValid || !values.employee_number || !values.sucursal.nombre || !values.password}
+						text='ENTRAR' />
 				</Grid>
 			</Grid>
 		</Paper>

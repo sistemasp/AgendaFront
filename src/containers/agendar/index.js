@@ -267,7 +267,7 @@ const Agendar = (props) => {
         });
         let tiempo = 0;
         tratamientos.forEach((item, index) => {
-            tiempo += Number(index === 0 ? item.tiempo : (item.tiempo - 20));
+            tiempo += Number(index === 0 ? item.tiempo : (item.tiempo - (item.servicio !== 'APARATOLOGÍA' ? 20 : 0) ));
         });
         return tiempo;
     }
