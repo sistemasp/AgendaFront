@@ -54,6 +54,8 @@ const ModalFormCita = (props) => {
     onChangeHora,
     onChangeTipoCita,
     onChangeAsistio,
+    onChangePromovendedor,
+    onChangeCosmetologa,
     isValid,
     onClickCancel,
     onClickActualizarCita,
@@ -61,10 +63,16 @@ const ModalFormCita = (props) => {
     servicios,
     tratamientos,
     horarios,
+    promovendedores,
+    cosmetologas,
+    doctores,
     valuesTipoCita,
     valuesStatus,
     onChangeSesion,
     onChangePrecio,
+    onChangeMotivos,
+    onChangeObservaciones,
+    onChangeDoctors,
   } = props; 
   
   return (
@@ -77,10 +85,7 @@ const ModalFormCita = (props) => {
           <form onSubmit={handleSubmit}>
             <Grid container spacing={1}>
               <Grid item xs={12}>
-                <h3>{values.paciente_nombre}</h3>
-              </Grid>
-              <Grid item xs={12}>
-                <h4>{values.telefono}</h4>
+                <h3>{values.paciente_nombre} ({values.telefono})</h3>
               </Grid>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
@@ -105,6 +110,20 @@ const ModalFormCita = (props) => {
                   placeholder="Selecciona tratamientos"
                   selectedValues={values.tratamientos} // Preselected value to persist in dropdown
                   /> 
+              </Grid>
+              <Grid item xs={12}>
+                  <FormControl variant="outlined" className={classes.formControl}>                
+                      <InputLabel id="simple-select-outlined-hora">Dermatologo</InputLabel>
+                      <Select
+                          labelId="simple-select-outlined-dermatologo"
+                          id="simple-select-outlined-dermatologo"
+                          value={values.dermatologo}
+                          error={Boolean(errors.dermatologo)}
+                          onChange={onChangeDoctors}
+                          label="Dermatoogo" >
+                          {doctores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+                      </Select>
+                  </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -141,7 +160,6 @@ const ModalFormCita = (props) => {
                 </FormControl>
               </Grid>
               
-              
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
                   <InputLabel id="simple-select-outlined-tipo-cita">Tipo cita</InputLabel>
@@ -153,6 +171,36 @@ const ModalFormCita = (props) => {
                     onChange={onChangeTipoCita}
                     label="Tipo cita" >
                         {valuesTipoCita.sort().map((item, index) => <MenuItem key={index} value={item.nombre}>{item.nombre}</MenuItem>)}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12}>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="simple-select-outlined-promovendedor">Promovendedor</InputLabel>
+                  <Select
+                    labelId="simple-select-outlined-promovendedor"
+                    id="simple-select-outlined-promovendedor"
+                    value={values.promovendedor}
+                    error={Boolean(errors.promovendedor)}
+                    onChange={onChangePromovendedor}
+                    label="Tipo cita" >
+                        {promovendedores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12}>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="simple-select-outlined-cosmetologa">Cosmetologa</InputLabel>
+                  <Select
+                    labelId="simple-select-outlined-cosmetologa"
+                    id="simple-select-outlined-cosmetologa"
+                    value={values.cosmetologa}
+                    error={Boolean(errors.cosmetologa)}
+                    onChange={onChangeCosmetologa}
+                    label="Tipo cita" >
+                        {cosmetologas.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                   </Select>
                 </FormControl>
               </Grid>
@@ -172,6 +220,21 @@ const ModalFormCita = (props) => {
                 </FormControl>
               </Grid>
               
+              {
+                values.asistio === 'CANCELO' || values.asistio === 'REAGENDO' || values.asistio === 'NO ASISTIO' ?
+                <Grid item xs={12}>
+                  <TextField
+                    className={classes.textField}
+                    name="motivos"
+                    //helperText={touched.numero_sesion ? errors.numero_sesion : ""}
+                    error={Boolean(errors.motivos)}
+                    label="Motivos"
+                    value={values.motivos}
+                    onChange={onChangeMotivos}
+                    variant="outlined" />
+                </Grid> : ''
+              }
+
               <Grid item xs={12}>
                 <TextField
                   className={classes.textField}
@@ -195,6 +258,18 @@ const ModalFormCita = (props) => {
                   value={values.numero_sesion}
                   type='Number'
                   onChange={onChangeSesion}
+                  variant="outlined" />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  className={classes.textField}
+                  name="observaciones"
+                  //helperText={touched.observaciones ? errors.observaciones : ""}
+                  error={Boolean(errors.observaciones)}
+                  label="Observaciones"
+                  value={values.observaciones}
+                  onChange={onChangeObservaciones}
                   variant="outlined" />
               </Grid>
 

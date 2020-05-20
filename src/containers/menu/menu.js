@@ -10,6 +10,8 @@ import Pacientes from '../pacientes/index';
 import Citas from '../citas/index';
 import Agendar from '../agendar/index';
 import { Button, Toolbar } from '@material-ui/core';
+import Reportes from '../reportes/index';
+import ModalPassword from '../../components/modal_password';
 
 
 function TabPanel(props) {
@@ -49,10 +51,13 @@ const useStyles = makeStyles(theme => ({
     },
     menuButton: {
         marginRight: theme.spacing(2),
-      },
-      title: {
+    },
+    title: {
         flexGrow: 1,
-      },
+    },
+    bar: {
+        backgroundColor: "#2BA6C6",
+    }
 }));
 
 export const MenuContainer = props => {
@@ -66,28 +71,51 @@ export const MenuContainer = props => {
         onClickAgendar,
         empleado,
         sucursal,
-        onClickLogout
+        onClickLogout,
+        onClickCambioPassword,
+        open,
+        onClose,
+        onOpen,
+        setMessage,
+        setSeverity,
+        setOpenAlert,
     } = props;
 
     return (
         <div className={classes.root}>
-            <AppBar position="static">
+            {
+                open ? 
+                <ModalPassword
+                    open={open}
+                    onClose={onClose}
+                    empleado={empleado}
+                    onClickLogout={onClickLogout}
+                    onClickCambioPassword={onClickCambioPassword} 
+                    setMessage={setMessage}
+                    setSeverity={setSeverity}
+                    setOpenAlert={setOpenAlert} /> : ''
+            }
+            <AppBar className={classes.bar} position="static">
                 <Toolbar>
-
                     <Typography variant="h6" className={classes.title}>
                         {`Sucuarsal: ${sucursal.nombre} - ${empleado.nombre} ( ${empleado.rol.nombre} )`}
                     </Typography>
                     <Button 
+                        color="default"
+                        variant="contained"
+                        onClick={onOpen}>Cambiar Contraseña</Button>
+                    <Button 
                         color="secondary"
                         variant="contained"
-                        onClick={onClickLogout}> Cerrar Sesion</Button>
+                        onClick={onClickLogout}>Cerrar Sesion</Button>
                 </Toolbar>
             </AppBar>
-            <AppBar position="static">
+            <AppBar className={classes.bar} position="static">
                 <Tabs value={value} onChange={onChangeTab} aria-label="simple tabs">
                     <Tab label="Pacientes" {...a11yProps(0)} />
                     <Tab label="Agendar cita" {...a11yProps(1)} />
                     <Tab label="Citas" {...a11yProps(2)} />
+                    <Tab label="Reportes" {...a11yProps(3)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
@@ -104,6 +132,10 @@ export const MenuContainer = props => {
             </TabPanel>
             <TabPanel value={value} index={2}>
                 <Citas 
+                    sucursal={sucursal._id}/>
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+                <Reportes 
                     sucursal={sucursal._id}/>
             </TabPanel>
         </div>

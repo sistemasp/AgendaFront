@@ -1,11 +1,20 @@
 import React, { Fragment } from 'react';
 
 import TableComponent from '../../components/table/TableComponent';
-import { Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import ModalPaciente from '../../components/modal_paciente';
 import ModHistorico from '../../components/modal_historico';
+import { ButtonCustom } from '../../components/basic/ButtonCustom';
+
+const useStyles = makeStyles(theme => ({
+	button: {
+		color: '#FFFFFF'
+	}
+}));
 
 export const PacientesContainer = (props) => {
+
+  const classes = useStyles();
 
   const {
     titulo,
@@ -40,12 +49,14 @@ export const PacientesContainer = (props) => {
           onClose={handleClose}
           paciente={paciente} /> : ''
       }
-      <Button
+
+      <ButtonCustom 
+        className={classes.button}
         color="primary"
         variant="contained"
-        onClick={handleOpen} >
-        Nuevo Paciente
-      </Button>
+        onClick={handleOpen}
+        text='Nuevo Paciente' />
+        
       <TableComponent
         titulo={titulo}
         columns={columns}

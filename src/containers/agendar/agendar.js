@@ -49,6 +49,8 @@ export const AgendarContainer = (props) => {
         onChangePrecio,
         empleado,
         disableDate,
+        doctores,
+        onChangeDoctors,
         // TABLE DATES PROPERTIES
         titulo,
         columns,
@@ -113,6 +115,20 @@ export const AgendarContainer = (props) => {
                             placeholder="Selecciona tratamientos"
                             selectedValues={values.tratamientos} // Preselected value to persist in dropdown
                             /> 
+                    </Grid>
+                    <Grid item xs={12} sm={2}>
+                        <FormControl variant="outlined" className={classes.formControl}>                
+                            <InputLabel id="simple-select-outlined-hora">Dermatologo</InputLabel>
+                            <Select
+                                labelId="simple-select-outlined-dermatologo"
+                                id="simple-select-outlined-dermatologo"
+                                value={values.dermatologo}
+                                error={Boolean(errors.dermatologo)}
+                                onChange={onChangeDoctors}
+                                label="Dermatologo" >
+                                {doctores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item xs={12} sm={2}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>

@@ -1,7 +1,9 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { FormControl, InputLabel, Select, makeStyles, MenuItem, Paper, Grid } from "@material-ui/core";
+import { FormControl, InputLabel, Select, makeStyles, MenuItem, Paper, Grid, InputAdornment, IconButton, OutlinedInput, createMuiTheme, ThemeProvider } from "@material-ui/core";
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { ButtonCustom } from "../../components/basic/ButtonCustom";
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -15,8 +17,16 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(2),
     },
     button: {
-        width: '100%',
-    }
+		width: '80%',
+		color: '#FFFFFF'
+	},
+	margin: {
+		margin: theme.spacing(1),
+	},
+	textField: {
+		width: '80%',
+		
+	},
 }));
 
 export const LoginContainer = (props) => {
@@ -28,10 +38,13 @@ export const LoginContainer = (props) => {
 		errors,
 		touched,
 		handleSubmit,
-		handleChange,
+		handleChangeNumber,
+		handleChangePassword,
 		isValid,
 		sucursales,
 		onChangeSucursal,
+		handleClickShowPassword,
+		handleMouseDownPassword,
 		//setFieldTouched
 	} = props;
 	// console.table(props);
@@ -41,12 +54,12 @@ export const LoginContainer = (props) => {
 		handleChange(e);
 		setFieldTouched(name, true, false);
     };*/
-    
+
 	return (
 		<Paper>
 			<Grid container className={classes.root} justify="center" spacing={3}>
-				<Grid item xs={12} sm={2}>
-					<FormControl variant="outlined" className={classes.formControl}>
+				<Grid item xs={12}>
+					<FormControl variant="outlined" className={classes.margin, classes.textField}>
 						<InputLabel id="simple-select-outlined-sucursal">Sucursales</InputLabel>
 						<Select
 							labelId="simple-select-outlined-sucursal"
@@ -61,25 +74,50 @@ export const LoginContainer = (props) => {
 						</Select>
 					</FormControl>
 				</Grid>
-				<Grid item xs={12} sm={2}>
+				<Grid item xs={12}>
 					<TextField
+						className={classes.textField}
 						name="employee_number"
 						helperText={touched.employee_number ? errors.employee_number : ""}
 						error={Boolean(errors.employee_number)}
 						label="Numero de empleado"
 						value={values.employee_number}
-						onChange={handleChange}
+						onChange={handleChangeNumber}
 						variant="outlined" />
 				</Grid>
-				<Grid item xs={12} sm={2}>
-					<Button
+				<Grid item xs={12}>
+					<FormControl className={classes.textField} variant="outlined">
+					<InputLabel htmlFor="outlined-adornment-password">Contraseña</InputLabel>
+					<OutlinedInput
+						id="outlined-adornment-password"
+						type={values.showPassword ? 'text' : 'password'}
+						value={values.password}
+						onChange={handleChangePassword}
+						endAdornment={
+						<InputAdornment position="end">
+							<IconButton
+							aria-label="toggle password visibility"
+							onClick={handleClickShowPassword}
+							onMouseDown={handleMouseDownPassword}
+							edge="end"
+							>
+							{values.showPassword ? <Visibility /> : <VisibilityOff />}
+							</IconButton>
+						</InputAdornment>
+						}
+						labelWidth={70}
+					/>
+					</FormControl>
+				</Grid>
+				<Grid item xs={12}>
+					<ButtonCustom 
+						className={classes.button}
 						type="submit"
 						color="primary"
 						variant="contained"
 						onClick={handleSubmit}
-						disabled={!isValid || !values.employee_number || !values.sucursal.nombre} >
-						Entrar
-					</Button>
+						disabled={!isValid || !values.employee_number || !values.sucursal.nombre || !values.password}
+						text='ENTRAR' />
 				</Grid>
 			</Grid>
 		</Paper>

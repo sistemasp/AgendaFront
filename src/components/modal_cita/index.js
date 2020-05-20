@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllServices, findTreatmentByServicio, getAllSchedules, findScheduleByDateAndSucursalAndService, updateDate } from "../../services";
+import { getAllServices, findTreatmentByServicio, getAllSchedules, findScheduleByDateAndSucursalAndService, updateDate, findEmployeesByRolId } from "../../services";
 import * as Yup from "yup";
 import ModalFormCita from './ModalFormCita';
 import { Formik } from 'formik';
@@ -44,6 +44,9 @@ const ModalCita = (props) => {
   const [servicios, setServicios] = useState([]);
   const [tratamientos, setTratamientos] = useState([]);
   const [horarios, setHorarios] = useState([]);
+  const [promovendedores, setPromovendedores] = useState([]);
+  const [cosmetologas, setCosmetologas] = useState([]);
+  const [doctores, setDoctores] = useState([]);
   const [values, setValues] = useState({
     fecha: cita.fecha,
     fecha_show: new Date(splitDate[2], (splitDate[1] - 1), splitDate[0]),
@@ -58,8 +61,13 @@ const ModalCita = (props) => {
     tipo_cita: cita.tipo_cita,
     confirmo: cita.confirmo,
     quien_confirma: cita.quien_confirma,
+    promovendedor: cita.promovendedora,
+    cosmetologa: cita.cosmetologa,
     asistio: cita.asistio,
     precio: cita.precio,
+    motivos: cita.motivos,
+    observaciones: cita.observaciones,
+    dermatologo: cita.dermatologo
   });
 
   const valuesTipoCita = [
@@ -75,7 +83,12 @@ const ModalCita = (props) => {
     { "nombre": "NO ASISTIO" },
     { "nombre": "CANCELO" },
     { "nombre": "REAGENDO" },
+    { "nombre": "PENDIENTE" },
   ];
+
+  const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
+  const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
+  const doctorRolId = process.env.REACT_APP_DOCTOR_ROL_ID;
 
   useEffect(() => {
     const loadServicios = async() => {
@@ -97,12 +110,36 @@ const ModalCita = (props) => {
         response.data.push({hora: values.hora});
         setHorarios(response.data);
       }
-  }
+    }
+
+    const loadPromovendedores = async() => {
+      const response = await findEmployeesByRolId(promovendedorRolId);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setPromovendedores(response.data);
+      }
+    }
+
+    const loadCosmetologas = async() => {
+      const response = await findEmployeesByRolId(cosmetologaRolId);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setCosmetologas(response.data);
+      }
+    }
+
+    const loadDoctores = async() => {
+      const response = await findEmployeesByRolId(doctorRolId);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+          setDoctores(response.data);
+      }
+    }
 
     loadServicios();
     loadTratamientos();
     loadHorariosByServicio();
-  }, [cita]);
+    loadPromovendedores();
+    loadCosmetologas();
+    loadDoctores();
+  }, [cita, promovendedorRolId, cosmetologaRolId, doctorRolId]);
 
   const loadTratamientos = async(servicio) => {
     const response = await findTreatmentByServicio(servicio);
@@ -152,8 +189,20 @@ const ModalCita = (props) => {
       setValues({...values, tipo_cita: e.target.value});
   }
 
+  const handleChangePromovendedor = e => {
+    setValues({...values, promovendedor: e.target.value});
+  }
+
+  const handleChangeCosmetologa = e => {
+    setValues({...values, cosmetologa: e.target.value});
+  }
+
   const handleChangeAsistio = e => {
     setValues({...values, asistio: e.target.value});
+  }
+
+  const handleChangeObservaciones = e => {
+    setValues({...values, observaciones: e.target.value});
   }
 
   const getTimeToTratamiento = (tratamientos) => {
@@ -185,6 +234,14 @@ const ModalCita = (props) => {
     setValues({...values, precio: e.target.value});
   };
 
+  const handleChangeMotivos = e => {
+    setValues({...values, motivos: e.target.value});
+  }
+
+  const handleChangeDoctors = (e) => {
+    setValues({...values, dermatologo: e.target.value});
+  }
+
   return (
     <Formik
       enableReinitialize
@@ -204,13 +261,21 @@ const ModalCita = (props) => {
         onChangeHora={(e) => handleChangeHora(e)}
         onChangeTipoCita={(e) => handleChangeTipoCita(e)}
         onChangeAsistio={(e) => handleChangeAsistio(e)}
+        onChangePromovendedor={(e) => handleChangePromovendedor(e)}
+        onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
+        onChangeDoctors={(e) => handleChangeDoctors(e)}
         servicios={servicios}
         tratamientos={tratamientos}
         horarios={horarios}
+        promovendedores={promovendedores}
+        cosmetologas={cosmetologas}
+        doctores={doctores}
         valuesTipoCita={valuesTipoCita}
         valuesStatus={valuesStatus}
         onChangeSesion={handleChangeSesion}
         onChangePrecio={handleChangePrecio}
+        onChangeMotivos={handleChangeMotivos}
+        onChangeObservaciones={handleChangeObservaciones}
         {...props} />
       }
     </Formik>

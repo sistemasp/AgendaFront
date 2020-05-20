@@ -193,6 +193,18 @@ export const findDatesByDateAndSucursal = async(dia, mes, anio, sucursalId) => {
     }
 }
 
+export const findDatesByRangeDateAndSucursal = async(diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cita/fecha_inicio/${diai}/${mesi}/${anioi}/fecha_fin/${diaf}/${mesf}/${aniof}/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findDatesByRangeDateAndSucursal', error);
+    }
+}
+
 export const findHistoricByPaciente = async(pacienteId) => {
     try {
         const response = await axios({
@@ -256,6 +268,43 @@ export const findEmployeeByEmployeeNumber = async(employeeNumber) => {
         return response;
     } catch (error) {
         console.log('findEmployeeByEmployeeNumber', error);
+    }
+}
+
+export const loginEmployee = async(employeeNumber, password) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/empleado/login/${employeeNumber}/${password}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('loginEmployee', error);
+    }
+}
+
+export const findEmployeesByRolId = async(rolId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/empleado/rol/${rolId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findEmployeesByRolId', error);
+    }
+}
+
+export const updateEmployee = async(employeeId, employee) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/empleado/${employeeId}`,
+            method: 'PUT',
+            data: employee
+        });
+        return response;
+    } catch (error) {
+        console.log('updateEmployee', error);
     }
 }
 
