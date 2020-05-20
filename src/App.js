@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 // import LoginContainer from './containers/LoginContainer';
 import LoginForm from "./containers/login/index";
-import MenuMain from "./containers/menu/index";
+import MenuMain from "./containers/main/index";
 import './App.css';
 
 const App = () => {
@@ -14,7 +14,7 @@ const App = () => {
             exact path="/" 
             component={LoginForm} />
           <Route 
-            exact path="/menu"
+            exact path="/main"
             component={MenuMain} />
         </div>
       </Router>

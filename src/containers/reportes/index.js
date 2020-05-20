@@ -50,7 +50,7 @@ const Reportes = (props) => {
         { title: 'Tipo Cita', field: 'tipo_cita' },
         { title: 'Quien confirma', field: 'quien_confirma.nombre' },
         { title: 'Promovendedor', field: 'promovendedor_nombre' },
-        { title: 'Dermatologo', field: 'dermatologo_nombre' },
+        { title: 'Medico', field: 'medico_nombre' },
         { title: 'Cosmetologa', field: 'cosmetologa_nombre' },
         { title: 'Estado', field: 'asistio' },
         { title: 'Motivos', field: 'motivos' },
@@ -93,7 +93,7 @@ const Reportes = (props) => {
                     item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
                     item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
                     item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-                    item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
+                    item.medico_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
                     item.show_tratamientos = item.tratamientos.map(tratamiento => {
                         return `${tratamiento.nombre}, `;
                     });
@@ -148,7 +148,7 @@ const Reportes = (props) => {
                 item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
                 item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
                 item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-                item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
+                item.medico_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
                 item.show_tratamientos = item.tratamientos.map(tratamiento => {
                     return `${tratamiento.nombre}, `;
                 });

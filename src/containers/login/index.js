@@ -90,7 +90,7 @@ const LoginForm = (props) => {
     const response = await loginEmployee(data.employee_number, data.password);
     if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK && response.data !== '' ) {
       if (response.data ) {
-        history.push('/menu', { empleado: response.data, sucursal: data.sucursal });
+        history.push('/main', { empleado: response.data, sucursal: data.sucursal });
       }
     } else {
       setOpenAlert(true);

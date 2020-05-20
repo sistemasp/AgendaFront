@@ -83,33 +83,6 @@ export const MenuContainer = props => {
 
     return (
         <div className={classes.root}>
-            {
-                open ? 
-                <ModalPassword
-                    open={open}
-                    onClose={onClose}
-                    empleado={empleado}
-                    onClickLogout={onClickLogout}
-                    onClickCambioPassword={onClickCambioPassword} 
-                    setMessage={setMessage}
-                    setSeverity={setSeverity}
-                    setOpenAlert={setOpenAlert} /> : ''
-            }
-            <AppBar className={classes.bar} position="static">
-                <Toolbar>
-                    <Typography variant="h6" className={classes.title}>
-                        {`Sucuarsal: ${sucursal.nombre} - ${empleado.nombre} ( ${empleado.rol.nombre} )`}
-                    </Typography>
-                    <Button 
-                        color="default"
-                        variant="contained"
-                        onClick={onOpen}>Cambiar Contraseña</Button>
-                    <Button 
-                        color="secondary"
-                        variant="contained"
-                        onClick={onClickLogout}>Cerrar Sesion</Button>
-                </Toolbar>
-            </AppBar>
             <AppBar className={classes.bar} position="static">
                 <Tabs value={value} onChange={onChangeTab} aria-label="simple tabs">
                     <Tab label="Pacientes" {...a11yProps(0)} />

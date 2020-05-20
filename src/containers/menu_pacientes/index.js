@@ -7,7 +7,7 @@ const Alert = (props) => {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const MenuMain = (props) => {
+const MenuPatient = (props) => {
 
     const [pacienteAgendado, setPacienteAgendado] = useState({});
     const [value, setValue] = useState(0);
@@ -16,12 +16,9 @@ const MenuMain = (props) => {
     const [message, setMessage] = useState('');
     const [severity, setSeverity] = useState('success');
 
-    const { 
-        empleado,
-        sucursal,
-    } = props.location.state;
-
     const {
+        sucursal,
+        empleado,
         history,
     } = props;
 
@@ -81,4 +78,4 @@ const MenuMain = (props) => {
     );
 }
 
-export default MenuMain;
+export default MenuPatient;

@@ -118,14 +118,14 @@ export const AgendarContainer = (props) => {
                     </Grid>
                     <Grid item xs={12} sm={2}>
                         <FormControl variant="outlined" className={classes.formControl}>                
-                            <InputLabel id="simple-select-outlined-hora">Dermatologo</InputLabel>
+                            <InputLabel id="simple-select-outlined-hora">Medico</InputLabel>
                             <Select
-                                labelId="simple-select-outlined-dermatologo"
-                                id="simple-select-outlined-dermatologo"
-                                value={values.dermatologo}
-                                error={Boolean(errors.dermatologo)}
+                                labelId="simple-select-outlined-medico"
+                                id="simple-select-outlined-medico"
+                                value={values.medico}
+                                error={Boolean(errors.medico)}
                                 onChange={onChangeDoctors}
-                                label="Dermatologo" >
+                                label="Medico" >
                                 {doctores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
                             </Select>
                         </FormControl>
