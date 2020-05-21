@@ -138,7 +138,7 @@ export const AgendarContainer = (props) => {
                                 alignItems="center" >
                                 <KeyboardDatePicker
                                     disableToolbar
-                                    disablePast
+                                    //disablePast
                                     autoOk
                                     disabled={disableDate}
                                     variant="inline"
