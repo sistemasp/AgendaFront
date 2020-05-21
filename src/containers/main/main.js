@@ -23,8 +23,10 @@ import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import AirlineSeatReclineNormalIcon from '@material-ui/icons/AirlineSeatReclineNormal';
 import { Button } from '@material-ui/core';
-import Agendar from '../agendar';
+import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import ModalPassword from '../../components/modal_password';
+import Medicos from '../medicos';
+import Consultorios from '../consultorios';
 
 const TabPanel = (props) => {
 	const { children, value, index, ...other } = props;
@@ -205,14 +207,14 @@ export const MainContainer = props => {
 				<Divider />
 				<List>
 					<ListItem button key={'Pacientes'} onClick={(e) => onChangeTab(e, 0)}>
-						<ListItemIcon> <People /> </ListItemIcon>
+						<ListItemIcon> <AccessibilityNewIcon /> </ListItemIcon>
 						<ListItemText primary={'Pacientes'} />
 					</ListItem>
 					<ListItem button key={'Medicos'} onClick={(e) => onChangeTab(e, 1)}>
 						<ListItemIcon> <People /> </ListItemIcon>
 						<ListItemText primary={'Medicos'} />
 					</ListItem>
-					<ListItem button key={'Consultorios'}>
+					<ListItem button key={'Consultorios'} onClick={(e) => onChangeTab(e, 2)}>
 						<ListItemIcon> <AirlineSeatReclineNormalIcon /> </ListItemIcon>
 						<ListItemText primary={'Consultorios'} />
 					</ListItem>
@@ -238,7 +240,14 @@ export const MainContainer = props => {
 						sucursal={sucursal} />
 				</TabPanel>
 				<TabPanel value={value} index={1}>
-					<Agendar
+					<Medicos
+						paciente={pacienteAgendado}
+						setPacienteAgendado={setPacienteAgendado}
+						empleado={empleado}
+						sucursal={sucursal._id} />
+				</TabPanel>
+				<TabPanel value={value} index={2}>
+					<Consultorios
 						paciente={pacienteAgendado}
 						setPacienteAgendado={setPacienteAgendado}
 						empleado={empleado}

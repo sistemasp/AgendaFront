@@ -47,7 +47,7 @@ const Agendar = (props) => {
     const [servicios, setServicios] = useState([]);
     const [tratamientos, setTratamientos] = useState([]);
     const [horarios, setHorarios] = useState([]);
-    const [doctores, setDoctores] = useState([]);
+    const [medicos, setMedicos] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [disableDate, setDisableDate] = useState(true);
     const [values, setValues] = useState({
@@ -144,7 +144,7 @@ const Agendar = (props) => {
         const loadDoctores = async() => {
             const response = await findEmployeesByRolId(doctorRolId);
             if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-                setDoctores(response.data);
+                setMedicos(response.data);
             }
         }
 
@@ -372,7 +372,7 @@ const Agendar = (props) => {
                     empleado={empleado}
                     onClickCancel={handleCloseModal}
                     loadCitas={loadCitas}
-                    doctores={doctores}
+                    medicos={medicos}
                     onChangeDoctors={(e) => handleChangeDoctors(e)}
                     {...props} />
                 }

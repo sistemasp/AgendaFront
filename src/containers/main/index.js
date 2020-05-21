@@ -25,8 +25,6 @@ const MenuMain = (props) => {
         history,
     } = props;
 
-    console.log("Props", props);
-
     const handleChangeTab = (event, newValue) => {
         setValue(newValue);
     };

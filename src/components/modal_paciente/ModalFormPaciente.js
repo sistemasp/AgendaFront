@@ -49,7 +49,7 @@ const ModalFormPaciente = (props) => {
     onClickGuardarAgendar,
     open,
   } = props;
-
+  
   return (
     <div>
       <Modal

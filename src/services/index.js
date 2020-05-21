@@ -321,3 +321,30 @@ export const showAllOffices = async() => {
         console.log('showAllOffices', error);
     }
 }
+
+// CONSULTORIOS
+
+export const findSurgeryBySucursalId = async(sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consultorio/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findSurgeryBySucursalId', error);
+    }
+}
+
+export const createSurgery = async(consultorio) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consultorio`,
+            method: 'POST',
+            data: consultorio
+        });
+        return response;
+    } catch (error) {
+        console.log('createSurgery', error);
+    }
+}

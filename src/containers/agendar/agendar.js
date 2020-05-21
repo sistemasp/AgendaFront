@@ -49,7 +49,7 @@ export const AgendarContainer = (props) => {
         onChangePrecio,
         empleado,
         disableDate,
-        doctores,
+        medicos,
         onChangeDoctors,
         // TABLE DATES PROPERTIES
         titulo,
@@ -126,7 +126,7 @@ export const AgendarContainer = (props) => {
                                 error={Boolean(errors.medico)}
                                 onChange={onChangeDoctors}
                                 label="Medico" >
-                                {doctores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+                                {medicos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
                             </Select>
                         </FormControl>
                     </Grid>
