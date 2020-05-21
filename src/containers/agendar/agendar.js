@@ -47,6 +47,7 @@ export const AgendarContainer = (props) => {
         isValid,
         isSubmitting,
         onChangePrecio,
+        onChangeTiempo,
         empleado,
         disableDate,
         doctores,
@@ -182,12 +183,24 @@ export const AgendarContainer = (props) => {
                         variant="outlined" />
                     </Grid>
                     <Grid item xs={12} sm={2}>
+                        <TextField
+                        name="tiempo"
+                        //helperText={touched.tiempo ? errors.tiempo : ""}
+                        error={Boolean(errors.tiempo)}
+                        label="Tiempo"
+                        value={values.tiempo}
+                        type='Number'
+                        onChange={onChangeTiempo}
+                        variant="outlined" />
+                    </Grid>
+                    <Grid item xs={12} sm={2}>
                         <Button
                             className={classes.button}
                             variant="contained"
                             color="primary"
                             disabled={!isValid || isSubmitting || !paciente.nombres || !values.servicio 
-                                || values.tratamientos.length  === 0 || !values.fecha || !values.hora || !values.precio} 
+                                || values.tratamientos.length  === 0 || !values.fecha || !values.hora || !values.precio 
+                                || !values.tiempo} 
                             onClick={() => onClickAgendar(values)} >
                             Agendar
                         </Button>

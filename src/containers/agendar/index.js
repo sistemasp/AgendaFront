@@ -59,7 +59,8 @@ const Agendar = (props) => {
         paciente: `${paciente._id}`,
         precio: '',
         tipo_cita: '',
-        citado: ''
+        citado: '',
+        tiempo: '',
     });
     const [citas, setCitas] = useState([]);
     const [openModal, setOpenModal] = useState(false);
@@ -279,7 +280,7 @@ const Agendar = (props) => {
         data.sucursal = sucursal;
         data.numero_sesion = 1;
         data.asistio = 'PENDIENTE';
-        data.tiempo = getTimeToTratamiento(data.tratamientos);
+        // data.tiempo = getTimeToTratamiento(data.tratamientos);
         const response = await createDate(data);
         if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED ) {
             setOpenAlert(true);
@@ -305,6 +306,10 @@ const Agendar = (props) => {
 
     const handleChangePrecio = (e) => {
         setValues({...values, precio: e.target.value});
+    }
+
+    const handleChangeTiempo = (e) => {
+        setValues({...values, tiempo: e.target.value});
     }
 
     const handleChangeDoctors = (e) => {
@@ -362,6 +367,7 @@ const Agendar = (props) => {
                     disableDate={disableDate}
                     onClickAgendar={handleClickAgendar}
                     onChangePrecio={(e) => handleChangePrecio(e)}
+                    onChangeTiempo={(e) => handleChangeTiempo(e)}
                     titulo={ `CITAS (${filterDate.fecha})`}
                     columns={columns}
                     options={options}

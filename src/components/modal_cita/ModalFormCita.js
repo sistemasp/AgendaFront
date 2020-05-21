@@ -52,6 +52,7 @@ const ModalFormCita = (props) => {
     onChangeTratamientos,
     onChangeFecha,
     onChangeHora,
+    onChangeTiempo,
     onChangeTipoCita,
     onChangeAsistio,
     onChangePromovendedor,
@@ -158,6 +159,19 @@ const ModalFormCita = (props) => {
                     {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
                   </Select>
                 </FormControl>
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  className={classes.textField}
+                  name="tiempo"
+                  //helperText={touched.tiempo ? errors.tiempo : ""}
+                  error={Boolean(errors.tiempo)}
+                  label="Tiempo (minutos)"
+                  value={values.tiempo}
+                  type='Number'
+                  onChange={onChangeTiempo}
+                  variant="outlined" />
               </Grid>
               
               <Grid item xs={12}>
