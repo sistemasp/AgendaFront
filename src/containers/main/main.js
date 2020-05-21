@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -27,6 +27,8 @@ import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import ModalPassword from '../../components/modal_password';
 import Medicos from '../medicos';
 import Consultorios from '../consultorios';
+import Corte from '../corte';
+import ListaEspera from '../lista_espera';
 
 const TabPanel = (props) => {
 	const { children, value, index, ...other } = props;
@@ -111,6 +113,9 @@ const useStyles = makeStyles((theme) => ({
 	},
 	title: {
 		flexGrow: 1,
+	},
+	fragment: {
+		width: '100%',
 	}
 }));
 
@@ -218,11 +223,11 @@ export const MainContainer = props => {
 						<ListItemIcon> <AirlineSeatReclineNormalIcon /> </ListItemIcon>
 						<ListItemText primary={'Consultorios'} />
 					</ListItem>
-					<ListItem button key={'Corte'}>
+					<ListItem button key={'Corte'} onClick={(e) => onChangeTab(e, 3)}>
 						<ListItemIcon> <AttachMoneyIcon /> </ListItemIcon>
 						<ListItemText primary={'Corte'} />
 					</ListItem>
-					<ListItem button key={'Lista de Espera'}>
+					<ListItem button key={'Lista de Espera'} onClick={(e) => onChangeTab(e, 4)}>
 						<ListItemIcon> <ListAltIcon /> </ListItemIcon>
 						<ListItemText primary={'Lista de Espera'} />
 					</ListItem>
@@ -234,25 +239,41 @@ export const MainContainer = props => {
 				})}
 			>
 				<div className={classes.drawerHeader} />
-				<TabPanel value={value} index={0}>
-					<MenuPatient
-						empleado={empleado}
-						sucursal={sucursal} />
-				</TabPanel>
-				<TabPanel value={value} index={1}>
-					<Medicos
-						paciente={pacienteAgendado}
-						setPacienteAgendado={setPacienteAgendado}
-						empleado={empleado}
-						sucursal={sucursal._id} />
-				</TabPanel>
-				<TabPanel value={value} index={2}>
-					<Consultorios
-						paciente={pacienteAgendado}
-						setPacienteAgendado={setPacienteAgendado}
-						empleado={empleado}
-						sucursal={sucursal._id} />
-				</TabPanel>
+				<Fragment className={classes.fragment}>
+					<TabPanel value={value} index={0}>
+						<MenuPatient
+							empleado={empleado}
+							sucursal={sucursal} />
+					</TabPanel>
+					<TabPanel value={value} index={1}>
+						<Medicos
+							paciente={pacienteAgendado}
+							setPacienteAgendado={setPacienteAgendado}
+							empleado={empleado}
+							sucursal={sucursal._id} />
+					</TabPanel>
+					<TabPanel value={value} index={2}>
+						<Consultorios
+							paciente={pacienteAgendado}
+							setPacienteAgendado={setPacienteAgendado}
+							empleado={empleado}
+							sucursal={sucursal._id} />
+					</TabPanel>
+					<TabPanel value={value} index={3}>
+						<Corte
+							paciente={pacienteAgendado}
+							setPacienteAgendado={setPacienteAgendado}
+							empleado={empleado}
+							sucursal={sucursal._id} />
+					</TabPanel>
+					<TabPanel value={value} index={4}>
+						<ListaEspera
+							paciente={pacienteAgendado}
+							setPacienteAgendado={setPacienteAgendado}
+							empleado={empleado}
+							sucursal={sucursal._id} />
+					</TabPanel>
+				</Fragment>
 			</main>
 		</div>
 	);

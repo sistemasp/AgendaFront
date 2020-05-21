@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { Backdrop, CircularProgress } from '@material-ui/core';
-import { ConsultorioContainer } from './consultorios';
+import { ListaEsperaContainer } from './lista_espera';
 import { findEmployeesByRolId, findSurgeryBySucursalId, createSurgery } from '../../services';
 import HistoryIcon from '@material-ui/icons/History';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const Consultorios = (props) => {
+const ListaEspera = (props) => {
 
 	const classes = useStyles();
 
@@ -54,8 +54,8 @@ const Consultorios = (props) => {
 
 	const columns = [
 		{ title: 'Nombre', field: 'nombre' },
-		{ title: 'Medico', field: 'nombre_medico' },
-		{ title: 'Paciente', field: 'nombre_paciente' },
+		{ title: 'Consultorio', field: 'nombre_medico' },
+		{ title: 'Medico', field: 'nombre_paciente' },
 	];
 
 	const options = {
@@ -116,19 +116,6 @@ const Consultorios = (props) => {
 		setIsLoading(false);
 	}
 
-	const actions = [
-		{
-			icon: Edit,
-			tooltip: 'Generar Pago',
-			onClick: onClickAgendar
-		},
-		{
-			icon: HistoryIcon,
-			tooltip: 'Historial de pagos',
-			onClick: handleClickHistorico
-		}
-	];
-
 	useEffect(() => {
 		const loadConsultorios = async () => {
 			const response = await findSurgeryBySucursalId(sucursal);
@@ -152,10 +139,9 @@ const Consultorios = (props) => {
 		<Fragment>
 			{
 				!isLoading ?
-					<ConsultorioContainer
+					<ListaEsperaContainer
 						columns={columns}
-						titulo='Consultorios'
-						actions={actions}
+						titulo='Lista de espera'
 						options={options}
 						openModal={openModal}
 						openHistoric={openHistoric}
@@ -177,4 +163,4 @@ const Consultorios = (props) => {
 	);
 }
 
-export default Consultorios;
+export default ListaEspera;

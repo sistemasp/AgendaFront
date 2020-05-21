@@ -94,7 +94,7 @@ const Agendar = (props) => {
         { title: 'Observaciones', field: 'observaciones' },
     ];
 
-    const doctorRolId = process.env.REACT_APP_DOCTOR_ROL_ID;
+    const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
 
     const options = {
         rowStyle: rowData => {
@@ -142,7 +142,7 @@ const Agendar = (props) => {
         }
 
         const loadDoctores = async() => {
-            const response = await findEmployeesByRolId(doctorRolId);
+            const response = await findEmployeesByRolId(medicoRolId);
             if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
                 setMedicos(response.data);
             }
@@ -153,7 +153,7 @@ const Agendar = (props) => {
         loadServicios();
         loadDoctores();
         setIsLoading(false);
-    }, [sucursal]);
+    }, [sucursal, medicoRolId]);
 
     const loadTratamientos = async(servicio) => {
         const response = await findTreatmentByServicio(servicio);

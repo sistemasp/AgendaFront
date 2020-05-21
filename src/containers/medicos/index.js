@@ -54,7 +54,9 @@ const Medicos = (props) => {
 	} = props;
 
 	const columns = [
-		{ title: 'Nombre', field: 'nombre' }
+		{ title: 'Nombre', field: 'nombre' },
+		{ title: 'Cedula Profesional', field: 'cedula' },
+		{ title: 'Fecha Ingreso', field: 'fecha_ingreso' }
 	];
 
 	const options = {

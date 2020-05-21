@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { Backdrop, CircularProgress } from '@material-ui/core';
-import { ConsultorioContainer } from './consultorios';
+import { CorteContainer } from './corte';
 import { findEmployeesByRolId, findSurgeryBySucursalId, createSurgery } from '../../services';
 import HistoryIcon from '@material-ui/icons/History';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const Consultorios = (props) => {
+const Corte = (props) => {
 
 	const classes = useStyles();
 
@@ -152,9 +152,10 @@ const Consultorios = (props) => {
 		<Fragment>
 			{
 				!isLoading ?
-					<ConsultorioContainer
+					<CorteContainer
 						columns={columns}
-						titulo='Consultorios'
+						tituloIngreso='Ingreso'
+						tituloEgreso='Egreso'
 						actions={actions}
 						options={options}
 						openModal={openModal}
@@ -177,4 +178,4 @@ const Consultorios = (props) => {
 	);
 }
 
-export default Consultorios;
+export default Corte;
