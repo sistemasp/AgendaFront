@@ -67,7 +67,8 @@ const ModalCita = (props) => {
     precio: cita.precio,
     motivos: cita.motivos,
     observaciones: cita.observaciones,
-    dermatologo: cita.dermatologo
+    dermatologo: cita.dermatologo,
+    tiempo: cita.tiempo,
   });
 
   const valuesTipoCita = [
@@ -220,7 +221,7 @@ const ModalCita = (props) => {
 
   const handleOnClickActualizarCita = async(event, rowData) => {
     rowData.quien_confirma = empleado._id;
-    rowData.tiempo = getTimeToTratamiento(rowData.tratamientos);
+    // rowData.tiempo = getTimeToTratamiento(rowData.tratamientos);
     await updateDate(cita._id, rowData);
     onClose();
     await loadCitas(rowData.fecha_show);
@@ -241,6 +242,10 @@ const ModalCita = (props) => {
   const handleChangeDoctors = (e) => {
     setValues({...values, dermatologo: e.target.value});
   }
+
+  const handleChangeTiempo = e => {
+    setValues({...values, tiempo: e.target.value});
+  };
 
   return (
     <Formik
@@ -264,6 +269,7 @@ const ModalCita = (props) => {
         onChangePromovendedor={(e) => handleChangePromovendedor(e)}
         onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
         onChangeDoctors={(e) => handleChangeDoctors(e)}
+        onChangeTiempo={(e) => handleChangeTiempo(e)}
         servicios={servicios}
         tratamientos={tratamientos}
         horarios={horarios}
