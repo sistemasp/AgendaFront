@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export const AgendarContainer = (props) => {
+export const AgendarConsultaContainer = (props) => {
 
 	const classes = useStyles();
 
@@ -94,44 +94,6 @@ export const AgendarContainer = (props) => {
 
 				<Grid container spacing={3}>
 					<Grid item xs={12} sm={2}>
-						<FormControl variant="outlined" className={classes.formControl}>
-							<InputLabel id="simple-select-outlined-servicio">Servicio</InputLabel>
-							<Select
-								labelId="simple-select-outlined-servicio"
-								id="simple-select-outlined-servicio"
-								value={values.servicio}
-								error={Boolean(errors.servicio)}
-								onChange={onChangeServicio}
-								label="Servicio" >
-								{servicios.sort().map((item, index) => <MenuItem key={index} value={item.nombre}>{item.nombre}</MenuItem>)}
-							</Select>
-						</FormControl>
-					</Grid>
-					<Grid item xs={12} sm={2}>
-						<Multiselect
-							options={tratamientos} // Options to display in the dropdown
-							displayValue="nombre" // Property name to display in the dropdown options
-							onSelect={(e) => onChangeTratamientos(e)} // Function will trigger on select event
-							onRemove={(e) => onChangeTratamientos(e)} // Function will trigger on remove event
-							placeholder="Selecciona tratamientos"
-							selectedValues={values.tratamientos} // Preselected value to persist in dropdown
-						/>
-					</Grid>
-					<Grid item xs={12} sm={2}>
-						<FormControl variant="outlined" className={classes.formControl}>
-							<InputLabel id="simple-select-outlined-hora">Medico</InputLabel>
-							<Select
-								labelId="simple-select-outlined-medico"
-								id="simple-select-outlined-medico"
-								value={values.medico}
-								error={Boolean(errors.medico)}
-								onChange={onChangeDoctors}
-								label="Medico" >
-								{medicos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
-							</Select>
-						</FormControl>
-					</Grid>
-					<Grid item xs={12} sm={2}>
 						<MuiPickersUtilsProvider utils={DateFnsUtils}>
 							<Grid
 								container
@@ -141,7 +103,6 @@ export const AgendarContainer = (props) => {
 									disableToolbar
 									//disablePast
 									autoOk
-									disabled={disableDate}
 									variant="inline"
 									format="dd/MM/yyyy"
 									margin="normal"
@@ -156,6 +117,7 @@ export const AgendarContainer = (props) => {
 							</Grid>
 						</MuiPickersUtilsProvider>
 					</Grid>
+
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
 							<InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
@@ -171,6 +133,7 @@ export const AgendarContainer = (props) => {
 							</Select>
 						</FormControl>
 					</Grid>
+
 					<Grid item xs={12} sm={2}>
 						<TextField
 							name="precio"
@@ -182,25 +145,14 @@ export const AgendarContainer = (props) => {
 							onChange={onChangePrecio}
 							variant="outlined" />
 					</Grid>
-					<Grid item xs={12} sm={2}>
-						<TextField
-							name="tiempo"
-							//helperText={touched.tiempo ? errors.tiempo : ""}
-							error={Boolean(errors.tiempo)}
-							label="Tiempo"
-							value={values.tiempo}
-							type='Number'
-							onChange={onChangeTiempo}
-							variant="outlined" />
-					</Grid>
+
+
 					<Grid item xs={12} sm={2}>
 						<Button
 							className={classes.button}
 							variant="contained"
 							color="primary"
-							disabled={!isValid || isSubmitting || !paciente.nombres || !values.servicio
-								|| values.tratamientos.length === 0 || !values.fecha || !values.hora || !values.precio
-								|| !values.tiempo}
+							disabled={!isValid || isSubmitting}
 							onClick={() => onClickAgendar(values)} >
 							Agendar
                         </Button>
@@ -219,7 +171,7 @@ export const AgendarContainer = (props) => {
 							format="dd/MM/yyyy"
 							margin="normal"
 							id="date-picker-inline-filter"
-							label="Filtrado Citas"
+							label="Filtrado Consultas"
 							value={filterDate}
 							onChange={onChangeFilterDate}
 							KeyboardButtonProps={{

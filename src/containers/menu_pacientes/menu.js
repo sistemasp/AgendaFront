@@ -12,6 +12,7 @@ import Agendar from '../agendar/index';
 import { Button, Toolbar } from '@material-ui/core';
 import Reportes from '../reportes/index';
 import ModalPassword from '../../components/modal_password';
+import AgendarConsulta from '../agendar_consulta';
 
 
 function TabPanel(props) {
@@ -87,8 +88,10 @@ export const MenuContainer = props => {
                 <Tabs value={value} onChange={onChangeTab} aria-label="simple tabs">
                     <Tab label="Pacientes" {...a11yProps(0)} />
                     <Tab label="Agendar cita" {...a11yProps(1)} />
-                    <Tab label="Citas" {...a11yProps(2)} />
-                    <Tab label="Reportes" {...a11yProps(3)} />
+                    <Tab label="Agendar consulta" {...a11yProps(2)} />
+                    <Tab label="Citas" {...a11yProps(3)} />
+                    <Tab label="Consultas" {...a11yProps(4)} />
+                    <Tab label="Reportes" {...a11yProps(5)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
@@ -104,10 +107,21 @@ export const MenuContainer = props => {
                     sucursal={sucursal._id} />
             </TabPanel>
             <TabPanel value={value} index={2}>
+                <AgendarConsulta 
+                    paciente={pacienteAgendado}
+                    setPacienteAgendado={setPacienteAgendado}
+                    empleado={empleado}
+                    sucursal={sucursal._id} />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
                 <Citas 
                     sucursal={sucursal._id}/>
             </TabPanel>
-            <TabPanel value={value} index={3}>
+            <TabPanel value={value} index={4}>
+                <Citas 
+                    sucursal={sucursal._id}/>
+            </TabPanel>
+            <TabPanel value={value} index={5}>
                 <Reportes 
                     sucursal={sucursal._id}/>
             </TabPanel>
