@@ -48,10 +48,15 @@ export const AgendarContainer = (props) => {
 		isSubmitting,
 		onChangePrecio,
 		onChangeTiempo,
+		onChangeObservaciones,
 		empleado,
 		disableDate,
-		medicos,
+		doctores,
+		promovendedores,
+		cosmetologas,
 		onChangeDoctors,
+		onChangePromovendedor,
+		onChangeCosmetologa,
 		// TABLE DATES PROPERTIES
 		titulo,
 		columns,
@@ -91,7 +96,6 @@ export const AgendarContainer = (props) => {
 			}
 			<Paper>
 				<h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'Selecciona un paciente'}</h1>
-
 				<Grid container spacing={3}>
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
@@ -119,15 +123,43 @@ export const AgendarContainer = (props) => {
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
-							<InputLabel id="simple-select-outlined-hora">Medico</InputLabel>
+							<InputLabel id="simple-select-outlined-hora">Dermatologo</InputLabel>
 							<Select
-								labelId="simple-select-outlined-medico"
-								id="simple-select-outlined-medico"
-								value={values.medico}
-								error={Boolean(errors.medico)}
+								labelId="simple-select-outlined-dermatologo"
+								id="simple-select-outlined-dermatologo"
+								value={values.dermatologo}
+								error={Boolean(errors.dermatologo)}
 								onChange={onChangeDoctors}
-								label="Medico" >
-								{medicos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+								label="Dermatologo" >
+								{doctores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+							</Select>
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<FormControl variant="outlined" className={classes.formControl}>
+							<InputLabel id="simple-select-outlined-promovendedor">Promovendedor</InputLabel>
+							<Select
+								labelId="simple-select-outlined-promovendedor"
+								id="simple-select-outlined-promovendedor"
+								value={values.promovendedor}
+								error={Boolean(errors.promovendedor)}
+								onChange={onChangePromovendedor}
+								label="Promovendedor" >
+								{promovendedores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+							</Select>
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<FormControl variant="outlined" className={classes.formControl}>
+							<InputLabel id="simple-select-outlined-cosmetologa">Cosmetologa</InputLabel>
+							<Select
+								labelId="simple-select-outlined-cosmetologa"
+								id="simple-select-outlined-cosmetologa"
+								value={values.cosmetologa}
+								error={Boolean(errors.cosmetologa)}
+								onChange={onChangeCosmetologa}
+								label="Cosmetologa" >
+								{cosmetologas.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
 					</Grid>
@@ -191,6 +223,16 @@ export const AgendarContainer = (props) => {
 							value={values.tiempo}
 							type='Number'
 							onChange={onChangeTiempo}
+							variant="outlined" />
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<TextField
+							name="observaciones"
+							//helperText={touched.observaciones ? errors.observaciones : ""}
+							error={Boolean(errors.observaciones)}
+							label="Observaciones"
+							value={values.observaciones}
+							onChange={onChangeObservaciones}
 							variant="outlined" />
 					</Grid>
 					<Grid item xs={12} sm={2}>
