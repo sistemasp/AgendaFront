@@ -47,11 +47,16 @@ export const AgendarContainer = (props) => {
         isValid,
         isSubmitting,
         onChangePrecio,
-        onChangeTiempo,
+				onChangeTiempo,
+				onChangeObservaciones,
         empleado,
         disableDate,
-        doctores,
-        onChangeDoctors,
+				doctores,
+				promovendedores,
+				cosmetologas,
+				onChangeDoctors,
+				onChangePromovendedor,
+				onChangeCosmetologa,
         // TABLE DATES PROPERTIES
         titulo,
         columns,
@@ -131,6 +136,34 @@ export const AgendarContainer = (props) => {
                             </Select>
                         </FormControl>
                     </Grid>
+										<Grid item xs={12} sm={2}>
+                        <FormControl variant="outlined" className={classes.formControl}>                
+                            <InputLabel id="simple-select-outlined-promovendedor">Promovendedor</InputLabel>
+                            <Select
+                                labelId="simple-select-outlined-promovendedor"
+                                id="simple-select-outlined-promovendedor"
+                                value={values.promovendedor}
+                                error={Boolean(errors.promovendedor)}
+                                onChange={onChangePromovendedor}
+                                label="Promovendedor" >
+                                {promovendedores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+										<Grid item xs={12} sm={2}>
+                        <FormControl variant="outlined" className={classes.formControl}>                
+                            <InputLabel id="simple-select-outlined-cosmetologa">Cosmetologa</InputLabel>
+                            <Select
+                                labelId="simple-select-outlined-cosmetologa"
+                                id="simple-select-outlined-cosmetologa"
+                                value={values.cosmetologa}
+                                error={Boolean(errors.cosmetologa)}
+                                onChange={onChangeCosmetologa}
+                                label="Cosmetologa" >
+                                {cosmetologas.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+                            </Select>
+                        </FormControl>
+                    </Grid>
                     <Grid item xs={12} sm={2}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <Grid 
@@ -191,6 +224,16 @@ export const AgendarContainer = (props) => {
                         value={values.tiempo}
                         type='Number'
                         onChange={onChangeTiempo}
+                        variant="outlined" />
+                    </Grid>
+                    <Grid item xs={12} sm={2}>
+                        <TextField
+                        name="observaciones"
+                        //helperText={touched.observaciones ? errors.observaciones : ""}
+                        error={Boolean(errors.observaciones)}
+                        label="Observaciones"
+                        value={values.observaciones}
+                        onChange={onChangeObservaciones}
                         variant="outlined" />
                     </Grid>
                     <Grid item xs={12} sm={2}>

@@ -6,27 +6,27 @@ import { Formik } from 'formik';
 
 const validationSchema = Yup.object({
   fecha: Yup.string("Ingresa los nombres")
-        .required("Los nombres del pacientes son requeridos"),
+    .required("Los nombres del pacientes son requeridos"),
   hora: Yup.string("Ingresa los apellidos")
-        .required("Los nombres del pacientes son requeridos"),
+    .required("Los nombres del pacientes son requeridos"),
   paciente: Yup.string("Ingresa la fecha de nacimiento")
-        .required("Los nombres del pacientes son requeridos"),
+    .required("Los nombres del pacientes son requeridos"),
   servicio: Yup.string("Ingresa la direccion")
-        .required("Los nombres del pacientes son requeridos"),
+    .required("Los nombres del pacientes son requeridos"),
   tratamiento: Yup.string("Ingresa el telefono")
-        .required("Los nombres del pacientes son requeridos"),
+    .required("Los nombres del pacientes son requeridos"),
   numero_sesion: Yup.string("Ingresa los nombres")
-        .required("Los nombres del pacientes son requeridos"),
+    .required("Los nombres del pacientes son requeridos"),
   recepcionista: Yup.string("Ingresa los apellidos")
-        .required("Los nombres del pacientes son requeridos"),
+    .required("Los nombres del pacientes son requeridos"),
   confirmo: Yup.string("Ingresa la fecha de nacimiento")
-        .required("Los nombres del pacientes son requeridos"),
+    .required("Los nombres del pacientes son requeridos"),
   quien_confirma: Yup.string("Ingresa la direccion")
-        .required("Los nombres del pacientes son requeridos"),
+    .required("Los nombres del pacientes son requeridos"),
   asistio: Yup.string("Ingresa el telefono")
-        .required("Los nombres del pacientes son requeridos"),
+    .required("Los nombres del pacientes son requeridos"),
   precio: Yup.string("Ingresa el telefono")
-        .required("Los nombres del pacientes son requeridos"),
+    .required("Los nombres del pacientes son requeridos"),
 });
 
 const ModalCita = (props) => {
@@ -92,45 +92,45 @@ const ModalCita = (props) => {
   const doctorRolId = process.env.REACT_APP_DOCTOR_ROL_ID;
 
   useEffect(() => {
-    const loadServicios = async() => {
-        const response = await getAllServices();
-        if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK ) {
-            setServicios(response.data);
-        }
-    }
-    const loadTratamientos = async() => {
-      const response = await findTreatmentByServicio(cita.servicio);
-      if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-          setTratamientos(response.data);
+    const loadServicios = async () => {
+      const response = await getAllServices();
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setServicios(response.data);
       }
     }
-    const loadHorariosByServicio = async() => {
+    const loadTratamientos = async () => {
+      const response = await findTreatmentByServicio(cita.servicio);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setTratamientos(response.data);
+      }
+    }
+    const loadHorariosByServicio = async () => {
       const splitDate = (cita.fecha).split('/');
       const response = await findScheduleByDateAndSucursalAndService(splitDate[0], splitDate[1], splitDate[2], cita.sucursal._id, cita.servicio);
-      if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        response.data.push({hora: values.hora});
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        response.data.push({ hora: values.hora });
         setHorarios(response.data);
       }
     }
 
-    const loadPromovendedores = async() => {
+    const loadPromovendedores = async () => {
       const response = await findEmployeesByRolId(promovendedorRolId);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setPromovendedores(response.data);
       }
     }
 
-    const loadCosmetologas = async() => {
+    const loadCosmetologas = async () => {
       const response = await findEmployeesByRolId(cosmetologaRolId);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setCosmetologas(response.data);
       }
     }
 
-    const loadDoctores = async() => {
+    const loadDoctores = async () => {
       const response = await findEmployeesByRolId(doctorRolId);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-          setDoctores(response.data);
+        setDoctores(response.data);
       }
     }
 
@@ -142,85 +142,87 @@ const ModalCita = (props) => {
     loadDoctores();
   }, [cita, promovendedorRolId, cosmetologaRolId, doctorRolId]);
 
-  const loadTratamientos = async(servicio) => {
+  const loadTratamientos = async (servicio) => {
     const response = await findTreatmentByServicio(servicio);
-    if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setTratamientos(response.data);
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setTratamientos(response.data);
     }
   }
 
-  const loadHorarios = async() => {
-      const response = await getAllSchedules();
-      if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-          setHorarios(response.data);
-      }
+  const loadHorarios = async () => {
+    const response = await getAllSchedules();
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setHorarios(response.data);
+    }
   }
 
   const handleChangeServicio = e => {
-      setValues({
-          ...values,
-          servicio: e.target.value,
-          tratamiento: '',
-          fecha_show: new Date(),
-          fecha: '',
-          hora: '',
-          precio: '',
-      });
-      loadTratamientos(e.target.value);
+    setValues({
+      ...values,
+      servicio: e.target.value,
+      tratamiento: '',
+      fecha_show: new Date(),
+      fecha: '',
+      hora: '',
+      precio: '',
+    });
+    loadTratamientos(e.target.value);
   };
 
   const handleChangeTratamientos = (items) => {
-    setValues({...values, tratamientos: items});
+    setValues({ ...values, tratamientos: items });
   }
 
   const handleChangeFecha = date => {
-      loadHorarios();
-      setValues({
-          ...values,
-          fecha_show: date,
-          fecha: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
-      });
+    loadHorarios();
+    setValues({
+      ...values,
+      fecha_show: date,
+      fecha: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+    });
   };
 
   const handleChangeHora = e => {
-      setValues({...values, hora: e.target.value});
+    setValues({ ...values, hora: e.target.value });
   };
 
   const handleChangeTipoCita = e => {
-      setValues({...values, tipo_cita: e.target.value});
+    setValues({ ...values, tipo_cita: e.target.value });
   }
 
   const handleChangePromovendedor = e => {
-    setValues({...values, promovendedor: e.target.value});
+    setValues({ ...values, promovendedor: e.target.value });
   }
 
   const handleChangeCosmetologa = e => {
-    setValues({...values, cosmetologa: e.target.value});
+    setValues({ ...values, cosmetologa: e.target.value });
   }
 
   const handleChangeAsistio = e => {
-    setValues({...values, asistio: e.target.value});
+    setValues({ ...values, asistio: e.target.value });
   }
 
   const handleChangeObservaciones = e => {
-    setValues({...values, observaciones: e.target.value});
+    setValues({ ...values, observaciones: e.target.value });
   }
 
   const getTimeToTratamiento = (tratamientos) => {
-    tratamientos.sort( (a, b) => {
-        if (a.tiempo < b.tiempo) return 1;
-        if (a.tiempo > b.tiempo) return -1;
-        return 0;
+    tratamientos.sort((a, b) => {
+      if (a.tiempo < b.tiempo) return 1;
+      if (a.tiempo > b.tiempo) return -1;
+      return 0;
     });
     let tiempo = 0;
     tratamientos.forEach((item, index) => {
-        tiempo += Number(index === 0 ? item.tiempo : (item.tiempo - 20));
+      tiempo += Number(index === 0 ? item.tiempo : (item.tiempo - 20));
     });
     return tiempo;
   }
 
-  const handleOnClickActualizarCita = async(event, rowData) => {
-    rowData.quien_confirma = empleado._id;
+  const handleOnClickActualizarCita = async (event, rowData) => {
+    if (rowData.asistio !== 'PENDIENTE') {
+      rowData.quien_confirma = empleado._id;
+    }
     // rowData.tiempo = getTimeToTratamiento(rowData.tratamientos);
     await updateDate(cita._id, rowData);
     onClose();
@@ -228,23 +230,23 @@ const ModalCita = (props) => {
   }
 
   const handleChangeSesion = e => {
-    setValues({...values, numero_sesion: e.target.value});
+    setValues({ ...values, numero_sesion: e.target.value });
   };
 
   const handleChangePrecio = e => {
-    setValues({...values, precio: e.target.value});
+    setValues({ ...values, precio: e.target.value });
   };
 
   const handleChangeMotivos = e => {
-    setValues({...values, motivos: e.target.value});
+    setValues({ ...values, motivos: e.target.value });
   }
 
   const handleChangeDoctors = (e) => {
-    setValues({...values, dermatologo: e.target.value});
+    setValues({ ...values, dermatologo: e.target.value });
   }
 
   const handleChangeTiempo = e => {
-    setValues({...values, tiempo: e.target.value});
+    setValues({ ...values, tiempo: e.target.value });
   };
 
   return (
@@ -254,35 +256,35 @@ const ModalCita = (props) => {
       validationSchema={validationSchema} >
       {
         props => <ModalFormCita
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={open}
-        onClickCancel={onClose}
-        cita={cita}
-        onClickActualizarCita={handleOnClickActualizarCita}
-        onChangeServicio={(e) => handleChangeServicio(e)}
-        onChangeTratamientos={(e) => handleChangeTratamientos(e)}
-        onChangeFecha={(e) => handleChangeFecha(e)}
-        onChangeHora={(e) => handleChangeHora(e)}
-        onChangeTipoCita={(e) => handleChangeTipoCita(e)}
-        onChangeAsistio={(e) => handleChangeAsistio(e)}
-        onChangePromovendedor={(e) => handleChangePromovendedor(e)}
-        onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
-        onChangeDoctors={(e) => handleChangeDoctors(e)}
-        onChangeTiempo={(e) => handleChangeTiempo(e)}
-        servicios={servicios}
-        tratamientos={tratamientos}
-        horarios={horarios}
-        promovendedores={promovendedores}
-        cosmetologas={cosmetologas}
-        doctores={doctores}
-        valuesTipoCita={valuesTipoCita}
-        valuesStatus={valuesStatus}
-        onChangeSesion={handleChangeSesion}
-        onChangePrecio={handleChangePrecio}
-        onChangeMotivos={handleChangeMotivos}
-        onChangeObservaciones={handleChangeObservaciones}
-        {...props} />
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={open}
+          onClickCancel={onClose}
+          cita={cita}
+          onClickActualizarCita={handleOnClickActualizarCita}
+          onChangeServicio={(e) => handleChangeServicio(e)}
+          onChangeTratamientos={(e) => handleChangeTratamientos(e)}
+          onChangeFecha={(e) => handleChangeFecha(e)}
+          onChangeHora={(e) => handleChangeHora(e)}
+          onChangeTipoCita={(e) => handleChangeTipoCita(e)}
+          onChangeAsistio={(e) => handleChangeAsistio(e)}
+          onChangePromovendedor={(e) => handleChangePromovendedor(e)}
+          onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
+          onChangeDoctors={(e) => handleChangeDoctors(e)}
+          onChangeTiempo={(e) => handleChangeTiempo(e)}
+          servicios={servicios}
+          tratamientos={tratamientos}
+          horarios={horarios}
+          promovendedores={promovendedores}
+          cosmetologas={cosmetologas}
+          doctores={doctores}
+          valuesTipoCita={valuesTipoCita}
+          valuesStatus={valuesStatus}
+          onChangeSesion={handleChangeSesion}
+          onChangePrecio={handleChangePrecio}
+          onChangeMotivos={handleChangeMotivos}
+          onChangeObservaciones={handleChangeObservaciones}
+          {...props} />
       }
     </Formik>
   );

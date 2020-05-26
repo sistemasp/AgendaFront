@@ -121,7 +121,7 @@ const ModalFormCita = (props) => {
                           value={values.dermatologo}
                           error={Boolean(errors.dermatologo)}
                           onChange={onChangeDoctors}
-                          label="Dermatoogo" >
+                          label="Dermatologo" >
                           {doctores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
                       </Select>
                   </FormControl>
