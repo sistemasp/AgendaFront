@@ -5,6 +5,7 @@ import { PacientesContainer } from './pacientes';
 import { getAllPatients, updatePatient, createPatient, findPatientByPhoneNumber } from '../../services';
 import EditIcon from '@material-ui/icons/Edit';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
+import TodayIcon from '@material-ui/icons/Today';
 import HistoryIcon from '@material-ui/icons/History';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -48,7 +49,8 @@ const Pacientes = (props) => {
     const [severity, setSeverity] = useState('success');
 
     const {
-        onClickAgendar
+        onClickAgendarTratamiento,
+        onClickAgendarConsulta,
     } = props;
 
     const columns = [
@@ -140,7 +142,7 @@ const Pacientes = (props) => {
             || `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED ) {
             setSeverity('success');
             loadPacientes();
-            onClickAgendar(e, val);
+            onClickAgendarTratamiento(e, val);
             setMessage(paciente._id ? 'Paciente actualizado correctamente' : 'Paciente creado correctamente');
         }
 
@@ -160,9 +162,14 @@ const Pacientes = (props) => {
 
     const actions = [
         {
+            icon: TodayIcon,
+            tooltip: 'Agendar consulta',
+            onClick: onClickAgendarConsulta
+        },
+        {
             icon: EventAvailableIcon,
-            tooltip: 'Agendar cita',
-            onClick: onClickAgendar
+            tooltip: 'Agendar tratamiento',
+            onClick: onClickAgendarTratamiento
         },
         {
             icon: EditIcon,

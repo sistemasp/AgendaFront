@@ -69,7 +69,8 @@ export const MenuContainer = props => {
         setPacienteAgendado,
         onChangeTab,
         value,
-        onClickAgendar,
+        onClickAgendarTratamiento,
+        onClickAgendarConsulta,
         empleado,
         sucursal,
         onClickLogout,
@@ -87,27 +88,28 @@ export const MenuContainer = props => {
             <AppBar className={classes.bar} position="static">
                 <Tabs value={value} onChange={onChangeTab} aria-label="simple tabs">
                     <Tab label="Pacientes" {...a11yProps(0)} />
-                    <Tab label="Agendar cita" {...a11yProps(1)} />
-                    <Tab label="Agendar consulta" {...a11yProps(2)} />
-                    <Tab label="Citas" {...a11yProps(3)} />
-                    <Tab label="Consultas" {...a11yProps(4)} />
+                    <Tab label="Agendar consulta" {...a11yProps(1)} />
+                    <Tab label="Agendar tratamiento" {...a11yProps(2)} />
+                    <Tab label="Consultas" {...a11yProps(3)} />
+                    <Tab label="Tratamientos" {...a11yProps(4)} />
                     <Tab label="Reportes" {...a11yProps(5)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
                 <Pacientes 
-                    onClickAgendar={onClickAgendar}
+                    onClickAgendarTratamiento={onClickAgendarTratamiento}
+                    onClickAgendarConsulta={onClickAgendarConsulta}
                     onChangeTab={onChangeTab} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <Agendar 
+                <AgendarConsulta 
                     paciente={pacienteAgendado}
                     setPacienteAgendado={setPacienteAgendado}
                     empleado={empleado}
                     sucursal={sucursal._id} />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <AgendarConsulta 
+                <Agendar 
                     paciente={pacienteAgendado}
                     setPacienteAgendado={setPacienteAgendado}
                     empleado={empleado}

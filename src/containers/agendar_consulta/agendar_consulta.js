@@ -11,7 +11,6 @@ import Select from '@material-ui/core/Select';
 import { Paper, Button, TextField } from '@material-ui/core';
 import TableComponent from '../../components/table/TableComponent';
 import ModalCita from '../../components/modal_cita';
-import { Multiselect } from 'multiselect-react-dropdown';
 
 const useStyles = makeStyles(theme => ({
 	formControl: {
@@ -47,11 +46,12 @@ export const AgendarConsultaContainer = (props) => {
 		isValid,
 		isSubmitting,
 		onChangePrecio,
-		onChangeTiempo,
 		empleado,
-		disableDate,
 		medicos,
-		onChangeDoctors,
+		promovendedores,
+		onChangeMedicos,
+		onChangePromovendedor,
+		onChangeObservaciones,
 		// TABLE DATES PROPERTIES
 		titulo,
 		columns,
@@ -133,7 +133,34 @@ export const AgendarConsultaContainer = (props) => {
 							</Select>
 						</FormControl>
 					</Grid>
-
+					<Grid item xs={12} sm={2}>
+						<FormControl variant="outlined" className={classes.formControl}>
+							<InputLabel id="simple-select-outlined-hora">Medico</InputLabel>
+							<Select
+								labelId="simple-select-outlined-medico"
+								id="simple-select-outlined-medico"
+								value={values.medico}
+								error={Boolean(errors.medico)}
+								onChange={onChangeMedicos}
+								label="Medico" >
+								{medicos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+							</Select>
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<FormControl variant="outlined" className={classes.formControl}>
+							<InputLabel id="simple-select-outlined-promovendedor">Promovendedor</InputLabel>
+							<Select
+								labelId="simple-select-outlined-promovendedor"
+								id="simple-select-outlined-promovendedor"
+								value={values.promovendedor}
+								error={Boolean(errors.promovendedor)}
+								onChange={onChangePromovendedor}
+								label="Promovendedor" >
+								{promovendedores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+							</Select>
+						</FormControl>
+					</Grid>
 					<Grid item xs={12} sm={2}>
 						<TextField
 							name="precio"
@@ -145,8 +172,16 @@ export const AgendarConsultaContainer = (props) => {
 							onChange={onChangePrecio}
 							variant="outlined" />
 					</Grid>
-
-
+					<Grid item xs={12} sm={2}>
+						<TextField
+							name="observaciones"
+							//helperText={touched.observaciones ? errors.observaciones : ""}
+							error={Boolean(errors.observaciones)}
+							label="Observaciones"
+							value={values.observaciones}
+							onChange={onChangeObservaciones}
+							variant="outlined" />
+					</Grid>
 					<Grid item xs={12} sm={2}>
 						<Button
 							className={classes.button}

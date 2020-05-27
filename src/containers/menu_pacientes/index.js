@@ -26,9 +26,14 @@ const MenuPatient = (props) => {
         setValue(newValue);
     };
 
-    const handleAgendar = (event, rowData) => {
+    const handleAgendarTratamiento = (event, rowData) => {
         setPacienteAgendado(rowData);
-        setValue(Number(process.env.REACT_APP_PAGE_AGENDAR));
+        setValue(Number(process.env.REACT_APP_PAGE_AGENDAR_TRATAMIENTO));
+    }
+
+    const handleClickAgendarConsulta = (event, rowData) => {
+        setPacienteAgendado(rowData);
+        setValue(Number(process.env.REACT_APP_PAGE_AGENDAR_CONSULTA));
     }
 
     const handleLogout = () => {
@@ -57,7 +62,8 @@ const MenuPatient = (props) => {
                 pacienteAgendado={pacienteAgendado}
                 setPacienteAgendado={setPacienteAgendado}
                 onChangeTab={handleChangeTab}
-                onClickAgendar={handleAgendar}
+                onClickAgendarTratamiento={handleAgendarTratamiento}
+                onClickAgendarConsulta={handleClickAgendarConsulta}
                 empleado={empleado}
                 sucursal={sucursal}
                 open={open}

@@ -36,6 +36,7 @@ export const AgendarContainer = (props) => {
 		servicios,
 		tratamientos,
 		horarios,
+		tipoCitas,
 		onChangeServicio,
 		onChangeTratamientos,
 		onChangeFecha,
@@ -51,7 +52,7 @@ export const AgendarContainer = (props) => {
 		onChangeObservaciones,
 		empleado,
 		disableDate,
-		doctores,
+		medicos,
 		promovendedores,
 		cosmetologas,
 		onChangeDoctors,
@@ -107,7 +108,7 @@ export const AgendarContainer = (props) => {
 								error={Boolean(errors.servicio)}
 								onChange={onChangeServicio}
 								label="Servicio" >
-								{servicios.sort().map((item, index) => <MenuItem key={index} value={item.nombre}>{item.nombre}</MenuItem>)}
+								{servicios.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
 					</Grid>
@@ -123,15 +124,15 @@ export const AgendarContainer = (props) => {
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
-							<InputLabel id="simple-select-outlined-hora">Dermatologo</InputLabel>
+							<InputLabel id="simple-select-outlined-hora">Medico</InputLabel>
 							<Select
-								labelId="simple-select-outlined-dermatologo"
-								id="simple-select-outlined-dermatologo"
-								value={values.dermatologo}
-								error={Boolean(errors.dermatologo)}
+								labelId="simple-select-outlined-medico"
+								id="simple-select-outlined-medico"
+								value={values.medico}
+								error={Boolean(errors.medico)}
 								onChange={onChangeDoctors}
-								label="Dermatologo" >
-								{doctores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+								label="Medico" >
+								{medicos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
 					</Grid>
@@ -200,6 +201,20 @@ export const AgendarContainer = (props) => {
 								disabled={values.fecha_show === ''}
 								label="Hora" >
 								{horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
+							</Select>
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<FormControl variant="outlined" className={classes.formControl}>
+							<InputLabel id="simple-select-outlined-tipo-cita">Tipo Cita</InputLabel>
+							<Select
+								labelId="simple-select-outlined-tipo-cita"
+								id="simple-select-outlined-tipo-cita"
+								value={values.tipoCita}
+								error={Boolean(errors.tipoCita)}
+								onChange={onChangeTipoCita}
+								label="Tipo Cita" >
+								{tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
 					</Grid>

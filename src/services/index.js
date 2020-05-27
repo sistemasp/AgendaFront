@@ -82,10 +82,10 @@ export const getAllTreatments = async() => {
     }
 }
 
-export const findTreatmentByServicio = async(servicio) => {
+export const findTreatmentByServicio = async(servicioId) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/tratamiento/servicio/${servicio}`,
+            url: `${baseUrl}/tratamiento/servicio/${servicioId}`,
             method: 'GET'
         });
         return response;
@@ -128,6 +128,18 @@ export const findScheduleByDateAndSucursalAndService = async(dia, mes, anio, suc
         return response;
     } catch (error) {
         console.log('findScheduleByDateAndSucursalAndService', error);
+    }
+}
+
+export const findScheduleInConsultByDateAndSucursal = async(consultaId, dia, mes, anio, sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/horario/consulta/${consultaId}/${dia}/${mes}/${anio}/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findScheduleInConsultByDateAndSucursal', error);
     }
 }
 
@@ -346,5 +358,131 @@ export const createSurgery = async(consultorio) => {
         return response;
     } catch (error) {
         console.log('createSurgery', error);
+    }
+}
+
+// CONSULTAS
+
+export const getAllConsults = async() => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('getAllConsults', error);
+    }
+}
+
+export const getAllConsultsBySucursal = async(sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('getAllConsultsBySucursal', error);
+    }
+}
+
+export const showAllConsultsBySucursalAsistio = async(sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta/sucursal/${sucursalId}/asistio`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllConsultsBySucursalAsistio', error);
+    }
+}
+
+export const findConsultsByDate = async(dia, mes, anio) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta/${dia}/${mes}/${anio}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findConsultsByDate', error);
+    }
+}
+
+export const findConsultsByDateAndSucursal = async(dia, mes, anio, sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta/${dia}/${mes}/${anio}/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findConsultsByDateAndSucursal', error);
+    }
+}
+
+export const findConsultsByRangeDateAndSucursal = async(diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta/fecha_inicio/${diai}/${mesi}/${anioi}/fecha_fin/${diaf}/${mesf}/${aniof}/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findConsultsByRangeDateAndSucursal', error);
+    }
+}
+
+export const findHistoricConsultByPaciente = async(pacienteId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta/histotic/${pacienteId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findHistoricConsultByPaciente', error);
+    }
+}
+
+export const createConsult = async(consulta) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta`,
+            method: 'POST',
+            data: consulta
+        });
+        return response;
+    } catch (error) {
+        console.log('createConsult', error);
+    }
+}
+
+export const updateConsult = async(dateId, consulta) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta/${dateId}`,
+            method: 'PUT',
+            data: consulta
+        });
+        return response;
+    } catch (error) {
+        console.log('updateConsult', error);
+    }
+}
+
+// TIPO CITAS
+
+export const showAllTipoCitas = async() => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/tipocita`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllTipoCitas', error);
     }
 }
