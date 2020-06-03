@@ -61,14 +61,17 @@ const Agendar = (props) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [disableDate, setDisableDate] = useState(true);
 	const [values, setValues] = useState({
-		servicio: {},
+		servicio: '',
 		tratamientos: [],
 		fecha_show: '',
+		medico: '',
+		promovendedor: '',
+		cosmetologa: '',
 		fecha: '',
 		hora: '',
 		paciente: `${paciente._id}`,
 		precio: '',
-		tipo_cita: {},
+		tipo_cita: '',
 		tiempo: '',
 		observaciones: '',
 	});
@@ -173,6 +176,7 @@ const Agendar = (props) => {
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				setTipoCitas(response.data);
 			}
+			setIsLoading(false);
 		}
 
 		setIsLoading(true);
@@ -182,11 +186,10 @@ const Agendar = (props) => {
 		loadServicios();
 		loadMedicos();
 		loadTipoCitas();
-		setIsLoading(false);
 	}, [sucursal]);
 
 	const loadTratamientos = async (servicio) => {
-		const response = await findTreatmentByServicio(servicio._id);
+		const response = await findTreatmentByServicio(servicio);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setTratamientos(response.data);
 		}
@@ -196,7 +199,7 @@ const Agendar = (props) => {
 		const dia = date ? date.getDate() : values.fecha_show.getDate();
 		const mes = Number(date ? date.getMonth() : values.fecha_show.getMonth()) + 1;
 		const anio = date ? date.getFullYear() : values.fecha_show.getFullYear();
-		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, values.servicio._id);
+		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, values.servicio);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setHorarios(response.data);
 		}
@@ -206,7 +209,7 @@ const Agendar = (props) => {
 		const dia = date ? date.getDate() : values.fecha_show.getDate();
 		const mes = Number(date ? date.getMonth() : values.fecha_show.getMonth()) + 1;
 		const anio = date ? date.getFullYear() : values.fecha_show.getFullYear();
-		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, servicio._id);
+		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, servicio);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setHorarios(response.data);
 		}
@@ -312,21 +315,25 @@ const Agendar = (props) => {
 		data.sucursal = sucursal;
 		data.numero_sesion = 1;
 		data.status = pendienteStatusId;
-		console.log('DATA', data);
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 		const response = await createDate(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			setOpenAlert(true);
 			setMessage('La Cita se agendo correctamente');
 			setValues({
-				servicio: {},
-				tratamiento: '',
+				servicio: '',
+				tratamientos: [],
 				fecha_show: '',
+				medico: '',
+				promovendedor: '',
+				cosmetologa: '',
 				fecha: '',
 				hora: '',
-				paciente: {},
+				paciente: `${paciente._id}`,
 				precio: '',
-				tipo_cita: {},
+				tipo_cita: '',
+				tiempo: '',
+				observaciones: '',
 			});
 			setDisableDate(true);
 			setPacienteAgendado({});
@@ -374,7 +381,7 @@ const Agendar = (props) => {
 		setCita(rowData);
 		// await loadTratamientos(rowData.servicio);
 		const splitDate = (rowData.fecha).split('/');
-		await loadHorariosByServicio(new Date(splitDate[2], (splitDate[1] - 1), splitDate[0]), rowData.servicio);
+		await loadHorariosByServicio(new Date(splitDate[2], (splitDate[1] - 1), splitDate[0]), rowData.servicio._id);
 		setOpenModal(true);
 		setIsLoading(false);
 	}
@@ -407,7 +414,7 @@ const Agendar = (props) => {
 								onChangeFilterDate={(e) => handleChangeFilterDate(e)}
 								onChangeHora={(e) => handleChangeHora(e)}
 								onChangeObservaciones={(e) => handleChangeObservaciones(e)}
-								filterDate={filterDate.fecha_show}
+								filterDate={filterDate}
 								paciente={paciente}
 								disableDate={disableDate}
 								promovendedores={promovendedores}

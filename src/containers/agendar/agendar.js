@@ -81,6 +81,7 @@ export const AgendarContainer = (props) => {
 					<ModalCita
 						open={openModal}
 						cita={cita}
+						fecha={filterDate.fecha}
 						onClickActualizarCita={onClickActualizarCita}
 						onClose={onClickCancel}
 						onChangeServicio={onChangeServicio}
@@ -108,7 +109,7 @@ export const AgendarContainer = (props) => {
 								error={Boolean(errors.servicio)}
 								onChange={onChangeServicio}
 								label="Servicio" >
-								{servicios.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+								{servicios.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
 					</Grid>
@@ -132,7 +133,7 @@ export const AgendarContainer = (props) => {
 								error={Boolean(errors.medico)}
 								onChange={onChangeDoctors}
 								label="Medico" >
-								{medicos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+								{medicos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
 					</Grid>
@@ -146,7 +147,7 @@ export const AgendarContainer = (props) => {
 								error={Boolean(errors.promovendedor)}
 								onChange={onChangePromovendedor}
 								label="Promovendedor" >
-								{promovendedores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+								{promovendedores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
 					</Grid>
@@ -160,7 +161,7 @@ export const AgendarContainer = (props) => {
 								error={Boolean(errors.cosmetologa)}
 								onChange={onChangeCosmetologa}
 								label="Cosmetologa" >
-								{cosmetologas.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+								{cosmetologas.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
 					</Grid>
@@ -210,11 +211,11 @@ export const AgendarContainer = (props) => {
 							<Select
 								labelId="simple-select-outlined-tipo-cita"
 								id="simple-select-outlined-tipo-cita"
-								value={values.tipoCita}
-								error={Boolean(errors.tipoCita)}
+								value={values.tipo_cita}
+								error={Boolean(errors.tipo_cita)}
 								onChange={onChangeTipoCita}
 								label="Tipo Cita" >
-								{tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+								{tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
 					</Grid>
@@ -277,7 +278,7 @@ export const AgendarContainer = (props) => {
 							margin="normal"
 							id="date-picker-inline-filter"
 							label="Filtrado Citas"
-							value={filterDate}
+							value={filterDate.fecha_show}
 							onChange={onChangeFilterDate}
 							KeyboardButtonProps={{
 								'aria-label': 'change date',
