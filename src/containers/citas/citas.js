@@ -24,23 +24,12 @@ export const CitasContainer = (props) => {
         event: 'Evento',
     };
 
-    const colorLaser = '#23F34B';
-    const colorAparatologia = '#349CC4';
-    const colorFacial = '#E560FF';
     const textColor = "#FFFFFF";
 
     const eventPropGetter = (event, start, end, isSelected) => {
-        let color = '#000000';
-        if (event.servicio === 'APARATOLOGÍA') {
-            color = colorAparatologia;
-        } else if (event.servicio === 'FACIAL') {
-            color = colorFacial;
-        } else if (event.servicio === 'LÁSER') {
-            color = colorLaser;
-        }
 
         let newStyle = {
-            backgroundColor: color,
+            backgroundColor: event.servicio.color,
             color: textColor,
             borderRadius: "5px",
         };
