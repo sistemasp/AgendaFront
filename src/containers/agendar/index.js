@@ -1,7 +1,15 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { AgendarContainer } from "./agendar";
-import { getAllServices, findTreatmentByServicio, findScheduleByDateAndSucursalAndService, findDatesByDateAndSucursal, createDate, findEmployeesByRolId } from "../../services";
+import {
+	getAllServices,
+	findTreatmentByServicio,
+	findScheduleByDateAndSucursalAndService,
+	findDatesByDateAndSucursal,
+	createDate,
+	findEmployeesByRolId,
+	showAllTipoCitas
+} from "../../services";
 import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
@@ -32,7 +40,6 @@ const validationSchema = Yup.object({
 });
 
 const Agendar = (props) => {
-
 	const classes = useStyles();
 
 	const {
@@ -47,21 +54,24 @@ const Agendar = (props) => {
 	const [servicios, setServicios] = useState([]);
 	const [tratamientos, setTratamientos] = useState([]);
 	const [horarios, setHorarios] = useState([]);
-	const [doctores, setDoctores] = useState([]);
+	const [medicos, setMedicos] = useState([]);
 	const [promovendedores, setPromovendedores] = useState([]);
 	const [cosmetologas, setCosmetologas] = useState([]);
+	const [tipoCitas, setTipoCitas] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [disableDate, setDisableDate] = useState(true);
 	const [values, setValues] = useState({
 		servicio: '',
 		tratamientos: [],
 		fecha_show: '',
+		medico: '',
+		promovendedor: '',
+		cosmetologa: '',
 		fecha: '',
 		hora: '',
 		paciente: `${paciente._id}`,
 		precio: '',
 		tipo_cita: '',
-		citado: '',
 		tiempo: '',
 		observaciones: '',
 	});
@@ -83,35 +93,29 @@ const Agendar = (props) => {
 		{ title: 'Hora', field: 'hora' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
 		{ title: 'Telefono', field: 'paciente.telefono' },
-		{ title: 'Servicio', field: 'servicio' },
+		{ title: 'Servicio', field: 'servicio.nombre' },
 		{ title: 'Tratamientos', field: 'show_tratamientos' },
 		{ title: 'Numero Sesion', field: 'numero_sesion' },
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
-		{ title: 'Tipo Cita', field: 'tipo_cita' },
+		{ title: 'Tipo Cita', field: 'tipo_cita.nombre' },
 		{ title: 'Quien confirma', field: 'quien_confirma.nombre' },
 		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
-		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
+		{ title: 'Medico', field: 'medico_nombre' },
 		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
-		{ title: 'Estado', field: 'asistio' },
+		{ title: 'Estado', field: 'status.nombre' },
 		{ title: 'Precio', field: 'precio_moneda' },
 		{ title: 'Tiempo (minutos)', field: 'tiempo' },
 		{ title: 'Observaciones', field: 'observaciones' },
 	];
 
-	const doctorRolId = process.env.REACT_APP_DOCTOR_ROL_ID;
+	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
 	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
 	const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
+	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
 
 	const options = {
 		rowStyle: rowData => {
-			const { asistio } = rowData;
-			if (asistio === 'NO ASISTIO') {
-				return { color: '#B7B4A1' };
-			} else if (asistio === 'CANCELO') {
-				return { color: '#FF0000', fontWeight: 'bold' };
-			} else if (asistio === 'REAGENDO') {
-				return { color: '#FBD014' };
-			}
+			return { color: rowData.status.color };
 		},
 		headerStyle: {
 			backgroundColor: '#2BA6C6',
@@ -131,14 +135,13 @@ const Agendar = (props) => {
 
 		const loadCitas = async () => {
 			const response = await findDatesByDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
-
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
 					item.precio_moneda = toFormatterCurrency(item.precio);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-					item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
+					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
 					item.show_tratamientos = item.tratamientos.map(tratamiento => {
 						return `${tratamiento.nombre}, `;
 					});
@@ -161,11 +164,19 @@ const Agendar = (props) => {
 			}
 		}
 
-		const loadDoctores = async () => {
-			const response = await findEmployeesByRolId(doctorRolId);
+		const loadMedicos = async () => {
+			const response = await findEmployeesByRolId(medicoRolId);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setDoctores(response.data);
+				setMedicos(response.data);
 			}
+		}
+
+		const loadTipoCitas = async () => {
+			const response = await showAllTipoCitas();
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setTipoCitas(response.data);
+			}
+			setIsLoading(false);
 		}
 
 		setIsLoading(true);
@@ -173,8 +184,8 @@ const Agendar = (props) => {
 		loadPromovendedores();
 		loadCosmetologas();
 		loadServicios();
-		loadDoctores();
-		setIsLoading(false);
+		loadMedicos();
+		loadTipoCitas();
 	}, [sucursal]);
 
 	const loadTratamientos = async (servicio) => {
@@ -276,7 +287,7 @@ const Agendar = (props) => {
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
+				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
 				item.show_tratamientos = item.tratamientos.map(tratamiento => {
 					return `${tratamiento.nombre}, `;
 				});
@@ -300,11 +311,10 @@ const Agendar = (props) => {
 
 	const handleClickAgendar = async (data) => {
 		setIsLoading(true);
-		data.tipo_cita = 'CITADO';
 		data.quien_agenda = empleado._id;
 		data.sucursal = sucursal;
 		data.numero_sesion = 1;
-		data.asistio = 'PENDIENTE';
+		data.status = pendienteStatusId;
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 		const response = await createDate(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
@@ -312,14 +322,18 @@ const Agendar = (props) => {
 			setMessage('La Cita se agendo correctamente');
 			setValues({
 				servicio: '',
-				tratamiento: '',
+				tratamientos: [],
 				fecha_show: '',
+				medico: '',
+				promovendedor: '',
+				cosmetologa: '',
 				fecha: '',
 				hora: '',
-				paciente: {},
+				paciente: `${paciente._id}`,
 				precio: '',
 				tipo_cita: '',
-				citado: '',
+				tiempo: '',
+				observaciones: '',
 			});
 			setDisableDate(true);
 			setPacienteAgendado({});
@@ -338,7 +352,7 @@ const Agendar = (props) => {
 	}
 
 	const handleChangeDoctors = (e) => {
-		setValues({ ...values, dermatologo: e.target.value });
+		setValues({ ...values, medico: e.target.value });
 	}
 
 	const handleChangePromovendedor = (e) => {
@@ -348,6 +362,11 @@ const Agendar = (props) => {
 	const handleChangeCosmetologa = (e) => {
 		setValues({ ...values, cosmetologa: e.target.value });
 	}
+
+	const handleChangeTipoCita = (e) => {
+		setValues({ ...values, tipo_cita: e.target.value });
+	}
+
 	const handleCloseAlert = () => {
 		setOpenAlert(false);
 	};
@@ -362,7 +381,7 @@ const Agendar = (props) => {
 		setCita(rowData);
 		// await loadTratamientos(rowData.servicio);
 		const splitDate = (rowData.fecha).split('/');
-		await loadHorariosByServicio(new Date(splitDate[2], (splitDate[1] - 1), splitDate[0]), rowData.servicio);
+		await loadHorariosByServicio(new Date(splitDate[2], (splitDate[1] - 1), splitDate[0]), rowData.servicio._id);
 		setOpenModal(true);
 		setIsLoading(false);
 	}
@@ -395,7 +414,7 @@ const Agendar = (props) => {
 								onChangeFilterDate={(e) => handleChangeFilterDate(e)}
 								onChangeHora={(e) => handleChangeHora(e)}
 								onChangeObservaciones={(e) => handleChangeObservaciones(e)}
-								filterDate={filterDate.fecha_show}
+								filterDate={filterDate}
 								paciente={paciente}
 								disableDate={disableDate}
 								promovendedores={promovendedores}
@@ -413,7 +432,9 @@ const Agendar = (props) => {
 								empleado={empleado}
 								onClickCancel={handleCloseModal}
 								loadCitas={loadCitas}
-								doctores={doctores}
+								medicos={medicos}
+								tipoCitas={tipoCitas}
+								onChangeTipoCita={(e) => handleChangeTipoCita(e)}
 								onChangeDoctors={(e) => handleChangeDoctors(e)}
 								onChangePromovendedor={(e) => handleChangePromovendedor(e)}
 								onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}

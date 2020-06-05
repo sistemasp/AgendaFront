@@ -1,8 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { getAllServices, findTreatmentByServicio, getAllSchedules, findScheduleByDateAndSucursalAndService, updateDate, findEmployeesByRolId } from "../../services";
+import React, { useState, useEffect, Fragment } from 'react';
+import { 
+  getAllServices,
+  findTreatmentByServicio,
+  getAllSchedules,
+  findScheduleByDateAndSucursalAndService,
+  updateDate,
+  findEmployeesByRolId,
+  showAllTipoCitas,
+  showAllStatus,
+} from "../../services";
 import * as Yup from "yup";
 import ModalFormCita from './ModalFormCita';
 import { Formik } from 'formik';
+import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 
 const validationSchema = Yup.object({
   fecha: Yup.string("Ingresa los nombres")
@@ -29,7 +39,16 @@ const validationSchema = Yup.object({
     .required("Los nombres del pacientes son requeridos"),
 });
 
+const useStyles = makeStyles(theme => ({
+	backdrop: {
+		zIndex: theme.zIndex.drawer + 1,
+		color: '#fff',
+	},
+}));
+
 const ModalCita = (props) => {
+
+  const classes = useStyles();
 
   const {
     open,
@@ -37,16 +56,20 @@ const ModalCita = (props) => {
     cita,
     empleado,
     loadCitas,
+    fecha,
   } = props;
 
   const splitDate = (cita.fecha).split('/');
 
+  const [isLoading, setIsLoading] = useState(true);
   const [servicios, setServicios] = useState([]);
   const [tratamientos, setTratamientos] = useState([]);
   const [horarios, setHorarios] = useState([]);
   const [promovendedores, setPromovendedores] = useState([]);
   const [cosmetologas, setCosmetologas] = useState([]);
   const [doctores, setDoctores] = useState([]);
+  const [tipoCitas, setTipoCitas] = useState([]);
+  const [statements, setStatements] = useState([]);
   const [values, setValues] = useState({
     fecha: cita.fecha,
     fecha_show: new Date(splitDate[2], (splitDate[1] - 1), splitDate[0]),
@@ -61,35 +84,20 @@ const ModalCita = (props) => {
     tipo_cita: cita.tipo_cita,
     confirmo: cita.confirmo,
     quien_confirma: cita.quien_confirma,
-    promovendedor: cita.promovendedora,
+    promovendedor: cita.promovendedor,
     cosmetologa: cita.cosmetologa,
-    asistio: cita.asistio,
+    status: cita.status,
     precio: cita.precio,
     motivos: cita.motivos,
     observaciones: cita.observaciones,
-    dermatologo: cita.dermatologo,
+    medico: cita.medico,
     tiempo: cita.tiempo,
   });
 
-  const valuesTipoCita = [
-    { "nombre": "CITADO" },
-    { "nombre": "SIN CITA" },
-    { "nombre": "DERIVADO" },
-    { "nombre": "FACEBOOK" },
-    { "nombre": "INSTAGRAM" },
-  ];
-
-  const valuesStatus = [
-    { "nombre": "ASISTIO" },
-    { "nombre": "NO ASISTIO" },
-    { "nombre": "CANCELO" },
-    { "nombre": "REAGENDO" },
-    { "nombre": "PENDIENTE" },
-  ];
-
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
   const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
-  const doctorRolId = process.env.REACT_APP_DOCTOR_ROL_ID;
+  const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
+  const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
 
   useEffect(() => {
     const loadServicios = async () => {
@@ -99,14 +107,14 @@ const ModalCita = (props) => {
       }
     }
     const loadTratamientos = async () => {
-      const response = await findTreatmentByServicio(cita.servicio);
+      const response = await findTreatmentByServicio(cita.servicio._id);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setTratamientos(response.data);
       }
     }
     const loadHorariosByServicio = async () => {
       const splitDate = (cita.fecha).split('/');
-      const response = await findScheduleByDateAndSucursalAndService(splitDate[0], splitDate[1], splitDate[2], cita.sucursal._id, cita.servicio);
+      const response = await findScheduleByDateAndSucursalAndService(splitDate[0], splitDate[1], splitDate[2], cita.sucursal._id, cita.servicio._id);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         response.data.push({ hora: values.hora });
         setHorarios(response.data);
@@ -128,19 +136,39 @@ const ModalCita = (props) => {
     }
 
     const loadDoctores = async () => {
-      const response = await findEmployeesByRolId(doctorRolId);
+      const response = await findEmployeesByRolId(medicoRolId);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setDoctores(response.data);
       }
     }
 
+    const loadTipoCitas = async () => {
+			const response = await showAllTipoCitas();
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setTipoCitas(response.data);
+			}
+			setIsLoading(false);
+    }
+    
+    const loadStaus = async () => {
+      const response = await showAllStatus();
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setStatements(response.data);
+			}
+			setIsLoading(false);
+    }
+
+    setIsLoading(true);
     loadServicios();
     loadTratamientos();
     loadHorariosByServicio();
     loadPromovendedores();
     loadCosmetologas();
     loadDoctores();
-  }, [cita, promovendedorRolId, cosmetologaRolId, doctorRolId]);
+    loadTipoCitas();
+    loadStaus();
+    setIsLoading(false);
+  }, [cita, promovendedorRolId, cosmetologaRolId, medicoRolId]);
 
   const loadTratamientos = async (servicio) => {
     const response = await findTreatmentByServicio(servicio);
@@ -198,8 +226,8 @@ const ModalCita = (props) => {
     setValues({ ...values, cosmetologa: e.target.value });
   }
 
-  const handleChangeAsistio = e => {
-    setValues({ ...values, asistio: e.target.value });
+  const handleChangeStatus = e => {
+    setValues({ ...values, status: e.target.value });
   }
 
   const handleChangeObservaciones = e => {
@@ -220,10 +248,10 @@ const ModalCita = (props) => {
   }
 
   const handleOnClickActualizarCita = async (event, rowData) => {
-    if (rowData.asistio !== 'PENDIENTE') {
+    if (rowData.status._id !== pendienteStatusId) {
       rowData.quien_confirma = empleado._id;
     }
-    // rowData.tiempo = getTimeToTratamiento(rowData.tratamientos);
+    //rowData.tiempo = getTimeToTratamiento(rowData.tratamientos);
     await updateDate(cita._id, rowData);
     onClose();
     await loadCitas(rowData.fecha_show);
@@ -250,43 +278,52 @@ const ModalCita = (props) => {
   };
 
   return (
-    <Formik
-      enableReinitialize
-      initialValues={values}
-      validationSchema={validationSchema} >
+    <Fragment>
       {
-        props => <ModalFormCita
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={open}
-          onClickCancel={onClose}
-          cita={cita}
-          onClickActualizarCita={handleOnClickActualizarCita}
-          onChangeServicio={(e) => handleChangeServicio(e)}
-          onChangeTratamientos={(e) => handleChangeTratamientos(e)}
-          onChangeFecha={(e) => handleChangeFecha(e)}
-          onChangeHora={(e) => handleChangeHora(e)}
-          onChangeTipoCita={(e) => handleChangeTipoCita(e)}
-          onChangeAsistio={(e) => handleChangeAsistio(e)}
-          onChangePromovendedor={(e) => handleChangePromovendedor(e)}
-          onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
-          onChangeDoctors={(e) => handleChangeDoctors(e)}
-          onChangeTiempo={(e) => handleChangeTiempo(e)}
-          servicios={servicios}
-          tratamientos={tratamientos}
-          horarios={horarios}
-          promovendedores={promovendedores}
-          cosmetologas={cosmetologas}
-          doctores={doctores}
-          valuesTipoCita={valuesTipoCita}
-          valuesStatus={valuesStatus}
-          onChangeSesion={handleChangeSesion}
-          onChangePrecio={handleChangePrecio}
-          onChangeMotivos={handleChangeMotivos}
-          onChangeObservaciones={handleChangeObservaciones}
-          {...props} />
+        !isLoading ?
+          <Formik
+            enableReinitialize
+            initialValues={values}
+            validationSchema={validationSchema} >
+            {
+              props => <ModalFormCita
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+                open={open}
+                onClickCancel={onClose}
+                cita={cita}
+                onClickActualizarCita={handleOnClickActualizarCita}
+                onChangeServicio={(e) => handleChangeServicio(e)}
+                onChangeTratamientos={(e) => handleChangeTratamientos(e)}
+                onChangeFecha={(e) => handleChangeFecha(e)}
+                onChangeHora={(e) => handleChangeHora(e)}
+                onChangeTipoCita={(e) => handleChangeTipoCita(e)}
+                onChangeStatus={(e) => handleChangeStatus(e)}
+                onChangePromovendedor={(e) => handleChangePromovendedor(e)}
+                onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
+                onChangeDoctors={(e) => handleChangeDoctors(e)}
+                onChangeTiempo={(e) => handleChangeTiempo(e)}
+                servicios={servicios}
+                tratamientos={tratamientos}
+                horarios={horarios}
+                promovendedores={promovendedores}
+                cosmetologas={cosmetologas}
+                doctores={doctores}
+                tipoCitas={tipoCitas}
+                statements={statements}
+                onChangeSesion={handleChangeSesion}
+                onChangePrecio={handleChangePrecio}
+                onChangeMotivos={handleChangeMotivos}
+                onChangeObservaciones={handleChangeObservaciones}
+                {...props} />
+            }
+          </Formik> :
+          <Backdrop className={classes.backdrop} open={isLoading} >
+            <CircularProgress color="inherit" />
+          </Backdrop>
       }
-    </Formik>
+    </Fragment>
+
   );
 }
 

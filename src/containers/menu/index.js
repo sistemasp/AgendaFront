@@ -31,7 +31,7 @@ const MenuMain = (props) => {
 
     const handleAgendar = (event, rowData) => {
         setPacienteAgendado(rowData);
-        setValue(Number(process.env.REACT_APP_PAGE_AGENDAR));
+        setValue(Number(process.env.REACT_APP_PAGE_AGENDAR_CONSULTA));
     }
 
     const handleLogout = () => {

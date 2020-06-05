@@ -14,271 +14,286 @@ import ModalCita from '../../components/modal_cita';
 import { Multiselect } from 'multiselect-react-dropdown';
 
 const useStyles = makeStyles(theme => ({
-    formControl: {
-        minWidth: 120,
-        width: '100%',
-    },
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
-    button: {
-        width: '100%',
-    }
+	formControl: {
+		minWidth: 120,
+		width: '100%',
+	},
+	selectEmpty: {
+		marginTop: theme.spacing(2),
+	},
+	button: {
+		width: '100%',
+	}
 }));
 
 export const AgendarContainer = (props) => {
 
-    const classes = useStyles();
+	const classes = useStyles();
 
-    const {
-        values,
-        errors,
-        servicios,
-        tratamientos,
-        horarios,
-        onChangeServicio,
-        onChangeTratamientos,
-        onChangeFecha,
-        onChangeHora,
-        onChangeFilterDate,
-        filterDate,
-        paciente,
-        onClickAgendar,
-        isValid,
-        isSubmitting,
-        onChangePrecio,
-				onChangeTiempo,
-				onChangeObservaciones,
-        empleado,
-        disableDate,
-				doctores,
-				promovendedores,
-				cosmetologas,
-				onChangeDoctors,
-				onChangePromovendedor,
-				onChangeCosmetologa,
-        // TABLE DATES PROPERTIES
-        titulo,
-        columns,
-        citas,
-        actions,
-        options,
-        // MODAL PROPERTIES
-        openModal,
-        cita,
-        onClickActualizarCita,
-        onClickCancel,
-        onChangeTipoCita,
-        onChangeAsistio,
-        loadCitas,
-    } = props;
+	const {
+		values,
+		errors,
+		servicios,
+		tratamientos,
+		horarios,
+		tipoCitas,
+		onChangeServicio,
+		onChangeTratamientos,
+		onChangeFecha,
+		onChangeHora,
+		onChangeFilterDate,
+		filterDate,
+		paciente,
+		onClickAgendar,
+		isValid,
+		isSubmitting,
+		onChangePrecio,
+		onChangeTiempo,
+		onChangeObservaciones,
+		empleado,
+		disableDate,
+		medicos,
+		promovendedores,
+		cosmetologas,
+		onChangeDoctors,
+		onChangePromovendedor,
+		onChangeCosmetologa,
+		// TABLE DATES PROPERTIES
+		titulo,
+		columns,
+		citas,
+		actions,
+		options,
+		// MODAL PROPERTIES
+		openModal,
+		cita,
+		onClickActualizarCita,
+		onClickCancel,
+		onChangeTipoCita,
+		onChangeAsistio,
+		loadCitas,
+	} = props;
 
-    return (
-        <Fragment>
-            {
-                openModal ? 
-                <ModalCita
-                    open={openModal}
-                    cita={cita}
-                    onClickActualizarCita={onClickActualizarCita}
-                    onClose={onClickCancel}
-                    onChangeServicio={onChangeServicio}
-                    onChangeTratamientos={onChangeTratamientos}
-                    onChangeFecha={onChangeFecha}
-                    onChangeHora={onChangeHora}
-                    onChangeTipoCita={onChangeTipoCita}
-                    onChangeAsistio={onChangeAsistio}
-                    servicios={servicios}
-                    tratamientos={tratamientos}
-                    horarios={horarios}
-                    empleado={empleado}
-                    loadCitas={loadCitas} /> : ''
-            }
-            <Paper>
-                <h1>{ paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'Selecciona un paciente'}</h1>
-
-                <Grid container spacing={3}>
-                    <Grid item xs={12} sm={2}>
-                        <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel id="simple-select-outlined-servicio">Servicio</InputLabel>
-                            <Select
-                                labelId="simple-select-outlined-servicio"
-                                id="simple-select-outlined-servicio"
-                                value={values.servicio}
-                                error={Boolean(errors.servicio)}
-                                onChange={onChangeServicio}
-                                label="Servicio" >
-                                    {servicios.sort().map((item, index) => <MenuItem key={index} value={item.nombre}>{item.nombre}</MenuItem>)}
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12} sm={2}>
-                        <Multiselect 
-                            options={tratamientos} // Options to display in the dropdown
-                            displayValue="nombre" // Property name to display in the dropdown options
-                            onSelect={(e) => onChangeTratamientos(e)} // Function will trigger on select event
-                            onRemove={(e) => onChangeTratamientos(e)} // Function will trigger on remove event
-                            placeholder="Selecciona tratamientos"
-                            selectedValues={values.tratamientos} // Preselected value to persist in dropdown
-                            /> 
-                    </Grid>
-                    <Grid item xs={12} sm={2}>
-                        <FormControl variant="outlined" className={classes.formControl}>                
-                            <InputLabel id="simple-select-outlined-hora">Dermatologo</InputLabel>
-                            <Select
-                                labelId="simple-select-outlined-dermatologo"
-                                id="simple-select-outlined-dermatologo"
-                                value={values.dermatologo}
-                                error={Boolean(errors.dermatologo)}
-                                onChange={onChangeDoctors}
-                                label="Dermatologo" >
-                                {doctores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
-                            </Select>
-                        </FormControl>
-                    </Grid>
-										<Grid item xs={12} sm={2}>
-                        <FormControl variant="outlined" className={classes.formControl}>                
-                            <InputLabel id="simple-select-outlined-promovendedor">Promovendedor</InputLabel>
-                            <Select
-                                labelId="simple-select-outlined-promovendedor"
-                                id="simple-select-outlined-promovendedor"
-                                value={values.promovendedor}
-                                error={Boolean(errors.promovendedor)}
-                                onChange={onChangePromovendedor}
-                                label="Promovendedor" >
-                                {promovendedores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
-                            </Select>
-                        </FormControl>
-                    </Grid>
-										<Grid item xs={12} sm={2}>
-                        <FormControl variant="outlined" className={classes.formControl}>                
-                            <InputLabel id="simple-select-outlined-cosmetologa">Cosmetologa</InputLabel>
-                            <Select
-                                labelId="simple-select-outlined-cosmetologa"
-                                id="simple-select-outlined-cosmetologa"
-                                value={values.cosmetologa}
-                                error={Boolean(errors.cosmetologa)}
-                                onChange={onChangeCosmetologa}
-                                label="Cosmetologa" >
-                                {cosmetologas.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12} sm={2}>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <Grid 
-                                container
-                                justify="center"
-                                alignItems="center" >
-                                <KeyboardDatePicker
-                                    disableToolbar
-                                    //disablePast
-                                    autoOk
-                                    disabled={disableDate}
-                                    variant="inline"
-                                    format="dd/MM/yyyy"
-                                    margin="normal"
-                                    id="date-picker-inline"
-                                    label="Fecha"
-                                    value={values.fecha_show}
-                                    onChange={onChangeFecha}
-                                    KeyboardButtonProps={{
-                                        'aria-label': 'change date',
-                                    }}
-                                    invalidDateMessage='Selecciona una fecha' />
-                            </Grid>
-                        </MuiPickersUtilsProvider>
-                    </Grid>
-                    <Grid item xs={12} sm={2}>
-                        <FormControl variant="outlined" className={classes.formControl}>                
-                            <InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
-                            <Select
-                                labelId="simple-select-outlined-hora"
-                                id="simple-select-outlined-hora"
-                                value={values.hora}
-                                error={Boolean(errors.hora)}
-                                onChange={onChangeHora}
-                                disabled={values.fecha_show===''}
-                                label="Hora" > 
-                                {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12} sm={2}>
-                        <TextField
-                        name="precio"
-                        //helperText={touched.precio ? errors.precio : ""}
-                        error={Boolean(errors.precio)}
-                        label="Precio"
-                        value={values.precio}
-                        type='Number'
-                        onChange={onChangePrecio}
-                        variant="outlined" />
-                    </Grid>
-                    <Grid item xs={12} sm={2}>
-                        <TextField
-                        name="tiempo"
-                        //helperText={touched.tiempo ? errors.tiempo : ""}
-                        error={Boolean(errors.tiempo)}
-                        label="Tiempo"
-                        value={values.tiempo}
-                        type='Number'
-                        onChange={onChangeTiempo}
-                        variant="outlined" />
-                    </Grid>
-                    <Grid item xs={12} sm={2}>
-                        <TextField
-                        name="observaciones"
-                        //helperText={touched.observaciones ? errors.observaciones : ""}
-                        error={Boolean(errors.observaciones)}
-                        label="Observaciones"
-                        value={values.observaciones}
-                        onChange={onChangeObservaciones}
-                        variant="outlined" />
-                    </Grid>
-                    <Grid item xs={12} sm={2}>
-                        <Button
-                            className={classes.button}
-                            variant="contained"
-                            color="primary"
-                            disabled={!isValid || isSubmitting || !paciente.nombres || !values.servicio 
-                                || values.tratamientos.length  === 0 || !values.fecha || !values.hora || !values.precio 
-                                || !values.tiempo} 
-                            onClick={() => onClickAgendar(values)} >
-                            Agendar
+	return (
+		<Fragment>
+			{
+				openModal ?
+					<ModalCita
+						open={openModal}
+						cita={cita}
+						fecha={filterDate.fecha}
+						onClickActualizarCita={onClickActualizarCita}
+						onClose={onClickCancel}
+						onChangeServicio={onChangeServicio}
+						onChangeTratamientos={onChangeTratamientos}
+						onChangeFecha={onChangeFecha}
+						onChangeHora={onChangeHora}
+						onChangeTipoCita={onChangeTipoCita}
+						onChangeAsistio={onChangeAsistio}
+						servicios={servicios}
+						tratamientos={tratamientos}
+						horarios={horarios}
+						empleado={empleado}
+						loadCitas={loadCitas} /> : ''
+			}
+			<Paper>
+				<h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'Selecciona un paciente'}</h1>
+				<Grid container spacing={3}>
+					<Grid item xs={12} sm={2}>
+						<FormControl variant="outlined" className={classes.formControl}>
+							<InputLabel id="simple-select-outlined-servicio">Servicio</InputLabel>
+							<Select
+								labelId="simple-select-outlined-servicio"
+								id="simple-select-outlined-servicio"
+								value={values.servicio}
+								error={Boolean(errors.servicio)}
+								onChange={onChangeServicio}
+								label="Servicio" >
+								{servicios.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
+							</Select>
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<Multiselect
+							options={tratamientos} // Options to display in the dropdown
+							displayValue="nombre" // Property name to display in the dropdown options
+							onSelect={(e) => onChangeTratamientos(e)} // Function will trigger on select event
+							onRemove={(e) => onChangeTratamientos(e)} // Function will trigger on remove event
+							placeholder="Selecciona tratamientos"
+							selectedValues={values.tratamientos} // Preselected value to persist in dropdown
+						/>
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<FormControl variant="outlined" className={classes.formControl}>
+							<InputLabel id="simple-select-outlined-hora">Medico</InputLabel>
+							<Select
+								labelId="simple-select-outlined-medico"
+								id="simple-select-outlined-medico"
+								value={values.medico}
+								error={Boolean(errors.medico)}
+								onChange={onChangeDoctors}
+								label="Medico" >
+								{medicos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
+							</Select>
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<FormControl variant="outlined" className={classes.formControl}>
+							<InputLabel id="simple-select-outlined-promovendedor">Promovendedor</InputLabel>
+							<Select
+								labelId="simple-select-outlined-promovendedor"
+								id="simple-select-outlined-promovendedor"
+								value={values.promovendedor}
+								error={Boolean(errors.promovendedor)}
+								onChange={onChangePromovendedor}
+								label="Promovendedor" >
+								{promovendedores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
+							</Select>
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<FormControl variant="outlined" className={classes.formControl}>
+							<InputLabel id="simple-select-outlined-cosmetologa">Cosmetologa</InputLabel>
+							<Select
+								labelId="simple-select-outlined-cosmetologa"
+								id="simple-select-outlined-cosmetologa"
+								value={values.cosmetologa}
+								error={Boolean(errors.cosmetologa)}
+								onChange={onChangeCosmetologa}
+								label="Cosmetologa" >
+								{cosmetologas.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
+							</Select>
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<MuiPickersUtilsProvider utils={DateFnsUtils}>
+							<Grid
+								container
+								justify="center"
+								alignItems="center" >
+								<KeyboardDatePicker
+									disableToolbar
+									//disablePast
+									autoOk
+									disabled={disableDate}
+									variant="inline"
+									format="dd/MM/yyyy"
+									margin="normal"
+									id="date-picker-inline"
+									label="Fecha"
+									value={values.fecha_show}
+									onChange={onChangeFecha}
+									KeyboardButtonProps={{
+										'aria-label': 'change date',
+									}}
+									invalidDateMessage='Selecciona una fecha' />
+							</Grid>
+						</MuiPickersUtilsProvider>
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<FormControl variant="outlined" className={classes.formControl}>
+							<InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
+							<Select
+								labelId="simple-select-outlined-hora"
+								id="simple-select-outlined-hora"
+								value={values.hora}
+								error={Boolean(errors.hora)}
+								onChange={onChangeHora}
+								disabled={values.fecha_show === ''}
+								label="Hora" >
+								{horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
+							</Select>
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<FormControl variant="outlined" className={classes.formControl}>
+							<InputLabel id="simple-select-outlined-tipo-cita">Tipo Cita</InputLabel>
+							<Select
+								labelId="simple-select-outlined-tipo-cita"
+								id="simple-select-outlined-tipo-cita"
+								value={values.tipo_cita}
+								error={Boolean(errors.tipo_cita)}
+								onChange={onChangeTipoCita}
+								label="Tipo Cita" >
+								{tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
+							</Select>
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<TextField
+							name="precio"
+							//helperText={touched.precio ? errors.precio : ""}
+							error={Boolean(errors.precio)}
+							label="Precio"
+							value={values.precio}
+							type='Number'
+							onChange={onChangePrecio}
+							variant="outlined" />
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<TextField
+							name="tiempo"
+							//helperText={touched.tiempo ? errors.tiempo : ""}
+							error={Boolean(errors.tiempo)}
+							label="Tiempo"
+							value={values.tiempo}
+							type='Number'
+							onChange={onChangeTiempo}
+							variant="outlined" />
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<TextField
+							name="observaciones"
+							//helperText={touched.observaciones ? errors.observaciones : ""}
+							error={Boolean(errors.observaciones)}
+							label="Observaciones"
+							value={values.observaciones}
+							onChange={onChangeObservaciones}
+							variant="outlined" />
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<Button
+							className={classes.button}
+							variant="contained"
+							color="primary"
+							disabled={!isValid || isSubmitting || !paciente.nombres || !values.servicio
+								|| values.tratamientos.length === 0 || !values.fecha || !values.hora || !values.precio
+								|| !values.tiempo}
+							onClick={() => onClickAgendar(values)} >
+							Agendar
                         </Button>
-                    </Grid>
-                </Grid>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <Grid 
-                        container
-                        justify="center"
-                        alignItems="center" >
-                        <KeyboardDatePicker
-                            disableToolbar
-                            loadingIndicator
-                            autoOk
-                            variant="inline"
-                            format="dd/MM/yyyy"
-                            margin="normal"
-                            id="date-picker-inline-filter"
-                            label="Filtrado Citas"
-                            value={filterDate}
-                            onChange={onChangeFilterDate}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }} />
-                    </Grid>
-                </MuiPickersUtilsProvider>
-            </Paper>
+					</Grid>
+				</Grid>
+				<MuiPickersUtilsProvider utils={DateFnsUtils}>
+					<Grid
+						container
+						justify="center"
+						alignItems="center" >
+						<KeyboardDatePicker
+							disableToolbar
+							loadingIndicator
+							autoOk
+							variant="inline"
+							format="dd/MM/yyyy"
+							margin="normal"
+							id="date-picker-inline-filter"
+							label="Filtrado Citas"
+							value={filterDate.fecha_show}
+							onChange={onChangeFilterDate}
+							KeyboardButtonProps={{
+								'aria-label': 'change date',
+							}} />
+					</Grid>
+				</MuiPickersUtilsProvider>
+			</Paper>
 
-            <TableComponent
-                titulo={titulo}
-                columns={columns}
-                data={citas}
-                actions={actions}
-                options={options} />
+			<TableComponent
+				titulo={titulo}
+				columns={columns}
+				data={citas}
+				actions={actions}
+				options={options} />
 
-        </Fragment>
-    );
+		</Fragment>
+	);
 }
