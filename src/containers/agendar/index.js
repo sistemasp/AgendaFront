@@ -64,9 +64,6 @@ const Agendar = (props) => {
 		servicio: '',
 		tratamientos: [],
 		fecha_show: '',
-		medico: '',
-		promovendedor: '',
-		cosmetologa: '',
 		fecha: '',
 		hora: '',
 		paciente: `${paciente._id}`,
@@ -115,6 +112,7 @@ const Agendar = (props) => {
 
 	const options = {
 		rowStyle: rowData => {
+			console.log(rowData);
 			return { color: rowData.status.color };
 		},
 		headerStyle: {

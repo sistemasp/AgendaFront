@@ -13,6 +13,7 @@ import { Button, Toolbar } from '@material-ui/core';
 import Reportes from '../reportes/index';
 import ModalPassword from '../../components/modal_password';
 import AgendarLectura from '../agendar/index_lectura';
+import PacientesLectura from '../pacientes/index_lectura';
 
 
 function TabPanel(props) {
@@ -112,18 +113,23 @@ export const MenuLecturaContainer = props => {
 			</AppBar>
 			<AppBar className={classes.bar} position="static">
 				<Tabs value={value} onChange={onChangeTab} aria-label="simple tabs">
-					<Tab label="Buscar citas" {...a11yProps(0)} />
-					<Tab label="Calendario" {...a11yProps(1)} />
+					<Tab label="Pacientes" {...a11yProps(0)} />
+					<Tab label="Buscar citas" {...a11yProps(1)} />
+					<Tab label="Calendario" {...a11yProps(2)} />
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>
+				<PacientesLectura
+					sucursal={sucursal._id} />
+			</TabPanel>
+			<TabPanel value={value} index={1}>
 				<AgendarLectura
 					paciente={pacienteAgendado}
 					setPacienteAgendado={setPacienteAgendado}
 					empleado={empleado}
 					sucursal={sucursal._id} />
 			</TabPanel>
-			<TabPanel value={value} index={1}>
+			<TabPanel value={value} index={2}>
 				<Citas
 					sucursal={sucursal._id} />
 			</TabPanel>

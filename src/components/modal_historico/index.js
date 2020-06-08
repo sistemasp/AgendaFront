@@ -16,11 +16,11 @@ const ModHistorico = (props) => {
   const columns = [
     { title: 'Fecha', field: 'fecha_show' },
     { title: 'Hora', field: 'hora' },
-    { title: 'Servicio', field: 'servicio' },
+    { title: 'Servicio', field: 'servicio.nombre' },
     { title: 'Tratamientos', field: 'show_tratamientos' },
     { title: 'Numero Sesion', field: 'numero_sesion' },
-    { title: 'Tipo Cita', field: 'tipo_cita' },
-    { title: 'Asistio', field: 'asistio' },
+    { title: 'Tipo Cita', field: 'tipo_cita.nombre' },
+    { title: 'Estado', field: 'status.nombre' },
     { title: 'Sucursal', field: 'sucursal.nombre'},
     { title: 'Precio', field: 'precio_moneda' },
   ];
