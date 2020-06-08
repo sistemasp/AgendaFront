@@ -148,7 +148,7 @@ const Reportes = (props) => {
                 item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
                 item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
                 item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-                item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
+                item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
                 item.show_tratamientos = item.tratamientos.map(tratamiento => {
                     return `${tratamiento.nombre}, `;
                 });
