@@ -132,7 +132,7 @@ const Agendar = (props) => {
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
 					const fecha = new Date(item.fecha_hora);
-					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
+					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
@@ -238,7 +238,6 @@ const Agendar = (props) => {
 
 	const handleChangeFecha = async (date) => {
 		setIsLoading(true);
-		const fecha = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 		await setValues({
 			...values,
 			fecha_hora: date,
@@ -254,7 +253,7 @@ const Agendar = (props) => {
 		date.setHours(Number(hora[0]) - 5); // -5 por zona horaria
 		date.setMinutes(hora[1]);
 		date.setSeconds(0);
-		setValues({ ...values, fecha_hora: date, hora: e.target.value });
+		setValues({ ...values, fecha_hora: date });
 		setIsLoading(false);
 	};
 
@@ -280,7 +279,7 @@ const Agendar = (props) => {
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
 				const fecha = new Date(item.fecha_hora);
-				item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
+				item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
@@ -375,8 +374,7 @@ const Agendar = (props) => {
 		setIsLoading(true);
 		setCita(rowData);
 		// await loadTratamientos(rowData.servicio);
-		const splitDate = (rowData.fecha).split('/');
-		await loadHorariosByServicio(new Date(splitDate[2], (splitDate[1] - 1), splitDate[0]), rowData.servicio._id);
+		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio._id);
 		setOpenModal(true);
 		setIsLoading(false);
 	}

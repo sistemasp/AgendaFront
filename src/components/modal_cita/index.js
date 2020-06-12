@@ -13,6 +13,7 @@ import * as Yup from "yup";
 import ModalFormCita from './ModalFormCita';
 import { Formik } from 'formik';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
+import { addZero } from '../../utils/utils';
 
 const validationSchema = Yup.object({
   fecha: Yup.string("Ingresa los nombres")
@@ -56,13 +57,9 @@ const ModalCita = (props) => {
     cita,
     empleado,
     loadCitas,
-    fecha,
   } = props;
 
-  const splitDate = (cita.fecha).split('/');
-
   const [isLoading, setIsLoading] = useState(true);
-  const [servicios, setServicios] = useState([]);
   const [tratamientos, setTratamientos] = useState([]);
   const [horarios, setHorarios] = useState([]);
   const [promovendedores, setPromovendedores] = useState([]);
@@ -70,10 +67,14 @@ const ModalCita = (props) => {
   const [doctores, setDoctores] = useState([]);
   const [tipoCitas, setTipoCitas] = useState([]);
   const [statements, setStatements] = useState([]);
+
+  const fecha_cita = new Date(cita.fecha_hora);
+  const hora =  `${addZero(Number(fecha_cita.getHours()) + 5)}:${addZero(fecha_cita.getMinutes())}`;
+
   const [values, setValues] = useState({
-    fecha: cita.fecha,
-    fecha_show: new Date(splitDate[2], (splitDate[1] - 1), splitDate[0]),
-    hora: cita.hora,
+    fecha_hora: cita.fecha_hora,
+    fecha_show: fecha_cita,
+    hora: hora,
     paciente: cita.paciente,
     paciente_nombre: `${cita.paciente.nombres} ${cita.paciente.apellidos}`,
     telefono: cita.paciente.telefono,
@@ -81,16 +82,16 @@ const ModalCita = (props) => {
     tratamientos: cita.tratamientos,
     numero_sesion: cita.numero_sesion,
     quien_agenda: cita.quien_agenda,
-    tipo_cita: cita.tipo_cita,
+    tipo_cita: cita.tipo_cita._id,
     confirmo: cita.confirmo,
     quien_confirma: cita.quien_confirma,
-    promovendedor: cita.promovendedor,
-    cosmetologa: cita.cosmetologa,
-    status: cita.status,
+    promovendedor: cita.promovendedor._id,
+    cosmetologa: cita.cosmetologa._id,
+    status: cita.status._id,
     precio: cita.precio,
     motivos: cita.motivos,
     observaciones: cita.observaciones,
-    medico: cita.medico,
+    medico: cita.medico._id,
     tiempo: cita.tiempo,
   });
 
@@ -100,12 +101,6 @@ const ModalCita = (props) => {
   const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
 
   useEffect(() => {
-    const loadServicios = async () => {
-      const response = await getAllServices();
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setServicios(response.data);
-      }
-    }
     const loadTratamientos = async () => {
       const response = await findTreatmentByServicio(cita.servicio._id);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -113,8 +108,8 @@ const ModalCita = (props) => {
       }
     }
     const loadHorariosByServicio = async () => {
-      const splitDate = (cita.fecha).split('/');
-      const response = await findScheduleByDateAndSucursalAndService(splitDate[0], splitDate[1], splitDate[2], cita.sucursal._id, cita.servicio._id);
+      const date = new Date(cita.fecha_hora);
+      const response = await findScheduleByDateAndSucursalAndService(date.getDate(), Number(date.getMonth() + 1), date.getFullYear(), cita.sucursal._id, cita.servicio._id);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         response.data.push({ hora: values.hora });
         setHorarios(response.data);
@@ -159,7 +154,6 @@ const ModalCita = (props) => {
     }
 
     setIsLoading(true);
-    loadServicios();
     loadTratamientos();
     loadHorariosByServicio();
     loadPromovendedores();
@@ -201,18 +195,26 @@ const ModalCita = (props) => {
     setValues({ ...values, tratamientos: items });
   }
 
-  const handleChangeFecha = date => {
-    loadHorarios();
-    setValues({
-      ...values,
-      fecha_show: date,
-      fecha: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
-    });
-  };
+  const handleChangeFecha = async (date) => {
+		setIsLoading(true);
+		await setValues({
+			...values,
+			fecha_hora: date,
+		});
+		await loadHorarios(date);
+		setIsLoading(false);
+	};
 
-  const handleChangeHora = e => {
-    setValues({ ...values, hora: e.target.value });
-  };
+	const handleChangeHora = e => {
+		setIsLoading(true);
+		const hora = (e.target.value).split(':');
+		const date = new Date(values.fecha_hora);
+		date.setHours(Number(hora[0]) - 5); // -5 por zona horaria
+		date.setMinutes(hora[1]);
+		date.setSeconds(0);
+		setValues({ ...values, fecha_hora: date, hora: e.target.value });
+		setIsLoading(false);
+	};
 
   const handleChangeTipoCita = e => {
     setValues({ ...values, tipo_cita: e.target.value });
@@ -228,6 +230,7 @@ const ModalCita = (props) => {
 
   const handleChangeStatus = e => {
     setValues({ ...values, status: e.target.value });
+    console.log('ESTADOS', values.status);
   }
 
   const handleChangeObservaciones = e => {
@@ -269,8 +272,8 @@ const ModalCita = (props) => {
     setValues({ ...values, motivos: e.target.value });
   }
 
-  const handleChangeDoctors = (e) => {
-    setValues({ ...values, dermatologo: e.target.value });
+  const handleChangeMedico = (e) => {
+    setValues({ ...values, medico: e.target.value });
   }
 
   const handleChangeTiempo = e => {
@@ -301,9 +304,8 @@ const ModalCita = (props) => {
                 onChangeStatus={(e) => handleChangeStatus(e)}
                 onChangePromovendedor={(e) => handleChangePromovendedor(e)}
                 onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
-                onChangeDoctors={(e) => handleChangeDoctors(e)}
+                onChangeMedico={(e) => handleChangeMedico(e)}
                 onChangeTiempo={(e) => handleChangeTiempo(e)}
-                servicios={servicios}
                 tratamientos={tratamientos}
                 horarios={horarios}
                 promovendedores={promovendedores}

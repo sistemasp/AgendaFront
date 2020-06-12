@@ -21,10 +21,8 @@ const Citas = (props) => {
 
     const parseToEvents = (citas) => {
         return citas.map( cita => {
-            const splitDate = (cita.fecha).split('/');
-            const splitHora = (cita.hora).split(':');
-            const startDate = new Date(splitDate[2], (splitDate[1] - 1), splitDate[0], splitHora[0], splitHora[1], 0);
-            const endDate = new Date(splitDate[2], (splitDate[1] - 1), splitDate[0], splitHora[0], splitHora[1], 0);
+            const startDate = new Date(cita.fecha_hora);
+            const endDate = new Date(cita.fecha_hora);
             const minutos = Number(endDate.getMinutes()) + Number(cita.tiempo);
             endDate.setMinutes(minutos);
             const tratamientos = cita.tratamientos.map(tratamiento => {

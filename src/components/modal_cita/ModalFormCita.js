@@ -42,6 +42,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const canceloStatusId = process.env.REACT_APP_CANCELO_STATUS_ID;
+const noAsistioStatusId = process.env.REACT_APP_NO_ASISTIO_STATUS_ID;
+const reagendoStatusId = process.env.REACT_APP_REAGENDO_STATUS_ID;
+
 const ModalFormCita = (props) => {
   const classes = useStyles();
 
@@ -64,7 +68,6 @@ const ModalFormCita = (props) => {
     onClickCancel,
     onClickActualizarCita,
     open,
-    servicios,
     tratamientos,
     horarios,
     promovendedores,
@@ -76,7 +79,7 @@ const ModalFormCita = (props) => {
     onChangePrecio,
     onChangeMotivos,
     onChangeObservaciones,
-    onChangeDoctors,
+    onChangeMedico,
   } = props;
 
   return (
@@ -115,7 +118,7 @@ const ModalFormCita = (props) => {
                         id="simple-select-outlined-medico"
                         value={values.medico}
                         error={Boolean(errors.medico)}
-                        onChange={onChangeDoctors}
+                        onChange={onChangeMedico}
                         label="Medico" >
                         {doctores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                       </Select>
@@ -239,7 +242,7 @@ const ModalFormCita = (props) => {
               </Grid>
 
               {
-                values.status.nombre === 'CANCELO' || values.status.nombre === 'REAGENDO' || values.status.nombre === 'NO ASISTIO' ?
+                values.status === canceloStatusId || values.status === noAsistioStatusId || values.status === reagendoStatusId ?
                   <Grid item xs={12}>
                     <TextField
                       className={classes.textField}

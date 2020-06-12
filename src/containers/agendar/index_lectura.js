@@ -1,20 +1,10 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import { AgendarContainer } from "./agendar";
 import {
-	getAllServices,
-	findTreatmentByServicio,
-	findScheduleByDateAndSucursalAndService,
-	findDatesByDateAndSucursal,
-	createDate,
-	findEmployeesByRolId,
-	showAllTipoCitas
+	findDatesByDateAndSucursal
 } from "../../services";
-import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
+import { Backdrop, CircularProgress } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
-import { Formik } from 'formik';
-import EditIcon from '@material-ui/icons/Edit';
-import * as Yup from "yup";
 import { toFormatterCurrency, addZero } from "../../utils/utils";
 import { AgendarLecturaContainer } from "./agendar_lectura";
 
@@ -28,17 +18,6 @@ const useStyles = makeStyles(theme => ({
 		color: '#fff',
 	},
 }));
-
-const validationSchema = Yup.object({
-	servicio: Yup.string("Ingresa los nombres")
-		.required("El servicio es requerido."),
-	tratamiento: Yup.string("Ingresa los apellidos")
-		.required("El tratamiento es requerido"),
-	fecha: Yup.string("Ingresa la fecha de nacimiento")
-		.required("Los nombres del pacientes son requeridos"),
-	hora: Yup.string("Ingresa la direccion")
-		.required("Los nombres del pacientes son requeridos")
-});
 
 const AgendarLectura = (props) => {
 	const classes = useStyles();
@@ -93,6 +72,10 @@ const AgendarLectura = (props) => {
 					item.show_tratamientos = item.tratamientos.map(tratamiento => {
 						return `${tratamiento.nombre}, `;
 					});
+					const fecha = new Date(item.fecha_hora);
+					const hora = addZero(Number(fecha.getHours() + 5));
+					const minutos = addZero(fecha.getMinutes());
+					item.hora = `${hora}:${minutos}`;
 				});
 				setCitas(response.data);
 			}
@@ -128,6 +111,10 @@ const AgendarLectura = (props) => {
 				item.show_tratamientos = item.tratamientos.map(tratamiento => {
 					return `${tratamiento.nombre}, `;
 				});
+				const fecha = new Date(item.fecha_hora);
+				const hora = addZero(Number(fecha.getHours() + 5));
+				const minutos = addZero(fecha.getMinutes());
+				item.hora = `${hora}:${minutos}`;
 			});
 			setCitas(response.data);
 		}
@@ -156,7 +143,7 @@ const AgendarLectura = (props) => {
 						columns={columns}
 						options={options}
 						citas={citas}
-						empleado={empleado}/>
+						empleado={empleado} />
 					:
 					<Backdrop className={classes.backdrop} open={isLoading} >
 						<CircularProgress color="inherit" />

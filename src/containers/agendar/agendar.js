@@ -257,7 +257,7 @@ export const AgendarContainer = (props) => {
 							variant="contained"
 							color="primary"
 							disabled={!isValid || isSubmitting || !paciente.nombres || !values.servicio
-								|| values.tratamientos.length === 0 || !values.fecha || !values.hora || !values.precio
+								|| values.tratamientos.length === 0 || !values.fecha_hora || !values.precio
 								|| !values.tiempo}
 							onClick={() => onClickAgendar(values)} >
 							Agendar
