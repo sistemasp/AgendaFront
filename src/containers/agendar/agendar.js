@@ -181,7 +181,7 @@ export const AgendarContainer = (props) => {
 									margin="normal"
 									id="date-picker-inline"
 									label="Fecha"
-									value={values.fecha_show}
+									value={values.fecha_hora}
 									onChange={onChangeFecha}
 									KeyboardButtonProps={{
 										'aria-label': 'change date',
