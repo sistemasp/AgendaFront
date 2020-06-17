@@ -62,7 +62,7 @@ const MenuMain = (props) => {
 		<Fragment>
 			{
 				permisos.includes('ALL') ?
-					<MenuContainer
+					<MainContainer
 						pacienteAgendado={pacienteAgendado}
 						setPacienteAgendado={setPacienteAgendado}
 						onChangeTab={handleChangeTab}
