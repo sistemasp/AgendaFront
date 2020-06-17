@@ -64,14 +64,11 @@ const Agendar = (props) => {
 		servicio: '',
 		tratamientos: [],
 		fecha_show: '',
-		medico: '',
-		promovendedor: '',
-		cosmetologa: '',
 		fecha: '',
 		hora: '',
 		paciente: `${paciente._id}`,
 		precio: '',
-		tipo_cita: '',
+		tipo_cita: {},
 		tiempo: '',
 		observaciones: '',
 	});
@@ -178,7 +175,6 @@ const Agendar = (props) => {
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				setTipoCitas(response.data);
 			}
-			setIsLoading(false);
 		}
 
 		setIsLoading(true);
@@ -188,10 +184,11 @@ const Agendar = (props) => {
 		loadServicios();
 		loadMedicos();
 		loadTipoCitas();
+		setIsLoading(false);
 	}, [sucursal]);
 
 	const loadTratamientos = async (servicio) => {
-		const response = await findTreatmentByServicio(servicio);
+		const response = await findTreatmentByServicio(servicio._id);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setTratamientos(response.data);
 		}
@@ -318,6 +315,7 @@ const Agendar = (props) => {
 		data.sucursal = sucursal;
 		data.numero_sesion = 1;
 		data.status = pendienteStatusId;
+		console.log('DATA', data);
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 		const response = await createDate(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
@@ -331,9 +329,7 @@ const Agendar = (props) => {
 				cosmetologa: '',
 				paciente: `${paciente._id}`,
 				precio: '',
-				tipo_cita: '',
-				tiempo: '',
-				observaciones: '',
+				tipo_cita: {},
 			});
 			setDisableDate(true);
 			setPacienteAgendado({});
@@ -413,7 +409,7 @@ const Agendar = (props) => {
 								onChangeFilterDate={(e) => handleChangeFilterDate(e)}
 								onChangeHora={(e) => handleChangeHora(e)}
 								onChangeObservaciones={(e) => handleChangeObservaciones(e)}
-								filterDate={filterDate}
+								filterDate={filterDate.fecha_show}
 								paciente={paciente}
 								disableDate={disableDate}
 								promovendedores={promovendedores}

@@ -35,10 +35,6 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     width: '100%',
-  },
-  label: {
-    marginTop: '0px',
-    marginBottom: '0px',
   }
 }));
 
@@ -53,21 +49,23 @@ const ModalFormCita = (props) => {
   const [modalStyle] = React.useState(getModalStyle);
 
   const {
-    values,
-    errors,
-    handleSubmit,
+		values,
+		errors,
+		handleSubmit,
+    onChangeServicio,
     onChangeTratamientos,
     onChangeFecha,
     onChangeHora,
     onChangeTiempo,
     onChangeTipoCita,
-    onChangeStatus,
+    onChangeAsistio,
     onChangePromovendedor,
     onChangeCosmetologa,
     isValid,
     onClickCancel,
     onClickActualizarCita,
     open,
+    servicios,
     tratamientos,
     horarios,
     promovendedores,
@@ -79,9 +77,9 @@ const ModalFormCita = (props) => {
     onChangePrecio,
     onChangeMotivos,
     onChangeObservaciones,
-    onChangeMedico,
-  } = props;
-
+    onChangeDoctors,
+  } = props; 
+  
   return (
     <div>
       <Modal
@@ -92,20 +90,31 @@ const ModalFormCita = (props) => {
           <form onSubmit={handleSubmit}>
             <Grid container spacing={1}>
               <Grid item xs={12}>
-                <h2 className={classes.label}>{values.paciente_nombre} ({values.telefono})</h2>
+                <h3>{values.paciente_nombre} ({values.telefono})</h3>
               </Grid>
               <Grid item xs={12}>
-                <h3 className={classes.label}>Servicio: {values.servicio.nombre}</h3>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="simple-select-outlined-servicio">Servicio</InputLabel>
+                  <Select
+                    labelId="simple-select-outlined-servicio"
+                    id="simple-select-outlined-servicio"
+                    value={values.servicio}
+                    error={Boolean(errors.servicio)}
+                    onChange={onChangeServicio}
+                    label="Servicio" >
+                        {servicios.sort().map((item, index) => <MenuItem key={index} value={item.nombre}>{item.nombre}</MenuItem>)}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <Multiselect
+                <Multiselect 
                   options={tratamientos} // Options to display in the dropdown
                   displayValue="nombre" // Property name to display in the dropdown options
                   onSelect={(e) => onChangeTratamientos(e)} // Function will trigger on select event
                   onRemove={(e) => onChangeTratamientos(e)} // Function will trigger on remove event
                   placeholder="Selecciona tratamientos"
                   selectedValues={values.tratamientos} // Preselected value to persist in dropdown
-                />
+                  /> 
               </Grid>
               <Grid item xs={12}>
                 {
@@ -122,8 +131,7 @@ const ModalFormCita = (props) => {
                         label="Medico" >
                         {doctores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                       </Select>
-                    </FormControl>
-                }
+                  </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -144,6 +152,7 @@ const ModalFormCita = (props) => {
                     invalidDateMessage='Selecciona una fecha' />
                 </MuiPickersUtilsProvider>
               </Grid>
+
               <Grid item xs={12} sm={6}>
                 <FormControl variant="outlined" className={classes.formControl}>                
                   <InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
@@ -158,6 +167,7 @@ const ModalFormCita = (props) => {
                   </Select>
                 </FormControl>
               </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   className={classes.textField}
@@ -170,7 +180,7 @@ const ModalFormCita = (props) => {
                   onChange={onChangeTiempo}
                   variant="outlined" />
               </Grid>
-
+              
               <Grid item xs={12}>
                 {
                   /* values.tipo_cita */ false ?
@@ -189,6 +199,7 @@ const ModalFormCita = (props) => {
                     </FormControl>
                 }
               </Grid>
+
               <Grid item xs={12}>
                 {
                   /* values.promovendedor */ false ?
@@ -207,6 +218,7 @@ const ModalFormCita = (props) => {
                     </FormControl>
                 }
               </Grid>
+
               <Grid item xs={12}>
                 {
                   /* values.cosmetologa */ false ?
@@ -225,6 +237,7 @@ const ModalFormCita = (props) => {
                     </FormControl>
                 }
               </Grid>
+              
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
                   <InputLabel id="simple-select-outlined-statements">Estado</InputLabel>
@@ -239,7 +252,7 @@ const ModalFormCita = (props) => {
                   </Select>
                 </FormControl>
               </Grid>
-
+              
               {
                 values.status === canceloStatusId || values.status === noAsistioStatusId || values.status === reagendoStatusId ?
                   <Grid item xs={12}>
@@ -267,7 +280,7 @@ const ModalFormCita = (props) => {
                   onChange={onChangePrecio}
                   variant="outlined" />
               </Grid>
-
+              
               <Grid item xs={12}>
                 <TextField
                   className={classes.textField}
@@ -300,18 +313,18 @@ const ModalFormCita = (props) => {
                   variant="contained"
                   onClick={(e) => onClickActualizarCita(e, values)}
                   disabled={!isValid} >
-                  Guardar
+                    Guardar
                 </Button>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Button
-                  className={classes.button}
-                  color="secondary"
-                  variant="contained"
-                  onClick={onClickCancel} >
+              <Button
+                className={classes.button}
+                color="secondary"
+                variant="contained"
+                onClick={onClickCancel} >
                   Cancelar
               </Button>
-              </Grid>
+            </Grid>
             </Grid>
           </form>
         </div>
@@ -320,4 +333,4 @@ const ModalFormCita = (props) => {
   );
 }
 
-export default ModalFormCita;
+  export default ModalFormCita;

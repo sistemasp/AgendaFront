@@ -103,7 +103,7 @@ const ModalCita = (props) => {
 
   useEffect(() => {
     const loadTratamientos = async () => {
-      const response = await findTreatmentByServicio(cita.servicio._id);
+      const response = await findTreatmentByServicio(cita.servicio);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setTratamientos(response.data);
       }
@@ -132,7 +132,7 @@ const ModalCita = (props) => {
     }
 
     const loadDoctores = async () => {
-      const response = await findEmployeesByRolId(medicoRolId);
+      const response = await findEmployeesByRolId(doctorRolId);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setDoctores(response.data);
       }
