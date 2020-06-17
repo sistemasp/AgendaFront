@@ -2,78 +2,110 @@ import React, { useState, Fragment } from "react";
 import { MainContainer } from "./main";
 import { Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
+import Agendar from "../agendar";
+import { MenuLecturaContainer } from "./menu_lectura";
 
 const Alert = (props) => {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
+	return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 const MenuMain = (props) => {
 
-    const [pacienteAgendado, setPacienteAgendado] = useState({});
-    const [value, setValue] = useState(0);
-    const [openModalPassword, setOpenModalPassword] = useState(false);
-    const [openAlert, setOpenAlert] = useState(false);
-    const [message, setMessage] = useState('');
-    const [severity, setSeverity] = useState('success');
+	const [pacienteAgendado, setPacienteAgendado] = useState({});
+	const [value, setValue] = useState(0);
+	const [open, setOpen] = useState(false);
+	const [openAlert, setOpenAlert] = useState(false);
+	const [message, setMessage] = useState('');
+	const [severity, setSeverity] = useState('success');
 
-    const { 
-        empleado,
-        sucursal,
-    } = props.location.state;
+	const {
+		empleado,
+		sucursal,
+	} = props.location.state;
 
-    const {
-        history,
-    } = props;
+	const { permisos } = empleado.rol;
 
-    const handleChangeTab = (event, newValue) => {
-        setValue(newValue);
-    };
+	const {
+		history,
+	} = props;
 
-    const handleAgendar = (event, rowData) => {
-        setPacienteAgendado(rowData);
-        setValue(Number(process.env.REACT_APP_PAGE_AGENDAR));
-    }
+	const handleChangeTab = (event, newValue) => {
+		setValue(newValue);
+	};
 
-    const handleLogout = () => {
-        history.push('/', { empleado: {}, sucursal: {} });
-    }
+	const handleAgendar = (event, rowData) => {
+		setPacienteAgendado(rowData);
+		setValue(Number(process.env.REACT_APP_PAGE_AGENDAR_CONSULTA));
+	}
 
-    const handleClickCambioPassword = () => {
-        setOpenModalPassword(true);
-    }
+	const handleLogout = () => {
+		history.push('/', { empleado: {}, sucursal: {} });
+	}
 
-    const handleClose = () => {
-        setOpenModalPassword(false);
-    }
+	const handleClickCambioPassword = () => {
+		setOpen(true);
+	}
 
-    const handleCloseAlert = () => {
-        setOpenAlert(false);
-    };
+	const handleOpen = () => {
+		setOpen(true);
+	}
 
-    return (
-        <Fragment>
-            <MainContainer 
-                pacienteAgendado={pacienteAgendado}
-                setPacienteAgendado={setPacienteAgendado}
-                onChangeTab={handleChangeTab}
-                onClickAgendar={handleAgendar}
-                empleado={empleado}
-                sucursal={sucursal}
-                openModalPassword={openModalPassword}
-                onClickLogout={handleLogout}
-                onClickCambioPassword={handleClickCambioPassword}
-                onClose={handleClose}
-                value={value}
-                setMessage={setMessage}
-                setSeverity={setSeverity}
-                setOpenAlert={setOpenAlert}/>
-            <Snackbar open={openAlert} autoHideDuration={5000} onClose={handleCloseAlert}>
-                <Alert onClose={handleCloseAlert} severity={severity}>
-                    {message}
-                </Alert>
-            </Snackbar>
-        </Fragment>        
-    );
+	const handleClose = () => {
+		setOpen(false);
+	}
+
+	const handleCloseAlert = () => {
+		setOpenAlert(false);
+	};
+
+	return (
+		<Fragment>
+			{
+				permisos.includes('ALL') ?
+					<MenuContainer
+						pacienteAgendado={pacienteAgendado}
+						setPacienteAgendado={setPacienteAgendado}
+						onChangeTab={handleChangeTab}
+						onClickAgendar={handleAgendar}
+						empleado={empleado}
+						sucursal={sucursal}
+						open={open}
+						onClickLogout={handleLogout}
+						onClickCambioPassword={handleClickCambioPassword}
+						onOpen={handleOpen}
+						onClose={handleClose}
+						value={value}
+						setMessage={setMessage}
+						setSeverity={setSeverity}
+						setOpenAlert={setOpenAlert} />
+
+					: (permisos.includes('VER_CITAS')
+					?	<MenuLecturaContainer
+							pacienteAgendado={pacienteAgendado}
+							setPacienteAgendado={setPacienteAgendado}
+							onChangeTab={handleChangeTab}
+							onClickAgendar={handleAgendar}
+							empleado={empleado}
+							sucursal={sucursal}
+							open={open}
+							onClickLogout={handleLogout}
+							onClickCambioPassword={handleClickCambioPassword}
+							onOpen={handleOpen}
+							onClose={handleClose}
+							value={value}
+							setMessage={setMessage}
+							setSeverity={setSeverity}
+							setOpenAlert={setOpenAlert} />
+						: '')
+			}
+
+			<Snackbar open={openAlert} autoHideDuration={5000} onClose={handleCloseAlert}>
+				<Alert onClose={handleCloseAlert} severity={severity}>
+					{message}
+				</Alert>
+			</Snackbar>
+		</Fragment>
+	);
 }
 
 export default MenuMain;

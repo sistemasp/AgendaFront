@@ -181,7 +181,7 @@ export const AgendarContainer = (props) => {
 									margin="normal"
 									id="date-picker-inline"
 									label="Fecha"
-									value={values.fecha_show}
+									value={values.fecha_hora}
 									onChange={onChangeFecha}
 									KeyboardButtonProps={{
 										'aria-label': 'change date',
@@ -257,7 +257,7 @@ export const AgendarContainer = (props) => {
 							variant="contained"
 							color="primary"
 							disabled={!isValid || isSubmitting || !paciente.nombres || !values.servicio
-								|| values.tratamientos.length === 0 || !values.fecha || !values.hora || !values.precio
+								|| values.tratamientos.length === 0 || !values.fecha_hora || !values.precio
 								|| !values.tiempo}
 							onClick={() => onClickAgendar(values)} >
 							Agendar
@@ -278,7 +278,7 @@ export const AgendarContainer = (props) => {
 							margin="normal"
 							id="date-picker-inline-filter"
 							label="Filtrado Citas"
-							value={filterDate.fecha_show}
+							value={filterDate.fecha_hora}
 							onChange={onChangeFilterDate}
 							KeyboardButtonProps={{
 								'aria-label': 'change date',

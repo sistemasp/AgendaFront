@@ -1,18 +1,10 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { Backdrop, CircularProgress } from '@material-ui/core';
-import { PacientesContainer } from './pacientes';
 import { getAllPatients, updatePatient, createPatient, findPatientByPhoneNumber } from '../../services';
-import EditIcon from '@material-ui/icons/Edit';
-import EventAvailableIcon from '@material-ui/icons/EventAvailable';
-import TodayIcon from '@material-ui/icons/Today';
 import HistoryIcon from '@material-ui/icons/History';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import { PacientesLecturaContainer } from "./pacientes_lectura";
 
-function Alert(props) {
-	return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 const useStyles = makeStyles(theme => ({
 	backdrop: {
@@ -35,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const Pacientes = (props) => {
+const PacientesLectura = (props) => {
 
 	const classes = useStyles();
 
@@ -161,16 +153,6 @@ const Pacientes = (props) => {
 
 	const actions = [
 		{
-			icon: EventAvailableIcon,
-			tooltip: 'Agendar cita',
-			onClick: onClickAgendar
-		},
-		{
-			icon: EditIcon,
-			tooltip: 'Actualizar registro',
-			onClick: handleOnClickEditar
-		},
-		{
 			icon: HistoryIcon,
 			tooltip: 'Ver Historico',
 			onClick: handleClickHistorico
@@ -192,7 +174,7 @@ const Pacientes = (props) => {
 		<Fragment>
 			{
 				!isLoading ?
-					<PacientesContainer
+					<PacientesLecturaContainer
 						pacientes={pacientes}
 						columns={columns}
 						titulo='Pacientes'
@@ -202,21 +184,14 @@ const Pacientes = (props) => {
 						openHistoric={openHistoric}
 						paciente={paciente}
 						telefono={paciente.telefono}
-						onClickGuardar={handleOnClickGuardar}
-						onClickGuardarAgendar={handleOnClickGuardarAgendar}
 						handleOpen={handleOpen}
 						handleClose={handleClose} /> :
 					<Backdrop className={classes.backdrop} open={isLoading} >
 						<CircularProgress color="inherit" />
 					</Backdrop>
 			}
-			<Snackbar open={openAlert} autoHideDuration={5000} onClose={handleCloseAlert}>
-				<Alert onClose={handleCloseAlert} severity={severity}>
-					{message}
-				</Alert>
-			</Snackbar>
 		</Fragment>
 	);
 }
 
-export default Pacientes;
+export default PacientesLectura;

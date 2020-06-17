@@ -16,11 +16,11 @@ const ModHistorico = (props) => {
   const columns = [
     { title: 'Fecha', field: 'fecha_show' },
     { title: 'Hora', field: 'hora' },
-    { title: 'Servicio', field: 'servicio' },
+    { title: 'Servicio', field: 'servicio.nombre' },
     { title: 'Tratamientos', field: 'show_tratamientos' },
     { title: 'Numero Sesion', field: 'numero_sesion' },
-    { title: 'Tipo Cita', field: 'tipo_cita' },
-    { title: 'Asistio', field: 'asistio' },
+    { title: 'Tipo Cita', field: 'tipo_cita.nombre' },
+    { title: 'Estado', field: 'status.nombre' },
     { title: 'Sucursal', field: 'sucursal.nombre'},
     { title: 'Precio', field: 'precio_moneda' },
   ];
@@ -54,11 +54,14 @@ const ModHistorico = (props) => {
             item.show_tratamientos = item.tratamientos.map(tratamiento => {
                 return `${tratamiento.nombre}, `;
             });
-            const date = item.fecha.split('/');
-            const dia = addZero(date[0]);
-            const mes = addZero(date[1]);
-            const anio = date[2];
+            const date = new Date(item.fecha_hora);
+            const dia = addZero(date.getDate());
+            const mes = addZero(date.getMonth() + 1);
+            const anio = date.getFullYear();
+            const hora = Number(date.getHours() + 5);
+            const minutos = date.getMinutes();
             item.fecha_show = `${dia}/${mes}/${anio}`;
+            item.hora = `${addZero(hora)}:${addZero(minutos)}`;
           });
           setHistorial(response.data);
         }

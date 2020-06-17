@@ -1,9 +1,16 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import { ReportesContainer } from "./reportes";
-import { findDatesByRangeDateAndSucursal } from "../../services";
+import {
+	findDatesByDateAndSucursal
+} from "../../services";
 import { Backdrop, CircularProgress } from "@material-ui/core";
+import MuiAlert from '@material-ui/lab/Alert';
 import { toFormatterCurrency, addZero } from "../../utils/utils";
+import { AgendarLecturaContainer } from "./agendar_lectura";
+
+function Alert(props) {
+	return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles(theme => ({
 	backdrop: {
@@ -12,11 +19,11 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-const Reportes = (props) => {
-
+const AgendarLectura = (props) => {
 	const classes = useStyles();
 
 	const {
+		empleado,
 		sucursal,
 	} = props;
 
@@ -28,18 +35,12 @@ const Reportes = (props) => {
 	const mes = addZero(date.getMonth() + 1);
 	const anio = date.getFullYear();
 
-	const [startDate, setStartDate] = useState({
-		fecha_show: date,
-		fecha: `${dia}/${mes}/${anio}`,
-	});
-
-	const [endDate, setEndDate] = useState({
+	const [filterDate, setFilterDate] = useState({
 		fecha_show: date,
 		fecha: `${dia}/${mes}/${anio}`,
 	});
 
 	const columns = [
-		{ title: 'Fecha', field: 'fecha_show' },
 		{ title: 'Hora', field: 'hora' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
 		{ title: 'Telefono', field: 'paciente.telefono' },
@@ -53,40 +54,14 @@ const Reportes = (props) => {
 		{ title: 'Medico', field: 'medico_nombre' },
 		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
 		{ title: 'Estado', field: 'status.nombre' },
-		{ title: 'Motivos', field: 'motivos' },
 		{ title: 'Precio', field: 'precio_moneda' },
-		{ title: 'Tiempo (minutos)', field: 'tiempo' },
 		{ title: 'Observaciones', field: 'observaciones' },
 	];
-
-	const options = {
-		rowStyle: rowData => {
-			const { asistio } = rowData;
-			if (asistio === 'NO ASISTIO') {
-				return { color: '#B7B4A1' };
-			} else if (asistio === 'CANCELO') {
-				return { color: '#FF0000', fontWeight: 'bold' };
-			} else if (asistio === 'REAGENDO') {
-				return { color: '#FBD014' };
-			}
-		},
-		headerStyle: {
-			backgroundColor: '#2BA6C6',
-			color: '#FFF',
-			fontWeight: 'bolder',
-			fontSize: '18px'
-		},
-		exportAllData: true,
-		exportButton: true,
-		exportDelimiter: ';'
-	}
 
 	useEffect(() => {
 
 		const loadCitas = async () => {
-			const response = await findDatesByRangeDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(),
-				date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
-
+			const response = await findDatesByDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
 					item.precio_moneda = toFormatterCurrency(item.precio);
@@ -97,53 +72,38 @@ const Reportes = (props) => {
 					item.show_tratamientos = item.tratamientos.map(tratamiento => {
 						return `${tratamiento.nombre}, `;
 					});
-					const date = new Date(item.fecha_hora);
-					item.fecha_show = `${addZero(date.getDate())}/${addZero(date.getMonth() + 1)}/${date.getFullYear()}`;
+					const fecha = new Date(item.fecha_hora);
+					const hora = addZero(Number(fecha.getHours() + 5));
+					const minutos = addZero(fecha.getMinutes());
+					item.hora = `${hora}:${minutos}`;
 				});
 				setCitas(response.data);
 			}
 		}
+
 		setIsLoading(true);
 		loadCitas();
 		setIsLoading(false);
 	}, [sucursal]);
 
-	const handleChangeStartDate = async (date) => {
+	const handleChangeFilterDate = async (date) => {
 		setIsLoading(true);
 		const dia = addZero(date.getDate());
 		const mes = addZero(date.getMonth() + 1);
 		const anio = date.getFullYear();
-		setStartDate({
+		setFilterDate({
 			fecha_show: date,
 			fecha: `${dia}/${mes}/${anio}`
 		});
+		await loadCitas(date);
 		setIsLoading(false);
 	};
 
-	const handleChangeEndDate = async (date) => {
-		setIsLoading(true);
-		const dia = addZero(date.getDate());
-		const mes = addZero(date.getMonth() + 1);
-		const anio = date.getFullYear();
-		setEndDate({
-			fecha_show: date,
-			fecha: `${dia}/${mes}/${anio}`
-		});
-
-		setIsLoading(false);
-	};
-
-	const handleReportes = async () => {
-		await loadCitas(startDate.fecha_show, endDate.fecha_show);
-	}
-
-	const loadCitas = async (startDate, endDate) => {
-		const response = await findDatesByRangeDateAndSucursal(startDate.getDate(), (startDate.getMonth() + 1), startDate.getFullYear(),
-			endDate.getDate(), (endDate.getMonth() + 1), endDate.getFullYear(), sucursal);
+	const loadCitas = async (filterDate) => {
+		const response = await findDatesByDateAndSucursal(filterDate.getDate(), (filterDate.getMonth() + 1), filterDate.getFullYear(), sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
 				item.precio_moneda = toFormatterCurrency(item.precio);
-
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
@@ -151,35 +111,41 @@ const Reportes = (props) => {
 				item.show_tratamientos = item.tratamientos.map(tratamiento => {
 					return `${tratamiento.nombre}, `;
 				});
-
-				const date = new Date(item.fecha_hora);
-				item.fecha_show = `${addZero(date.getDate())}/${addZero(date.getMonth() + 1)}/${date.getFullYear()}`;
+				const fecha = new Date(item.fecha_hora);
+				const hora = addZero(Number(fecha.getHours() + 5));
+				const minutos = addZero(fecha.getMinutes());
+				item.hora = `${hora}:${minutos}`;
 			});
 			setCitas(response.data);
 		}
 	}
 
-	const actions = [
-	];
+	const options = {
+		rowStyle: rowData => {
+			return { color: rowData.status.color };
+		},
+		headerStyle: {
+			backgroundColor: '#2BA6C6',
+			color: '#FFF',
+			fontWeight: 'bolder',
+			fontSize: '18px'
+		}
+	}
 
 	return (
 		<Fragment>
 			{
 				!isLoading ?
-					<ReportesContainer
-						onChangeStartDate={(e) => handleChangeStartDate(e)}
-						onChangeEndDate={(e) => handleChangeEndDate(e)}
-						startDate={startDate.fecha_show}
-						endDate={endDate.fecha_show}
-						titulo={`REPORTES (${startDate.fecha} - ${endDate.fecha})`}
+					<AgendarLecturaContainer
+						onChangeFilterDate={(e) => handleChangeFilterDate(e)}
+						filterDate={filterDate}
+						titulo={`CITAS (${filterDate.fecha})`}
 						columns={columns}
 						options={options}
 						citas={citas}
-						actions={actions}
-						loadCitas={loadCitas}
-						onClickReportes={handleReportes}
-						{...props} />
-					: <Backdrop className={classes.backdrop} open={isLoading} >
+						empleado={empleado} />
+					:
+					<Backdrop className={classes.backdrop} open={isLoading} >
 						<CircularProgress color="inherit" />
 					</Backdrop>
 			}
@@ -187,4 +153,4 @@ const Reportes = (props) => {
 	);
 }
 
-export default Reportes;
+export default AgendarLectura;

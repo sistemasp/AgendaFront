@@ -137,6 +137,8 @@ const Agendar = (props) => {
 			const response = await findDatesByDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
+					const fecha = new Date(item.fecha_hora);
+					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
@@ -196,9 +198,9 @@ const Agendar = (props) => {
 	}
 
 	const loadHorarios = async (date) => {
-		const dia = date ? date.getDate() : values.fecha_show.getDate();
-		const mes = Number(date ? date.getMonth() : values.fecha_show.getMonth()) + 1;
-		const anio = date ? date.getFullYear() : values.fecha_show.getFullYear();
+		const dia = date ? date.getDate() : values.fecha_hora.getDate();
+		const mes = Number(date ? date.getMonth() : values.fecha_hora.getMonth()) + 1;
+		const anio = date ? date.getFullYear() : values.fecha_hora.getFullYear();
 		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, values.servicio);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setHorarios(response.data);
@@ -206,9 +208,9 @@ const Agendar = (props) => {
 	}
 
 	const loadHorariosByServicio = async (date, servicio) => {
-		const dia = date ? date.getDate() : values.fecha_show.getDate();
-		const mes = Number(date ? date.getMonth() : values.fecha_show.getMonth()) + 1;
-		const anio = date ? date.getFullYear() : values.fecha_show.getFullYear();
+		const dia = date ? date.getDate() : values.fecha_hora.getDate();
+		const mes = Number(date ? date.getMonth() : values.fecha_hora.getMonth()) + 1;
+		const anio = date ? date.getFullYear() : values.fecha_hora.getFullYear();
 		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, servicio);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setHorarios(response.data);
@@ -221,9 +223,7 @@ const Agendar = (props) => {
 		setValues({
 			...values,
 			servicio: e.target.value,
-			fecha_show: '',
-			fecha: '',
-			hora: '',
+			fecha_hora: '',
 			precio: '',
 		});
 		loadTratamientos(e.target.value);
@@ -234,9 +234,7 @@ const Agendar = (props) => {
 		setIsLoading(true);
 		setValues({
 			...values,
-			fecha_show: '',
-			fecha: '',
-			hora: '',
+			fecha_hora: '',
 			precio: '',
 			tratamientos: items
 		});
@@ -246,11 +244,9 @@ const Agendar = (props) => {
 
 	const handleChangeFecha = async (date) => {
 		setIsLoading(true);
-		const fecha = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 		await setValues({
 			...values,
-			fecha_show: date,
-			fecha: fecha
+			fecha_hora: date,
 		});
 		await loadHorarios(date);
 		setIsLoading(false);
@@ -258,7 +254,12 @@ const Agendar = (props) => {
 
 	const handleChangeHora = e => {
 		setIsLoading(true);
-		setValues({ ...values, hora: e.target.value });
+		const hora = (e.target.value).split(':');
+		const date = values.fecha_hora;
+		date.setHours(Number(hora[0]) - 5); // -5 por zona horaria
+		date.setMinutes(hora[1]);
+		date.setSeconds(0);
+		setValues({ ...values, fecha_hora: date });
 		setIsLoading(false);
 	};
 
@@ -272,7 +273,7 @@ const Agendar = (props) => {
 		const mes = addZero(date.getMonth() + 1);
 		const anio = date.getFullYear();
 		setFilterDate({
-			fecha_show: date,
+			fecha_hora: date,
 			fecha: `${dia}/${mes}/${anio}`
 		});
 		await loadCitas(date);
@@ -283,6 +284,8 @@ const Agendar = (props) => {
 		const response = await findDatesByDateAndSucursal(filterDate.getDate(), (filterDate.getMonth() + 1), filterDate.getFullYear(), sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
+				const fecha = new Date(item.fecha_hora);
+				item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
@@ -323,12 +326,9 @@ const Agendar = (props) => {
 			setValues({
 				servicio: '',
 				tratamientos: [],
-				fecha_show: '',
 				medico: '',
 				promovendedor: '',
 				cosmetologa: '',
-				fecha: '',
-				hora: '',
 				paciente: `${paciente._id}`,
 				precio: '',
 				tipo_cita: '',
@@ -380,8 +380,7 @@ const Agendar = (props) => {
 		setIsLoading(true);
 		setCita(rowData);
 		// await loadTratamientos(rowData.servicio);
-		const splitDate = (rowData.fecha).split('/');
-		await loadHorariosByServicio(new Date(splitDate[2], (splitDate[1] - 1), splitDate[0]), rowData.servicio._id);
+		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio._id);
 		setOpenModal(true);
 		setIsLoading(false);
 	}
