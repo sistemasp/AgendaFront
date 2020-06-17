@@ -3,7 +3,7 @@ import { MainContainer } from "./main";
 import { Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import Agendar from "../agendar";
-import { MenuLecturaContainer } from "./menu_lectura";
+import { MainLecturaContainer } from "./main_lectura";
 
 const Alert = (props) => {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -80,7 +80,7 @@ const MenuMain = (props) => {
 						setOpenAlert={setOpenAlert} />
 
 					: (permisos.includes('VER_CITAS')
-					?	<MenuLecturaContainer
+					?	<MainLecturaContainer
 							pacienteAgendado={pacienteAgendado}
 							setPacienteAgendado={setPacienteAgendado}
 							onChangeTab={handleChangeTab}

@@ -132,7 +132,7 @@ const ModalCita = (props) => {
     }
 
     const loadDoctores = async () => {
-      const response = await findEmployeesByRolId(doctorRolId);
+      const response = await findEmployeesByRolId(medicoRolId);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setDoctores(response.data);
       }
