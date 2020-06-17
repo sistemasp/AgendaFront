@@ -42,6 +42,7 @@ const LoginForm = (props) => {
   const [values, setValues] = useState({
     employee_number: '',
     password: '',
+    sucursal: '',
     showPassword: false
   });
   const [openAlert, setOpenAlert] = useState(false);
