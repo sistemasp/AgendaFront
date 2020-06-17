@@ -278,7 +278,7 @@ export const AgendarContainer = (props) => {
 							margin="normal"
 							id="date-picker-inline-filter"
 							label="Filtrado Citas"
-							value={filterDate.fecha_show}
+							value={filterDate.fecha_hora}
 							onChange={onChangeFilterDate}
 							KeyboardButtonProps={{
 								'aria-label': 'change date',
