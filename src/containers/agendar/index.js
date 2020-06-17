@@ -107,6 +107,11 @@ const Agendar = (props) => {
 	const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
 	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
 
+	console.log('medicoRolId', medicoRolId);
+	console.log('promovendedorRolId', promovendedorRolId);
+	console.log('medicoRocosmetologaRolIdlId', cosmetologaRolId);
+	console.log('pendienteStatusId', pendienteStatusId);
+
 	const options = {
 		rowStyle: rowData => {
 			return { color: rowData.status.color };
