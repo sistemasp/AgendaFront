@@ -64,8 +64,6 @@ const Agendar = (props) => {
 		servicio: '',
 		tratamientos: [],
 		fecha_show: '',
-		fecha: '',
-		hora: '',
 		paciente: `${paciente._id}`,
 		precio: '',
 		tipo_cita: {},
@@ -198,7 +196,7 @@ const Agendar = (props) => {
 		const dia = date ? date.getDate() : values.fecha_hora.getDate();
 		const mes = Number(date ? date.getMonth() : values.fecha_hora.getMonth()) + 1;
 		const anio = date ? date.getFullYear() : values.fecha_hora.getFullYear();
-		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, values.servicio);
+		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, values.servicio._id);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setHorarios(response.data);
 		}
@@ -208,7 +206,7 @@ const Agendar = (props) => {
 		const dia = date ? date.getDate() : values.fecha_hora.getDate();
 		const mes = Number(date ? date.getMonth() : values.fecha_hora.getMonth()) + 1;
 		const anio = date ? date.getFullYear() : values.fecha_hora.getFullYear();
-		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, servicio);
+		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, servicio._id);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setHorarios(response.data);
 		}
@@ -256,7 +254,7 @@ const Agendar = (props) => {
 		date.setHours(Number(hora[0]) - 5); // -5 por zona horaria
 		date.setMinutes(hora[1]);
 		date.setSeconds(0);
-		setValues({ ...values, fecha_hora: date });
+		setValues({ ...values, hora: e.target.value, fecha_hora: date });
 		setIsLoading(false);
 	};
 
@@ -315,7 +313,6 @@ const Agendar = (props) => {
 		data.sucursal = sucursal;
 		data.numero_sesion = 1;
 		data.status = pendienteStatusId;
-		console.log('DATA', data);
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 		const response = await createDate(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {

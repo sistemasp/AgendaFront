@@ -49,7 +49,9 @@ const Pacientes = (props) => {
 	const [severity, setSeverity] = useState('success');
 
 	const {
-		onClickAgendar
+		onClickAgendar,
+		onClickAgendarTratamiento,
+		onClickAgendarConsulta
 	} = props;
 
 	const columns = [
@@ -161,9 +163,14 @@ const Pacientes = (props) => {
 
 	const actions = [
 		{
+			icon: TodayIcon,
+			tooltip: 'Agendar consulta',
+			onClick: onClickAgendarConsulta
+		},
+		{
 			icon: EventAvailableIcon,
-			tooltip: 'Agendar cita',
-			onClick: onClickAgendar
+			tooltip: 'Agendar tratamiento',
+			onClick: onClickAgendarTratamiento
 		},
 		{
 			icon: EditIcon,

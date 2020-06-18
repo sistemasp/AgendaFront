@@ -198,7 +198,7 @@ export const AgendarContainer = (props) => {
 								value={values.hora}
 								error={Boolean(errors.hora)}
 								onChange={onChangeHora}
-								disabled={values.fecha_show === ''}
+								disabled={values.fecha_hora === ''}
 								label="Hora" >
 								{horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
 							</Select>

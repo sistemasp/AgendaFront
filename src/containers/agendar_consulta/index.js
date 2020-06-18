@@ -1,7 +1,13 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { AgendarConsultaContainer } from "./agendar_consulta";
-import { findScheduleInConsultByDateAndSucursal, findConsultsByDateAndSucursal, createConsult, findEmployeesByRolId } from "../../services";
+import { 
+	findScheduleInConsultByDateAndSucursal,
+	findConsultsByDateAndSucursal,
+	createConsult,
+	findEmployeesByRolId,
+	showAllTipoCitas
+} from "../../services";
 import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
@@ -46,12 +52,11 @@ const AgendarConsulta = (props) => {
 	const [message, setMessage] = useState('');
 	const [horarios, setHorarios] = useState([]);
 	const [medicos, setMedicos] = useState([]);
+	const [tipoCitas, setTipoCitas] = useState([]);
 	const [promovendedores, setPromovendedores] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [disableDate, setDisableDate] = useState(true);
 	const [values, setValues] = useState({
-		fecha_show: '',
-		fecha: '',
 		hora: '',
 		paciente: `${paciente._id}`,
 		precio: '',
@@ -77,11 +82,11 @@ const AgendarConsulta = (props) => {
 		{ title: 'Hora atendido', field: 'hora' },
 		{ title: 'Hora salida', field: 'hora' },
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
-		{ title: 'Tipo Consulta', field: 'tipo_cita' },
+		{ title: 'Tipo Consulta', field: 'tipo_cita.nombre' },
 		{ title: 'Quien confirma', field: 'quien_confirma.nombre' },
 		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
 		{ title: 'Medico', field: 'medico_nombre' },
-		{ title: 'Estado', field: 'asistio' },
+		{ title: 'Estado', field: 'status.nombre' },
 		{ title: 'Precio', field: 'precio_moneda' },
 		{ title: 'Observaciones', field: 'observaciones' },
 	];
@@ -89,17 +94,12 @@ const AgendarConsulta = (props) => {
 	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
 	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
 	const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
+	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
 
 	const options = {
 		rowStyle: rowData => {
-			const { asistio } = rowData;
-			if (asistio === 'NO ASISTIO') {
-				return { color: '#B7B4A1' };
-			} else if (asistio === 'CANCELO') {
-				return { color: '#FF0000', fontWeight: 'bold' };
-			} else if (asistio === 'REAGENDO') {
-				return { color: '#FBD014' };
-			}
+			console.log('ROWDATa', rowData);
+			return { color: rowData.status.color };
 		},
 		headerStyle: {
 			backgroundColor: '#2BA6C6',
@@ -113,17 +113,15 @@ const AgendarConsulta = (props) => {
 
 		const loadConsultas = async () => {
 			const response = await findConsultsByDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
-
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
+					const fecha = new Date(item.fecha_hora);
+					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-					item.show_tratamientos = item.tratamientos.map(tratamiento => {
-						return `${tratamiento.nombre}, `;
-					});
 				});
 				setConsultas(response.data);
 			}
@@ -143,10 +141,18 @@ const AgendarConsulta = (props) => {
 			}
 		}
 
+		const loadTipoCitas = async () => {
+			const response = await showAllTipoCitas();
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setTipoCitas(response.data);
+			}
+		}
+
 		setIsLoading(true);
 		loadConsultas();
 		loadMedicos();
 		loadPromovendedores();
+		loadTipoCitas();
 		setIsLoading(false);
 	}, [sucursal, medicoRolId, promovendedorRolId]);
 
@@ -162,11 +168,9 @@ const AgendarConsulta = (props) => {
 
 	const handleChangeFecha = async (date) => {
 		setIsLoading(true);
-		const fecha = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 		await setValues({
 			...values,
-			fecha_show: date,
-			fecha: fecha
+			fecha_hora: date,
 		});
 		await loadHorarios(date);
 		setIsLoading(false);
@@ -174,7 +178,12 @@ const AgendarConsulta = (props) => {
 
 	const handleChangeHora = e => {
 		setIsLoading(true);
-		setValues({ ...values, hora: e.target.value });
+		const hora = (e.target.value).split(':');
+		const date = values.fecha_hora;
+		date.setHours(Number(hora[0]) - 5); // -5 por zona horaria
+		date.setMinutes(hora[1]);
+		date.setSeconds(0);
+		setValues({ ...values, hora: e.target.value, fecha_hora: date });
 		setIsLoading(false);
 	};
 
@@ -195,14 +204,13 @@ const AgendarConsulta = (props) => {
 		const response = await findConsultsByDateAndSucursal(filterDate.getDate(), (filterDate.getMonth() + 1), filterDate.getFullYear(), sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
+				const fecha = new Date(item.fecha_hora);
+				item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-				item.show_tratamientos = item.tratamientos.map(tratamiento => {
-					return `${tratamiento.nombre}, `;
-				});
 			});
 			setConsultas(response.data);
 		}
@@ -221,15 +229,17 @@ const AgendarConsulta = (props) => {
 		return tiempo;
 	}
 
+	const handleChangeTipoCita = (e) => {
+		setValues({ ...values, tipo_cita: e.target.value });
+	}
+
 	const handleClickAgendar = async (data) => {
 		setIsLoading(true);
-		data.tipo_cita = 'CITADO';
 		data.quien_agenda = empleado._id;
 		data.sucursal = sucursal;
-		data.estado = 'PENDIENTE';
-		console.log("DATA", data);
+		data.status = pendienteStatusId;
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
-		/*const response = await createConsult(data);
+		const response = await createConsult(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			setOpenAlert(true);
 			setMessage('La Consulta se agendo correctamente');
@@ -247,8 +257,7 @@ const AgendarConsulta = (props) => {
 			setDisableDate(true);
 			setPacienteAgendado({});
 			loadConsultas(new Date());
-		}*/
-
+		}
 		setIsLoading(false);
 	};
 
@@ -262,6 +271,10 @@ const AgendarConsulta = (props) => {
 
 	const handleChangeMedicos = (e) => {
 		setValues({ ...values, medico: e.target.value });
+	}
+
+	const handleChangeObservaciones = e => {
+		setValues({ ...values, observaciones: e.target.value });
 	}
 
 	const handleCloseAlert = () => {
@@ -311,6 +324,7 @@ const AgendarConsulta = (props) => {
 								onClickAgendar={handleClickAgendar}
 								onChangePrecio={(e) => handleChangePrecio(e)}
 								onChangeTiempo={(e) => handleChangeTiempo(e)}
+								onChangeObservaciones={(e) => handleChangeObservaciones(e)}
 								titulo={`CONSULTAS (${filterDate.fecha})`}
 								columns={columns}
 								options={options}
@@ -321,6 +335,8 @@ const AgendarConsulta = (props) => {
 								empleado={empleado}
 								onClickCancel={handleCloseModal}
 								loadConsultas={loadConsultas}
+								tipoCitas={tipoCitas}
+								onChangeTipoCita={(e) => handleChangeTipoCita(e)}
 								medicos={medicos}
 								promovendedores={promovendedores}
 								onChangeMedicos={(e) => handleChangeMedicos(e)}
