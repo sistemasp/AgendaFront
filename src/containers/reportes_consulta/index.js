@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import { ReportesContainer } from "./reportes";
-import { findDatesByRangeDateAndSucursal } from "../../services";
+import { ReportesConsultaContainer } from "./reportes_consulta";
+import { findConsultsByRangeDateAndSucursal } from "../../services";
 import { Backdrop, CircularProgress } from "@material-ui/core";
 import { toFormatterCurrency, addZero } from "../../utils/utils";
 
@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-const Reportes = (props) => {
+const ReportesConsulta = (props) => {
 
 	const classes = useStyles();
 
@@ -39,36 +39,27 @@ const Reportes = (props) => {
 	});
 
 	const columns = [
-		{ title: 'Fecha', field: 'fecha_show' },
 		{ title: 'Hora', field: 'hora' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
 		{ title: 'Telefono', field: 'paciente.telefono' },
-		{ title: 'Servicio', field: 'servicio.nombre' },
-		{ title: 'Tratamientos', field: 'show_tratamientos' },
-		{ title: 'Numero Sesion', field: 'numero_sesion' },
+		{ title: 'Hora atendido', field: 'hora_atencion' },
+		{ title: 'Hora salida', field: 'hora_salida' },
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
-		{ title: 'Tipo Cita', field: 'tipo_cita.nombre' },
+		{ title: 'Tipo Consulta', field: 'tipo_cita.nombre' },
 		{ title: 'Quien confirma', field: 'quien_confirma.nombre' },
 		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
 		{ title: 'Medico', field: 'medico_nombre' },
-		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
 		{ title: 'Estado', field: 'status.nombre' },
-		{ title: 'Motivos', field: 'motivos' },
 		{ title: 'Precio', field: 'precio_moneda' },
-		{ title: 'Tiempo (minutos)', field: 'tiempo' },
 		{ title: 'Observaciones', field: 'observaciones' },
 	];
 
 	const options = {
 		rowStyle: rowData => {
-			const { asistio } = rowData;
-			if (asistio === 'NO ASISTIO') {
-				return { color: '#B7B4A1' };
-			} else if (asistio === 'CANCELO') {
-				return { color: '#FF0000', fontWeight: 'bold' };
-			} else if (asistio === 'REAGENDO') {
-				return { color: '#FBD014' };
-			}
+			return { 
+				color: rowData.status.color,
+				backgroundColor: rowData.pagado ? '#10CC88' : ''
+			};
 		},
 		headerStyle: {
 			backgroundColor: '#2BA6C6',
@@ -84,21 +75,17 @@ const Reportes = (props) => {
 	useEffect(() => {
 
 		const loadCitas = async () => {
-			const response = await findDatesByRangeDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(),
+			const response = await findConsultsByRangeDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(),
 				date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
 
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
+					const fecha = new Date(item.fecha_hora);
+					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-					item.show_tratamientos = item.tratamientos.map(tratamiento => {
-						return `${tratamiento.nombre}, `;
-					});
-					const date = new Date(item.fecha_hora);
-					item.fecha_show = `${addZero(date.getDate())}/${addZero(date.getMonth() + 1)}/${date.getFullYear()}`;
 				});
 				setCitas(response.data);
 			}
@@ -138,22 +125,16 @@ const Reportes = (props) => {
 	}
 
 	const loadCitas = async (startDate, endDate) => {
-		const response = await findDatesByRangeDateAndSucursal(startDate.getDate(), (startDate.getMonth() + 1), startDate.getFullYear(),
+		const response = await findConsultsByRangeDateAndSucursal(startDate.getDate(), (startDate.getMonth() + 1), startDate.getFullYear(),
 			endDate.getDate(), (endDate.getMonth() + 1), endDate.getFullYear(), sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-			response.data.forEach(item => {
+			await response.data.forEach(item => {
+				const fecha = new Date(item.fecha_hora);
+				item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);
-
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-				item.show_tratamientos = item.tratamientos.map(tratamiento => {
-					return `${tratamiento.nombre}, `;
-				});
-
-				const date = new Date(item.fecha_hora);
-				item.fecha_show = `${addZero(date.getDate())}/${addZero(date.getMonth() + 1)}/${date.getFullYear()}`;
 			});
 			setCitas(response.data);
 		}
@@ -166,12 +147,12 @@ const Reportes = (props) => {
 		<Fragment>
 			{
 				!isLoading ?
-					<ReportesContainer
+					<ReportesConsultaContainer
 						onChangeStartDate={(e) => handleChangeStartDate(e)}
 						onChangeEndDate={(e) => handleChangeEndDate(e)}
 						startDate={startDate.fecha_show}
 						endDate={endDate.fecha_show}
-						titulo={`REPORTES TRATAMIENTOS(${startDate.fecha} - ${endDate.fecha})`}
+						titulo={`REPORTES CONSULTAS(${startDate.fecha} - ${endDate.fecha})`}
 						columns={columns}
 						options={options}
 						citas={citas}
@@ -187,4 +168,4 @@ const Reportes = (props) => {
 	);
 }
 
-export default Reportes;
+export default ReportesConsulta;

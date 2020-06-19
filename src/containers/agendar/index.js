@@ -109,7 +109,10 @@ const Agendar = (props) => {
 
 	const options = {
 		rowStyle: rowData => {
-			return { color: rowData.status.color };
+			return { 
+				color: rowData.status.color,
+				backgroundColor: rowData.pagado ? '#10CC88' : ''
+			};
 		},
 		headerStyle: {
 			backgroundColor: '#2BA6C6',

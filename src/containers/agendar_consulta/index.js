@@ -98,7 +98,10 @@ const AgendarConsulta = (props) => {
 
 	const options = {
 		rowStyle: rowData => {
-			return { color: rowData.status.color };
+			return { 
+				color: rowData.status.color,
+				backgroundColor: rowData.pagado ? '#10CC88' : ''
+			};
 		},
 		headerStyle: {
 			backgroundColor: '#2BA6C6',
@@ -118,7 +121,6 @@ const AgendarConsulta = (props) => {
 					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
-					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
 				});
