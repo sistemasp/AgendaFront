@@ -63,7 +63,6 @@ const Agendar = (props) => {
 	const [values, setValues] = useState({
 		servicio: '',
 		tratamientos: [],
-		fecha_show: '',
 		paciente: `${paciente._id}`,
 		precio: '',
 		tipo_cita: {},
@@ -80,7 +79,7 @@ const Agendar = (props) => {
 	const anio = date.getFullYear();
 
 	const [filterDate, setFilterDate] = useState({
-		fecha_show: date,
+		fecha_hora: date,
 		fecha: `${dia}/${mes}/${anio}`,
 	});
 
@@ -206,7 +205,7 @@ const Agendar = (props) => {
 		const dia = date ? date.getDate() : values.fecha_hora.getDate();
 		const mes = Number(date ? date.getMonth() : values.fecha_hora.getMonth()) + 1;
 		const anio = date ? date.getFullYear() : values.fecha_hora.getFullYear();
-		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, servicio._id);
+		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, servicio);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setHorarios(response.data);
 		}
@@ -373,13 +372,14 @@ const Agendar = (props) => {
 		setIsLoading(true);
 		setCita(rowData);
 		// await loadTratamientos(rowData.servicio);
+		console.log('rowData', rowData);
 		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio._id);
 		setOpenModal(true);
 		setIsLoading(false);
 	}
 
 	const actions = [
-		//new Date(anio, mes - 1, dia) < filterDate.fecha_show  ? 
+		//new Date(anio, mes - 1, dia) < filterDate.fecha_hora  ? 
 		{
 			icon: EditIcon,
 			tooltip: 'Editar cita',
@@ -406,7 +406,7 @@ const Agendar = (props) => {
 								onChangeFilterDate={(e) => handleChangeFilterDate(e)}
 								onChangeHora={(e) => handleChangeHora(e)}
 								onChangeObservaciones={(e) => handleChangeObservaciones(e)}
-								filterDate={filterDate.fecha_show}
+								filterDate={filterDate.fecha_hora}
 								paciente={paciente}
 								disableDate={disableDate}
 								promovendedores={promovendedores}

@@ -13,6 +13,7 @@ import { Button, Toolbar } from '@material-ui/core';
 import Reportes from '../reportes/index';
 import ModalPassword from '../../components/modal_password';
 import AgendarConsulta from '../agendar_consulta';
+import Consultas from '../consultas';
 
 
 function TabPanel(props) {
@@ -116,7 +117,7 @@ export const MenuContainer = props => {
                     sucursal={sucursal._id} />
             </TabPanel>
             <TabPanel value={value} index={3}>
-                <Citas 
+                <Consultas 
                     sucursal={sucursal._id}/>
             </TabPanel>
             <TabPanel value={value} index={4}>

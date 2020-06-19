@@ -35,10 +35,6 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     width: '100%',
-  },
-  label: {
-    marginTop: '0px',
-    marginBottom: '0px',
   }
 }));
 
@@ -46,7 +42,7 @@ const canceloStatusId = process.env.REACT_APP_CANCELO_STATUS_ID;
 const noAsistioStatusId = process.env.REACT_APP_NO_ASISTIO_STATUS_ID;
 const reagendoStatusId = process.env.REACT_APP_REAGENDO_STATUS_ID;
 
-const ModalFormCita = (props) => {
+const ModalFormConsulta = (props) => {
   const classes = useStyles();
 
   // getModalStyle is not a pure function, we roll the style only on the first render
@@ -56,28 +52,20 @@ const ModalFormCita = (props) => {
     values,
     errors,
     handleSubmit,
-    onChangeServicio,
-    onChangeTratamientos,
     onChangeFecha,
     onChangeHora,
-    onChangeTiempo,
     onChangeTipoCita,
     onChangeStatus,
     onChangePromovendedor,
-    onChangeCosmetologa,
     isValid,
     onClickCancel,
     onClickActualizarCita,
     open,
-    servicios,
-    tratamientos,
     horarios,
     promovendedores,
-    cosmetologas,
     doctores,
     tipoCitas,
     statements,
-    onChangeSesion,
     onChangePrecio,
     onChangeMotivos,
     onChangeObservaciones,
@@ -94,20 +82,7 @@ const ModalFormCita = (props) => {
           <form onSubmit={handleSubmit}>
             <Grid container spacing={1}>
               <Grid item xs={12}>
-                <h2 className={classes.label}>{values.paciente_nombre} ({values.telefono})</h2>
-              </Grid>
-              <Grid item xs={12}>
-                <h3 className={classes.label}>Servicio: {values.servicio.nombre}</h3>
-              </Grid>
-              <Grid item xs={12}>
-                <Multiselect
-                  options={tratamientos} // Options to display in the dropdown
-                  displayValue="nombre" // Property name to display in the dropdown options
-                  onSelect={(e) => onChangeTratamientos(e)} // Function will trigger on select event
-                  onRemove={(e) => onChangeTratamientos(e)} // Function will trigger on remove event
-                  placeholder="Selecciona tratamientos"
-                  selectedValues={values.tratamientos} // Preselected value to persist in dropdown
-                />
+                <h3>{values.paciente_nombre} ({values.telefono})</h3>
               </Grid>
               <Grid item xs={12}>
                 {
@@ -163,19 +138,6 @@ const ModalFormCita = (props) => {
               </Grid>
 
               <Grid item xs={12}>
-                <TextField
-                  className={classes.textField}
-                  name="tiempo"
-                  //helperText={touched.tiempo ? errors.tiempo : ""}
-                  error={Boolean(errors.tiempo)}
-                  label="Tiempo (minutos)"
-                  value={values.tiempo}
-                  type='Number'
-                  onChange={onChangeTiempo}
-                  variant="outlined" />
-              </Grid>
-
-              <Grid item xs={12}>
                 {
                   /* values.tipo_cita */ false ?
                     <h3 className={classes.label}>Tipo cita: {values.tipo_cita.nombre}</h3> :
@@ -208,25 +170,6 @@ const ModalFormCita = (props) => {
                         onChange={onChangePromovendedor}
                         label="Promovendedor" >
                         {promovendedores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
-                      </Select>
-                    </FormControl>
-                }
-              </Grid>
-
-              <Grid item xs={12}>
-                {
-                  /* values.cosmetologa */ false ?
-                    <h3 className={classes.label}>Cosmetologa: {values.cosmetologa.nombre}</h3> :
-                    <FormControl variant="outlined" className={classes.formControl}>
-                      <InputLabel id="simple-select-outlined-cosmetologa">Cosmetologa</InputLabel>
-                      <Select
-                        labelId="simple-select-outlined-cosmetologa"
-                        id="simple-select-outlined-cosmetologa"
-                        value={values.cosmetologa}
-                        error={Boolean(errors.cosmetologa)}
-                        onChange={onChangeCosmetologa}
-                        label="Cosmetologa" >
-                        {cosmetologas.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                       </Select>
                     </FormControl>
                 }
@@ -278,19 +221,6 @@ const ModalFormCita = (props) => {
               <Grid item xs={12}>
                 <TextField
                   className={classes.textField}
-                  name="numero_sesion"
-                  //helperText={touched.numero_sesion ? errors.numero_sesion : ""}
-                  error={Boolean(errors.numero_sesion)}
-                  label="Numero sesion"
-                  value={values.numero_sesion}
-                  type='Number'
-                  onChange={onChangeSesion}
-                  variant="outlined" />
-              </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  className={classes.textField}
                   name="observaciones"
                   //helperText={touched.observaciones ? errors.observaciones : ""}
                   error={Boolean(errors.observaciones)}
@@ -327,4 +257,4 @@ const ModalFormCita = (props) => {
   );
 }
 
-export default ModalFormCita;
+export default ModalFormConsulta;

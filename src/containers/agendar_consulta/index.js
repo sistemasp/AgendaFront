@@ -79,8 +79,8 @@ const AgendarConsulta = (props) => {
 		{ title: 'Hora', field: 'hora' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
 		{ title: 'Telefono', field: 'paciente.telefono' },
-		{ title: 'Hora atendido', field: 'hora' },
-		{ title: 'Hora salida', field: 'hora' },
+		{ title: 'Hora atendido', field: 'hora_atencion' },
+		{ title: 'Hora salida', field: 'hora_salida' },
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
 		{ title: 'Tipo Consulta', field: 'tipo_cita.nombre' },
 		{ title: 'Quien confirma', field: 'quien_confirma.nombre' },
@@ -98,7 +98,6 @@ const AgendarConsulta = (props) => {
 
 	const options = {
 		rowStyle: rowData => {
-			console.log('ROWDATa', rowData);
 			return { color: rowData.status.color };
 		},
 		headerStyle: {
@@ -120,7 +119,7 @@ const AgendarConsulta = (props) => {
 					item.precio_moneda = toFormatterCurrency(item.precio);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
+					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
 				});
 				setConsultas(response.data);
@@ -209,7 +208,6 @@ const AgendarConsulta = (props) => {
 				item.precio_moneda = toFormatterCurrency(item.precio);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
 			});
 			setConsultas(response.data);
@@ -238,6 +236,8 @@ const AgendarConsulta = (props) => {
 		data.quien_agenda = empleado._id;
 		data.sucursal = sucursal;
 		data.status = pendienteStatusId;
+		data.hora_atencion = '--:--';
+		data.hora_salida = '--:--';
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 		const response = await createConsult(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
@@ -277,6 +277,10 @@ const AgendarConsulta = (props) => {
 		setValues({ ...values, observaciones: e.target.value });
 	}
 
+	const handleChangePromovendedor = (e) => {
+		setValues({ ...values, promovendedor: e.target.value });
+	}
+
 	const handleCloseAlert = () => {
 		setOpenAlert(false);
 	};
@@ -289,8 +293,7 @@ const AgendarConsulta = (props) => {
 		setIsLoading(true);
 		setConsulta(rowData);
 		// await loadTratamientos(rowData.servicio);
-		const splitDate = (rowData.fecha).split('/');
-		await loadHorarios(new Date(splitDate[2], (splitDate[1] - 1), splitDate[0]));
+		await loadHorarios(new Date(rowData.fecha_hora));
 		setOpenModal(true);
 		setIsLoading(false);
 	}
@@ -333,6 +336,7 @@ const AgendarConsulta = (props) => {
 								cita={cita}
 								openModal={openModal}
 								empleado={empleado}
+								sucursal={sucursal}
 								onClickCancel={handleCloseModal}
 								loadConsultas={loadConsultas}
 								tipoCitas={tipoCitas}
@@ -340,6 +344,7 @@ const AgendarConsulta = (props) => {
 								medicos={medicos}
 								promovendedores={promovendedores}
 								onChangeMedicos={(e) => handleChangeMedicos(e)}
+								onChangePromovendedor={(e) => handleChangePromovendedor(e)}
 								{...props} />
 						}
 					</Formik> :

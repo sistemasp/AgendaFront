@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from "react";
-import { CitasContainer } from "./citas";
-import { showAllDatesBySucursalAsistio } from "../../services";
+import { ConsultasContainer } from "./consultas";
+import { showAllConsultsBySucursalAsistio } from "../../services";
 import { Backdrop, CircularProgress, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Citas = (props) => {
+const Consultas = (props) => {
 
     const classes = useStyles();
 
@@ -19,40 +19,37 @@ const Citas = (props) => {
 
     const { sucursal } = props;
 
-    const parseToEvents = (citas) => {
-        return citas.map( cita => {
-            const splitDate = (cita.fecha).split('/');
-            const splitHora = (cita.hora).split(':');
-            const startDate = new Date(splitDate[2], (splitDate[1] - 1), splitDate[0], splitHora[0], splitHora[1], 0);
-            const endDate = new Date(splitDate[2], (splitDate[1] - 1), splitDate[0], splitHora[0], splitHora[1], 0);
-            const minutos = Number(endDate.getMinutes()) + Number(cita.tiempo);
-            endDate.setMinutes(minutos);
-            const tratamientos = cita.tratamientos.map(tratamiento => {
-                return `${tratamiento.nombre}, `;
-            });
+    const parseToEvents = (consultas) => {
+        return consultas.map( consulta => {
+            const startDate = new Date(consulta.fecha_hora);
+            const endDate = new Date(consulta.fecha_hora);
+            // const minutos = Number(endDate.getMinutes()) + Number(consulta.tiempo);
+            // endDate.setMinutes(minutos);
+            const medico = consulta.medico.nombre;
             return {
-                id: cita._id,
-                title: tratamientos,
+                id: consulta._id,
+                title: medico,
                 start: startDate,
                 end: endDate,
-                servicio: cita.servicio
+                medico: consulta.medico
             }
         });
     }
     
     useEffect(() => {
-        const loadCitas = async() => {
-            const response = await showAllDatesBySucursalAsistio(sucursal);
+        const loadConsultas = async() => {
+            const response = await showAllConsultsBySucursalAsistio(sucursal);
             
             if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK ) {
                 setEvents(parseToEvents(response.data));
             }
         }
         setIsLoading(true);
-        loadCitas();
+        loadConsultas();
         setIsLoading(false);
     }, [sucursal]);
 
+		console.log("EVENTS", events);
     return (
         <Fragment>
             {
@@ -60,11 +57,11 @@ const Citas = (props) => {
                 ? <Backdrop className={classes.backdrop} open={isLoading} >
                     <CircularProgress color="inherit" />
                 </Backdrop>
-                : <CitasContainer 
+                : <ConsultasContainer 
                     events={events} />
             }
         </Fragment>
     );
 }
 
-export default Citas;
+export default Consultas;

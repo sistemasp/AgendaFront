@@ -10,7 +10,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { Paper, Button, TextField } from '@material-ui/core';
 import TableComponent from '../../components/table/TableComponent';
-import ModalCita from '../../components/modal_cita';
+import ModalConsulta from '../../components/modal_consulta';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -66,14 +66,15 @@ export const AgendarConsultaContainer = (props) => {
     onClickCancel,
     onChangeTipoCita,
     onChangeAsistio,
-    loadCitas,
+    loadConsultas,
+    sucursal,
   } = props;
 
   return (
     <Fragment>
       {
         openModal ?
-          <ModalCita
+          <ModalConsulta
             open={openModal}
             cita={cita}
             onClickActualizarCita={onClickActualizarCita}
@@ -88,7 +89,8 @@ export const AgendarConsultaContainer = (props) => {
             tratamientos={tratamientos}
             horarios={horarios}
             empleado={empleado}
-            loadCitas={loadCitas} /> : ''
+            sucursal={sucursal}
+            loadConsultas={loadConsultas} /> : ''
       }
       <Paper>
         <h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'Selecciona un paciente'}</h1>
