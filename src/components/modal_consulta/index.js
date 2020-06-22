@@ -5,6 +5,7 @@ import {
   findEmployeesByRolId,
   showAllTipoCitas,
   showAllStatus,
+  createConsult,
 } from "../../services";
 import * as Yup from "yup";
 import { Formik } from 'formik';
@@ -34,10 +35,10 @@ const validationSchema = Yup.object({
 });
 
 const useStyles = makeStyles(theme => ({
-	backdrop: {
-		zIndex: theme.zIndex.drawer + 1,
-		color: '#fff',
-	},
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
 }));
 
 const ModalConsulta = (props) => {
@@ -50,8 +51,10 @@ const ModalConsulta = (props) => {
     cita,
     empleado,
     loadConsultas,
-    fecha,
     sucursal,
+    setOpenAlert,
+    setMessage,
+    setFilterDate,
   } = props;
 
   const [isLoading, setIsLoading] = useState(true);
@@ -62,12 +65,15 @@ const ModalConsulta = (props) => {
   const [statements, setStatements] = useState([]);
 
   const fecha_cita = new Date(cita.fecha_hora);
-  const hora =  `${addZero(Number(fecha_cita.getHours()) + 5)}:${addZero(fecha_cita.getMinutes())}`;
+  const fecha = `${addZero(fecha_cita.getDate())}/${addZero(Number(fecha_cita.getMonth() + 1))}/${addZero(fecha_cita.getFullYear())}`;
+  const hora = `${addZero(Number(fecha_cita.getHours()) + 5)}:${addZero(fecha_cita.getMinutes())}`;
 
   const [values, setValues] = useState({
-    fecha_hora: cita.fecha_hora,
     fecha_show: fecha_cita,
+    fecha: fecha,
     hora: hora,
+    fecha_actual: fecha,
+    hora_actual: hora,
     paciente: cita.paciente,
     paciente_nombre: `${cita.paciente.nombres} ${cita.paciente.apellidos}`,
     telefono: cita.paciente.telefono,
@@ -80,13 +86,14 @@ const ModalConsulta = (props) => {
     motivos: cita.motivos,
     observaciones: cita.observaciones,
     medico: cita.medico ? cita.medico._id : '',
-    pagado : cita.pagado,
+    pagado: cita.pagado,
   });
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
   const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
   const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
   const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
+  const reagendoStatusId = process.env.REACT_APP_REAGENDO_STATUS_ID;
   const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
 
   useEffect(() => {
@@ -106,19 +113,19 @@ const ModalConsulta = (props) => {
     }
 
     const loadTipoCitas = async () => {
-			const response = await showAllTipoCitas();
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setTipoCitas(response.data);
-			}
-			setIsLoading(false);
+      const response = await showAllTipoCitas();
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setTipoCitas(response.data);
+      }
+      setIsLoading(false);
     }
-    
+
     const loadStaus = async () => {
       const response = await showAllStatus();
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setStatements(response.data);
-			}
-			setIsLoading(false);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setStatements(response.data);
+      }
+      setIsLoading(false);
     }
 
     const loadHorarios = async (date) => {
@@ -151,25 +158,33 @@ const ModalConsulta = (props) => {
   }
 
   const handleChangeFecha = async (date) => {
-		setIsLoading(true);
-		await setValues({
-			...values,
-			fecha_hora: date,
-		});
-		await loadHorarios(date);
-		setIsLoading(false);
-	};
+    setIsLoading(true);
+    const fechaObservaciones = `${addZero(date.getDate())}/${addZero(Number(date.getMonth() + 1))}/${date.getFullYear()} - ${values.hora} hrs`;
+    await setValues({
+      ...values,
+      nueva_fecha_hora: date,
+      observaciones: fechaObservaciones,
+    });
+    await loadHorarios(date);
+    setIsLoading(false);
+  };
 
-	const handleChangeHora = e => {
-		setIsLoading(true);
-		const hora = (e.target.value).split(':');
-		const date = new Date(values.fecha_hora);
-		date.setHours(Number(hora[0]) - 5); // -5 por zona horaria
-		date.setMinutes(hora[1]);
-		date.setSeconds(0);
-		setValues({ ...values, fecha_hora: date, hora: e.target.value });
-		setIsLoading(false);
-	};
+  const handleChangeHora = e => {
+    setIsLoading(true);
+    const hora = (e.target.value).split(':');
+    const date = new Date(values.nueva_fecha_hora);
+    date.setHours(Number(hora[0]) - 5); // -5 por zona horaria
+    date.setMinutes(hora[1]);
+    date.setSeconds(0);
+    const fechaObservaciones = `${addZero(date.getDate())}/${addZero(Number(date.getMonth() + 1))}/${date.getFullYear()} - ${e.target.value} hrs`;
+    setValues({
+      ...values,
+      nueva_fecha_hora: date,
+      hora: e.target.value,
+      observaciones: fechaObservaciones,
+    });
+    setIsLoading(false);
+  };
 
   const handleChangeTipoCita = e => {
     setValues({ ...values, tipo_cita: e.target.value });
@@ -188,21 +203,68 @@ const ModalConsulta = (props) => {
   }
 
   const handleChangePagado = (e) => {
-		setValues({ ...values, pagado: !values.pagado });
-	}
+    setValues({ ...values, pagado: !values.pagado });
+  }
 
   const handleOnClickActualizarCita = async (event, rowData) => {
     if (rowData.status !== pendienteStatusId) {
       rowData.quien_confirma = empleado._id;
       if (rowData.status === asistioStatusId) {
         const dateNow = new Date();
-		    rowData.hora_llegada = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
+        rowData.hora_llegada = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
       }
     }
-    await updateConsult(cita._id, rowData);
+
+    if (rowData.status === reagendoStatusId) {
+      await updateConsult(cita._id, rowData);
+      rowData.quien_agenda = empleado._id;
+      rowData.sucursal = sucursal;
+      rowData.status = pendienteStatusId;
+      rowData.hora_llegada = '--:--';
+      rowData.hora_atencion = '--:--';
+      rowData.hora_salida = '--:--';
+      rowData.observaciones = `Consulta reagendada ${values.fecha_actual} - ${values.hora_actual} hrs`;
+      rowData.fecha_hora = rowData.nueva_fecha_hora;
+      const response = await createConsult(rowData);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+        setOpenAlert(true);
+        setMessage('La Consulta se reagendo correctamente');
+      }
+
+      const dia = addZero(rowData.fecha_hora.getDate());
+      const mes = addZero(rowData.fecha_hora.getMonth() + 1);
+      const anio = rowData.fecha_hora.getFullYear();
+      setFilterDate({
+        fecha_show: rowData.fecha_hora,
+        fecha: `${dia}/${mes}/${anio}`
+      });
+      await loadConsultas(rowData.fecha_hora);
+    } else {
+      const dia = addZero(rowData.fecha_show.getDate());
+      const mes = addZero(rowData.fecha_show.getMonth() + 1);
+      const anio = rowData.fecha_show.getFullYear();
+      setFilterDate({
+        fecha_show: rowData.fecha_show,
+        fecha: `${dia}/${mes}/${anio}`
+      });
+      await updateConsult(cita._id, rowData);
+      await loadConsultas(rowData.fecha_show);
+    }
     onClose();
-    await loadConsultas(rowData.fecha_show);
   }
+
+  const handleChangeFilterDate = async (date) => {
+    setIsLoading(true);
+    const dia = addZero(date.getDate());
+    const mes = addZero(date.getMonth() + 1);
+    const anio = date.getFullYear();
+    setFilterDate({
+      fecha_show: date,
+      fecha: `${dia}/${mes}/${anio}`
+    });
+    await loadConsultas(date);
+    setIsLoading(false);
+  };
 
   const handleChangeSesion = e => {
     setValues({ ...values, numero_sesion: e.target.value });

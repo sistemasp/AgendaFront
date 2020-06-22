@@ -81,6 +81,9 @@ export const AgendarConsultaContainer = (props) => {
     onChangeAsistio,
     loadConsultas,
     sucursal,
+    setMessage,
+    setOpenAlert,
+    setFilterDate,
   } = props;
 
   return (
@@ -103,7 +106,11 @@ export const AgendarConsultaContainer = (props) => {
             horarios={horarios}
             empleado={empleado}
             sucursal={sucursal}
-            loadConsultas={loadConsultas} /> : ''
+            loadConsultas={loadConsultas}
+            setOpenAlert={setOpenAlert}
+            setMessage={setMessage}
+            setFilterDate={setFilterDate}
+             /> : ''
       }
       <Paper>
         <h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'Selecciona un paciente'}</h1>

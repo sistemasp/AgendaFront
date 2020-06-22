@@ -244,6 +244,7 @@ const AgendarConsulta = (props) => {
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
+		console.log("DATA", data);
 		const response = await createConsult(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			setOpenAlert(true);
@@ -356,6 +357,9 @@ const AgendarConsulta = (props) => {
 								promovendedores={promovendedores}
 								onChangeMedicos={(e) => handleChangeMedicos(e)}
 								onChangePromovendedor={(e) => handleChangePromovendedor(e)}
+								setOpenAlert={setOpenAlert}
+								setMessage={setMessage}
+								setFilterDate={setFilterDate}
 								{...props} />
 						}
 					</Formik> :
