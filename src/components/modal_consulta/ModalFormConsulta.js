@@ -5,6 +5,7 @@ import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid } fr
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { Multiselect } from 'multiselect-react-dropdown';
+import { CheckCustom } from '../basic/CheckCustom';
 
 function getModalStyle() {
   const top = 50;
@@ -70,6 +71,7 @@ const ModalFormConsulta = (props) => {
     onChangeMotivos,
     onChangeObservaciones,
     onChangeMedico,
+    onChangePagado,
   } = props;
 
   return (
@@ -230,6 +232,15 @@ const ModalFormConsulta = (props) => {
                   variant="outlined" />
               </Grid>
 
+              <Grid item xs={12}>
+                <CheckCustom
+                  checked={values.pagado}
+                  onChange={onChangePagado}
+                  name="checkedG"
+                  label="Pagado"
+                />
+              </Grid>
+
               <Grid item xs={12} sm={6}>
                 <Button
                   className={classes.button}
@@ -240,6 +251,7 @@ const ModalFormConsulta = (props) => {
                   Guardar
                 </Button>
               </Grid>
+
               <Grid item xs={12} sm={6}>
                 <Button
                   className={classes.button}

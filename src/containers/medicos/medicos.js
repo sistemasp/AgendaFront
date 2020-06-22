@@ -50,13 +50,6 @@ export const MedicosContainer = (props) => {
           paciente={paciente} /> : ''
       }
 
-      <ButtonCustom 
-        className={classes.button}
-        color="primary"
-        variant="contained"
-        onClick={handleOpen}
-        text='Nuevo Medico' />
-        
       <TableComponent
         titulo={titulo}
         columns={columns}

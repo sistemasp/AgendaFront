@@ -80,11 +80,13 @@ const ModalConsulta = (props) => {
     motivos: cita.motivos,
     observaciones: cita.observaciones,
     medico: cita.medico ? cita.medico._id : '',
+    pagado : cita.pagado,
   });
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
   const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
   const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
+  const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
   const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
 
   useEffect(() => {
@@ -185,10 +187,17 @@ const ModalConsulta = (props) => {
     setValues({ ...values, observaciones: e.target.value });
   }
 
+  const handleChangePagado = (e) => {
+		setValues({ ...values, pagado: !values.pagado });
+	}
 
   const handleOnClickActualizarCita = async (event, rowData) => {
-    if (rowData.status._id !== pendienteStatusId) {
+    if (rowData.status !== pendienteStatusId) {
       rowData.quien_confirma = empleado._id;
+      if (rowData.status === asistioStatusId) {
+        const dateNow = new Date();
+		    rowData.hora_llegada = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
+      }
     }
     await updateConsult(cita._id, rowData);
     onClose();
@@ -247,6 +256,7 @@ const ModalConsulta = (props) => {
                 onChangePrecio={handleChangePrecio}
                 onChangeMotivos={handleChangeMotivos}
                 onChangeObservaciones={handleChangeObservaciones}
+                onChangePagado={(e) => handleChangePagado(e)}
                 {...props} />
             }
           </Formik> :

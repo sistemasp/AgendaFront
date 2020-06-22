@@ -60,6 +60,7 @@ const AgendarConsulta = (props) => {
 		hora: '',
 		paciente: `${paciente._id}`,
 		precio: '',
+		pagado: false,
 	});
 	const [citas, setConsultas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
@@ -79,6 +80,7 @@ const AgendarConsulta = (props) => {
 		{ title: 'Hora', field: 'hora' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
 		{ title: 'Telefono', field: 'paciente.telefono' },
+		{ title: 'Hora llegada', field: 'hora_llegada' },
 		{ title: 'Hora atendido', field: 'hora_atencion' },
 		{ title: 'Hora salida', field: 'hora_salida' },
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
@@ -100,7 +102,7 @@ const AgendarConsulta = (props) => {
 		rowStyle: rowData => {
 			return { 
 				color: rowData.status.color,
-				backgroundColor: rowData.pagado ? '#10CC88' : ''
+				backgroundColor: rowData.pagado ? process.env.REACT_APP_PAGADO_COLOR : ''
 			};
 		},
 		headerStyle: {
@@ -238,6 +240,7 @@ const AgendarConsulta = (props) => {
 		data.quien_agenda = empleado._id;
 		data.sucursal = sucursal;
 		data.status = pendienteStatusId;
+		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
@@ -255,6 +258,7 @@ const AgendarConsulta = (props) => {
 				precio: '',
 				tipo_cita: '',
 				citado: '',
+				pagado: false,
 			});
 			setDisableDate(true);
 			setPacienteAgendado({});
@@ -281,6 +285,10 @@ const AgendarConsulta = (props) => {
 
 	const handleChangePromovendedor = (e) => {
 		setValues({ ...values, promovendedor: e.target.value });
+	}
+
+	const handleChangePagado = (e) => {
+		setValues({ ...values, pagado: !values.pagado });
 	}
 
 	const handleCloseAlert = () => {
@@ -330,6 +338,7 @@ const AgendarConsulta = (props) => {
 								onChangePrecio={(e) => handleChangePrecio(e)}
 								onChangeTiempo={(e) => handleChangeTiempo(e)}
 								onChangeObservaciones={(e) => handleChangeObservaciones(e)}
+								onChangePagado={(e) => handleChangePagado(e)}
 								titulo={`CONSULTAS (${filterDate.fecha})`}
 								columns={columns}
 								options={options}

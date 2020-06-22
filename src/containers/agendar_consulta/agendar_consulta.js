@@ -1,16 +1,18 @@
 import 'date-fns';
 import React, { Fragment } from 'react';
 import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { Paper, Button, TextField } from '@material-ui/core';
+import { Paper, Button, TextField, Checkbox, FormControlLabel } from '@material-ui/core';
 import TableComponent from '../../components/table/TableComponent';
 import ModalConsulta from '../../components/modal_consulta';
+import { green } from '@material-ui/core/colors';
+import { CheckCustom } from '../../components/basic/CheckCustom';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -24,6 +26,16 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   }
 }));
+
+const GreenCheckbox = withStyles({
+  root: {
+    color: green[400],
+    '&$checked': {
+      color: green[600],
+    },
+  },
+  checked: {},
+})((props) => <Checkbox color="default" {...props} />);
 
 export const AgendarConsultaContainer = (props) => {
 
@@ -53,6 +65,7 @@ export const AgendarConsultaContainer = (props) => {
     onChangeMedicos,
     onChangePromovendedor,
     onChangeObservaciones,
+    onChangePagado,
     // TABLE DATES PROPERTIES
     titulo,
     columns,
@@ -198,6 +211,14 @@ export const AgendarConsultaContainer = (props) => {
               value={values.observaciones}
               onChange={onChangeObservaciones}
               variant="outlined" />
+          </Grid>
+          <Grid item xs={12} sm={2}>
+            <CheckCustom
+              checked={values.pagado}
+              onChange={onChangePagado}
+              name="checkedG"
+              label="Pagado"
+            />
           </Grid>
           <Grid item xs={12} sm={2}>
             <Button
