@@ -361,6 +361,18 @@ export const createSurgery = async(consultorio) => {
     }
 }
 
+export const updateSurgery = async(surgeryId, surgery) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consultorio/${surgeryId}`,
+            method: 'PUT',
+            data: surgery
+        });
+        return response;
+    } catch (error) {
+        console.log('updateSurgery', error);
+    }
+}
 // CONSULTAS
 
 export const getAllConsults = async() => {

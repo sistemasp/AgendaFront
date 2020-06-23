@@ -9,6 +9,7 @@ import HistoryIcon from '@material-ui/icons/History';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import PaymentIcon from '@material-ui/icons/Payment';
+import { addZero } from "../../utils/utils";
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -56,7 +57,8 @@ const Medicos = (props) => {
 	const columns = [
 		{ title: 'Nombre', field: 'nombre' },
 		{ title: 'Cedula Profesional', field: 'cedula' },
-		{ title: 'Fecha Ingreso', field: 'fecha_ingreso' }
+		{ title: 'Fecha Ingreso', field: 'fecha_ingreso_show' },
+		{ title: 'Fecha Baja', field: 'fecha_baja_show' },
 	];
 
 	const options = {
@@ -114,7 +116,15 @@ const Medicos = (props) => {
 		const loadMedicos = async () => {
 			const response = await findEmployeesByRolId(medicoRolId);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-					setMedicos(response.data);
+				response.data.forEach(item => {
+					const fecha_ingreso = new Date(item.fecha_ingreso);
+					const fecha_ingreso_show = `${addZero(fecha_ingreso.getDate())}/${addZero(Number(fecha_ingreso.getMonth() + 1))}/${fecha_ingreso.getFullYear()}`;
+					const fecha_baja = new Date(item.fecha_baja);
+					const fecha_baja_show = `${addZero(fecha_baja.getDate())}/${addZero(Number(fecha_baja.getMonth() + 1))}/${fecha_baja.getFullYear()}`;
+					item.fecha_ingreso_show = fecha_ingreso_show;
+					item.fecha_baja_show = item.fecha_baja ? fecha_baja_show : '-';
+				});
+				setMedicos(response.data);
 			}
 			setIsLoading(false);
 		}

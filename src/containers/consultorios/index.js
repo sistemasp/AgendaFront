@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Backdrop, CircularProgress } from '@material-ui/core';
 import { ConsultorioContainer } from './consultorios';
 import { findEmployeesByRolId, findSurgeryBySucursalId, createSurgery } from '../../services';
-import HistoryIcon from '@material-ui/icons/History';
+import AirlineSeatReclineExtraIcon from '@material-ui/icons/AirlineSeatReclineExtra';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import Edit from '@material-ui/icons/Edit';
@@ -38,9 +38,8 @@ const Consultorios = (props) => {
 	const classes = useStyles();
 
 	const [openModal, setOpenModal] = useState(false);
-	const [openHistoric, setOpenHistoric] = useState(false);
+	const [openModalAsignar, setOpenModalAsignar] = useState(false);
 	const [openAlert, setOpenAlert] = useState(false);
-	const [medicos, setMedicos] = useState([]);
 	const [consultorios, setConsultorios] = useState([]);
 	const [consultorio, setConsultorio] = useState({});
 	const [isLoading, setIsLoading] = useState(true);
@@ -48,14 +47,13 @@ const Consultorios = (props) => {
 	const [severity, setSeverity] = useState('success');
 
 	const {
-		onClickAgendar,
 		sucursal,
 	} = props;
 
 	const columns = [
 		{ title: 'Nombre', field: 'nombre' },
-		{ title: 'Medico', field: 'nombre_medico' },
-		{ title: 'Paciente', field: 'nombre_paciente' },
+		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Paciente', field: 'paciente_nombre' },
 	];
 
 	const options = {
@@ -70,11 +68,13 @@ const Consultorios = (props) => {
 		exportDelimiter: ';'
 	}
 
-	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
-
 	const loadConsultorios = async () => {
 		const response = await findSurgeryBySucursalId(sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			response.data.forEach(item => {
+				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
+				item.medico_nombre = item.medico ? item.medico.nombre : 'SIN MEDICO';
+			});
 			setConsultorios(response.data);
 		}
 	}
@@ -86,21 +86,16 @@ const Consultorios = (props) => {
 	const handleClose = () => {
 		setConsultorio({});
 		setOpenModal(false);
-		setOpenHistoric(false);
+		setOpenModalAsignar(false);
 	};
 
 	const handleCloseAlert = () => {
 		setOpenAlert(false);
 	};
 
-	const handleOnClickEditar = (event, rowData) => {
+	const handleOnClickAsignarMedico = (event, rowData) => {
 		setConsultorio(rowData);
-		setOpenModal(true);
-	}
-
-	const handleClickHistorico = (event, rowData) => {
-		setConsultorio(rowData);
-		setOpenHistoric(true);
+		setOpenModalAsignar(true);
 	}
 
 	const handleClickGuardar = async (event, data) => {
@@ -118,14 +113,9 @@ const Consultorios = (props) => {
 
 	const actions = [
 		{
-			icon: Edit,
-			tooltip: 'Generar Pago',
-			onClick: onClickAgendar
-		},
-		{
-			icon: HistoryIcon,
-			tooltip: 'Historial de pagos',
-			onClick: handleClickHistorico
+			icon: AirlineSeatReclineExtraIcon,
+			tooltip: 'Asignar un medico',
+			onClick: handleOnClickAsignarMedico
 		}
 	];
 
@@ -133,19 +123,16 @@ const Consultorios = (props) => {
 		const loadConsultorios = async () => {
 			const response = await findSurgeryBySucursalId(sucursal);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				response.data.forEach(item => {
+					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
+					item.medico_nombre = item.medico ? item.medico.nombre : 'SIN MEDICO';
+				});
 				setConsultorios(response.data);
 			}
 		}
-
-		const loadMedicos = async () => {
-			const response = await findEmployeesByRolId(medicoRolId);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setMedicos(response.data);
-			}
-			setIsLoading(false);
-		}
+		setIsLoading(true);
 		loadConsultorios();
-		loadMedicos();
+		setIsLoading(false);
 	}, [sucursal]);
 
 	return (
@@ -158,12 +145,15 @@ const Consultorios = (props) => {
 						actions={actions}
 						options={options}
 						openModal={openModal}
-						openHistoric={openHistoric}
+						openModalAsignar={openModalAsignar}
 						consultorio={consultorio}
 						consultorios={consultorios}
 						handleOpen={handleOpen}
 						handleClose={handleClose}
-						handleClickGuardar={handleClickGuardar} /> :
+						handleClickGuardar={handleClickGuardar}
+						setOpenAlert={setOpenAlert}
+						setMessage={setMessage}
+						loadConsultorios={loadConsultorios} /> :
 					<Backdrop className={classes.backdrop} open={isLoading} >
 						<CircularProgress color="inherit" />
 					</Backdrop>
