@@ -7,11 +7,12 @@ import ModHistorico from '../../components/modal_historico';
 import { ButtonCustom } from '../../components/basic/ButtonCustom';
 import ModalFormConsultorio from '../../components/modal_consultorio/ModalFormConsultorio';
 import ModalConsultorio from '../../components/modal_consultorio';
+import ModalConsultorioAgregarPaciente from '../../components/modal_consultorio_agregar_paciente';
 
 const useStyles = makeStyles(theme => ({
-	button: {
-		color: '#FFFFFF'
-	}
+  button: {
+    color: '#FFFFFF'
+  }
 }));
 
 export const ListaEsperaContainer = (props) => {
@@ -19,27 +20,54 @@ export const ListaEsperaContainer = (props) => {
   const classes = useStyles();
 
   const {
-    titulo,
-    columns,
+    tituloConsultorios,
+    tituloEspera,
+    columnsConsultorios,
+    columnsEspera,
     consultorios,
-    consultorio,
-    actions,
-    options,
-    openModal,
-    handleOpen,
-    onClickGuardar,
-    handleClickGuardar,
+    listaEspera,
+    consulta,
+    optionsEspera,
+    optionsConsultorio,
+    actionsEspera,
+    actionsConsultorio,
+    openModalAsignar,
+    handleClose,
+    setOpenAlert,
+    setMessage,
+    loadListaEspera,
+    loadConsultorios,
+    sucursal,
   } = props;
 
   return (
     <Fragment>
-        
+
+      {
+        openModalAsignar ?
+          <ModalConsultorioAgregarPaciente
+            open={openModalAsignar}
+            onClose={handleClose}
+            consulta={consulta}
+            setOpenAlert={setOpenAlert}
+            setMessage={setMessage}
+            loadListaEspera={loadListaEspera}
+            loadConsultorios={loadConsultorios}
+            sucursal={sucursal} /> : ''
+      }
       <TableComponent
-        titulo={titulo}
-        columns={columns}
+        titulo={tituloConsultorios}
+        columns={columnsConsultorios}
         data={consultorios}
-        actions={actions}
-        options={options} />
+        actions={actionsConsultorio}
+        options={optionsConsultorio} />
+
+      <TableComponent
+        titulo={tituloEspera}
+        columns={columnsEspera}
+        data={listaEspera}
+        actions={actionsEspera}
+        options={optionsEspera} />
     </Fragment>
   );
 }

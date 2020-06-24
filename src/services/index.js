@@ -348,6 +348,18 @@ export const findSurgeryBySucursalId = async(sucursalId) => {
     }
 }
 
+export const findSurgeryBySucursalIdAndFree = async(sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consultorio/sucursal/${sucursalId}/libre`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findSurgeryBySucursalIdAndFree', error);
+    }
+}
+
 export const createSurgery = async(consultorio) => {
     try {
         const response = await axios({
@@ -373,6 +385,19 @@ export const updateSurgery = async(surgeryId, surgery) => {
         console.log('updateSurgery', error);
     }
 }
+
+export const breakFreeSurgeryById = async(surgeryId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consultorio/liberar/${surgeryId}`,
+            method: 'PUT'
+        });
+        return response;
+    } catch (error) {
+        console.log('breakFreeSurgeryById', error);
+    }
+}
+
 // CONSULTAS
 
 export const getAllConsults = async() => {
@@ -482,6 +507,18 @@ export const updateConsult = async(dateId, consulta) => {
         return response;
     } catch (error) {
         console.log('updateConsult', error);
+    }
+}
+
+export const waitingList = async(sucursalId, statusAsistioId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta/sucursal/${sucursalId}/asistio/${statusAsistioId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('waitingList', error);
     }
 }
 
