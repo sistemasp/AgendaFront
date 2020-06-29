@@ -1,12 +1,13 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { AgendarConsultaContainer } from "./agendar_consulta";
-import { 
+import {
 	findScheduleInConsultByDateAndSucursal,
 	findConsultsByDateAndSucursal,
 	createConsult,
 	findEmployeesByRolId,
-	showAllTipoCitas
+	showAllTipoCitas,
+	createPago
 } from "../../services";
 import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
@@ -14,6 +15,7 @@ import { Formik } from 'formik';
 import EditIcon from '@material-ui/icons/Edit';
 import * as Yup from "yup";
 import { toFormatterCurrency, addZero } from "../../utils/utils";
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -64,7 +66,9 @@ const AgendarConsulta = (props) => {
 	});
 	const [citas, setConsultas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
+	const [openModalPago, setOpenModalPago] = useState(false);
 	const [cita, setConsulta] = useState();
+	const [pago, setPago] = useState({});
 
 	const date = new Date();
 	const dia = addZero(date.getDate());
@@ -95,12 +99,13 @@ const AgendarConsulta = (props) => {
 
 	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
 	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
-	const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
 	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
+	const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
+	const consultaTratamientoId = process.env.REACT_APP_CONSULTA_TRATAMIENTO_ID;
 
 	const options = {
 		rowStyle: rowData => {
-			return { 
+			return {
 				color: rowData.status.color,
 				backgroundColor: rowData.pagado ? process.env.REACT_APP_PAGADO_COLOR : ''
 			};
@@ -244,7 +249,7 @@ const AgendarConsulta = (props) => {
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
-		console.log("DATA", data);
+
 		const response = await createConsult(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			setOpenAlert(true);
@@ -261,6 +266,7 @@ const AgendarConsulta = (props) => {
 				citado: '',
 				pagado: false,
 			});
+			setPago({});
 			setDisableDate(true);
 			setPacienteAgendado({});
 			loadConsultas(new Date());
@@ -289,7 +295,12 @@ const AgendarConsulta = (props) => {
 	}
 
 	const handleChangePagado = (e) => {
-		setValues({ ...values, pagado: !values.pagado });
+		const pagado = !values.pagado;
+		setValues({ ...values, pagado: pagado });
+		setOpenModalPago(pagado);
+		if (!pagado) {
+			setPago({});
+		}
 	}
 
 	const handleCloseAlert = () => {
@@ -298,6 +309,12 @@ const AgendarConsulta = (props) => {
 
 	const handleCloseModal = () => {
 		setOpenModal(false);
+	};
+
+	const handleCloseModalPago = () => {
+		setOpenModalPago(false);
+		setValues({ ...values, pagado: false });
+		setPago({});
 	};
 
 	const handleOnClickEditarConsulta = async (event, rowData) => {
@@ -309,14 +326,40 @@ const AgendarConsulta = (props) => {
 		setIsLoading(false);
 	}
 
+	const handleOnClickVerPago = (event, rowData) => {
+		console.log(rowData);
+	}
+
 	const actions = [
 		//new Date(anio, mes - 1, dia) < filterDate.fecha_show  ? 
 		{
 			icon: EditIcon,
 			tooltip: 'Editar cita',
 			onClick: handleOnClickEditarConsulta
-		} //: ''
+		}, //: ''
+		rowData => ({
+			disabled: !rowData.pagado,
+			icon: AttachMoneyIcon,
+			tooltip: 'Ver pago',
+			onClick: handleOnClickVerPago
+		}),
 	];
+
+
+	const handleClickGuardarPago = async (event, rowData) => {
+		setOpenModalPago(false);
+		rowData.fecha_pago = new Date();
+		rowData.paciente = values.paciente;
+		rowData.medico = values.medico._id;
+		rowData.servicio = consultaServicioId;
+		rowData.tratamientos = consultaTratamientoId;
+		rowData.quien_recibe_pago = empleado._id;
+		rowData.sucursal = sucursal;
+		const res = await createPago(rowData);
+		if (`${res.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+			setValues({ ...values, pago: res.data._id });
+		}
+	}
 
 	return (
 		<Fragment>
@@ -350,6 +393,7 @@ const AgendarConsulta = (props) => {
 								empleado={empleado}
 								sucursal={sucursal}
 								onClickCancel={handleCloseModal}
+								onCloseModalPago={handleCloseModalPago}
 								loadConsultas={loadConsultas}
 								tipoCitas={tipoCitas}
 								onChangeTipoCita={(e) => handleChangeTipoCita(e)}
@@ -360,6 +404,8 @@ const AgendarConsulta = (props) => {
 								setOpenAlert={setOpenAlert}
 								setMessage={setMessage}
 								setFilterDate={setFilterDate}
+								openModalPago={openModalPago}
+								handleClickGuardarPago={handleClickGuardarPago}
 								{...props} />
 						}
 					</Formik> :

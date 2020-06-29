@@ -13,6 +13,7 @@ import TableComponent from '../../components/table/TableComponent';
 import ModalConsulta from '../../components/modal_consulta';
 import { green } from '@material-ui/core/colors';
 import { CheckCustom } from '../../components/basic/CheckCustom';
+import ModalPago from '../../components/modal_pago';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -77,6 +78,7 @@ export const AgendarConsultaContainer = (props) => {
     cita,
     onClickActualizarCita,
     onClickCancel,
+    onCloseModalPago,
     onChangeTipoCita,
     onChangeAsistio,
     loadConsultas,
@@ -84,6 +86,8 @@ export const AgendarConsultaContainer = (props) => {
     setMessage,
     setOpenAlert,
     setFilterDate,
+    openModalPago,
+    handleClickGuardarPago,
   } = props;
 
   return (
@@ -110,7 +114,15 @@ export const AgendarConsultaContainer = (props) => {
             setOpenAlert={setOpenAlert}
             setMessage={setMessage}
             setFilterDate={setFilterDate}
-             /> : ''
+          /> : ''
+      }
+      {
+        openModalPago ?
+          <ModalPago
+            open={openModalPago}
+            onClose={onCloseModalPago}
+            handleClickGuardarPago={handleClickGuardarPago} />
+          : ''
       }
       <Paper>
         <h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'Selecciona un paciente'}</h1>

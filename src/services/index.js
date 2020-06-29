@@ -484,6 +484,18 @@ export const findHistoricConsultByPaciente = async(pacienteId) => {
     }
 }
 
+export const findHistoricConsultByMedico = async(medicoId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta/histotic/medico/${medicoId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findHistoricConsultByMedico', error);
+    }
+}
+
 export const createConsult = async(consulta) => {
     try {
         const response = await axios({
@@ -549,3 +561,73 @@ export const showAllStatus = async() => {
         console.log('showAllStatus', error);
     }
 }
+
+// BANCOS
+
+export const showAllBanco = async() => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/banco`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllBanco', error);
+    }
+}
+
+// METODO PAGO
+
+export const showAllMetodoPago = async() => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/metodopago`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllMetodoPago', error);
+    }
+}
+
+// TIPO TARJETA
+
+export const showAllTipoTarjeta = async() => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/tipotarjeta`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllTipoTarjeta', error);
+    }
+}
+
+// PAGOS
+
+export const createPago = async(pago) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/pago`,
+            method: 'POST',
+            data: pago
+        });
+        return response;
+    } catch (error) {
+        console.log('createPago', error);
+    }
+}
+
+export const findPaysByRangeDateAndSucursal = async(diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/pago/fecha_inicio/${diai}/${mesi}/${anioi}/fecha_fin/${diaf}/${mesf}/${aniof}/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findPaysByRangeDateAndSucursal', error);
+    }
+}
+

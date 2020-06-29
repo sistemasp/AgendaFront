@@ -2,7 +2,6 @@ import React, { useState, Fragment } from "react";
 import { MainContainer } from "./main";
 import { Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
-import Agendar from "../agendar";
 import { MainLecturaContainer } from "./main_lectura";
 
 const Alert = (props) => {

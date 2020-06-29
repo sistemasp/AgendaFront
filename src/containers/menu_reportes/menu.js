@@ -6,11 +6,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Pacientes from '../pacientes/index';
-import Citas from '../citas/index';
-import Agendar from '../agendar/index';
-import AgendarConsulta from '../agendar_consulta';
-import Consultas from '../consultas';
+import ReportesTratamientos from '../reportes_tratamientos';
+import ReportesPagos from '../reportes_pagos';
+import ReportesConsultas from '../reportes_consultas';
 
 
 function TabPanel(props) {
@@ -63,62 +61,32 @@ export const MenuContainer = props => {
 	const classes = useStyles();
 
 	const {
-		pacienteAgendado,
-		setPacienteAgendado,
 		onChangeTab,
 		value,
-		onClickAgendarTratamiento,
-		onClickAgendarConsulta,
-		empleado,
 		sucursal,
-		onClickLogout,
-		onClickCambioPassword,
-		open,
-		onClose,
-		onOpen,
-		setMessage,
-		setSeverity,
-		setOpenAlert,
 	} = props;
 
+	console.log('SUCURSAL', sucursal);
 	return (
 		<div className={classes.root}>
 			<AppBar className={classes.bar} position="static">
 				<Tabs value={value} onChange={onChangeTab} aria-label="simple tabs">
-					<Tab label="Pacientes" {...a11yProps(0)} />
-					<Tab label="Agendar consulta" {...a11yProps(1)} />
-					<Tab label="Agendar tratamiento" {...a11yProps(2)} />
-					<Tab label="Consultas" {...a11yProps(3)} />
-					<Tab label="Tratamientos" {...a11yProps(4)} />
+					<Tab label="Reportes Consulta" {...a11yProps(0)} />
+					<Tab label="Reportes Tratamiento" {...a11yProps(1)} />
+					<Tab label="Reportes Pagos" {...a11yProps(2)} />
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>
-				<Pacientes
-					onClickAgendarTratamiento={onClickAgendarTratamiento}
-					onClickAgendarConsulta={onClickAgendarConsulta}
-					onChangeTab={onChangeTab} />
+				<ReportesConsultas
+					sucursal={sucursal} />
 			</TabPanel>
 			<TabPanel value={value} index={1}>
-				<AgendarConsulta
-					paciente={pacienteAgendado}
-					setPacienteAgendado={setPacienteAgendado}
-					empleado={empleado}
-					sucursal={sucursal._id} />
+				<ReportesTratamientos
+					sucursal={sucursal} />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
-				<Agendar
-					paciente={pacienteAgendado}
-					setPacienteAgendado={setPacienteAgendado}
-					empleado={empleado}
-					sucursal={sucursal._id} />
-			</TabPanel>
-			<TabPanel value={value} index={3}>
-				<Consultas
-					sucursal={sucursal._id} />
-			</TabPanel>
-			<TabPanel value={value} index={4}>
-				<Citas
-					sucursal={sucursal._id} />
+				<ReportesPagos
+					sucursal={sucursal} />
 			</TabPanel>
 		</div>
 	);

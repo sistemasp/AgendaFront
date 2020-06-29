@@ -7,7 +7,7 @@ import { Paper, Button } from '@material-ui/core';
 import TableComponent from '../../components/table/TableComponent';
 
 
-export const ReportesContainer = (props) => {
+export const ReportesPagosContainer = (props) => {
 
     const {
         onChangeStartDate,

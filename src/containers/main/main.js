@@ -29,6 +29,8 @@ import Medicos from '../medicos';
 import Consultorios from '../consultorios';
 import Corte from '../corte';
 import ListaEspera from '../lista_espera';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import MenuReports from '../menu_reportes';
 
 const TabPanel = (props) => {
 	const { children, value, index, ...other } = props;
@@ -231,6 +233,10 @@ export const MainContainer = props => {
 						<ListItemIcon> <ListAltIcon /> </ListItemIcon>
 						<ListItemText primary={'Lista de Espera'} />
 					</ListItem>
+					<ListItem button key={'Reportes'} onClick={(e) => onChangeTab(e, 5)}>
+						<ListItemIcon> <AssignmentIcon /> </ListItemIcon>
+						<ListItemText primary={'Reportes'} />
+					</ListItem>
 				</List>
 			</Drawer>
 			<main
@@ -268,6 +274,13 @@ export const MainContainer = props => {
 					</TabPanel>
 					<TabPanel value={value} index={4}>
 						<ListaEspera
+							paciente={pacienteAgendado}
+							setPacienteAgendado={setPacienteAgendado}
+							empleado={empleado}
+							sucursal={sucursal._id} />
+					</TabPanel>
+					<TabPanel value={value} index={5}>
+						<MenuReports
 							paciente={pacienteAgendado}
 							setPacienteAgendado={setPacienteAgendado}
 							empleado={empleado}
