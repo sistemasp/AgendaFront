@@ -22,9 +22,11 @@ const Citas = (props) => {
     const parseToEvents = (citas) => {
         return citas.map( cita => {
             const startDate = new Date(cita.fecha_hora);
+            const startMinutos = Number(startDate.getMinutes()) + Number(300);
+            startDate.setMinutes(startMinutos);
             const endDate = new Date(cita.fecha_hora);
-            const minutos = Number(endDate.getMinutes()) + Number(cita.tiempo);
-            endDate.setMinutes(minutos);
+            const endMinutos = Number(endDate.getMinutes()) + Number(300) + Number(cita.tiempo);
+            endDate.setMinutes(endMinutos);
             const tratamientos = cita.tratamientos.map(tratamiento => {
                 return `${tratamiento.nombre}, `;
             });

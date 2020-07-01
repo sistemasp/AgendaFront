@@ -99,6 +99,7 @@ const Reportes = (props) => {
 					});
 					const date = new Date(item.fecha_hora);
 					item.fecha_show = `${addZero(date.getDate())}/${addZero(date.getMonth() + 1)}/${date.getFullYear()}`;
+					item.hora = `${addZero(date.getHours() + 5)}:${addZero(date.getMinutes())}`;
 				});
 				setCitas(response.data);
 			}
