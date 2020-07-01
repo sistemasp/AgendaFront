@@ -66,9 +66,10 @@ const AgendarConsulta = (props) => {
 	});
 	const [citas, setConsultas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
+	const [openModalPagos, setOpenModalPagos] = useState(false);
 	const [openModalPago, setOpenModalPago] = useState(false);
 	const [cita, setConsulta] = useState();
-	const [pago, setPago] = useState({});
+	let pagos = [];
 
 	const date = new Date();
 	const dia = addZero(date.getDate());
@@ -240,6 +241,7 @@ const AgendarConsulta = (props) => {
 		setValues({ ...values, tipo_cita: e.target.value });
 	}
 
+
 	const handleClickAgendar = async (data) => {
 		setIsLoading(true);
 		data.quien_agenda = empleado._id;
@@ -266,7 +268,7 @@ const AgendarConsulta = (props) => {
 				citado: '',
 				pagado: false,
 			});
-			setPago({});
+			pagos = [];
 			setDisableDate(true);
 			setPacienteAgendado({});
 			loadConsultas(new Date());
@@ -297,9 +299,9 @@ const AgendarConsulta = (props) => {
 	const handleChangePagado = (e) => {
 		const pagado = !values.pagado;
 		setValues({ ...values, pagado: pagado });
-		setOpenModalPago(pagado);
+		setOpenModalPagos(pagado);
 		if (!pagado) {
-			setPago({});
+			pagos = [];
 		}
 	}
 
@@ -311,10 +313,10 @@ const AgendarConsulta = (props) => {
 		setOpenModal(false);
 	};
 
-	const handleCloseModalPago = () => {
-		setOpenModalPago(false);
+	const handleCloseModalPagos = () => {
+		setOpenModalPagos(false);
 		setValues({ ...values, pagado: false });
-		setPago({});
+		pagos = [];
 	};
 
 	const handleOnClickEditarConsulta = async (event, rowData) => {
@@ -345,7 +347,6 @@ const AgendarConsulta = (props) => {
 		}),
 	];
 
-
 	const handleClickGuardarPago = async (event, rowData) => {
 		setOpenModalPago(false);
 		rowData.fecha_pago = new Date();
@@ -357,7 +358,7 @@ const AgendarConsulta = (props) => {
 		rowData.sucursal = sucursal;
 		const res = await createPago(rowData);
 		if (`${res.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-			setValues({ ...values, pago: res.data._id });
+			pagos.push(res.data._id);
 		}
 	}
 
@@ -393,7 +394,7 @@ const AgendarConsulta = (props) => {
 								empleado={empleado}
 								sucursal={sucursal}
 								onClickCancel={handleCloseModal}
-								onCloseModalPago={handleCloseModalPago}
+								onCloseModalPago={handleCloseModalPagos}
 								loadConsultas={loadConsultas}
 								tipoCitas={tipoCitas}
 								onChangeTipoCita={(e) => handleChangeTipoCita(e)}
@@ -404,8 +405,10 @@ const AgendarConsulta = (props) => {
 								setOpenAlert={setOpenAlert}
 								setMessage={setMessage}
 								setFilterDate={setFilterDate}
+								openModalPagos={openModalPagos}
 								openModalPago={openModalPago}
 								handleClickGuardarPago={handleClickGuardarPago}
+								setOpenModalPago={setOpenModalPago}
 								{...props} />
 						}
 					</Formik> :

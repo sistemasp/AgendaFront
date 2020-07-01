@@ -14,7 +14,13 @@ const GreenCheckbox = withStyles({
 
 export const CheckCustom = (props) => {
 
-    const { checked, onChange, name, label } = props;
+    const { 
+        checked,
+        onChange,
+        name,
+        label,
+        disabled,
+    } = props;
 
     return (
         <FormControlLabel
@@ -22,7 +28,8 @@ export const CheckCustom = (props) => {
                 <GreenCheckbox 
                     checked={checked}
                     onChange={onChange}
-                    name={name} />}
+                    name={name}
+                    disabled={disabled} />}
             label={label}
         />        
     )

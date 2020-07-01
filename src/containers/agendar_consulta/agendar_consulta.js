@@ -14,6 +14,7 @@ import ModalConsulta from '../../components/modal_consulta';
 import { green } from '@material-ui/core/colors';
 import { CheckCustom } from '../../components/basic/CheckCustom';
 import ModalPago from '../../components/modal_pago';
+import ModalPagos from '../../components/modal_pagos';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -86,8 +87,10 @@ export const AgendarConsultaContainer = (props) => {
     setMessage,
     setOpenAlert,
     setFilterDate,
+    openModalPagos,
     openModalPago,
     handleClickGuardarPago,
+    setOpenModalPago,
   } = props;
 
   return (
@@ -117,11 +120,14 @@ export const AgendarConsultaContainer = (props) => {
           /> : ''
       }
       {
-        openModalPago ?
-          <ModalPago
-            open={openModalPago}
+        openModalPagos ?
+          <ModalPagos
+            open={openModalPagos}
+            openModalPago={openModalPago}
             onClose={onCloseModalPago}
-            handleClickGuardarPago={handleClickGuardarPago} />
+            paciente={paciente}
+            handleClickGuardarPago={handleClickGuardarPago}
+            setOpenModalPago={setOpenModalPago} />
           : ''
       }
       <Paper>
@@ -235,6 +241,8 @@ export const AgendarConsultaContainer = (props) => {
             <CheckCustom
               checked={values.pagado}
               onChange={onChangePagado}
+              disabled={!isValid || isSubmitting || !paciente.nombres || !values.fecha_hora || !values.precio
+                || !values.medico || !values.promovendedor}
               name="checkedG"
               label="Pagado"
             />
@@ -244,10 +252,11 @@ export const AgendarConsultaContainer = (props) => {
               className={classes.button}
               variant="contained"
               color="primary"
-              disabled={!isValid || isSubmitting}
+              disabled={!isValid || isSubmitting || !paciente.nombres || !values.fecha_hora || !values.precio
+                || !values.medico || !values.promovendedor}
               onClick={() => onClickAgendar(values)} >
               Agendar
-                        </Button>
+            </Button>
           </Grid>
         </Grid>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
