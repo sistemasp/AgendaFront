@@ -10,11 +10,11 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { Paper, Button, TextField, Checkbox, FormControlLabel } from '@material-ui/core';
 import TableComponent from '../../components/table/TableComponent';
-import ModalConsulta from '../../components/modal_consulta';
+import ModalConsulta from '../../components/modales/modal_consulta';
 import { green } from '@material-ui/core/colors';
 import { CheckCustom } from '../../components/basic/CheckCustom';
-import ModalPago from '../../components/modal_pago';
-import ModalPagos from '../../components/modal_pagos';
+import ModalPago from '../../components/modales/modal_pago';
+import ModalPagos from '../../components/modales/modal_pagos';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -74,7 +74,7 @@ export const AgendarConsultaContainer = (props) => {
     citas,
     actions,
     options,
-    // MODAL PROPERTIES
+    // MODALS PROPERTIES
     openModal,
     cita,
     onClickActualizarCita,
@@ -91,6 +91,7 @@ export const AgendarConsultaContainer = (props) => {
     openModalPago,
     handleClickGuardarPago,
     setOpenModalPago,
+    pagosIds,
   } = props;
 
   return (
@@ -127,7 +128,8 @@ export const AgendarConsultaContainer = (props) => {
             onClose={onCloseModalPago}
             paciente={paciente}
             handleClickGuardarPago={handleClickGuardarPago}
-            setOpenModalPago={setOpenModalPago} />
+            setOpenModalPago={setOpenModalPago}
+            pagosIds={pagosIds} />
           : ''
       }
       <Paper>

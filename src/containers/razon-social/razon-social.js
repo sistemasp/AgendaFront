@@ -4,6 +4,8 @@ import TableComponent from '../../components/table/TableComponent';
 import { makeStyles } from '@material-ui/core';
 import ModalPaciente from '../../components/modales/modal_paciente';
 import ModHistorico from '../../components/modales/modal_historico';
+import { ButtonCustom } from '../../components/basic/ButtonCustom';
+import ModalRazonSocial from '../../components/modales/modal_razon_social';
 
 const useStyles = makeStyles(theme => ({
 	button: {
@@ -11,15 +13,15 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export const MedicosContainer = (props) => {
+export const RazonSocialContainer = (props) => {
 
   const classes = useStyles();
 
   const {
     titulo,
     columns,
-    medicos,
-    paciente,
+    razonSociales,
+    razonSocial,
     actions,
     options,
     open,
@@ -34,10 +36,10 @@ export const MedicosContainer = (props) => {
     <Fragment>
       {
         open ? 
-        <ModalPaciente
+        <ModalRazonSocial
           open={open}
           onClose={handleClose}
-          paciente={paciente}
+          razonSocial={razonSocial}
           onClickGuardar={onClickGuardar}
           onClickGuardarAgendar={onClickGuardarAgendar} /> : ''
       }
@@ -46,13 +48,20 @@ export const MedicosContainer = (props) => {
         <ModHistorico
           open={openHistoric}
           onClose={handleClose}
-          paciente={paciente} /> : ''
+          paciente={razonSocial} /> : ''
       }
 
+      <ButtonCustom 
+        className={classes.button}
+        color="primary"
+        variant="contained"
+        onClick={handleOpen}
+        text='Nuevo razon social' />
+        
       <TableComponent
         titulo={titulo}
         columns={columns}
-        data={medicos}
+        data={razonSociales}
         actions={actions}
         options={options} />
     </Fragment>

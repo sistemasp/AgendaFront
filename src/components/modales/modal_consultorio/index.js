@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Yup from "yup";
 import ModalFormConsultorio from './ModalFormConsultorio';
-import { createSurgery } from '../../services';
+import { createSurgery } from '../../../services';
 import { Formik } from 'formik';
 
 const validationSchema = Yup.object({

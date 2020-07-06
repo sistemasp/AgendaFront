@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { findHistoricByPaciente } from "../../services";
+import { findHistoricByPaciente } from "../../../services";
 import ModalHistorico from './ModalHistorico';
-import { toFormatterCurrency, addZero } from '../../utils/utils';
+import { toFormatterCurrency, addZero } from '../../../utils/utils';
 
 const ModHistorico = (props) => {
 

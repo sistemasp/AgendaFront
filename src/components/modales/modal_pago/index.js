@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import * as Yup from "yup";
 import { Formik } from 'formik';
-import { updateSurgery, findSurgeryBySucursalIdAndFree, updateConsult, showAllBanco, showAllMetodoPago, showAllTipoTarjeta } from '../../services';
-import { addZero } from '../../utils/utils';
+import { updateSurgery, findSurgeryBySucursalIdAndFree, updateConsult, showAllBanco, showAllMetodoPago, showAllTipoTarjeta } from '../../../services';
+import { addZero } from '../../../utils/utils';
 import ModalFormPago from './ModalFormPago';
 
 const validationSchema = Yup.object({
@@ -19,6 +19,7 @@ const ModalPago = (props) => {
     setMessage,
     sucursal,
     handleClickGuardarPago,
+    loadPagos,
   } = props;
 
   const porcetanjeComision = process.env.REACT_APP_COMISION_PAGO_TARJETA;

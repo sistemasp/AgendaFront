@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import * as Yup from "yup";
 import { Formik } from 'formik';
 import ModalFormConsultorioAgregarMedico from './ModalFormConsultorioAgregarMedico';
-import { findEmployeesByRolId, updateSurgery } from '../../services';
+import { findEmployeesByRolId, updateSurgery } from '../../../services';
 
 const validationSchema = Yup.object({
   nombre: Yup.string("Ingresa los nombres")

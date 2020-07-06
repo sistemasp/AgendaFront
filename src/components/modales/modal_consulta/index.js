@@ -6,11 +6,11 @@ import {
   showAllTipoCitas,
   showAllStatus,
   createConsult,
-} from "../../services";
+} from "../../../services";
 import * as Yup from "yup";
 import { Formik } from 'formik';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
-import { addZero } from '../../utils/utils';
+import { addZero } from '../../../utils/utils';
 import ModalFormConsulta from './ModalFormConsulta';
 
 const validationSchema = Yup.object({

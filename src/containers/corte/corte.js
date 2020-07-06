@@ -3,11 +3,9 @@ import React, { Fragment } from 'react';
 import TableComponent from '../../components/table/TableComponent';
 import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import ModalPaciente from '../../components/modal_paciente';
-import ModHistorico from '../../components/modal_historico';
 import { ButtonCustom } from '../../components/basic/ButtonCustom';
-import ModalFormConsultorio from '../../components/modal_consultorio/ModalFormConsultorio';
-import ModalConsultorio from '../../components/modal_consultorio';
+import ModalFormConsultorio from '../../components/modales/modal_consultorio/ModalFormConsultorio';
+import ModalConsultorio from '../../components/modales/modal_consultorio';
 
 const useStyles = makeStyles(theme => ({
   button: {

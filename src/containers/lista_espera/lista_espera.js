@@ -2,12 +2,7 @@ import React, { Fragment } from 'react';
 
 import TableComponent from '../../components/table/TableComponent';
 import { makeStyles } from '@material-ui/core';
-import ModalPaciente from '../../components/modal_paciente';
-import ModHistorico from '../../components/modal_historico';
-import { ButtonCustom } from '../../components/basic/ButtonCustom';
-import ModalFormConsultorio from '../../components/modal_consultorio/ModalFormConsultorio';
-import ModalConsultorio from '../../components/modal_consultorio';
-import ModalConsultorioAgregarPaciente from '../../components/modal_consultorio_agregar_paciente';
+import ModalConsultorioAgregarPaciente from '../../components/modales/modal_consultorio_agregar_paciente';
 
 const useStyles = makeStyles(theme => ({
   button: {

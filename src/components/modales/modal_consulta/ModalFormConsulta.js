@@ -5,7 +5,7 @@ import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid } fr
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { Multiselect } from 'multiselect-react-dropdown';
-import { CheckCustom } from '../basic/CheckCustom';
+import { CheckCustom } from '../../basic/CheckCustom';
 
 function getModalStyle() {
   const top = 50;

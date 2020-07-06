@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
-import { ButtonCustom } from "../basic/ButtonCustom";
+import { ButtonCustom } from "../../basic/ButtonCustom";
 
 function getModalStyle() {
   const top = 50;
@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ModalFormConsultorioAgregarPaciente = (props) => {
+const ModalFormConsultorioAgregarMedico = (props) => {
   const classes = useStyles();
 
   // getModalStyle is not a pure function, we roll the style only on the first render
@@ -55,12 +55,12 @@ const ModalFormConsultorioAgregarPaciente = (props) => {
     errors,
     touched,
     handleSubmit,
-    onChangeConsultorio,
+    onChangeMedicos,
     isValid,
     onClickCancel,
     onClickGuardar,
     open,
-    consultorios,
+    medicos,
   } = props;
 
   return (
@@ -77,15 +77,15 @@ const ModalFormConsultorioAgregarPaciente = (props) => {
               </Grid>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-asignar">Consultorio disponible</InputLabel>
+                  <InputLabel id="simple-select-outlined-hora">Medico</InputLabel>
                   <Select
-                    labelId="simple-select-outlined-asignar"
-                    id="simple-select-outlined-asignar"
-                    value={values.consultorio}
-                    error={Boolean(errors.consultorio)}
-                    onChange={onChangeConsultorio}
-                    label="Consultorio disponible" >
-                    {consultorios.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+                    labelId="simple-select-outlined-medico"
+                    id="simple-select-outlined-medico"
+                    value={values.medico}
+                    error={Boolean(errors.medico)}
+                    onChange={onChangeMedicos}
+                    label="Medico" >
+                    {medicos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
                   </Select>
                 </FormControl>
               </Grid>
@@ -116,4 +116,4 @@ const ModalFormConsultorioAgregarPaciente = (props) => {
   );
 }
 
-export default ModalFormConsultorioAgregarPaciente;
+export default ModalFormConsultorioAgregarMedico;

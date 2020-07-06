@@ -10,7 +10,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { Paper, Button, TextField } from '@material-ui/core';
 import TableComponent from '../../components/table/TableComponent';
-import ModalCita from '../../components/modal_cita';
+import ModalCita from '../../components/modales/modal_cita';
 import { Multiselect } from 'multiselect-react-dropdown';
 
 const useStyles = makeStyles(theme => ({

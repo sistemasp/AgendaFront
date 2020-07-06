@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button, Grid } from '@material-ui/core';
 
-import TableComponent from '../table/TableComponent';
+import TableComponent from '../../table/TableComponent';
 import ModalPago from '../modal_pago';
 
 function getModalStyle() {
@@ -45,7 +45,7 @@ const ModalFormPagos = (props) => {
   const [modalStyle] = React.useState(getModalStyle);
 
   const {
-    historial,
+    pagos,
     open,
     onClickCancel,
     titulo,
@@ -56,6 +56,7 @@ const ModalFormPagos = (props) => {
     onClickCancelPago,
     handleClickGuardarPago,
     paciente,
+    loadPagos,
   } = props; 
   
   return (
@@ -66,7 +67,8 @@ const ModalFormPagos = (props) => {
             open={openModalPago}
             onClose={onClickCancelPago}
             paciente={paciente}
-            handleClickGuardarPago={handleClickGuardarPago} />
+            handleClickGuardarPago={handleClickGuardarPago}
+            loadPagos={loadPagos}/>
           : ''
       }
       <Modal
@@ -86,7 +88,7 @@ const ModalFormPagos = (props) => {
           <TableComponent
             titulo={titulo}
             columns={columns}
-            data={historial}
+            data={pagos}
             options={options} />
           <Grid item xs={12} sm={12}>
             <Button

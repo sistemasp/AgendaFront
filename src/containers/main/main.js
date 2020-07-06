@@ -24,13 +24,15 @@ import ListAltIcon from '@material-ui/icons/ListAlt';
 import AirlineSeatReclineNormalIcon from '@material-ui/icons/AirlineSeatReclineNormal';
 import { Button } from '@material-ui/core';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
-import ModalPassword from '../../components/modal_password';
+import ModalPassword from '../../components/modales/modal_password';
 import Medicos from '../medicos';
 import Consultorios from '../consultorios';
 import Corte from '../corte';
 import ListaEspera from '../lista_espera';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import MenuReports from '../menu_reportes';
+import Description from '@material-ui/icons/Description';
+import MenuFactura from '../menu_facturas';
 
 const TabPanel = (props) => {
 	const { children, value, index, ...other } = props;
@@ -237,6 +239,10 @@ export const MainContainer = props => {
 						<ListItemIcon> <AssignmentIcon /> </ListItemIcon>
 						<ListItemText primary={'Reportes'} />
 					</ListItem>
+					<ListItem button key={'Facturas'} onClick={(e) => onChangeTab(e, 6)}>
+						<ListItemIcon> <Description /> </ListItemIcon>
+						<ListItemText primary={'Facturas'} />
+					</ListItem>
 				</List>
 			</Drawer>
 			<main
@@ -281,6 +287,13 @@ export const MainContainer = props => {
 					</TabPanel>
 					<TabPanel value={value} index={5}>
 						<MenuReports
+							paciente={pacienteAgendado}
+							setPacienteAgendado={setPacienteAgendado}
+							empleado={empleado}
+							sucursal={sucursal._id} />
+					</TabPanel>
+					<TabPanel value={value} index={6}>
+						<MenuFactura
 							paciente={pacienteAgendado}
 							setPacienteAgendado={setPacienteAgendado}
 							empleado={empleado}

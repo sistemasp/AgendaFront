@@ -69,7 +69,7 @@ const AgendarConsulta = (props) => {
 	const [openModalPagos, setOpenModalPagos] = useState(false);
 	const [openModalPago, setOpenModalPago] = useState(false);
 	const [cita, setConsulta] = useState();
-	let pagos = [];
+	let pagosIds = '';
 
 	const date = new Date();
 	const dia = addZero(date.getDate());
@@ -268,7 +268,7 @@ const AgendarConsulta = (props) => {
 				citado: '',
 				pagado: false,
 			});
-			pagos = [];
+			pagosIds = '';
 			setDisableDate(true);
 			setPacienteAgendado({});
 			loadConsultas(new Date());
@@ -301,7 +301,7 @@ const AgendarConsulta = (props) => {
 		setValues({ ...values, pagado: pagado });
 		setOpenModalPagos(pagado);
 		if (!pagado) {
-			pagos = [];
+			pagosIds = '';
 		}
 	}
 
@@ -316,7 +316,7 @@ const AgendarConsulta = (props) => {
 	const handleCloseModalPagos = () => {
 		setOpenModalPagos(false);
 		setValues({ ...values, pagado: false });
-		pagos = [];
+		pagosIds = '';
 	};
 
 	const handleOnClickEditarConsulta = async (event, rowData) => {
@@ -358,7 +358,7 @@ const AgendarConsulta = (props) => {
 		rowData.sucursal = sucursal;
 		const res = await createPago(rowData);
 		if (`${res.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-			pagos.push(res.data._id);
+			pagosIds = pagosIds + res.data._id + ',';
 		}
 	}
 
@@ -409,6 +409,7 @@ const AgendarConsulta = (props) => {
 								openModalPago={openModalPago}
 								handleClickGuardarPago={handleClickGuardarPago}
 								setOpenModalPago={setOpenModalPago}
+								pagosIds={pagosIds}
 								{...props} />
 						}
 					</Formik> :

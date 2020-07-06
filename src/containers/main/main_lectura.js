@@ -24,7 +24,7 @@ import ListAltIcon from '@material-ui/icons/ListAlt';
 import AirlineSeatReclineNormalIcon from '@material-ui/icons/AirlineSeatReclineNormal';
 import { Button } from '@material-ui/core';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
-import ModalPassword from '../../components/modal_password';
+import ModalPassword from '../../components/modales/modal_password';
 import Medicos from '../medicos';
 import Consultorios from '../consultorios';
 import Corte from '../corte';

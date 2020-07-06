@@ -1,10 +1,14 @@
 import axios from 'axios';
 
 const baseUrl = process.env.REACT_APP_BASE_URL_LOCAL;
+const urlSepomexGetEstados = 'https://api-sepomex.hckdrk.mx/query/get_estados';
+const urlSepomexGetMunicipos = 'https://api-sepomex.hckdrk.mx/query/get_municipio_por_estado/';
+const urlSepomexGetColonia = 'https://api-sepomex.hckdrk.mx/query/get_colonia_por_municipio/';
+const urlSepomexGetAllInfoByCP = 'https://api-sepomex.hckdrk.mx/query/info_cp/';
 
 // PACIENTES
 
-export const getAllPatients = async() => {
+export const getAllPatients = async () => {
     try {
         const response = await axios({
             url: `${baseUrl}/paciente`,
@@ -16,7 +20,7 @@ export const getAllPatients = async() => {
     }
 }
 
-export const findPatientByPhoneNumber = async(telefono) => {
+export const findPatientByPhoneNumber = async (telefono) => {
     try {
         const response = await axios({
             url: `${baseUrl}/paciente/phonenumber/${telefono}`,
@@ -28,7 +32,7 @@ export const findPatientByPhoneNumber = async(telefono) => {
     }
 }
 
-export const updatePatient = async(pacienteId, paciente) => {
+export const updatePatient = async (pacienteId, paciente) => {
     try {
         const response = await axios({
             url: `${baseUrl}/paciente/${pacienteId}`,
@@ -41,7 +45,7 @@ export const updatePatient = async(pacienteId, paciente) => {
     }
 }
 
-export const createPatient = async(paciente) => {
+export const createPatient = async (paciente) => {
     try {
         const response = await axios({
             url: `${baseUrl}/paciente`,
@@ -56,7 +60,7 @@ export const createPatient = async(paciente) => {
 
 // SERVICIOS
 
-export const getAllServices = async() => {
+export const getAllServices = async () => {
     try {
         const response = await axios({
             url: `${baseUrl}/servicio`,
@@ -70,7 +74,7 @@ export const getAllServices = async() => {
 
 // TRATAMIENTOS
 
-export const getAllTreatments = async() => {
+export const getAllTreatments = async () => {
     try {
         const response = await axios({
             url: `${baseUrl}/tratamiento`,
@@ -82,7 +86,7 @@ export const getAllTreatments = async() => {
     }
 }
 
-export const findTreatmentByServicio = async(servicioId) => {
+export const findTreatmentByServicio = async (servicioId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/tratamiento/servicio/${servicioId}`,
@@ -95,7 +99,7 @@ export const findTreatmentByServicio = async(servicioId) => {
 }
 // HORARIO
 
-export const getAllSchedules = async() => {
+export const getAllSchedules = async () => {
     try {
         const response = await axios({
             url: `${baseUrl}/horario`,
@@ -107,7 +111,7 @@ export const getAllSchedules = async() => {
     }
 }
 
-export const findScheduleByDate = async(dia, mes, anio) => {
+export const findScheduleByDate = async (dia, mes, anio) => {
     try {
         const response = await axios({
             url: `${baseUrl}/horario/${dia}/${mes}/${anio}`,
@@ -119,7 +123,7 @@ export const findScheduleByDate = async(dia, mes, anio) => {
     }
 }
 
-export const findScheduleByDateAndSucursalAndService = async(dia, mes, anio, sucursalId, servicio) => {
+export const findScheduleByDateAndSucursalAndService = async (dia, mes, anio, sucursalId, servicio) => {
     try {
         const response = await axios({
             url: `${baseUrl}/horario/${dia}/${mes}/${anio}/${sucursalId}/${servicio}`,
@@ -131,7 +135,7 @@ export const findScheduleByDateAndSucursalAndService = async(dia, mes, anio, suc
     }
 }
 
-export const findScheduleInConsultByDateAndSucursal = async(consultaId, dia, mes, anio, sucursalId) => {
+export const findScheduleInConsultByDateAndSucursal = async (consultaId, dia, mes, anio, sucursalId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/horario/consulta/${consultaId}/${dia}/${mes}/${anio}/${sucursalId}`,
@@ -145,7 +149,7 @@ export const findScheduleInConsultByDateAndSucursal = async(consultaId, dia, mes
 
 // CITAS
 
-export const getAllDates = async() => {
+export const getAllDates = async () => {
     try {
         const response = await axios({
             url: `${baseUrl}/cita`,
@@ -157,7 +161,7 @@ export const getAllDates = async() => {
     }
 }
 
-export const getAllDatesBySucursal = async(sucursalId) => {
+export const getAllDatesBySucursal = async (sucursalId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/cita/sucursal/${sucursalId}`,
@@ -169,7 +173,7 @@ export const getAllDatesBySucursal = async(sucursalId) => {
     }
 }
 
-export const showAllDatesBySucursalAsistio = async(sucursalId) => {
+export const showAllDatesBySucursalAsistio = async (sucursalId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/cita/sucursal/${sucursalId}/asistio`,
@@ -181,7 +185,7 @@ export const showAllDatesBySucursalAsistio = async(sucursalId) => {
     }
 }
 
-export const findDatesByDate = async(dia, mes, anio) => {
+export const findDatesByDate = async (dia, mes, anio) => {
     try {
         const response = await axios({
             url: `${baseUrl}/cita/${dia}/${mes}/${anio}`,
@@ -193,7 +197,7 @@ export const findDatesByDate = async(dia, mes, anio) => {
     }
 }
 
-export const findDatesByDateAndSucursal = async(dia, mes, anio, sucursalId) => {
+export const findDatesByDateAndSucursal = async (dia, mes, anio, sucursalId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/cita/${dia}/${mes}/${anio}/sucursal/${sucursalId}`,
@@ -205,7 +209,7 @@ export const findDatesByDateAndSucursal = async(dia, mes, anio, sucursalId) => {
     }
 }
 
-export const findDatesByRangeDateAndSucursal = async(diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
+export const findDatesByRangeDateAndSucursal = async (diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/cita/fecha_inicio/${diai}/${mesi}/${anioi}/fecha_fin/${diaf}/${mesf}/${aniof}/sucursal/${sucursalId}`,
@@ -217,7 +221,7 @@ export const findDatesByRangeDateAndSucursal = async(diai, mesi, anioi, diaf, me
     }
 }
 
-export const findHistoricByPaciente = async(pacienteId) => {
+export const findHistoricByPaciente = async (pacienteId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/cita/histotic/${pacienteId}`,
@@ -229,7 +233,7 @@ export const findHistoricByPaciente = async(pacienteId) => {
     }
 }
 
-export const createDate = async(cita) => {
+export const createDate = async (cita) => {
     try {
         const response = await axios({
             url: `${baseUrl}/cita`,
@@ -242,7 +246,7 @@ export const createDate = async(cita) => {
     }
 }
 
-export const updateDate = async(dateId, cita) => {
+export const updateDate = async (dateId, cita) => {
     try {
         const response = await axios({
             url: `${baseUrl}/cita/${dateId}`,
@@ -257,7 +261,7 @@ export const updateDate = async(dateId, cita) => {
 
 // RECEPCIONISTAS
 
-export const findRecepcionistByEmployeeNumber = async(employeeNumber) => {
+export const findRecepcionistByEmployeeNumber = async (employeeNumber) => {
     try {
         const response = await axios({
             url: `${baseUrl}/recepcionista/number/${employeeNumber}`,
@@ -271,7 +275,7 @@ export const findRecepcionistByEmployeeNumber = async(employeeNumber) => {
 
 // EMPLEADOS
 
-export const findEmployeeByEmployeeNumber = async(employeeNumber) => {
+export const findEmployeeByEmployeeNumber = async (employeeNumber) => {
     try {
         const response = await axios({
             url: `${baseUrl}/empleado/number/${employeeNumber}`,
@@ -283,7 +287,7 @@ export const findEmployeeByEmployeeNumber = async(employeeNumber) => {
     }
 }
 
-export const loginEmployee = async(employeeNumber, password) => {
+export const loginEmployee = async (employeeNumber, password) => {
     try {
         const response = await axios({
             url: `${baseUrl}/empleado/login/${employeeNumber}/${password}`,
@@ -295,7 +299,7 @@ export const loginEmployee = async(employeeNumber, password) => {
     }
 }
 
-export const findEmployeesByRolId = async(rolId) => {
+export const findEmployeesByRolId = async (rolId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/empleado/rol/${rolId}`,
@@ -307,7 +311,7 @@ export const findEmployeesByRolId = async(rolId) => {
     }
 }
 
-export const updateEmployee = async(employeeId, employee) => {
+export const updateEmployee = async (employeeId, employee) => {
     try {
         const response = await axios({
             url: `${baseUrl}/empleado/${employeeId}`,
@@ -322,7 +326,7 @@ export const updateEmployee = async(employeeId, employee) => {
 
 // SUCURSALES
 
-export const showAllOffices = async() => {
+export const showAllOffices = async () => {
     try {
         const response = await axios({
             url: `${baseUrl}/sucursal`,
@@ -336,7 +340,7 @@ export const showAllOffices = async() => {
 
 // CONSULTORIOS
 
-export const findSurgeryBySucursalId = async(sucursalId) => {
+export const findSurgeryBySucursalId = async (sucursalId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/consultorio/sucursal/${sucursalId}`,
@@ -348,7 +352,7 @@ export const findSurgeryBySucursalId = async(sucursalId) => {
     }
 }
 
-export const findSurgeryBySucursalIdAndFree = async(sucursalId) => {
+export const findSurgeryBySucursalIdAndFree = async (sucursalId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/consultorio/sucursal/${sucursalId}/libre`,
@@ -360,7 +364,7 @@ export const findSurgeryBySucursalIdAndFree = async(sucursalId) => {
     }
 }
 
-export const createSurgery = async(consultorio) => {
+export const createSurgery = async (consultorio) => {
     try {
         const response = await axios({
             url: `${baseUrl}/consultorio`,
@@ -373,7 +377,7 @@ export const createSurgery = async(consultorio) => {
     }
 }
 
-export const updateSurgery = async(surgeryId, surgery) => {
+export const updateSurgery = async (surgeryId, surgery) => {
     try {
         const response = await axios({
             url: `${baseUrl}/consultorio/${surgeryId}`,
@@ -386,7 +390,7 @@ export const updateSurgery = async(surgeryId, surgery) => {
     }
 }
 
-export const breakFreeSurgeryById = async(surgeryId) => {
+export const breakFreeSurgeryById = async (surgeryId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/consultorio/liberar/${surgeryId}`,
@@ -400,7 +404,7 @@ export const breakFreeSurgeryById = async(surgeryId) => {
 
 // CONSULTAS
 
-export const getAllConsults = async() => {
+export const getAllConsults = async () => {
     try {
         const response = await axios({
             url: `${baseUrl}/consulta`,
@@ -412,7 +416,7 @@ export const getAllConsults = async() => {
     }
 }
 
-export const getAllConsultsBySucursal = async(sucursalId) => {
+export const getAllConsultsBySucursal = async (sucursalId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/consulta/sucursal/${sucursalId}`,
@@ -424,7 +428,7 @@ export const getAllConsultsBySucursal = async(sucursalId) => {
     }
 }
 
-export const showAllConsultsBySucursalAsistio = async(sucursalId) => {
+export const showAllConsultsBySucursalAsistio = async (sucursalId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/consulta/sucursal/${sucursalId}/asistio`,
@@ -436,7 +440,7 @@ export const showAllConsultsBySucursalAsistio = async(sucursalId) => {
     }
 }
 
-export const findConsultsByDate = async(dia, mes, anio) => {
+export const findConsultsByDate = async (dia, mes, anio) => {
     try {
         const response = await axios({
             url: `${baseUrl}/consulta/${dia}/${mes}/${anio}`,
@@ -448,7 +452,7 @@ export const findConsultsByDate = async(dia, mes, anio) => {
     }
 }
 
-export const findConsultsByDateAndSucursal = async(dia, mes, anio, sucursalId) => {
+export const findConsultsByDateAndSucursal = async (dia, mes, anio, sucursalId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/consulta/${dia}/${mes}/${anio}/sucursal/${sucursalId}`,
@@ -460,7 +464,7 @@ export const findConsultsByDateAndSucursal = async(dia, mes, anio, sucursalId) =
     }
 }
 
-export const findConsultsByRangeDateAndSucursal = async(diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
+export const findConsultsByRangeDateAndSucursal = async (diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/consulta/fecha_inicio/${diai}/${mesi}/${anioi}/fecha_fin/${diaf}/${mesf}/${aniof}/sucursal/${sucursalId}`,
@@ -472,7 +476,7 @@ export const findConsultsByRangeDateAndSucursal = async(diai, mesi, anioi, diaf,
     }
 }
 
-export const findHistoricConsultByPaciente = async(pacienteId) => {
+export const findHistoricConsultByPaciente = async (pacienteId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/consulta/histotic/${pacienteId}`,
@@ -484,7 +488,7 @@ export const findHistoricConsultByPaciente = async(pacienteId) => {
     }
 }
 
-export const findHistoricConsultByMedico = async(medicoId) => {
+export const findHistoricConsultByMedico = async (medicoId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/consulta/histotic/medico/${medicoId}`,
@@ -496,7 +500,7 @@ export const findHistoricConsultByMedico = async(medicoId) => {
     }
 }
 
-export const createConsult = async(consulta) => {
+export const createConsult = async (consulta) => {
     try {
         const response = await axios({
             url: `${baseUrl}/consulta`,
@@ -509,7 +513,7 @@ export const createConsult = async(consulta) => {
     }
 }
 
-export const updateConsult = async(dateId, consulta) => {
+export const updateConsult = async (dateId, consulta) => {
     try {
         const response = await axios({
             url: `${baseUrl}/consulta/${dateId}`,
@@ -522,7 +526,7 @@ export const updateConsult = async(dateId, consulta) => {
     }
 }
 
-export const waitingList = async(sucursalId, statusAsistioId) => {
+export const waitingList = async (sucursalId, statusAsistioId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/consulta/sucursal/${sucursalId}/asistio/${statusAsistioId}`,
@@ -536,7 +540,7 @@ export const waitingList = async(sucursalId, statusAsistioId) => {
 
 // TIPO CITAS
 
-export const showAllTipoCitas = async() => {
+export const showAllTipoCitas = async () => {
     try {
         const response = await axios({
             url: `${baseUrl}/tipocita`,
@@ -550,7 +554,7 @@ export const showAllTipoCitas = async() => {
 
 // STATUS
 
-export const showAllStatus = async() => {
+export const showAllStatus = async () => {
     try {
         const response = await axios({
             url: `${baseUrl}/status`,
@@ -564,7 +568,7 @@ export const showAllStatus = async() => {
 
 // BANCOS
 
-export const showAllBanco = async() => {
+export const showAllBanco = async () => {
     try {
         const response = await axios({
             url: `${baseUrl}/banco`,
@@ -578,7 +582,7 @@ export const showAllBanco = async() => {
 
 // METODO PAGO
 
-export const showAllMetodoPago = async() => {
+export const showAllMetodoPago = async () => {
     try {
         const response = await axios({
             url: `${baseUrl}/metodopago`,
@@ -592,7 +596,7 @@ export const showAllMetodoPago = async() => {
 
 // TIPO TARJETA
 
-export const showAllTipoTarjeta = async() => {
+export const showAllTipoTarjeta = async () => {
     try {
         const response = await axios({
             url: `${baseUrl}/tipotarjeta`,
@@ -606,7 +610,7 @@ export const showAllTipoTarjeta = async() => {
 
 // PAGOS
 
-export const createPago = async(pago) => {
+export const createPago = async (pago) => {
     try {
         const response = await axios({
             url: `${baseUrl}/pago`,
@@ -619,7 +623,7 @@ export const createPago = async(pago) => {
     }
 }
 
-export const findPaysByRangeDateAndSucursal = async(diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
+export const findPaysByRangeDateAndSucursal = async (diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/pago/fecha_inicio/${diai}/${mesi}/${anioi}/fecha_fin/${diaf}/${mesf}/${aniof}/sucursal/${sucursalId}`,
@@ -631,3 +635,121 @@ export const findPaysByRangeDateAndSucursal = async(diai, mesi, anioi, diaf, mes
     }
 }
 
+export const findPagoByIds = async (pagosIds) => {
+    console.log('PAGOS IDS', pagosIds);
+    try {
+        const response = await axios({
+            url: `${baseUrl}/pago/pagos/${pagosIds}`,
+            method: 'GET',
+        });
+        return response;
+    } catch (error) {
+        console.log('findPagoByIds', error);
+    }
+}
+
+// RAZON SOCIAL
+
+export const showAllRazonSocials = async () => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/razonsocial`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllRazonSocials', error);
+    }
+}
+
+export const updateRazonSocial = async (razonSocialId, razonSocial) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/razonsocial/${razonSocialId}`,
+            method: 'PUT',
+            data: razonSocial
+        });
+        return response;
+    } catch (error) {
+        console.log('updateRazonSocial', error);
+    }
+}
+
+export const createRazonSocial = async (razonSocial) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/razonsocial`,
+            method: 'POST',
+            data: razonSocial
+        });
+        return response;
+    } catch (error) {
+        console.log('createRazonSocial', error);
+    }
+}
+
+// SEPOMEX
+
+export const sepomexGetEstados = async () => {
+    try {
+        const response = await axios({
+            url: urlSepomexGetEstados,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('sepomexGetEstados', error);
+        return {
+            'error': process.env.REACT_APP_RESPONSE_CODE_ERROR,
+            'descripcion': error
+        };
+    }
+}
+
+export const sepomexGetMunicipos = async (estado) => {
+    try {
+        const response = await axios({
+            url: `${urlSepomexGetMunicipos}${estado}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('sepomexGetMunicipos', error);
+        return {
+            'error': process.env.REACT_APP_RESPONSE_CODE_ERROR,
+            'descripcion': error
+        };
+    }
+}
+
+export const sepomexGetColonia = async (municipio) => {
+    try {
+        const response = await axios({
+            url: `${urlSepomexGetColonia}${municipio}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('sepomexGetColonia', error);
+        return {
+            'error': process.env.REACT_APP_RESPONSE_CODE_ERROR,
+            'descripcion': error
+        };
+    }
+}
+
+export const sepomexGetAllInfoByCP = async (cp) => {
+    try {
+        const response = await axios({
+            url: `${urlSepomexGetAllInfoByCP}${cp}?type=simplified`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('sepomexGetAllInfoByCP', error);
+        return {
+            'error': process.env.REACT_APP_RESPONSE_CODE_ERROR,
+            'descripcion': error
+        };
+    }
+}

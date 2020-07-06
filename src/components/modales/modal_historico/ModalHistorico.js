@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button, Grid } from '@material-ui/core';
 
-import TableComponent from '../table/TableComponent';
+import TableComponent from '../../table/TableComponent';
 
 function getModalStyle() {
   const top = 50;

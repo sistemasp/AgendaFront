@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import * as Yup from "yup";
 import { Formik } from 'formik';
-import { updateSurgery, findSurgeryBySucursalIdAndFree, updateConsult, showAllBanco, showAllMetodoPago, showAllTipoTarjeta, findHistoricByPaciente } from '../../services';
-import { addZero, toFormatterCurrency } from '../../utils/utils';
+import { updateSurgery, findSurgeryBySucursalIdAndFree, updateConsult, showAllBanco, showAllMetodoPago, showAllTipoTarjeta, findHistoricByPaciente, findPagoByIds } from '../../../services';
+import { addZero, toFormatterCurrency } from '../../../utils/utils';
 import ModalFormPagos from './ModalFormPagos';
 
 const validationSchema = Yup.object({
@@ -18,9 +18,10 @@ const ModalPagos = (props) => {
     handleClickGuardarPago,
     openModalPago,
     setOpenModalPago,
+    pagosIds,
   } = props;
 
-  const [historial, setHistorial] = useState([]);
+  const [pagos, setPagos] = useState([]);
 
   const columns = [
     { title: 'Fecha', field: 'fecha_show' },
@@ -47,8 +48,26 @@ const ModalPagos = (props) => {
     }
   }
 
-  useEffect(() => {
-  }, []);
+  console.log("PAGOS IDS:", pagosIds);
+
+  useEffect(async() => {
+    const loadPagos = async() => {
+      const response = await findPagoByIds(pagosIds ? pagosIds : '5efb52c3d82d00000871ced7');
+      if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK ) {
+        setPagos(response.data);
+      }
+    }
+
+    await loadPagos();
+
+  }, [pagosIds]);
+
+  const loadPagos = async() => {
+    const response = await findPagoByIds(pagosIds ? pagosIds : '5efb52c3d82d00000871ced7');
+    if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK ) {
+      setPagos(response.data);
+    }
+  }
 
   const handleClickNewPago = () => {
     setOpenModalPago(true);
@@ -65,10 +84,11 @@ const ModalPagos = (props) => {
         onClickCancel={onClose}
         onClickNewPago={handleClickNewPago}
         onClickCancelPago={handleClickCancelPago}
-        historial={historial}
+        pagos={pagos}
         columns={columns}
         options={options}
         handleClickGuardarPago={handleClickGuardarPago}
+        loadPagos={loadPagos}
         titulo={`Pagos: ${paciente.nombres} ${paciente.apellidos}`}/>
   );
 }
