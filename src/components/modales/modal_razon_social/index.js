@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import ModalFormRazonSocial from './ModalFormRazonSocial';
-import { sepomexGetEstados, sepomexGetMunicipos, sepomexGetColonia, sepomexGetAllInfoByCP } from '../../../services';
+import { sepomexGetEstados, sepomexGetMunicipos, sepomexGetColonia, sepomexGetAllInfoByCP, createRazonSocial, updateRazonSocial } from '../../../services';
 import { Formik } from 'formik';
 import { Snackbar } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -14,8 +14,7 @@ const ModalRazonSocial = (props) => {
     open,
     onClose,
     razonSocial,
-    onClickGuardar,
-    onClickGuardarAgendar
+    loadRazonSocial,
   } = props;
 
   const [openAlert, setOpenAlert] = useState(false);
@@ -42,9 +41,7 @@ const ModalRazonSocial = (props) => {
     email: razonSocial.email
   });
 
-  const dataComplete = !values.rfc || !values.nombre_completo || !values.domicilio
-    || !values.numero || !values.colonia || !values.ciudad || !values.municipio || !values.estado
-    || !values.codigo_postal || !values.telefono || !values.email;
+  const dataComplete = !values.rfc || !values.nombre_completo;
 
   useEffect(() => {
     const loadEstados = async () => {
@@ -86,12 +83,9 @@ const ModalRazonSocial = (props) => {
     } else {
       setOpenAlert(true);
       setSeverity('warning');
-      console.log('RESPONSe', response);
       setMessage(response.descripcion.response.data.error_message);
     }
   }
-
-
 
   const handleChangeEstado = async (event) => {
     setValues({ ...values, estado: event.target.value });
@@ -115,6 +109,45 @@ const ModalRazonSocial = (props) => {
     setOpenAlert(false);
   };
 
+  const handleChangeDomicilio = (event) => {
+    setValues({ ...values, domicilio: event.target.value });
+  }
+
+  const handleChangeEmail = (event) => {
+    setValues({ ...values, email: event.target.value });
+  }
+
+  const handleChangeNombre = (event) => {
+    setValues({ ...values, nombre_completo: event.target.value });
+  }
+
+  const handleChangeNumero = (event) => {
+    setValues({ ...values, numero: event.target.value });
+  }
+
+  const handleChangeRfc = (event) => {
+    setValues({ ...values, rfc: event.target.value });
+  }
+
+  const handleChangeTelefono = (event) => {
+    setValues({ ...values, telefono: event.target.value });
+  }
+
+  const handleChangeCiudad = (event) => {
+    setValues({ ...values, ciudad: event.target.value });
+  }
+
+  const handleClickGuardar = async(e) => {
+    const response = razonSocial._id ? await updateRazonSocial(razonSocial._id, values) : await createRazonSocial(values);
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
+			|| `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+			setSeverity('success');
+			loadRazonSocial();
+			setMessage(razonSocial._id ? 'Razon Social actualizada correctamente' : 'Razon Social creada correctamente');
+    }
+    onClose();
+  }
+
   return (
     <Fragment>
       <Formik
@@ -127,8 +160,6 @@ const ModalRazonSocial = (props) => {
             open={open}
             onClickCancel={onClose}
             razonSocial={razonSocial}
-            onClickGuardar={onClickGuardar}
-            onClickGuardarAgendar={onClickGuardarAgendar}
             dataComplete={dataComplete}
             estados={estados}
             municipios={municipios}
@@ -139,6 +170,14 @@ const ModalRazonSocial = (props) => {
             onChangeColonia={(e) => handleChangeColonia(e)}
             onClickBuscar={handleClickBuscar}
             onChangeCP={(e) => handleChangeCP(e)}
+            onClickGuardar={handleClickGuardar}
+            onChangeDomicilio={(e) => handleChangeDomicilio(e)}
+            onChangeEmail={(e) => handleChangeEmail(e)}
+            onChangeNombre={(e) => handleChangeNombre(e)}
+            onChangeNumero={(e) => handleChangeNumero(e)}
+            onChangeRfc={(e) => handleChangeRfc(e)}
+            onChangeCiudad={(e) => handleChangeCiudad(e)}
+            onChangeTelefono={(e) => handleChangeTelefono(e)}
             {...props} />
         }
       </Formik>

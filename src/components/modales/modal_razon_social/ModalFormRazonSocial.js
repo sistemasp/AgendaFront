@@ -64,6 +64,13 @@ const ModalFormRazonSocial = (props) => {
     onChangeColonia,
     onClickBuscar,
     onChangeCP,
+    onChangeDomicilio,
+onChangeEmail,
+onChangeNombre,
+onChangeNumero,
+onChangeRfc,
+onChangeTelefono,
+onChangeCiudad,
   } = props;
 
   return (
@@ -83,7 +90,7 @@ const ModalFormRazonSocial = (props) => {
                   error={Boolean(errors.rfc)}
                   label="RFC"
                   value={values.rfc}
-                  onChange={handleChange}
+                  onChange={onChangeRfc}
                   inputProps={{
                     maxLength: "12"
                   }}
@@ -97,7 +104,7 @@ const ModalFormRazonSocial = (props) => {
                   error={Boolean(errors.nombre_completo)}
                   label="Nombre  completo"
                   value={values.nombre_completo}
-                  onChange={handleChange}
+                  onChange={onChangeNombre}
                   variant="outlined" />
               </Grid>
               <Grid item xs={12}>
@@ -108,7 +115,7 @@ const ModalFormRazonSocial = (props) => {
                   error={Boolean(errors.domicilio)}
                   label="Domicilio"
                   value={values.domicilio}
-                  onChange={handleChange}
+                  onChange={onChangeDomicilio}
                   variant="outlined" />
               </Grid>
               <Grid item xs={12}>
@@ -119,7 +126,7 @@ const ModalFormRazonSocial = (props) => {
                   error={Boolean(errors.numero)}
                   label="Numero"
                   value={values.numero}
-                  onChange={handleChange}
+                  onChange={onChangeNumero}
                   variant="outlined" />
               </Grid>
               <Grid item xs={12} sm={6} >
@@ -195,7 +202,7 @@ const ModalFormRazonSocial = (props) => {
                         error={Boolean(errors.codigo_postal)}
                         label="Ciudad"
                         value={values.ciudad}
-                        onChange={handleChange}
+                        onChange={onChangeCiudad}
                         variant="outlined" />
                     </Grid>
                   </Fragment>
@@ -225,7 +232,7 @@ const ModalFormRazonSocial = (props) => {
                   error={Boolean(errors.telefono)}
                   label="Telefono"
                   value={values.telefono}
-                  onChange={handleChange}
+                  onChange={onChangeTelefono}
                   inputProps={{
                     maxLength: "10",
                   }}
@@ -239,7 +246,7 @@ const ModalFormRazonSocial = (props) => {
                   error={Boolean(errors.email)}
                   label="Email"
                   value={values.email}
-                  onChange={handleChange}
+                  onChange={onChangeEmail}
                   variant="outlined" />
               </Grid>
               <Grid item xs={12} sm={6}>

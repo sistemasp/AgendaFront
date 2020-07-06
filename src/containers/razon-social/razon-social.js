@@ -28,8 +28,7 @@ export const RazonSocialContainer = (props) => {
     openHistoric,
     handleOpen,
     handleClose,
-    onClickGuardar,
-    onClickGuardarAgendar
+    loadRazonSocial,
   } = props;
 
   return (
@@ -40,8 +39,7 @@ export const RazonSocialContainer = (props) => {
           open={open}
           onClose={handleClose}
           razonSocial={razonSocial}
-          onClickGuardar={onClickGuardar}
-          onClickGuardarAgendar={onClickGuardarAgendar} /> : ''
+          loadRazonSocial={loadRazonSocial} /> : ''
       }
       {
         openHistoric ? 

@@ -211,7 +211,8 @@ const RazonSocial = (props) => {
 						onClickGuardar={handleOnClickGuardar}
 						onClickGuardarAgendar={handleOnClickGuardarAgendar}
 						handleOpen={handleOpen}
-						handleClose={handleClose} /> :
+						handleClose={handleClose}
+						loadRazonSocial={loadRazonSocial} /> :
 					<Backdrop className={classes.backdrop} open={isLoading} >
 						<CircularProgress color="inherit" />
 					</Backdrop>
