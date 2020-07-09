@@ -6,6 +6,8 @@ import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { Multiselect } from 'multiselect-react-dropdown';
 import { CheckCustom } from '../../basic/CheckCustom';
+import ModalPagos from '../modal_pagos';
+import ModalPago2 from '../modal_pago2';
 
 function getModalStyle() {
   const top = 50;
@@ -56,6 +58,8 @@ const ModalFormConsulta = (props) => {
   const {
     values,
     errors,
+    cita,
+    empleado,
     handleSubmit,
     onChangeFecha,
     onChangeHora,
@@ -63,7 +67,8 @@ const ModalFormConsulta = (props) => {
     onChangeStatus,
     onChangePromovendedor,
     isValid,
-    onClickCancel,
+    onClose,
+    onCloseModalPagos,
     onClickActualizarCita,
     open,
     horarios,
@@ -76,6 +81,9 @@ const ModalFormConsulta = (props) => {
     onChangeObservaciones,
     onChangeMedico,
     onChangePagado,
+    openModalPagos,
+    sucursal,
+    onGuardarModalPagos,
   } = props;
 
   return (
@@ -86,6 +94,17 @@ const ModalFormConsulta = (props) => {
         open={open} >
         <div style={modalStyle} className={classes.paper}>
           <form onSubmit={handleSubmit}>
+            {
+              openModalPagos ?
+                <ModalPago2
+                  open={openModalPagos}
+                  onClose={onCloseModalPagos}
+                  onGuardarModalPagos={onGuardarModalPagos}
+                  cita={cita}
+                  empleado={empleado}
+                  sucursal={sucursal} />
+                : ''
+            }
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <h2 className={classes.label}>{values.paciente_nombre} ({values.telefono})</h2>
@@ -111,7 +130,7 @@ const ModalFormConsulta = (props) => {
                     </FormControl>
                 }
               </Grid>
-             
+
               <Grid item xs={12}>
                 {
                   /* values.tipo_cita */ false ?
@@ -250,6 +269,7 @@ const ModalFormConsulta = (props) => {
                 <CheckCustom
                   checked={values.pagado}
                   onChange={onChangePagado}
+                  disabled={values.pagado}
                   name="checkedG"
                   label="Pagado"
                 />
@@ -271,7 +291,7 @@ const ModalFormConsulta = (props) => {
                   className={classes.button}
                   color="secondary"
                   variant="contained"
-                  onClick={onClickCancel} >
+                  onClick={onClose} >
                   Cancelar
               </Button>
               </Grid>

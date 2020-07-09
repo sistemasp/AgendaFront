@@ -15,13 +15,10 @@ const ModalPagos = (props) => {
     open,
     onClose,
     paciente,
-    handleClickGuardarPago,
-    openModalPago,
-    setOpenModalPago,
-    pagosIds,
   } = props;
 
   const [pagos, setPagos] = useState([]);
+  const [openModalPago, setOpenModalPago] = useState(false);
 
   const columns = [
     { title: 'Fecha', field: 'fecha_show' },
@@ -48,25 +45,23 @@ const ModalPagos = (props) => {
     }
   }
 
-  console.log("PAGOS IDS:", pagosIds);
-
   useEffect(async() => {
     const loadPagos = async() => {
-      const response = await findPagoByIds(pagosIds ? pagosIds : '5efb52c3d82d00000871ced7');
+      /*const response = await findPagoByIds(pagosIds);
       if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK ) {
         setPagos(response.data);
-      }
+      }*/
     }
 
     await loadPagos();
 
-  }, [pagosIds]);
+  }, []);
 
   const loadPagos = async() => {
-    const response = await findPagoByIds(pagosIds ? pagosIds : '5efb52c3d82d00000871ced7');
+    /*const response = await findPagoByIds(pagosIds);
     if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK ) {
       setPagos(response.data);
-    }
+    }*/
   }
 
   const handleClickNewPago = () => {
@@ -81,13 +76,12 @@ const ModalPagos = (props) => {
     <ModalFormPagos
         open={open}
         openModalPago={openModalPago}
-        onClickCancel={onClose}
+        onClose={onClose}
         onClickNewPago={handleClickNewPago}
         onClickCancelPago={handleClickCancelPago}
         pagos={pagos}
         columns={columns}
         options={options}
-        handleClickGuardarPago={handleClickGuardarPago}
         loadPagos={loadPagos}
         titulo={`Pagos: ${paciente.nombres} ${paciente.apellidos}`}/>
   );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as Yup from "yup";
 import { Formik } from 'formik';
-import { updateSurgery, findSurgeryBySucursalIdAndFree, updateConsult, showAllBanco, showAllMetodoPago, showAllTipoTarjeta } from '../../../services';
+import { updateSurgery, findSurgeryBySucursalIdAndFree, updateConsult, showAllBanco, showAllMetodoPago, showAllTipoTarjeta, createPago } from '../../../services';
 import { addZero } from '../../../utils/utils';
 import ModalFormPago from './ModalFormPago';
 
@@ -14,16 +14,17 @@ const ModalPago = (props) => {
   const {
     open,
     onClose,
-    consulta,
+    cita,
+    empleado,
     setOpenAlert,
     setMessage,
     sucursal,
-    handleClickGuardarPago,
     loadPagos,
   } = props;
 
   const porcetanjeComision = process.env.REACT_APP_COMISION_PAGO_TARJETA;
   const enConsultorioStatusId = process.env.REACT_APP_EN_CONSULTORIO_STATUS_ID;
+  const metodoPagoTarjetaId = process.env.REACT_APP_METODO_PAGO_TARJETA;
 
   const [isLoading, setIsLoading] = useState(true);
   const [bancos, setBancos] = useState([]);
@@ -39,7 +40,9 @@ const ModalPago = (props) => {
   });
 
   const tarjetaMetodoPagoId = process.env.REACT_APP_METODO_PAGO_TARJETA;
-
+  const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
+  const consultaTratamientoId = process.env.REACT_APP_CONSULTA_TRATAMIENTO_ID;
+  
   useEffect(() => {
     const loadBancos = async () => {
       const response = await showAllBanco();
@@ -97,10 +100,6 @@ const handleChangeCantidad = (event) => {
    });
 }
 
-const handleChangeFactura = (event) => {
-  setValues({ ...values, factura: !values.factura });
-}
-
 const handleChangeConfirmado = (event) => {
   setValues({ ...values, deposito_confirmado: !values.deposito_confirmado });
 }
@@ -121,6 +120,23 @@ const handleChangeObservaciones = (event) => {
     setValues({ ...values, digitos: event.target.value });
   }
 
+	const handleClickGuardarPago = async (event, rowData) => {
+		rowData.fecha_pago = new Date();
+		rowData.paciente = cita.paciente._id;
+		rowData.medico = cita.medico._id;
+		rowData.servicio = consultaServicioId;
+		rowData.tratamientos = consultaTratamientoId;
+		rowData.quien_recibe_pago = empleado._id;
+    rowData.sucursal = sucursal;
+    rowData.cita = cita._id;
+    rowData.porcentaje_comision = `${rowData.metodo_pago === metodoPagoTarjetaId ? porcetanjeComision : '0'} %`
+		const res = await createPago(rowData);
+		if (`${res.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+      onClose();
+      loadPagos();
+    }
+	}
+  
   return (
     <Formik
       initialValues={values}
@@ -141,7 +157,6 @@ const handleChangeObservaciones = (event) => {
           onChangeBank={(e) => handleChangeBank(e)}
           onChangeCardType={(e) => handleChangeCardType(e)}
           onChangeCantidad={(e) => handleChangeCantidad(e)}
-          onChangeFactura={(e) => handleChangeFactura(e)}
           onChangeConfirmado={(e) => handleChangeConfirmado(e)}
           onChangeObservaciones={(e) => handleChangeObservaciones(e)}
           onChangeDigitos={(e) => handleChangeDigitos(e)}

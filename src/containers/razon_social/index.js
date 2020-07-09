@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { Backdrop, CircularProgress } from '@material-ui/core';
-import { RazonSocialContainer } from './razon-social';
+import { RazonSocialContainer } from './razon_social';
 import { showAllRazonSocials, updatePatient, createPatient, findPatientByPhoneNumber, sepomexGetEstados } from '../../services';
 import EditIcon from '@material-ui/icons/Edit';
 import HistoryIcon from '@material-ui/icons/History';

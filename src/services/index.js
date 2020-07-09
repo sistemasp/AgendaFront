@@ -648,6 +648,31 @@ export const findPagoByIds = async (pagosIds) => {
     }
 }
 
+export const findPagosByCita = async (idCita) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/pago/pagos/cita/${idCita}`,
+            method: 'GET',
+        });
+        return response;
+    } catch (error) {
+        console.log('findPagosByCita', error);
+    }
+}
+
+export const updatePago = async (pagoId, pago) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/pago/${pagoId}`,
+            method: 'PUT',
+            data: pago
+        });
+        return response;
+    } catch (error) {
+        console.log('updatePago', error);
+    }
+}
+
 // RAZON SOCIAL
 
 export const showAllRazonSocials = async () => {
@@ -751,5 +776,34 @@ export const sepomexGetAllInfoByCP = async (cp) => {
             'error': process.env.REACT_APP_RESPONSE_CODE_ERROR,
             'descripcion': error
         };
+    }
+}
+
+// USO CFDI
+
+export const showAllUsoCfdis = async () => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/usocfdi`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllUsoCfdis', error);
+    }
+}
+
+// FACTURAS 
+
+export const createFactura = async (factura) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/factura`,
+            method: 'POST',
+            data: factura
+        });
+        return response;
+    } catch (error) {
+        console.log('createFactura', error);
     }
 }

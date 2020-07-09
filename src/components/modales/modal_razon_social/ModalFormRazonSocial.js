@@ -92,7 +92,7 @@ onChangeCiudad,
                   value={values.rfc}
                   onChange={onChangeRfc}
                   inputProps={{
-                    maxLength: "12"
+                    maxLength: "13"
                   }}
                   variant="outlined" />
               </Grid>

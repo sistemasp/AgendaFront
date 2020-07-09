@@ -4,6 +4,7 @@ import Modal from '@material-ui/core/Modal';
 import { TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import { ButtonCustom } from "../../basic/ButtonCustom";
 import { CheckCustom } from '../../basic/CheckCustom';
+import ModalBuscarRazonSocial from '../modal_buscar_razon_social';
 
 function getModalStyle() {
   const top = 50;
@@ -71,6 +72,8 @@ const ModalFormPago = (props) => {
     onChangeObservaciones,
     onChangeDigitos,
     open,
+    openModalFactura,
+    onCloseBuscarRazonSocial,
   } = props;
 
   return (
@@ -97,7 +100,6 @@ const ModalFormPago = (props) => {
                   </Select>
                 </FormControl>
               </Grid>
-
               {
                 values.metodo_pago !== process.env.REACT_APP_METODO_PAGO_EFECTIVO && values.metodo_pago !== '' ?
                   <Fragment>
@@ -176,15 +178,6 @@ const ModalFormPago = (props) => {
 
               <Grid item xs={12}>
                 <h2 className={classes.label}>{`Total: ${values.total}`}</h2>
-              </Grid>
-
-              <Grid item xs={6}>
-                <CheckCustom
-                  checked={values.factura}
-                  onChange={onChangeFactura}
-                  name="checkedF"
-                  label="Factura"
-                />
               </Grid>
 
               {

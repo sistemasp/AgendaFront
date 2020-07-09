@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import { AgendarContainer } from "./agendar";
+import { AgendarTratamientoContainer as AgendarTratamientoContainer } from "./agendar_tratamiento";
 import {
 	getAllServices,
 	findTreatmentByServicio,
@@ -39,7 +39,7 @@ const validationSchema = Yup.object({
 		.required("Los nombres del pacientes son requeridos")
 });
 
-const Agendar = (props) => {
+const AgendarTratamiento = (props) => {
 	const classes = useStyles();
 
 	const {
@@ -399,7 +399,7 @@ const Agendar = (props) => {
 						initialValues={values}
 						validationSchema={validationSchema} >
 						{
-							props => <AgendarContainer
+							props => <AgendarTratamientoContainer
 								servicios={servicios}
 								tratamientos={tratamientos}
 								horarios={horarios}
@@ -449,4 +449,4 @@ const Agendar = (props) => {
 	);
 }
 
-export default Agendar;
+export default AgendarTratamiento;

@@ -9,7 +9,7 @@ import Box from '@material-ui/core/Box';
 import ReportesTratamientos from '../reportes_tratamientos';
 import ReportesPagos from '../reportes_pagos';
 import ReportesConsultas from '../reportes_consultas';
-import RazonSocial from '../razon-social';
+import RazonSocial from '../razon_social';
 
 
 function TabPanel(props) {

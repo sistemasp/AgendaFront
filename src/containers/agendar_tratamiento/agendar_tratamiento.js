@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export const AgendarContainer = (props) => {
+export const AgendarTratamientoContainer = (props) => {
 
 	const classes = useStyles();
 

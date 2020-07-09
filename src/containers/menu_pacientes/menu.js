@@ -8,10 +8,9 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Pacientes from '../pacientes/index';
 import Citas from '../citas/index';
-import Agendar from '../agendar/index';
+import AgendarTratamiento from '../agendar_tratamiento/index';
 import AgendarConsulta from '../agendar_consulta';
 import Consultas from '../consultas';
-
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -106,7 +105,7 @@ export const MenuContainer = props => {
 					sucursal={sucursal._id} />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
-				<Agendar
+				<AgendarTratamiento
 					paciente={pacienteAgendado}
 					setPacienteAgendado={setPacienteAgendado}
 					empleado={empleado}

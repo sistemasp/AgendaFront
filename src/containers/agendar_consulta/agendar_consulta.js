@@ -15,6 +15,7 @@ import { green } from '@material-ui/core/colors';
 import { CheckCustom } from '../../components/basic/CheckCustom';
 import ModalPago from '../../components/modales/modal_pago';
 import ModalPagos from '../../components/modales/modal_pagos';
+import ModalPago2 from '../../components/modales/modal_pago2';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -79,7 +80,6 @@ export const AgendarConsultaContainer = (props) => {
     cita,
     onClickActualizarCita,
     onClickCancel,
-    onCloseModalPago,
     onChangeTipoCita,
     onChangeAsistio,
     loadConsultas,
@@ -87,11 +87,8 @@ export const AgendarConsultaContainer = (props) => {
     setMessage,
     setOpenAlert,
     setFilterDate,
+    OnCloseVerPagos,
     openModalPagos,
-    openModalPago,
-    handleClickGuardarPago,
-    setOpenModalPago,
-    pagosIds,
   } = props;
 
   return (
@@ -122,14 +119,12 @@ export const AgendarConsultaContainer = (props) => {
       }
       {
         openModalPagos ?
-          <ModalPagos
+          <ModalPago2
             open={openModalPagos}
-            openModalPago={openModalPago}
-            onClose={onCloseModalPago}
-            paciente={paciente}
-            handleClickGuardarPago={handleClickGuardarPago}
-            setOpenModalPago={setOpenModalPago}
-            pagosIds={pagosIds} />
+            onClose={OnCloseVerPagos}
+            cita={cita}
+            empleado={empleado}
+            sucursal={sucursal} />
           : ''
       }
       <Paper>
@@ -238,16 +233,6 @@ export const AgendarConsultaContainer = (props) => {
               value={values.observaciones}
               onChange={onChangeObservaciones}
               variant="outlined" />
-          </Grid>
-          <Grid item xs={12} sm={2}>
-            <CheckCustom
-              checked={values.pagado}
-              onChange={onChangePagado}
-              disabled={!isValid || isSubmitting || !paciente.nombres || !values.fecha_hora || !values.precio
-                || !values.medico || !values.promovendedor}
-              name="checkedG"
-              label="Pagado"
-            />
           </Grid>
           <Grid item xs={12} sm={2}>
             <Button

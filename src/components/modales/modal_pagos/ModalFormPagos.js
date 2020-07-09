@@ -47,7 +47,7 @@ const ModalFormPagos = (props) => {
   const {
     pagos,
     open,
-    onClickCancel,
+    onClose,
     titulo,
     columns,
     options,
@@ -57,8 +57,8 @@ const ModalFormPagos = (props) => {
     handleClickGuardarPago,
     paciente,
     loadPagos,
-  } = props; 
-  
+  } = props;
+
   return (
     <div>
       {
@@ -68,7 +68,7 @@ const ModalFormPagos = (props) => {
             onClose={onClickCancelPago}
             paciente={paciente}
             handleClickGuardarPago={handleClickGuardarPago}
-            loadPagos={loadPagos}/>
+            loadPagos={loadPagos} />
           : ''
       }
       <Modal
@@ -76,13 +76,13 @@ const ModalFormPagos = (props) => {
         aria-describedby="simple-modal-description"
         open={open} >
         <div style={modalStyle} className={classes.paper}>
-        <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12}>
             <Button
               className={classes.button}
               color="primary"
               variant="contained"
               onClick={onClickNewPago} >
-                AGREGAR PAGO
+              AGREGAR PAGO
             </Button>
           </Grid>
           <TableComponent
@@ -95,8 +95,8 @@ const ModalFormPagos = (props) => {
               className={classes.button}
               color="secondary"
               variant="contained"
-              onClick={onClickCancel} >
-                SALIR
+              onClick={onClose} >
+              SALIR
             </Button>
           </Grid>
         </div>

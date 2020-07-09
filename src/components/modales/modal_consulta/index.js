@@ -64,6 +64,8 @@ const ModalConsulta = (props) => {
   const [tipoCitas, setTipoCitas] = useState([]);
   const [statements, setStatements] = useState([]);
 
+  const [openModalPagos, setOpenModalPagos] = useState(false);
+  
   const fecha_cita = new Date(cita.fecha_hora);
   const fecha = `${addZero(fecha_cita.getDate())}/${addZero(Number(fecha_cita.getMonth() + 1))}/${addZero(fecha_cita.getFullYear())}`;
   const hora = `${addZero(Number(fecha_cita.getHours()) + 5)}:${addZero(fecha_cita.getMinutes())}`;
@@ -204,6 +206,7 @@ const ModalConsulta = (props) => {
 
   const handleChangePagado = (e) => {
     setValues({ ...values, pagado: !values.pagado });
+    setOpenModalPagos(!values.pagado);
   }
 
   const handleOnClickActualizarCita = async (event, rowData) => {
@@ -253,19 +256,6 @@ const ModalConsulta = (props) => {
     onClose();
   }
 
-  const handleChangeFilterDate = async (date) => {
-    setIsLoading(true);
-    const dia = addZero(date.getDate());
-    const mes = addZero(date.getMonth() + 1);
-    const anio = date.getFullYear();
-    setFilterDate({
-      fecha_show: date,
-      fecha: `${dia}/${mes}/${anio}`
-    });
-    await loadConsultas(date);
-    setIsLoading(false);
-  };
-
   const handleChangeSesion = e => {
     setValues({ ...values, numero_sesion: e.target.value });
   };
@@ -286,6 +276,15 @@ const ModalConsulta = (props) => {
     setValues({ ...values, tiempo: e.target.value });
   };
 
+  const handleCloseModalPagos = () => {
+    setOpenModalPagos(false);
+    setValues({ ...values, pagado: false });
+  }
+
+  const handleGuardarModalPagos = () => {
+    setOpenModalPagos(false);
+  }
+
   return (
     <Fragment>
       {
@@ -299,8 +298,9 @@ const ModalConsulta = (props) => {
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
                 open={open}
-                onClickCancel={onClose}
+                onClose={onClose}
                 cita={cita}
+                empleado={empleado}
                 onClickActualizarCita={handleOnClickActualizarCita}
                 onChangeFecha={(e) => handleChangeFecha(e)}
                 onChangeHora={(e) => handleChangeHora(e)}
@@ -319,6 +319,10 @@ const ModalConsulta = (props) => {
                 onChangeMotivos={handleChangeMotivos}
                 onChangeObservaciones={handleChangeObservaciones}
                 onChangePagado={(e) => handleChangePagado(e)}
+                openModalPagos={openModalPagos}
+                onCloseModalPagos={handleCloseModalPagos}
+                onGuardarModalPagos={handleGuardarModalPagos}
+                sucursal={sucursal}
                 {...props} />
             }
           </Formik> :
