@@ -2,11 +2,10 @@ import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { Backdrop, CircularProgress } from '@material-ui/core';
 import { ListaEsperaContainer } from './lista_espera';
-import { findSurgeryBySucursalId, createSurgery, waitingList, updateSurgery, updateConsult, breakFreeSurgeryById } from '../../services';
+import { findSurgeryBySucursalId, createSurgery, waitingList, updateSurgery, updateConsult, breakFreeSurgeryById, breakFreeSurgeryByIdPaciente } from '../../services';
 import InputIcon from '@material-ui/icons/Input';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import Edit from '@material-ui/icons/Edit';
 import DirectionsWalkIcon from '@material-ui/icons/DirectionsWalk';
 import { addZero } from "../../utils/utils";
 
@@ -132,7 +131,7 @@ const ListaEspera = (props) => {
 		await updateConsult(rowData.consulta._id, updateConsulta);
 		rowData.disponible = true;
 		await updateSurgery(rowData._id, rowData);
-		const response = await breakFreeSurgeryById(rowData._id);
+		const response = await breakFreeSurgeryByIdPaciente(rowData._id);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setOpenAlert(true);
 			setMessage('Salio el paciente');
@@ -152,11 +151,12 @@ const ListaEspera = (props) => {
 
 	const actionsConsultorio = [
 		//new Date(anio, mes - 1, dia) < filterDate.fecha_show  ? 
-		{
-			icon: DirectionsWalkIcon,
-			tooltip: 'Salida paciente',
-			onClick: handleOnClickLiberar
-		} //: ''
+		rowData => (
+			!rowData.disponible ? {
+				icon: DirectionsWalkIcon,
+				tooltip: 'Salida paciente',
+				onClick: handleOnClickLiberar
+			} : '')
 	];
 
 	const handleClose = () => {

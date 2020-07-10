@@ -2,11 +2,11 @@ import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { Backdrop, CircularProgress } from '@material-ui/core';
 import { ConsultorioContainer } from './consultorios';
-import { findEmployeesByRolId, findSurgeryBySucursalId, createSurgery } from '../../services';
+import { findSurgeryBySucursalId, createSurgery, breakFreeSurgeryByIdMedico } from '../../services';
 import AirlineSeatReclineExtraIcon from '@material-ui/icons/AirlineSeatReclineExtra';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import Edit from '@material-ui/icons/Edit';
+import DirectionsWalkIcon from '@material-ui/icons/DirectionsWalk';
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -98,6 +98,15 @@ const Consultorios = (props) => {
 		setOpenModalAsignar(true);
 	}
 
+	const handleOnClickLiberarConsultorio = async (event, rowData) => {
+		const response = await breakFreeSurgeryByIdMedico(rowData._id);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			setOpenAlert(true);
+			setMessage('Salio el medico');
+			await loadConsultorios();
+		}
+	}
+
 	const handleClickGuardar = async (event, data) => {
 		setIsLoading(true);
 		data.sucursal = sucursal;
@@ -112,11 +121,19 @@ const Consultorios = (props) => {
 	}
 
 	const actions = [
-		{
-			icon: AirlineSeatReclineExtraIcon,
-			tooltip: 'Asignar un medico',
-			onClick: handleOnClickAsignarMedico
-		}
+		rowData => (
+			!rowData.medico ? 
+			{
+				icon: AirlineSeatReclineExtraIcon,
+				tooltip: 'Asignar un medico',
+				onClick: handleOnClickAsignarMedico
+			} : 
+			(!rowData.paciente ? {
+				icon: DirectionsWalkIcon,
+				tooltip: 'Liberar consultorio',
+				onClick: handleOnClickLiberarConsultorio
+			} : '')
+		)
 	];
 
 	useEffect(() => {

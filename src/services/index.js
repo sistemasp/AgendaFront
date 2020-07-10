@@ -390,15 +390,27 @@ export const updateSurgery = async (surgeryId, surgery) => {
     }
 }
 
-export const breakFreeSurgeryById = async (surgeryId) => {
+export const breakFreeSurgeryByIdPaciente = async (surgeryId) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/consultorio/liberar/${surgeryId}`,
+            url: `${baseUrl}/consultorio/liberar/paciente/${surgeryId}`,
             method: 'PUT'
         });
         return response;
     } catch (error) {
-        console.log('breakFreeSurgeryById', error);
+        console.log('breakFreeSurgeryByIdPaciente', error);
+    }
+}
+
+export const breakFreeSurgeryByIdMedico = async (surgeryId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consultorio/liberar/medico/${surgeryId}`,
+            method: 'PUT'
+        });
+        return response;
+    } catch (error) {
+        console.log('breakFreeSurgeryByIdMedico', error);
     }
 }
 

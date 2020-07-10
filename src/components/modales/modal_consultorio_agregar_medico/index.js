@@ -42,6 +42,7 @@ const ModalConsultorioAgregarMedico = (props) => {
   }, [medicoRolId]);
 
   const handleClickGuardar = async (event, rowData) => {
+    values.disponible = true;
     const response = await updateSurgery(values._id, values);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setOpenAlert(true);
