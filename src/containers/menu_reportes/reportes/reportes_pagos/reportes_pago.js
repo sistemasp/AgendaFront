@@ -4,8 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { Paper, Button } from '@material-ui/core';
-import TableComponent from '../../components/table/TableComponent';
-
+import TableComponent from '../../../../components/table/TableComponent';
 
 export const ReportesPagosContainer = (props) => {
 

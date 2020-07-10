@@ -43,16 +43,19 @@ const ModalUsoCfdi = (props) => {
     onClose,
     factura,
     pago,
+    closeRazonSocial,
   } = props;
 
 
-  const handleGenerarFactura = async(event, rowData) => {
+  const handleGenerarFactura = async (event, rowData) => {
+    rowData.fecha_hora = new Date();
     const response = await createFactura(rowData);
-		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
       pago.factura = true;
       await updatePago(pago._id, pago);
     }
     onClose();
+    closeRazonSocial();
   }
 
   useEffect(() => {

@@ -6,10 +6,10 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import ReportesTratamientos from '../reportes_tratamientos';
-import ReportesPagos from '../reportes_pagos';
-import ReportesConsultas from '../reportes_consultas';
-
+import ReportesConsultas from './reportes/reportes_consultas';
+import ReportesTratamientos from './reportes/reportes_tratamientos';
+import ReportesPagos from './reportes/reportes_pagos';
+import ReportesFacturas from './reportes/reportes_facturas';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -66,7 +66,6 @@ export const MenuContainer = props => {
 		sucursal,
 	} = props;
 
-	console.log('SUCURSAL', sucursal);
 	return (
 		<div className={classes.root}>
 			<AppBar className={classes.bar} position="static">
@@ -74,6 +73,7 @@ export const MenuContainer = props => {
 					<Tab label="Reportes Consulta" {...a11yProps(0)} />
 					<Tab label="Reportes Tratamiento" {...a11yProps(1)} />
 					<Tab label="Reportes Pagos" {...a11yProps(2)} />
+					<Tab label="Reportes Facturas" {...a11yProps(3)} />
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>
@@ -86,6 +86,10 @@ export const MenuContainer = props => {
 			</TabPanel>
 			<TabPanel value={value} index={2}>
 				<ReportesPagos
+					sucursal={sucursal} />
+			</TabPanel>
+			<TabPanel value={value} index={3}>
+				<ReportesFacturas
 					sucursal={sucursal} />
 			</TabPanel>
 		</div>

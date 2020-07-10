@@ -74,29 +74,30 @@ const ModalFormBuscarRazonSocial = (props) => {
         aria-describedby="simple-modal-description"
         open={open} >
         <div style={modalStyle} className={classes.paper}>
-        {
-        openModalUsoCfdi ?
-          <ModalUsoCfdi
-            open={openModalUsoCfdi}
-            onClose={onCloseUsoCfdi}
-            factura={factura}
-            pago={pago}
-          /> : ''
-      }
-      {
-        openNuevaRazonSocial ? 
-        <ModalRazonSocial
-          open={openNuevaRazonSocial}
-          onClose={handleCloseNuevaRazonSocial}
-          razonSocial={{}}
-          loadRazonSocial={loadRazonSocial} /> : ''
-      }
-      <ButtonCustom 
-        className={classes.button}
-        color="primary"
-        variant="contained"
-        onClick={handleOpenNuevaRazonSocial}
-        text='Nuevo razon social' />
+          {
+            openModalUsoCfdi ?
+              <ModalUsoCfdi
+                open={openModalUsoCfdi}
+                onClose={onCloseUsoCfdi}
+                factura={factura}
+                pago={pago}
+                closeRazonSocial={onClose}
+              /> : ''
+          }
+          {
+            openNuevaRazonSocial ?
+              <ModalRazonSocial
+                open={openNuevaRazonSocial}
+                onClose={handleCloseNuevaRazonSocial}
+                razonSocial={{}}
+                loadRazonSocial={loadRazonSocial} /> : ''
+          }
+          <ButtonCustom
+            className={classes.button}
+            color="primary"
+            variant="contained"
+            onClick={handleOpenNuevaRazonSocial}
+            text='Nuevo razon social' />
 
           <TableComponent
             titulo={titulo}

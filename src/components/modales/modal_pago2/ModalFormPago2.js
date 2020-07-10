@@ -75,7 +75,6 @@ const ModalFormPago2 = (props) => {
     openModalFactura,
     onCloseBuscarRazonSocial,
     actions,
-    localization,
   } = props;
 
   return (

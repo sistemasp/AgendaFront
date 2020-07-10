@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import { ReportesConsultasContainer } from "./reportes_consultas";
-import { findConsultsByRangeDateAndSucursal } from "../../services";
+import { ReportesPagosContainer } from "./reportes_pago";
+import { findPaysByRangeDateAndSucursal } from "../../../../services";
 import { Backdrop, CircularProgress } from "@material-ui/core";
-import { toFormatterCurrency, addZero } from "../../utils/utils";
+import { toFormatterCurrency, addZero } from "../../../../utils/utils";
 
 const useStyles = makeStyles(theme => ({
 	backdrop: {
@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-const ReportesConsultas = (props) => {
+const ReportesPagos = (props) => {
 
 	const classes = useStyles();
 
@@ -39,29 +39,32 @@ const ReportesConsultas = (props) => {
 	});
 
 	const columns = [
+		{ title: 'Fecha', field: 'fecha_show' },
 		{ title: 'Hora', field: 'hora' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
-		{ title: 'Telefono', field: 'paciente.telefono' },
-		{ title: 'Hora llegada', field: 'hora_llegada' },
-		{ title: 'Hora atendido', field: 'hora_atencion' },
-		{ title: 'Hora salida', field: 'hora_salida' },
-		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
-		{ title: 'Tipo Consulta', field: 'tipo_cita.nombre' },
-		{ title: 'Quien confirma', field: 'quien_confirma.nombre' },
-		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
 		{ title: 'Medico', field: 'medico_nombre' },
-		{ title: 'Estado', field: 'status.nombre' },
-		{ title: 'Precio', field: 'precio_moneda' },
+		{ title: 'Servicio', field: 'servicio.nombre' },
+		{ title: 'Tratamientos', field: 'show_tratamientos' },
+		{ title: 'Quien recibio pago', field: 'quien_recibe_pago.nombre' },
+		{ title: 'Cantidad', field: 'cantidad_show' },
+		{ title: 'Porcentaje comision', field: 'porcentaje_comision_show' },
+		{ title: 'Comision', field: 'comision_show' },
+		{ title: 'Total', field: 'total_show' },
+		{ title: 'Banco', field: 'banco.nombre' },
+		{ title: 'Tipo tarjeta', field: 'tipo_tarjeta.nombre' },
+		{ title: 'Digitos', field: 'digitos' },
+		{ title: 'Factura', field: 'factura' },
+		{ title: 'Deposito confirmado', field: 'deposito_confirmado' },
 		{ title: 'Observaciones', field: 'observaciones' },
 	];
 
 	const options = {
-		rowStyle: rowData => {
+		/*rowStyle: rowData => {
 			return { 
 				color: rowData.status.color,
 				backgroundColor: rowData.pagado ? '#10CC88' : ''
 			};
-		},
+		},*/
 		headerStyle: {
 			backgroundColor: '#2BA6C6',
 			color: '#FFF',
@@ -76,17 +79,23 @@ const ReportesConsultas = (props) => {
 	useEffect(() => {
 
 		const loadCitas = async () => {
-			const response = await findConsultsByRangeDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(),
+			const response = await findPaysByRangeDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(),
 				date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
 
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
-					const fecha = new Date(item.fecha_hora);
+					const fecha = new Date(item.fecha_pago);
 					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
-					item.precio_moneda = toFormatterCurrency(item.precio);
+					item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
+					item.cantidad_show = toFormatterCurrency(item.cantidad);
+					item.porcentaje_comision_show = item.porcentaje_comision + ' %';
+					item.comision_show = toFormatterCurrency(item.comision);
+					item.total_show = toFormatterCurrency(item.total);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
-					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+					item.show_tratamientos = item.tratamientos.map(tratamiento => {
+						return `${tratamiento.nombre}, `;
+					});
 				});
 				setCitas(response.data);
 			}
@@ -126,16 +135,22 @@ const ReportesConsultas = (props) => {
 	}
 
 	const loadCitas = async (startDate, endDate) => {
-		const response = await findConsultsByRangeDateAndSucursal(startDate.getDate(), (startDate.getMonth() + 1), startDate.getFullYear(),
+		const response = await findPaysByRangeDateAndSucursal(startDate.getDate(), (startDate.getMonth() + 1), startDate.getFullYear(),
 			endDate.getDate(), (endDate.getMonth() + 1), endDate.getFullYear(), sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			await response.data.forEach(item => {
-				const fecha = new Date(item.fecha_hora);
+				const fecha = new Date(item.fecha_pago);
 				item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
-				item.precio_moneda = toFormatterCurrency(item.precio);
+				item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
+				item.cantidad_show = toFormatterCurrency(item.cantidad);
+				item.porcentaje_comision_show = item.porcentaje_comision + ' %';
+				item.comision_show = toFormatterCurrency(item.comision);
+				item.total_show = toFormatterCurrency(item.total);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
-				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.show_tratamientos = item.tratamientos.map(tratamiento => {
+					return `${tratamiento.nombre}, `;
+				});
 			});
 			setCitas(response.data);
 		}
@@ -148,12 +163,12 @@ const ReportesConsultas = (props) => {
 		<Fragment>
 			{
 				!isLoading ?
-					<ReportesConsultasContainer
+					<ReportesPagosContainer
 						onChangeStartDate={(e) => handleChangeStartDate(e)}
 						onChangeEndDate={(e) => handleChangeEndDate(e)}
 						startDate={startDate.fecha_show}
 						endDate={endDate.fecha_show}
-						titulo={`REPORTES CONSULTAS(${startDate.fecha} - ${endDate.fecha})`}
+						titulo={`REPORTES PAGOS(${startDate.fecha} - ${endDate.fecha})`}
 						columns={columns}
 						options={options}
 						citas={citas}
@@ -169,4 +184,4 @@ const ReportesConsultas = (props) => {
 	);
 }
 
-export default ReportesConsultas;
+export default ReportesPagos;

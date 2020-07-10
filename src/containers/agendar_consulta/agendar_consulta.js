@@ -124,7 +124,9 @@ export const AgendarConsultaContainer = (props) => {
             onClose={OnCloseVerPagos}
             cita={cita}
             empleado={empleado}
-            sucursal={sucursal} />
+            sucursal={sucursal}
+            setMessage={setMessage}
+            setOpenAlert={setOpenAlert} />
           : ''
       }
       <Paper>

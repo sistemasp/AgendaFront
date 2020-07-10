@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from "react";
-import { MenuFacturaContainer } from "./menu_facturas";
+import { MenuRazonSocialContainer } from "./menu_razon_social";
 import { Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 
@@ -7,7 +7,7 @@ const Alert = (props) => {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const MenuFactura = (props) => {
+const MenuRazonSocial = (props) => {
 
     const [pacienteAgendado, setPacienteAgendado] = useState({});
     const [value, setValue] = useState(0);
@@ -58,7 +58,7 @@ const MenuFactura = (props) => {
 
     return (
         <Fragment>
-            <MenuFacturaContainer
+            <MenuRazonSocialContainer
                 pacienteAgendado={pacienteAgendado}
                 setPacienteAgendado={setPacienteAgendado}
                 onChangeTab={handleChangeTab}
@@ -84,4 +84,4 @@ const MenuFactura = (props) => {
     );
 }
 
-export default MenuFactura;
+export default MenuRazonSocial;

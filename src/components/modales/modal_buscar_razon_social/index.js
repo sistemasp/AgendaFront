@@ -76,6 +76,7 @@ const ModalBuscarRazonSocial = (props) => {
       pago: pago._id,
       metodo_pago: pago.metodo_pago._id,
       ultimos_4_digitos: pago.digitos,
+      sucursal: pago.sucursal,
       cantidad: pago.cantidad, // REVISAR SI ES CANTIDAD O TOTAL
     }
     setFactura(factura);

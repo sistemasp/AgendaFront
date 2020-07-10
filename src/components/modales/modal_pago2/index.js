@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import * as Yup from "yup";
 import { Formik } from 'formik';
 import { findPagosByCita } from '../../../services';
@@ -36,9 +36,9 @@ const ModalPago2 = (props) => {
     { title: 'Comision(%)', field: 'porcentaje_comision' },
     { title: 'Comision', field: 'comision_moneda' },
     { title: 'Total', field: 'total_moneda' },
-    { title: 'Banco', field: 'banco.nombre' },
-    { title: 'Tipo Tarjeta', field: 'tipo_tarjeta.nombre' },
-    { title: 'Digitos', field: 'digitos' },
+    { title: 'Banco', field: 'banco_nombre' },
+    { title: 'Tipo Tarjeta', field: 'tipo_tarjeta_nombre' },
+    { title: 'Digitos', field: 'digitos_show' },
     { title: 'Pago confirmado', field: 'deposito_confirmado' },
     { title: 'Observaciones', field: 'observaciones' },
   ];
@@ -53,7 +53,7 @@ const ModalPago2 = (props) => {
   }
 
   const localization = {
-      header: { actions: 'Facturar' }
+    header: { actions: 'Facturar' }
   };
 
   const actions = [
@@ -78,14 +78,9 @@ const ModalPago2 = (props) => {
           item.cantidad_moneda = toFormatterCurrency(item.cantidad);
           item.comision_moneda = toFormatterCurrency(item.comision);
           item.total_moneda = toFormatterCurrency(item.total);
-          if (item.metodo_pago._id === efectivoMetodoPagoId) {
-            item = {
-              ...item,
-              banco: { nombre: '-' },
-              tipo_tarjeta: { nombre: '-' },
-              digitos: '-'
-            }
-          }
+          item.banco_nombre = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.banco.nombre;
+          item.tipo_tarjeta_nombre = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.tipo_tarjeta.nombre;
+          item.digitos_show = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.metodo_pago.nombre;
         });
         setPagos(response.data);
       }
@@ -141,31 +136,34 @@ const ModalPago2 = (props) => {
   }
 
   return (
-    <ModalFormPago2
-      aria-labelledby="simple-modal-title"
-      aria-describedby="simple-modal-description"
-      open={open}
-      onClickNewPago={handleClickNewPago}
-      onClickCancelPago={handleClickCancelPago}
-      openModalPago={openModalPago}
-      onClickCancel={onClose}
-      onClickGuardar={handleClickGuardarPago}
-      isLoading={isLoading}
-      pagos={pagos}
-      pago={pago}
-      columns={columns}
-      options={options}
-      actions={actions}
-      localization={localization}
-      cita={cita}
-      empleado={empleado}
-      sucursal={sucursal}
-      onGuardarModalPagos={onGuardarModalPagos}
-      titulo={`Pagos: ${cita.paciente.nombres} ${cita.paciente.apellidos}`}
-      openModalFactura={openModalFactura}
-      onCloseBuscarRazonSocial={handleCloseBuscarRazonSocial}
-      loadPagos={loadPagos}
-    />
+    <Fragment>
+      <ModalFormPago2
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={open}
+        onClickNewPago={handleClickNewPago}
+        onClickCancelPago={handleClickCancelPago}
+        openModalPago={openModalPago}
+        onClickCancel={onClose}
+        onClickGuardar={handleClickGuardarPago}
+        isLoading={isLoading}
+        pagos={pagos}
+        pago={pago}
+        columns={columns}
+        options={options}
+        actions={actions}
+        localization={localization}
+        cita={cita}
+        empleado={empleado}
+        sucursal={sucursal}
+        onGuardarModalPagos={onGuardarModalPagos}
+        titulo={`Pagos: ${cita.paciente.nombres} ${cita.paciente.apellidos}`}
+        openModalFactura={openModalFactura}
+        onCloseBuscarRazonSocial={handleCloseBuscarRazonSocial}
+        loadPagos={loadPagos}
+      />
+    </Fragment>
+
 
   );
 }

@@ -32,7 +32,7 @@ import ListaEspera from '../lista_espera';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import MenuReports from '../menu_reportes';
 import Description from '@material-ui/icons/Description';
-import MenuFactura from '../menu_facturas';
+import MenuRazonSocial from '../menu_razon_social';
 
 const TabPanel = (props) => {
 	const { children, value, index, ...other } = props;
@@ -235,14 +235,15 @@ export const MainContainer = props => {
 						<ListItemIcon> <ListAltIcon /> </ListItemIcon>
 						<ListItemText primary={'Lista de Espera'} />
 					</ListItem>
-					<ListItem button key={'Reportes'} onClick={(e) => onChangeTab(e, 5)}>
+					<ListItem button key={'Razon social'} onClick={(e) => onChangeTab(e, 5)}>
+						<ListItemIcon> <Description /> </ListItemIcon>
+						<ListItemText primary={'Razon social'} />
+					</ListItem>
+					<ListItem button key={'Reportes'} onClick={(e) => onChangeTab(e, 6)}>
 						<ListItemIcon> <AssignmentIcon /> </ListItemIcon>
 						<ListItemText primary={'Reportes'} />
 					</ListItem>
-					<ListItem button key={'Facturas'} onClick={(e) => onChangeTab(e, 6)}>
-						<ListItemIcon> <Description /> </ListItemIcon>
-						<ListItemText primary={'Facturas'} />
-					</ListItem>
+					
 				</List>
 			</Drawer>
 			<main
@@ -286,14 +287,14 @@ export const MainContainer = props => {
 							sucursal={sucursal._id} />
 					</TabPanel>
 					<TabPanel value={value} index={5}>
-						<MenuReports
+						<MenuRazonSocial
 							paciente={pacienteAgendado}
 							setPacienteAgendado={setPacienteAgendado}
 							empleado={empleado}
 							sucursal={sucursal._id} />
 					</TabPanel>
 					<TabPanel value={value} index={6}>
-						<MenuFactura
+						<MenuReports
 							paciente={pacienteAgendado}
 							setPacienteAgendado={setPacienteAgendado}
 							empleado={empleado}

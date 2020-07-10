@@ -6,9 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import ReportesTratamientos from '../reportes_tratamientos';
-import ReportesPagos from '../reportes_pagos';
-import ReportesConsultas from '../reportes_consultas';
+import ReportesTratamientos from '../menu_reportes/reportes/reportes_tratamientos';
 import RazonSocial from '../razon_social';
 
 
@@ -58,7 +56,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export const MenuFacturaContainer = props => {
+export const MenuRazonSocialContainer = props => {
 	const classes = useStyles();
 
 	const {
