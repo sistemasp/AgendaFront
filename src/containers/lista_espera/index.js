@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { Backdrop, CircularProgress } from '@material-ui/core';
 import { ListaEsperaContainer } from './lista_espera';
-import { findSurgeryBySucursalId, createSurgery, waitingList, updateSurgery, updateConsult, breakFreeSurgeryById, breakFreeSurgeryByIdPaciente } from '../../services';
+import { findSurgeryBySucursalIdWaitingList, createSurgery, waitingList, updateSurgery, updateConsult, breakFreeSurgeryById, breakFreeSurgeryByIdPaciente } from '../../services';
 import InputIcon from '@material-ui/icons/Input';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -97,7 +97,7 @@ const ListaEspera = (props) => {
 	const atendidoStatusId = process.env.REACT_APP_ATENDIDO_STATUS_ID;
 
 	const loadConsultorios = async () => {
-		const response = await findSurgeryBySucursalId(sucursal);
+		const response = await findSurgeryBySucursalIdWaitingList(sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'LIBRE';
@@ -182,7 +182,7 @@ const ListaEspera = (props) => {
 
 	useEffect(() => {
 		const loadConsultorios = async () => {
-			const response = await findSurgeryBySucursalId(sucursal);
+			const response = await findSurgeryBySucursalIdWaitingList(sucursal);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				response.data.forEach(item => {
 					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'LIBRE';

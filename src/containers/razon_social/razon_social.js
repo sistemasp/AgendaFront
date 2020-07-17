@@ -6,6 +6,7 @@ import ModalPaciente from '../../components/modales/modal_paciente';
 import ModHistorico from '../../components/modales/modal_historico';
 import { ButtonCustom } from '../../components/basic/ButtonCustom';
 import ModalRazonSocial from '../../components/modales/modal_razon_social';
+import ModHistoricoFacturas from '../../components/modales/historicos/facturas';
 
 const useStyles = makeStyles(theme => ({
 	button: {
@@ -43,10 +44,10 @@ export const RazonSocialContainer = (props) => {
       }
       {
         openHistoric ? 
-        <ModHistorico
+        <ModHistoricoFacturas
           open={openHistoric}
           onClose={handleClose}
-          paciente={razonSocial} /> : ''
+          razonSocial={razonSocial} /> : ''
       }
 
       <ButtonCustom 

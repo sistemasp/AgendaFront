@@ -12,9 +12,6 @@ import { Paper, Button, TextField, Checkbox, FormControlLabel } from '@material-
 import TableComponent from '../../components/table/TableComponent';
 import ModalConsulta from '../../components/modales/modal_consulta';
 import { green } from '@material-ui/core/colors';
-import { CheckCustom } from '../../components/basic/CheckCustom';
-import ModalPago from '../../components/modales/modal_pago';
-import ModalPagos from '../../components/modales/modal_pagos';
 import ModalPago2 from '../../components/modales/modal_pago2';
 
 const useStyles = makeStyles(theme => ({

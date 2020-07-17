@@ -3,8 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button, Grid } from '@material-ui/core';
 
-import TableComponent from '../../table/TableComponent';
-import ModalPago from '../modal_pago';
+import TableComponent from '../../../table/TableComponent';
 
 function getModalStyle() {
   const top = 50;
@@ -38,65 +37,40 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ModalFormPagos = (props) => {
+const ModalHistoricoFacturas = (props) => {
   const classes = useStyles();
 
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
 
   const {
-    pagos,
+    historial,
     open,
-    onClose,
+    onClickCancel,
     titulo,
     columns,
-    options,
-    openModalPago,
-    onClickNewPago,
-    onClickCancelPago,
-    handleClickGuardarPago,
-    paciente,
-    loadPagos,
-  } = props;
-
+    options
+  } = props; 
+  
   return (
     <div>
-      {
-        openModalPago ?
-          <ModalPago
-            open={openModalPago}
-            onClose={onClickCancelPago}
-            paciente={paciente}
-            handleClickGuardarPago={handleClickGuardarPago}
-            loadPagos={loadPagos} />
-          : ''
-      }
       <Modal
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
         open={open} >
         <div style={modalStyle} className={classes.paper}>
-          <Grid item xs={12} sm={12}>
-            <Button
-              className={classes.button}
-              color="primary"
-              variant="contained"
-              onClick={onClickNewPago} >
-              AGREGAR PAGO
-            </Button>
-          </Grid>
           <TableComponent
             titulo={titulo}
             columns={columns}
-            data={pagos}
+            data={historial}
             options={options} />
           <Grid item xs={12} sm={12}>
             <Button
               className={classes.button}
               color="secondary"
               variant="contained"
-              onClick={onClose} >
-              SALIR
+              onClick={onClickCancel} >
+                SALIR
             </Button>
           </Grid>
         </div>
@@ -105,4 +79,4 @@ const ModalFormPagos = (props) => {
   );
 }
 
-export default ModalFormPagos;
+  export default ModalHistoricoFacturas;

@@ -85,7 +85,7 @@ const ModalFormPago2 = (props) => {
             open={openModalPago}
             onClose={onClickCancelPago}
             cita={cita}
-            loadPagos={loadPagos}
+            pago={pago}
             empleado={empleado}
             sucursal={sucursal}
             loadPagos={loadPagos} />

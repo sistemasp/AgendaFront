@@ -28,8 +28,9 @@ const MenuMain = (props) => {
 		history,
 	} = props;
 
-	const handleChangeTab = (event, newValue) => {
+	const handleChangeTab = (event, newValue, close) => {
 		setValue(newValue);
+		close();
 	};
 
 	const handleAgendar = (event, rowData) => {

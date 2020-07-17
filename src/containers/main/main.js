@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -22,7 +22,7 @@ import People from '@material-ui/icons/People';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import AirlineSeatReclineNormalIcon from '@material-ui/icons/AirlineSeatReclineNormal';
-import { Button } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import ModalPassword from '../../components/modales/modal_password';
 import Medicos from '../medicos';
@@ -57,7 +57,7 @@ TabPanel.propTypes = {
 	value: PropTypes.any.isRequired,
 };
 
-const drawerWidth = 240;
+const drawerWidth = 250;
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -101,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	content: {
 		flexGrow: 1,
-		padding: theme.spacing(3),
+		width: `calc(100% - ${drawerWidth}px)`,
 		transition: theme.transitions.create('margin', {
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.leavingScreen,
@@ -109,6 +109,7 @@ const useStyles = makeStyles((theme) => ({
 		marginLeft: -drawerWidth,
 	},
 	contentShift: {
+		width: `calc(100% - ${drawerWidth}px)`,
 		transition: theme.transitions.create('margin', {
 			easing: theme.transitions.easing.easeOut,
 			duration: theme.transitions.duration.enteringScreen,
@@ -143,7 +144,7 @@ export const MainContainer = props => {
 
 	const classes = useStyles();
 	const theme = useTheme();
-	const [openDrawer, setOpenDrawer] = React.useState(false);
+	const [openDrawer, setOpenDrawer] = useState(false);
 
 	const handleDrawerOpen = () => {
 		setOpenDrawer(true);
@@ -215,35 +216,34 @@ export const MainContainer = props => {
 				</div>
 				<Divider />
 				<List>
-					<ListItem button key={'Pacientes'} onClick={(e) => onChangeTab(e, 0)}>
+					<ListItem button key={'Pacientes'} onClick={(e) => onChangeTab(e, 0, handleDrawerClose)}>
 						<ListItemIcon> <AccessibilityNewIcon /> </ListItemIcon>
 						<ListItemText primary={'Pacientes'} />
 					</ListItem>
-					<ListItem button key={'Medicos'} onClick={(e) => onChangeTab(e, 1)}>
+					<ListItem button key={'Medicos'} onClick={(e) => onChangeTab(e, 1, handleDrawerClose)}>
 						<ListItemIcon> <People /> </ListItemIcon>
 						<ListItemText primary={'Medicos'} />
 					</ListItem>
-					<ListItem button key={'Consultorios'} onClick={(e) => onChangeTab(e, 2)}>
+					<ListItem button key={'Consultorios'} onClick={(e) => onChangeTab(e, 2, handleDrawerClose)}>
 						<ListItemIcon> <AirlineSeatReclineNormalIcon /> </ListItemIcon>
 						<ListItemText primary={'Consultorios'} />
 					</ListItem>
-					<ListItem button key={'Corte'} onClick={(e) => onChangeTab(e, 3)}>
+					<ListItem button key={'Corte'} onClick={(e) => onChangeTab(e, 3, handleDrawerClose)}>
 						<ListItemIcon> <AttachMoneyIcon /> </ListItemIcon>
 						<ListItemText primary={'Corte'} />
 					</ListItem>
-					<ListItem button key={'Lista de Espera'} onClick={(e) => onChangeTab(e, 4)}>
+					<ListItem button key={'Lista de Espera'} onClick={(e) => onChangeTab(e, 4, handleDrawerClose)}>
 						<ListItemIcon> <ListAltIcon /> </ListItemIcon>
 						<ListItemText primary={'Lista de Espera'} />
 					</ListItem>
-					<ListItem button key={'Razon social'} onClick={(e) => onChangeTab(e, 5)}>
+					<ListItem button key={'Razon social'} onClick={(e) => onChangeTab(e, 5, handleDrawerClose)}>
 						<ListItemIcon> <Description /> </ListItemIcon>
 						<ListItemText primary={'Razon social'} />
 					</ListItem>
-					<ListItem button key={'Reportes'} onClick={(e) => onChangeTab(e, 6)}>
+					<ListItem button key={'Reportes'} onClick={(e) => onChangeTab(e, 6, handleDrawerClose)}>
 						<ListItemIcon> <AssignmentIcon /> </ListItemIcon>
 						<ListItemText primary={'Reportes'} />
 					</ListItem>
-					
 				</List>
 			</Drawer>
 			<main

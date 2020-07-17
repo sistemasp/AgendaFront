@@ -1,10 +1,9 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import * as Yup from "yup";
-import { Formik } from 'formik';
 import { findPagosByCita } from '../../../services';
 import { addZero, toFormatterCurrency } from '../../../utils/utils';
 import ModalFormPago2 from './ModalFormPago2';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import EditIcon from '@material-ui/icons/Edit';
 
 const ModalPago2 = (props) => {
   const {
@@ -26,6 +25,11 @@ const ModalPago2 = (props) => {
   const handleClickBuscarRazonSocial = (event, rowData) => {
     setPago(rowData);
     setOpenModalFactura(true);
+  }
+
+  const handleOnClickEditarPago = (event, rowData) => {
+    setPago(rowData);
+    setOpenModalPago(true);
   }
 
   const columns = [
@@ -63,6 +67,11 @@ const ModalPago2 = (props) => {
       tooltip: rowData.factura ? 'Ya se genero factura' : 'Generar factura',
       onClick: handleClickBuscarRazonSocial
     }),
+    {
+      icon: EditIcon,
+      tooltip: 'Editar pago',
+      onClick: handleOnClickEditarPago
+    }
   ];
 
   const efectivoMetodoPagoId = process.env.REACT_APP_METODO_PAGO_EFECTIVO;
@@ -103,14 +112,9 @@ const ModalPago2 = (props) => {
         item.cantidad_moneda = toFormatterCurrency(item.cantidad);
         item.comision_moneda = toFormatterCurrency(item.comision);
         item.total_moneda = toFormatterCurrency(item.total);
-        if (item.metodo_pago._id === efectivoMetodoPagoId) {
-          item = {
-            ...item,
-            banco: { nombre: '-' },
-            tipo_tarjeta: { nombre: '-' },
-            digitos: '-'
-          }
-        }
+        item.banco_nombre = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.banco.nombre;
+        item.tipo_tarjeta_nombre = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.tipo_tarjeta.nombre;
+        item.digitos_show = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.metodo_pago.nombre;
       });
       setPagos(response.data);
     }

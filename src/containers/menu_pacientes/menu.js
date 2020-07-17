@@ -102,7 +102,7 @@ export const MenuContainer = props => {
 					paciente={pacienteAgendado}
 					setPacienteAgendado={setPacienteAgendado}
 					empleado={empleado}
-					sucursal={sucursal._id} />
+					sucursal={sucursal} />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
 				<AgendarTratamiento

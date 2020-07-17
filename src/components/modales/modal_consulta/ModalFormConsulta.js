@@ -4,9 +4,7 @@ import Modal from '@material-ui/core/Modal';
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import { Multiselect } from 'multiselect-react-dropdown';
 import { CheckCustom } from '../../basic/CheckCustom';
-import ModalPagos from '../modal_pagos';
 import ModalPago2 from '../modal_pago2';
 
 function getModalStyle() {

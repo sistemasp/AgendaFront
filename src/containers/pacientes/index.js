@@ -99,7 +99,7 @@ const Pacientes = (props) => {
 	const handleOnClickGuardar = async (e, val) => {
 		console.log('VALUE', val);
 		setIsLoading(true);
-		/*const existPatient = paciente._id ? '' : await findPatientByPhoneNumber(val.telefono);
+		const existPatient = paciente._id ? '' : await findPatientByPhoneNumber(val.telefono);
 		setOpenAlert(true);
 
 		if (`${existPatient.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -120,7 +120,7 @@ const Pacientes = (props) => {
 			setMessage(paciente._id ? 'Paciente actualizado correctamente' : 'Paciente creado correctamente');
 		}
 
-		handleClose();*/
+		handleClose();
 		setIsLoading(false);
 	}
 

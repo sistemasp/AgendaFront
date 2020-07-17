@@ -352,6 +352,18 @@ export const findSurgeryBySucursalId = async (sucursalId) => {
     }
 }
 
+export const findSurgeryBySucursalIdWaitingList = async (sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consultorio/waitinglist/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findSurgeryBySucursalIdWaitingList', error);
+    }
+}
+
 export const findSurgeryBySucursalIdAndFree = async (sucursalId) => {
     try {
         const response = await axios({
@@ -829,5 +841,17 @@ export const findFacturasByRangeDateAndSucursal = async (diai, mesi, anioi, diaf
         return response;
     } catch (error) {
         console.log('findFacturasByRangeDateAndSucursal', error);
+    }
+}
+
+export const findFacturaByRazonSocialId = async (razonSocialId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/factura/razonsocial/${razonSocialId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findFacturaByRazonSocialId', error);
     }
 }

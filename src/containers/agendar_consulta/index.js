@@ -79,6 +79,7 @@ const AgendarConsulta = (props) => {
 	});
 
 	const columns = [
+		{ title: 'Folio', field: 'folio' },
 		{ title: 'Hora', field: 'hora' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
 		{ title: 'Telefono', field: 'paciente.telefono' },
@@ -118,7 +119,7 @@ const AgendarConsulta = (props) => {
 	useEffect(() => {
 
 		const loadConsultas = async () => {
-			const response = await findConsultsByDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
+			const response = await findConsultsByDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal._id);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
 					const fecha = new Date(item.fecha_hora);
@@ -165,7 +166,7 @@ const AgendarConsulta = (props) => {
 		const dia = date ? date.getDate() : values.fecha_show.getDate();
 		const mes = Number(date ? date.getMonth() : values.fecha_show.getMonth()) + 1;
 		const anio = date ? date.getFullYear() : values.fecha_show.getFullYear();
-		const response = await findScheduleInConsultByDateAndSucursal(consultaServicioId, dia, mes, anio, sucursal);
+		const response = await findScheduleInConsultByDateAndSucursal(consultaServicioId, dia, mes, anio, sucursal._id);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setHorarios(response.data);
 		}
@@ -206,7 +207,7 @@ const AgendarConsulta = (props) => {
 	};
 
 	const loadConsultas = async (filterDate) => {
-		const response = await findConsultsByDateAndSucursal(filterDate.getDate(), (filterDate.getMonth() + 1), filterDate.getFullYear(), sucursal);
+		const response = await findConsultsByDateAndSucursal(filterDate.getDate(), (filterDate.getMonth() + 1), filterDate.getFullYear(), sucursal._id);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
 				const fecha = new Date(item.fecha_hora);
@@ -237,11 +238,12 @@ const AgendarConsulta = (props) => {
 		setValues({ ...values, tipo_cita: e.target.value });
 	}
 
+	
 
 	const handleClickAgendar = async (data) => {
 		setIsLoading(true);
 		data.quien_agenda = empleado._id;
-		data.sucursal = sucursal;
+		data.sucursal = sucursal._id;
 		data.status = pendienteStatusId;
 		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';
@@ -361,7 +363,7 @@ const AgendarConsulta = (props) => {
 								cita={cita}
 								openModal={openModal}
 								empleado={empleado}
-								sucursal={sucursal}
+								sucursal={sucursal._id}
 								onClickCancel={handleCloseModal}
 								loadConsultas={loadConsultas}
 								tipoCitas={tipoCitas}
