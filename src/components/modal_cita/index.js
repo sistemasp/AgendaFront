@@ -251,7 +251,7 @@ const ModalCita = (props) => {
   }
 
   const handleOnClickActualizarCita = async (event, rowData) => {
-    if (rowData.status._id !== pendienteStatusId) {
+    if (rowData.status !== pendienteStatusId) {
       rowData.quien_confirma = empleado._id;
     }
     //rowData.tiempo = getTimeToTratamiento(rowData.tratamientos);

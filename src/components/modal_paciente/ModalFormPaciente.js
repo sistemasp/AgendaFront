@@ -141,7 +141,7 @@ const ModalFormPaciente = (props) => {
                     Cancelar
                 </Button>
               </Grid>
-              <Grid item xs={12}>
+              {false ? <Grid item xs={12}>
                 <Button
                   className={classes.button}
                   color="primary"
@@ -150,7 +150,7 @@ const ModalFormPaciente = (props) => {
                   disabled={!isValid} >
                     Guardar Y Agendar
                 </Button>
-              </Grid>
+              </Grid> : ''}
             </Grid>
             
           </form>
