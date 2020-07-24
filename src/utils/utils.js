@@ -41,3 +41,19 @@ export const exportTableToExcel = (tableID, filename = '') => {
         downloadLink.click();
     }
 }
+
+export const generateFolioCita = (cita) => {
+    console.log("CITA", cita);
+    const date = new Date(cita.fecha_hora);
+    const cons = cita.consecutivo;
+    const consecutivo =  cons ? 
+    (
+        cons < 10 ? '00' + cons : 
+            (
+                cons < 100 ?  '0' + cons : cons
+            ) 
+    ) : 
+    'S/C';
+    const folio = `${cita.sucursal.clave}${cita.servicio ? cita.servicio.clave : 'CON'}${date.getFullYear()}${addZero(date.getMonth() + 1)}${date.getDate()}${consecutivo}`;
+    return folio;
+}

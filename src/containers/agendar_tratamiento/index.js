@@ -2,20 +2,23 @@ import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { AgendarTratamientoContainer as AgendarTratamientoContainer } from "./agendar_tratamiento";
 import {
-	getAllServices,
+	findOfficeById,
 	findTreatmentByServicio,
 	findScheduleByDateAndSucursalAndService,
 	findDatesByDateAndSucursal,
 	createDate,
 	findEmployeesByRolId,
-	showAllTipoCitas
+	showAllTipoCitas,
+	createTreatmentPrice,
 } from "../../services";
 import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
 import EditIcon from '@material-ui/icons/Edit';
 import * as Yup from "yup";
-import { toFormatterCurrency, addZero } from "../../utils/utils";
+import { toFormatterCurrency, addZero, generateFolioCita } from "../../utils/utils";
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import PrintIcon from '@material-ui/icons/Print';
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -62,9 +65,9 @@ const AgendarTratamiento = (props) => {
 	const [disableDate, setDisableDate] = useState(true);
 	const [values, setValues] = useState({
 		servicio: '',
-		tratamientos: [],
+		tratamientos_precios: [],
 		paciente: `${paciente._id}`,
-		precio: '',
+		precio: 0,
 		tipo_cita: {},
 		tiempo: '',
 		observaciones: '',
@@ -72,6 +75,9 @@ const AgendarTratamiento = (props) => {
 	const [citas, setCitas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
 	const [cita, setCita] = useState();
+	const [openModalPagos, setOpenModalPagos] = useState(false);
+	const [openModalImprimirCita, setOpenModalImprimirCita] = useState(false);
+	const [datosImpresion, setDatosImpresion] = useState();
 
 	const date = new Date();
 	const dia = addZero(date.getDate());
@@ -79,11 +85,12 @@ const AgendarTratamiento = (props) => {
 	const anio = date.getFullYear();
 
 	const [filterDate, setFilterDate] = useState({
-		fecha_hora: date,
-		fecha: `${dia}/${mes}/${anio}`,
+		fecha_show: date,
+		fecha: `${dia}/${mes}/${anio}`
 	});
 
 	const columns = [
+		{ title: 'Folio', field: 'folio' },
 		{ title: 'Hora', field: 'hora' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
 		{ title: 'Telefono', field: 'paciente.telefono' },
@@ -100,6 +107,9 @@ const AgendarTratamiento = (props) => {
 		{ title: 'Precio', field: 'precio_moneda' },
 		{ title: 'Tiempo (minutos)', field: 'tiempo' },
 		{ title: 'Observaciones', field: 'observaciones' },
+		{ title: 'Hora llegada', field: 'hora_llegada' },
+		{ title: 'Hora atendido', field: 'hora_atencion' },
+		{ title: 'Hora salida', field: 'hora_salida' },
 	];
 
 	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
@@ -109,7 +119,7 @@ const AgendarTratamiento = (props) => {
 
 	const options = {
 		rowStyle: rowData => {
-			return { 
+			return {
 				color: rowData.status.color,
 				backgroundColor: rowData.pagado ? '#10CC88' : ''
 			};
@@ -124,9 +134,9 @@ const AgendarTratamiento = (props) => {
 
 	useEffect(() => {
 		const loadServicios = async () => {
-			const response = await getAllServices();
+			const response = await findOfficeById(sucursal);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setServicios(response.data);
+				setServicios(response.data.servicios);
 			}
 		}
 
@@ -134,6 +144,7 @@ const AgendarTratamiento = (props) => {
 			const response = await findDatesByDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
+					item.folio = generateFolioCita(item);
 					const fecha = new Date(item.fecha_hora);
 					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
@@ -141,12 +152,13 @@ const AgendarTratamiento = (props) => {
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-					item.show_tratamientos = item.tratamientos.map(tratamiento => {
+					item.show_tratamientos = item.tratamientos_precios.map(tratamiento => {
 						return `${tratamiento.nombre}, `;
 					});
 				});
 				setCitas(response.data);
 			}
+			setIsLoading(false);
 		}
 
 		const loadPromovendedores = async () => {
@@ -184,7 +196,6 @@ const AgendarTratamiento = (props) => {
 		loadServicios();
 		loadMedicos();
 		loadTipoCitas();
-		setIsLoading(false);
 	}, [sucursal]);
 
 	const loadTratamientos = async (servicio) => {
@@ -221,7 +232,8 @@ const AgendarTratamiento = (props) => {
 			...values,
 			servicio: e.target.value,
 			fecha_hora: '',
-			precio: '',
+			precio: 0,
+			tratamientos_precios: []
 		});
 		loadTratamientos(e.target.value);
 		setIsLoading(false);
@@ -229,11 +241,15 @@ const AgendarTratamiento = (props) => {
 
 	const handleChangeTratamientos = async (items) => {
 		setIsLoading(true);
+		let precio = 0;
+		items.map((item) => {
+			precio = Number(precio) + Number(item.precio);
+		});
 		setValues({
 			...values,
 			fecha_hora: '',
-			precio: '',
-			tratamientos: items
+			precio: precio,
+			tratamientos_precios: items
 		});
 		setDisableDate(false);
 		setIsLoading(false);
@@ -270,7 +286,7 @@ const AgendarTratamiento = (props) => {
 		const mes = addZero(date.getMonth() + 1);
 		const anio = date.getFullYear();
 		setFilterDate({
-			fecha_hora: date,
+			fecha_show: date,
 			fecha: `${dia}/${mes}/${anio}`
 		});
 		await loadCitas(date);
@@ -281,6 +297,7 @@ const AgendarTratamiento = (props) => {
 		const response = await findDatesByDateAndSucursal(filterDate.getDate(), (filterDate.getMonth() + 1), filterDate.getFullYear(), sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
+				item.folio = generateFolioCita(item);
 				const fecha = new Date(item.fecha_hora);
 				item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);
@@ -288,7 +305,7 @@ const AgendarTratamiento = (props) => {
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-				item.show_tratamientos = item.tratamientos.map(tratamiento => {
+				item.show_tratamientos = item.tratamientos_precios.map(tratamiento => {
 					return `${tratamiento.nombre}, `;
 				});
 			});
@@ -315,14 +332,22 @@ const AgendarTratamiento = (props) => {
 		data.sucursal = sucursal;
 		data.numero_sesion = 1;
 		data.status = pendienteStatusId;
-		// data.tiempo = getTimeToTratamiento(data.tratamientos);
+		data.hora_llegada = '--:--';
+		data.hora_atencion = '--:--';
+		data.hora_salida = '--:--';
+		/*const response = await createTreatmentPrice(data.tratamientos_precios);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+			console.log("RESPONSE DATA", response.data);
+
+		}*/
+		// data.tiempo = getTimeToTratamiento(data.tratamientos_precios);
 		const response = await createDate(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			setOpenAlert(true);
 			setMessage('La Cita se agendo correctamente');
 			setValues({
 				servicio: '',
-				tratamientos: [],
+				tratamientos_precios: [],
 				medico: '',
 				promovendedor: '',
 				cosmetologa: '',
@@ -330,6 +355,7 @@ const AgendarTratamiento = (props) => {
 				precio: '',
 				tipo_cita: {},
 			});
+			setTratamientos([]);
 			setDisableDate(true);
 			setPacienteAgendado({});
 			loadCitas(new Date());
@@ -338,8 +364,18 @@ const AgendarTratamiento = (props) => {
 		setIsLoading(false);
 	};
 
-	const handleChangePrecio = (e) => {
-		setValues({ ...values, precio: e.target.value });
+	const handleChangeItemPrecio = (e, index) => {
+		const newTratamientos = values.tratamientos_precios;
+		newTratamientos[index].precio = e.target.value;
+		let precio = 0;
+		newTratamientos.map((item) => {
+			precio = Number(precio) + Number(item.precio);
+		});
+		setValues({ 
+			...values,
+			tratamientos_precios: newTratamientos,
+			precio: precio,
+		});
 	}
 
 	const handleChangeTiempo = (e) => {
@@ -381,13 +417,42 @@ const AgendarTratamiento = (props) => {
 		setIsLoading(false);
 	}
 
+	const handleClickVerPagos = (event, rowData) => {
+		setCita(rowData);
+		setOpenModalPagos(true);
+	}
+
+	const handleCloseVerPagos = (event, rowData) => {
+		setOpenModalPagos(false);
+	}
+
+	const handleCloseImprimirConsulta = (event, rowData) => {
+		setOpenModalImprimirCita(false);
+	}
+
+	const handlePrint = async (event, rowData) => {
+		setDatosImpresion(rowData);
+		setOpenModalImprimirCita(true);
+	}
+
 	const actions = [
+		{
+			icon: PrintIcon,
+			tooltip: 'Imprimir',
+			onClick: handlePrint
+		},
 		//new Date(anio, mes - 1, dia) < filterDate.fecha_hora  ? 
 		{
 			icon: EditIcon,
 			tooltip: 'Editar cita',
 			onClick: handleOnClickEditarCita
-		} //: ''
+		}, //: ''
+		rowData => (
+			rowData.pagado ? {
+				icon: AttachMoneyIcon,
+				tooltip: 'Ver pago',
+				onClick: handleClickVerPagos
+			} : ''),
 	];
 
 	return (
@@ -415,7 +480,6 @@ const AgendarTratamiento = (props) => {
 								promovendedores={promovendedores}
 								cosmetologas={cosmetologas}
 								onClickAgendar={handleClickAgendar}
-								onChangePrecio={(e) => handleChangePrecio(e)}
 								onChangeTiempo={(e) => handleChangeTiempo(e)}
 								titulo={`CITAS (${filterDate.fecha})`}
 								columns={columns}
@@ -433,6 +497,16 @@ const AgendarTratamiento = (props) => {
 								onChangeDoctors={(e) => handleChangeDoctors(e)}
 								onChangePromovendedor={(e) => handleChangePromovendedor(e)}
 								onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
+								onCloseVerPagos={handleCloseVerPagos}
+								openModalPagos={openModalPagos}
+								openModalImprimirCita={openModalImprimirCita}
+								datosImpresion={datosImpresion}
+								onCloseImprimirConsulta={handleCloseImprimirConsulta}
+								sucursal={sucursal}
+								onChangeItemPrecio={handleChangeItemPrecio}
+								setOpenAlert={setOpenAlert}
+								setMessage={setMessage}
+								setFilterDate={setFilterDate}
 								{...props} />
 						}
 					</Formik> :

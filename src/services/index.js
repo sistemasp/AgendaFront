@@ -111,6 +111,18 @@ export const getAllSchedules = async () => {
     }
 }
 
+export const findSchedulesBySucursalAndServicio = async (idSucursal, idServicio) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/horario/sucursal/${idSucursal}/servicio/${idServicio}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('getAllSchedules', error);
+    }
+}
+
 export const findScheduleByDate = async (dia, mes, anio) => {
     try {
         const response = await axios({
@@ -335,6 +347,18 @@ export const showAllOffices = async () => {
         return response;
     } catch (error) {
         console.log('showAllOffices', error);
+    }
+}
+
+export const findOfficeById = async (idSucursal) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/sucursal/${idSucursal}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findOfficeById', error);
     }
 }
 
@@ -853,5 +877,20 @@ export const findFacturaByRazonSocialId = async (razonSocialId) => {
         return response;
     } catch (error) {
         console.log('findFacturaByRazonSocialId', error);
+    }
+}
+
+// TRATAMIENTO-PRECIO
+
+export const createTreatmentPrice = async (tratamientoprecio) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/tratamientoprecio`,
+            method: 'POST',
+            data: tratamientoprecio
+        });
+        return response;
+    } catch (error) {
+        console.log('createTreatmentPrice', error);
     }
 }

@@ -96,7 +96,7 @@ const ModalFormConsultorioAgregarPaciente = (props) => {
                   variant="contained"
                   onClick={(e) => onClickGuardar(e, values)}
                   disabled={!isValid}
-                  text='Guardar' />
+                  text='Pasar' />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Button

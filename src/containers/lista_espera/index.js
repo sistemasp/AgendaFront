@@ -174,7 +174,7 @@ const ListaEspera = (props) => {
 		const response = await createSurgery(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			setOpenAlert(true);
-			setMessage('El consultorio se guardo correctamente');
+			setMessage('El pasiente entró al consultorio');
 			loadConsultorios();
 		}
 		setIsLoading(false);

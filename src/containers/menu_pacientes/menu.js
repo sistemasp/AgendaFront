@@ -70,14 +70,7 @@ export const MenuContainer = props => {
 		onClickAgendarConsulta,
 		empleado,
 		sucursal,
-		onClickLogout,
-		onClickCambioPassword,
-		open,
-		onClose,
-		onOpen,
-		setMessage,
-		setSeverity,
-		setOpenAlert,
+		history,
 	} = props;
 
 	return (
@@ -102,7 +95,8 @@ export const MenuContainer = props => {
 					paciente={pacienteAgendado}
 					setPacienteAgendado={setPacienteAgendado}
 					empleado={empleado}
-					sucursal={sucursal} />
+					sucursal={sucursal}
+					history={history} />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
 				<AgendarTratamiento

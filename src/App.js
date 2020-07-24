@@ -8,16 +8,16 @@ import './App.css';
 const App = () => {
 
   return (
-      <Router>
-        <div className="App">
-          <Route 
-            exact path="/" 
-            component={LoginForm} />
-          <Route 
-            exact path="/main"
-            component={MenuMain} />
-        </div>
-      </Router>
+    <Router>
+      <div className="App">
+        <Route
+          exact path="/"
+          component={LoginForm} />
+        <Route
+          exact path="/main"
+          component={MenuMain} />
+      </div>
+    </Router>
   );
 }
 

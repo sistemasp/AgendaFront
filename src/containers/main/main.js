@@ -140,6 +140,7 @@ export const MainContainer = props => {
 		setMessage,
 		setSeverity,
 		setOpenAlert,
+		history,
 	} = props;
 
 	const classes = useStyles();
@@ -256,7 +257,8 @@ export const MainContainer = props => {
 					<TabPanel value={value} index={0}>
 						<MenuPatient
 							empleado={empleado}
-							sucursal={sucursal} />
+							sucursal={sucursal}
+							history={history} />
 					</TabPanel>
 					<TabPanel value={value} index={1}>
 						<Medicos

@@ -83,7 +83,7 @@ const ModalFormConsulta = (props) => {
     sucursal,
     onGuardarModalPagos,
   } = props;
-
+  
   return (
     <div>
       <Modal

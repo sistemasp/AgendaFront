@@ -77,7 +77,8 @@ const MenuMain = (props) => {
 						value={value}
 						setMessage={setMessage}
 						setSeverity={setSeverity}
-						setOpenAlert={setOpenAlert} />
+						setOpenAlert={setOpenAlert}
+						history={history} />
 
 					: (permisos.includes('VER_CITAS')
 					?	<MainLecturaContainer

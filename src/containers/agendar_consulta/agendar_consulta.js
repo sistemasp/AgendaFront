@@ -13,6 +13,7 @@ import TableComponent from '../../components/table/TableComponent';
 import ModalConsulta from '../../components/modales/modal_consulta';
 import { green } from '@material-ui/core/colors';
 import ModalPago2 from '../../components/modales/modal_pago2';
+import ModalImprimirConsulta from '../../components/modales/imprimir/consulta';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -86,7 +87,12 @@ export const AgendarConsultaContainer = (props) => {
     setFilterDate,
     OnCloseVerPagos,
     openModalPagos,
+    openModalImprimirConsultas,
+    datosImpresion,
+    onCloseImprimirConsulta,
   } = props;
+
+  console.log("SUCURSAL AGENDAR", sucursal);
 
   return (
     <Fragment>
@@ -124,6 +130,14 @@ export const AgendarConsultaContainer = (props) => {
             sucursal={sucursal}
             setMessage={setMessage}
             setOpenAlert={setOpenAlert} />
+          : ''
+      }
+      {
+        openModalImprimirConsultas ?
+          <ModalImprimirConsulta
+            open={openModalImprimirConsultas}
+            onClose={onCloseImprimirConsulta}
+            datos={datosImpresion} />
           : ''
       }
       <Paper>
@@ -214,6 +228,7 @@ export const AgendarConsultaContainer = (props) => {
           </Grid>
           <Grid item xs={12} sm={2}>
             <TextField
+              className={classes.button}
               name="precio"
               //helperText={touched.precio ? errors.precio : ""}
               error={Boolean(errors.precio)}
@@ -225,6 +240,7 @@ export const AgendarConsultaContainer = (props) => {
           </Grid>
           <Grid item xs={12} sm={2}>
             <TextField
+              className={classes.button}
               name="observaciones"
               //helperText={touched.observaciones ? errors.observaciones : ""}
               error={Boolean(errors.observaciones)}

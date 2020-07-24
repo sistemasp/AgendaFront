@@ -7,15 +7,15 @@ import {
 	createConsult,
 	findEmployeesByRolId,
 	showAllTipoCitas,
-	createPago
 } from "../../services";
 import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
 import EditIcon from '@material-ui/icons/Edit';
 import * as Yup from "yup";
-import { toFormatterCurrency, addZero } from "../../utils/utils";
+import { toFormatterCurrency, addZero, generateFolioCita } from "../../utils/utils";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import PrintIcon from '@material-ui/icons/Print';
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -48,6 +48,7 @@ const AgendarConsulta = (props) => {
 		empleado,
 		setPacienteAgendado,
 		sucursal,
+		history,
 	} = props;
 
 	const [openAlert, setOpenAlert] = useState(false);
@@ -67,6 +68,9 @@ const AgendarConsulta = (props) => {
 	const [openModal, setOpenModal] = useState(false);
 	const [openModalPagos, setOpenModalPagos] = useState(false);
 	const [cita, setConsulta] = useState();
+	const [openModalImprimirConsultas, setOpenModalImprimirConsultas] = useState(false);
+	const [datosImpresion, setDatosImpresion] = useState();
+
 
 	const date = new Date();
 	const dia = addZero(date.getDate());
@@ -123,6 +127,7 @@ const AgendarConsulta = (props) => {
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
 					const fecha = new Date(item.fecha_hora);
+					item.folio = generateFolioCita(item);
 					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
@@ -211,6 +216,7 @@ const AgendarConsulta = (props) => {
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
 				const fecha = new Date(item.fecha_hora);
+				item.folio = generateFolioCita(item);
 				item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
@@ -238,7 +244,7 @@ const AgendarConsulta = (props) => {
 		setValues({ ...values, tipo_cita: e.target.value });
 	}
 
-	
+
 
 	const handleClickAgendar = async (data) => {
 		setIsLoading(true);
@@ -319,8 +325,22 @@ const AgendarConsulta = (props) => {
 		setOpenModalPagos(false);
 	}
 
+	const handleCloseImprimirConsulta = (event, rowData) => {
+		setOpenModalImprimirConsultas(false);
+	}
+
+	const handlePrint = async (event, rowData) => {
+		setDatosImpresion(rowData);
+		setOpenModalImprimirConsultas(true);
+	}
+
 	const actions = [
 		//new Date(anio, mes - 1, dia) < filterDate.fecha_show  ? 
+		{
+			icon: PrintIcon,
+			tooltip: 'Imprimir',
+			onClick: handlePrint
+		},
 		{
 			icon: EditIcon,
 			tooltip: 'Editar cita',
@@ -377,6 +397,9 @@ const AgendarConsulta = (props) => {
 								setFilterDate={setFilterDate}
 								OnCloseVerPagos={handleCloseVerPagos}
 								openModalPagos={openModalPagos}
+								openModalImprimirConsultas={openModalImprimirConsultas}
+								datosImpresion={datosImpresion}
+								onCloseImprimirConsulta={handleCloseImprimirConsulta}
 								{...props} />
 						}
 					</Formik> :

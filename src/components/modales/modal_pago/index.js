@@ -138,7 +138,6 @@ const handleChangeObservaciones = (event) => {
   }
 
 	const handleClickGuardarPago = async (event, rowData) => {
-
 		rowData.fecha_pago = new Date();
 		rowData.paciente = cita.paciente._id;
 		rowData.medico = cita.medico._id;
@@ -147,7 +146,8 @@ const handleChangeObservaciones = (event) => {
 		rowData.quien_recibe_pago = empleado._id;
     rowData.sucursal = sucursal;
     rowData.cita = cita._id;
-    rowData.porcentaje_comision = `${rowData.metodo_pago === metodoPagoTarjetaId ? porcetanjeComision : '0'} %`
+    rowData.porcentaje_comision = `${rowData.metodo_pago === metodoPagoTarjetaId ? porcetanjeComision : '0'} %`;
+    console.log("DATA", rowData);
 		const res = pago._id ? await updatePago(pago._id, rowData) : await createPago(rowData);
     if (`${res.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
     || `${res.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {

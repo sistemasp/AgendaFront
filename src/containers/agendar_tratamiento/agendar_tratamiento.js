@@ -12,6 +12,9 @@ import { Paper, Button, TextField } from '@material-ui/core';
 import TableComponent from '../../components/table/TableComponent';
 import ModalCita from '../../components/modales/modal_cita';
 import { Multiselect } from 'multiselect-react-dropdown';
+import ModalPago2 from '../../components/modales/modal_pago2';
+import { toFormatterCurrency } from '../../utils/utils';
+import ModalImprimirTratamiento from '../../components/modales/imprimir/tratamiento';
 
 const useStyles = makeStyles(theme => ({
 	formControl: {
@@ -47,7 +50,6 @@ export const AgendarTratamientoContainer = (props) => {
 		onClickAgendar,
 		isValid,
 		isSubmitting,
-		onChangePrecio,
 		onChangeTiempo,
 		onChangeObservaciones,
 		empleado,
@@ -58,6 +60,7 @@ export const AgendarTratamientoContainer = (props) => {
 		onChangeDoctors,
 		onChangePromovendedor,
 		onChangeCosmetologa,
+		onChangeItemPrecio,
 		// TABLE DATES PROPERTIES
 		titulo,
 		columns,
@@ -72,6 +75,17 @@ export const AgendarTratamientoContainer = (props) => {
 		onChangeTipoCita,
 		onChangeAsistio,
 		loadCitas,
+		setFilterDate,
+		// MODAL PAGOS
+		onCloseVerPagos,
+		openModalPagos,
+		sucursal,
+		setMessage,
+		setOpenAlert,
+		// MODAL IMPRIMIR
+		openModalImprimirCita,
+		datosImpresion,
+		onCloseImprimirConsulta,
 	} = props;
 
 	return (
@@ -93,7 +107,31 @@ export const AgendarTratamientoContainer = (props) => {
 						tratamientos={tratamientos}
 						horarios={horarios}
 						empleado={empleado}
-						loadCitas={loadCitas} /> : ''
+						loadCitas={loadCitas}
+						sucursal={sucursal}
+						setOpenAlert={setOpenAlert}
+						setMessage={setMessage}
+						setFilterDate={setFilterDate} /> : ''
+			}
+			{
+				openModalPagos ?
+					<ModalPago2
+						open={openModalPagos}
+						onClose={onCloseVerPagos}
+						cita={cita}
+						empleado={empleado}
+						sucursal={sucursal}
+						setMessage={setMessage}
+						setOpenAlert={setOpenAlert} />
+					: ''
+			}
+			{
+				openModalImprimirCita ?
+					<ModalImprimirTratamiento
+						open={openModalImprimirCita}
+						onClose={onCloseImprimirConsulta}
+						datos={datosImpresion} />
+					: ''
 			}
 			<Paper>
 				<h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'Selecciona un paciente'}</h1>
@@ -119,9 +157,22 @@ export const AgendarTratamientoContainer = (props) => {
 							onSelect={(e) => onChangeTratamientos(e)} // Function will trigger on select event
 							onRemove={(e) => onChangeTratamientos(e)} // Function will trigger on remove event
 							placeholder="Selecciona tratamientos"
-							selectedValues={values.tratamientos} // Preselected value to persist in dropdown
+							selectedValues={values.tratamientos_precios} // Preselected value to persist in dropdown
 						/>
 					</Grid>
+					{
+						values.tratamientos_precios.map((item, index) =>
+							<Grid item xs={12} sm={2}>
+								<TextField
+									className={classes.button}
+									name={item.precio}
+									label={`Precio: ${item.nombre}`}
+									value={item.precio}
+									type='Number'
+									onChange={(e) => onChangeItemPrecio(e, index)}
+									variant="outlined" />
+							</Grid>)
+					}
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
 							<InputLabel id="simple-select-outlined-hora">Medico</InputLabel>
@@ -171,6 +222,7 @@ export const AgendarTratamientoContainer = (props) => {
 								justify="center"
 								alignItems="center" >
 								<KeyboardDatePicker
+									className={classes.button}
 									disableToolbar
 									//disablePast
 									autoOk
@@ -220,19 +272,8 @@ export const AgendarTratamientoContainer = (props) => {
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<TextField
-							name="precio"
-							//helperText={touched.precio ? errors.precio : ""}
-							error={Boolean(errors.precio)}
-							label="Precio"
-							value={values.precio}
-							type='Number'
-							onChange={onChangePrecio}
-							variant="outlined" />
-					</Grid>
-					<Grid item xs={12} sm={2}>
-						<TextField
+							className={classes.button}
 							name="tiempo"
-							//helperText={touched.tiempo ? errors.tiempo : ""}
 							error={Boolean(errors.tiempo)}
 							label="Tiempo"
 							value={values.tiempo}
@@ -242,8 +283,8 @@ export const AgendarTratamientoContainer = (props) => {
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<TextField
+							className={classes.button}
 							name="observaciones"
-							//helperText={touched.observaciones ? errors.observaciones : ""}
 							error={Boolean(errors.observaciones)}
 							label="Observaciones"
 							value={values.observaciones}
@@ -256,11 +297,14 @@ export const AgendarTratamientoContainer = (props) => {
 							variant="contained"
 							color="primary"
 							disabled={!isValid || isSubmitting || !paciente.nombres || !values.servicio
-								|| values.tratamientos.length === 0 || !values.fecha_hora || !values.precio
+								|| values.tratamientos_precios.length === 0 || !values.fecha_hora || !values.precio
 								|| !values.tiempo}
 							onClick={() => onClickAgendar(values)} >
 							Agendar
                         </Button>
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<h1>Total: {toFormatterCurrency(values.precio)}</h1>
 					</Grid>
 				</Grid>
 				<MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -277,7 +321,7 @@ export const AgendarTratamientoContainer = (props) => {
 							margin="normal"
 							id="date-picker-inline-filter"
 							label="Filtrado Citas"
-							value={filterDate.fecha_hora}
+							value={filterDate}
 							onChange={onChangeFilterDate}
 							KeyboardButtonProps={{
 								'aria-label': 'change date',

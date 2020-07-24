@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { Multiselect } from 'multiselect-react-dropdown';
+import { CheckCustom } from '../../basic/CheckCustom';
+import ModalPago2 from '../modal_pago2';
 
 function getModalStyle() {
   const top = 50;
@@ -69,7 +71,6 @@ const ModalFormCita = (props) => {
     onClickCancel,
     onClickActualizarCita,
     open,
-    servicios,
     tratamientos,
     horarios,
     promovendedores,
@@ -82,6 +83,13 @@ const ModalFormCita = (props) => {
     onChangeMotivos,
     onChangeObservaciones,
     onChangeMedico,
+    onChangePagado,
+    openModalPagos,
+    onCloseModalPagos,
+    onGuardarModalPagos,
+    cita,
+    empleado,
+    sucursal,
   } = props;
 
   return (
@@ -92,6 +100,17 @@ const ModalFormCita = (props) => {
         open={open} >
         <div style={modalStyle} className={classes.paper}>
           <form onSubmit={handleSubmit}>
+            {
+              openModalPagos ?
+                <ModalPago2
+                  open={openModalPagos}
+                  onClose={onCloseModalPagos}
+                  onGuardarModalPagos={onGuardarModalPagos}
+                  cita={cita}
+                  empleado={empleado}
+                  sucursal={sucursal} />
+                : ''
+            }
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <h2 className={classes.label}>{values.paciente_nombre} ({values.telefono})</h2>
@@ -106,7 +125,7 @@ const ModalFormCita = (props) => {
                   onSelect={(e) => onChangeTratamientos(e)} // Function will trigger on select event
                   onRemove={(e) => onChangeTratamientos(e)} // Function will trigger on remove event
                   placeholder="Selecciona tratamientos"
-                  selectedValues={values.tratamientos} // Preselected value to persist in dropdown
+                  selectedValues={values.tratamientos_precios} // Preselected value to persist in dropdown
                 />
               </Grid>
               <Grid item xs={12}>
@@ -127,39 +146,8 @@ const ModalFormCita = (props) => {
                     </FormControl>
                 }
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardDatePicker
-                    disableToolbar
-                    disablePast
-                    autoOk
-                    variant="inline"
-                    format="dd/MM/yyyy"
-                    margin="normal"
-                    id="date-picker-inline"
-                    label="Fecha"
-                    value={values.fecha_show}
-                    onChange={onChangeFecha}
-                    KeyboardButtonProps={{
-                      'aria-label': 'change date',
-                    }}
-                    invalidDateMessage='Selecciona una fecha' />
-                </MuiPickersUtilsProvider>
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
-                  <Select
-                    labelId="simple-select-outlined-hora"
-                    id="simple-select-outlined-hora"
-                    value={values.hora}
-                    error={Boolean(errors.hora)}
-                    onChange={onChangeHora}
-                    label="Hora" >
-                    {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
-                  </Select>
-                </FormControl>
+              <Grid item xs={12}>
+                <h2 className={classes.label}>{values.fecha_actual} - {values.hora_actual} hrs</h2>
               </Grid>
 
               <Grid item xs={12}>
@@ -248,6 +236,47 @@ const ModalFormCita = (props) => {
               </Grid>
 
               {
+                values.status === reagendoStatusId ?
+                  <Fragment>
+                    <Grid item xs={12} sm={6}>
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardDatePicker
+                          disableToolbar
+                          disablePast
+                          autoOk
+                          variant="inline"
+                          format="dd/MM/yyyy"
+                          margin="normal"
+                          id="date-picker-inline"
+                          label="Fecha"
+                          value={values.nueva_fecha_hora}
+                          onChange={onChangeFecha}
+                          KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                          }}
+                          invalidDateMessage='Selecciona una fecha' />
+                      </MuiPickersUtilsProvider>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <FormControl variant="outlined" className={classes.formControl}>
+                        <InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
+                        <Select
+                          labelId="simple-select-outlined-hora"
+                          id="simple-select-outlined-hora"
+                          value={values.hora}
+                          error={Boolean(errors.hora)}
+                          onChange={onChangeHora}
+                          label="Hora" >
+                          {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  </Fragment>
+                  : ''
+              }
+
+              {
                 values.status === canceloStatusId || values.status === noAsistioStatusId || values.status === reagendoStatusId ?
                   <Grid item xs={12}>
                     <TextField
@@ -298,6 +327,16 @@ const ModalFormCita = (props) => {
                   value={values.observaciones}
                   onChange={onChangeObservaciones}
                   variant="outlined" />
+              </Grid>
+
+              <Grid item xs={12}>
+                <CheckCustom
+                  checked={values.pagado}
+                  onChange={onChangePagado}
+                  disabled={values.pagado}
+                  name="checkedG"
+                  label="Pagado"
+                />
               </Grid>
 
               <Grid item xs={12} sm={6}>
