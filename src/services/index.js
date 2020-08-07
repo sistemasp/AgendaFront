@@ -245,6 +245,18 @@ export const findHistoricByPaciente = async (pacienteId) => {
     }
 }
 
+export const findHistoricByPacienteAndService = async (pacienteId, serviceId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cita/histotic/${pacienteId}/servicio/${serviceId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findHistoricByPacienteAndService', error);
+    }
+}
+
 export const createDate = async (cita) => {
     try {
         const response = await axios({
@@ -892,5 +904,33 @@ export const createTreatmentPrice = async (tratamientoprecio) => {
         return response;
     } catch (error) {
         console.log('createTreatmentPrice', error);
+    }
+}
+
+// FRECUENCIAS
+
+export const showAllFrecuencias = async () => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/frecuencia`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllFrecuencias', error);
+    }
+}
+
+// SEXOS
+
+export const showAllSexos = async () => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/sexo`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllSexos', error);
     }
 }

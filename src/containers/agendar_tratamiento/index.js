@@ -65,7 +65,7 @@ const AgendarTratamiento = (props) => {
 	const [disableDate, setDisableDate] = useState(true);
 	const [values, setValues] = useState({
 		servicio: '',
-		tratamientos_precios: [],
+		tratamientos: [],
 		paciente: `${paciente._id}`,
 		precio: 0,
 		tipo_cita: {},
@@ -152,7 +152,7 @@ const AgendarTratamiento = (props) => {
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-					item.show_tratamientos = item.tratamientos_precios.map(tratamiento => {
+					item.show_tratamientos = item.tratamientos.map(tratamiento => {
 						return `${tratamiento.nombre}, `;
 					});
 				});
@@ -233,7 +233,7 @@ const AgendarTratamiento = (props) => {
 			servicio: e.target.value,
 			fecha_hora: '',
 			precio: 0,
-			tratamientos_precios: []
+			tratamientos: []
 		});
 		loadTratamientos(e.target.value);
 		setIsLoading(false);
@@ -249,7 +249,7 @@ const AgendarTratamiento = (props) => {
 			...values,
 			fecha_hora: '',
 			precio: precio,
-			tratamientos_precios: items
+			tratamientos: items
 		});
 		setDisableDate(false);
 		setIsLoading(false);
@@ -305,7 +305,7 @@ const AgendarTratamiento = (props) => {
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-				item.show_tratamientos = item.tratamientos_precios.map(tratamiento => {
+				item.show_tratamientos = item.tratamientos.map(tratamiento => {
 					return `${tratamiento.nombre}, `;
 				});
 			});
@@ -335,19 +335,19 @@ const AgendarTratamiento = (props) => {
 		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
-		/*const response = await createTreatmentPrice(data.tratamientos_precios);
+		/*const response = await createTreatmentPrice(data.tratamientos);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			console.log("RESPONSE DATA", response.data);
 
 		}*/
-		// data.tiempo = getTimeToTratamiento(data.tratamientos_precios);
+		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 		const response = await createDate(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			setOpenAlert(true);
 			setMessage('La Cita se agendo correctamente');
 			setValues({
 				servicio: '',
-				tratamientos_precios: [],
+				tratamientos: [],
 				medico: '',
 				promovendedor: '',
 				cosmetologa: '',
@@ -365,7 +365,7 @@ const AgendarTratamiento = (props) => {
 	};
 
 	const handleChangeItemPrecio = (e, index) => {
-		const newTratamientos = values.tratamientos_precios;
+		const newTratamientos = values.tratamientos;
 		newTratamientos[index].precio = e.target.value;
 		let precio = 0;
 		newTratamientos.map((item) => {
@@ -373,7 +373,7 @@ const AgendarTratamiento = (props) => {
 		});
 		setValues({ 
 			...values,
-			tratamientos_precios: newTratamientos,
+			tratamientos: newTratamientos,
 			precio: precio,
 		});
 	}

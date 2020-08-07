@@ -6,7 +6,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { Multiselect } from 'multiselect-react-dropdown';
 import { CheckCustom } from '../../basic/CheckCustom';
-import ModalPago2 from '../modal_pago2';
+import ModalPagos from '../modal_pagos';
 
 function getModalStyle() {
   const top = 50;
@@ -102,7 +102,7 @@ const ModalFormCita = (props) => {
           <form onSubmit={handleSubmit}>
             {
               openModalPagos ?
-                <ModalPago2
+                <ModalPagos
                   open={openModalPagos}
                   onClose={onCloseModalPagos}
                   onGuardarModalPagos={onGuardarModalPagos}
@@ -125,7 +125,7 @@ const ModalFormCita = (props) => {
                   onSelect={(e) => onChangeTratamientos(e)} // Function will trigger on select event
                   onRemove={(e) => onChangeTratamientos(e)} // Function will trigger on remove event
                   placeholder="Selecciona tratamientos"
-                  selectedValues={values.tratamientos_precios} // Preselected value to persist in dropdown
+                  selectedValues={values.tratamientos} // Preselected value to persist in dropdown
                 />
               </Grid>
               <Grid item xs={12}>

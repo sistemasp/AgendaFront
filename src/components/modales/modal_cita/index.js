@@ -90,7 +90,7 @@ const ModalCita = (props) => {
     paciente_nombre: `${cita.paciente.nombres} ${cita.paciente.apellidos}`,
     telefono: cita.paciente.telefono,
     servicio: cita.servicio,
-    tratamientos_precios: cita.tratamientos_precios,
+    tratamientos: cita.tratamientos,
     numero_sesion: cita.numero_sesion,
     quien_agenda: cita.quien_agenda,
     tipo_cita: cita.tipo_cita ? cita.tipo_cita._id : '',
@@ -221,8 +221,6 @@ const ModalCita = (props) => {
     setIsLoading(false);
 	};
 
-  console.log("VALUES", values);
-
 	const handleChangeHora = e => {
 		setIsLoading(true);
 		const hora = (e.target.value).split(':');
@@ -254,7 +252,6 @@ const ModalCita = (props) => {
 
   const handleChangeStatus = e => {
     setValues({ ...values, status: e.target.value });
-    console.log('ESTADOS', values.status);
   }
 
   const handleChangeObservaciones = e => {

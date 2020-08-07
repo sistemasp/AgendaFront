@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button, Grid } from '@material-ui/core';
 
-import TableComponent from '../../table/TableComponent';
+import TableComponent from '../../../table/TableComponent';
 
 function getModalStyle() {
   const top = 50;
@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ModalHistorico = (props) => {
+const Aparatologia = (props) => {
   const classes = useStyles();
 
   // getModalStyle is not a pure function, we roll the style only on the first render
@@ -45,38 +45,20 @@ const ModalHistorico = (props) => {
 
   const {
     historial,
-    open,
-    onClickCancel,
     titulo,
     columns,
     options
-  } = props; 
-  
+  } = props;
+
   return (
     <div>
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={open} >
-        <div style={modalStyle} className={classes.paper}>
-          <TableComponent
-            titulo={titulo}
-            columns={columns}
-            data={historial}
-            options={options} />
-          <Grid item xs={12} sm={12}>
-            <Button
-              className={classes.button}
-              color="secondary"
-              variant="contained"
-              onClick={onClickCancel} >
-                SALIR
-            </Button>
-          </Grid>
-        </div>
-      </Modal>
+      <TableComponent
+        titulo={titulo}
+        columns={columns}
+        data={historial}
+        options={options} />
     </div>
   );
 }
 
-  export default ModalHistorico;
+export default Aparatologia;

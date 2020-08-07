@@ -1,11 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { findPagosByCita } from '../../../services';
 import { addZero, toFormatterCurrency } from '../../../utils/utils';
-import ModalFormPago2 from './ModalFormPago2';
+import ModalFormPagos from './ModalFormPagos';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import EditIcon from '@material-ui/icons/Edit';
 
-const ModalPago2 = (props) => {
+const ModalPagos = (props) => {
   const {
     open,
     onClose,
@@ -141,7 +141,7 @@ const ModalPago2 = (props) => {
 
   return (
     <Fragment>
-      <ModalFormPago2
+      <ModalFormPagos
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
         open={open}
@@ -172,4 +172,4 @@ const ModalPago2 = (props) => {
   );
 }
 
-export default ModalPago2;
+export default ModalPagos;

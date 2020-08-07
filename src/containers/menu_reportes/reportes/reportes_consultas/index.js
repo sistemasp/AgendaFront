@@ -47,6 +47,7 @@ const ReportesConsultas = (props) => {
 		{ title: 'Hora atendido', field: 'hora_atencion' },
 		{ title: 'Hora salida', field: 'hora_salida' },
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
+		{ title: 'Frecuencia', field: 'frecuencia.nombre' },
 		{ title: 'Tipo Consulta', field: 'tipo_cita.nombre' },
 		{ title: 'Quien confirma', field: 'quien_confirma.nombre' },
 		{ title: 'Promovendedor', field: 'promovendedor_nombre' },

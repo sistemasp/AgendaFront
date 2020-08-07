@@ -89,6 +89,7 @@ const ModalConsulta = (props) => {
     observaciones: cita.observaciones,
     medico: cita.medico ? cita.medico._id : '',
     pagado: cita.pagado,
+    frecuencia: cita.frecuencia,
   });
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;

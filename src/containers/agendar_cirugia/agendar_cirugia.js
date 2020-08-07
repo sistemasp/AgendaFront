@@ -38,7 +38,7 @@ const GreenCheckbox = withStyles({
   checked: {},
 })((props) => <Checkbox color="default" {...props} />);
 
-export const AgendarConsultaContainer = (props) => {
+export const AgendarCirugiaContainer = (props) => {
 
   const classes = useStyles();
 
@@ -48,7 +48,6 @@ export const AgendarConsultaContainer = (props) => {
     servicios,
     tratamientos,
     horarios,
-    frecuencias,
     onChangeServicio,
     onChangeTratamientos,
     onChangeFecha,
@@ -67,7 +66,7 @@ export const AgendarConsultaContainer = (props) => {
     onChangeMedicos,
     onChangePromovendedor,
     onChangeObservaciones,
-    onChangeFrecuencia,
+    onChangePagado,
     // TABLE DATES PROPERTIES
     titulo,
     columns,
@@ -167,6 +166,7 @@ export const AgendarConsultaContainer = (props) => {
               </Grid>
             </MuiPickersUtilsProvider>
           </Grid>
+
           <Grid item xs={12} sm={2}>
             <FormControl variant="outlined" className={classes.formControl}>
               <InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
@@ -179,20 +179,6 @@ export const AgendarConsultaContainer = (props) => {
                 disabled={values.fecha_show === ''}
                 label="Hora" >
                 {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} sm={2}>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel id="simple-select-outlined-frecuencia">Frecuencia</InputLabel>
-              <Select
-                labelId="simple-select-outlined-frecuencia"
-                id="simple-select-outlined-frecuencia"
-                value={values.frecuencia}
-                error={Boolean(errors.frecuencia)}
-                onChange={onChangeFrecuencia}
-                label="frecuencia" >
-                {frecuencias.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
               </Select>
             </FormControl>
           </Grid>

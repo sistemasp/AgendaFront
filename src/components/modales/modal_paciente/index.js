@@ -1,21 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import * as Yup from "yup";
 import ModalFormPaciente from './ModalFormPaciente';
+import {
+  showAllSexos,
+} from "../../../services";
+
 import { Formik } from 'formik';
 
 const validationSchema = Yup.object({
   nombres: Yup.string("Ingresa los nombres")
-        .required("Los nombres del pacientes son requeridos"),
+    .required("Los nombres del pacientes son requeridos"),
   apellidos: Yup.string("Ingresa los apellidos")
-        .required("Los nombres del pacientes son requeridos"),
-  fecha_nacimiento: Yup.string("Ingresa la fecha de nacimiento")
-        .required("La fecha de nacimiento es requerida")
-        .length(10),
-  direccion: Yup.string("Ingresa la direccion")
-        .required("Los nombres del pacientes son requeridos"),
+    .required("Los nombres del pacientes son requeridos"),
   telefono: Yup.string("Ingresa el telefono")
-        .required("Los nombres del pacientes son requeridos")
-        .min(8),
+    .required("Los nombres del pacientes son requeridos")
+    .min(8)
 });
 
 const ModalPaciente = (props) => {
@@ -27,33 +26,59 @@ const ModalPaciente = (props) => {
     onClickGuardarAgendar
   } = props;
 
+  const [sexos, setSexos] = useState([]);
+  const [isLoading, setIsLoading] = useState([]);
+
   const values = {
     _id: paciente._id,
     nombres: paciente.nombres,
     apellidos: paciente.apellidos,
-    fecha_nacimiento: paciente.fecha_nacimiento,
-    direccion: paciente.direccion,
-    telefono: paciente.telefono 
+    telefono: paciente.telefono,
+    sexo: paciente.sexo,
   }
 
-  const dataComplete = !values.nombres || !values.apellidos 
-    || !values.fecha_nacimiento || !values.direccion || !values.telefono;
+  const dataComplete = !values.nombres || !values.apellidos
+    || !values.sexo || !values.telefono;
+
+  console.log("VALUES", values);
+  console.log("dataComplete", dataComplete);
+
+  useEffect(() => {
+
+    const loadSexos = async () => {
+      const response = await showAllSexos();
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setSexos(response.data);
+      }
+      setIsLoading(false);
+    }
+
+    setIsLoading(true);
+    loadSexos();
+  }, []);
+
+  const handleChangeSexo = (e) => {
+    values.sexo = e.target.value;
+  }
 
   return (
     <Formik
+      enableReinitialize
       initialValues={values}
       validationSchema={validationSchema} >
       {
         props => <ModalFormPaciente
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={open}
-        onClickCancel={onClose}
-        paciente={paciente}
-        onClickGuardar={onClickGuardar}
-        onClickGuardarAgendar={onClickGuardarAgendar}
-        dataComplete={dataComplete}
-        {...props} />
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={open}
+          onClickCancel={onClose}
+          paciente={paciente}
+          onClickGuardar={onClickGuardar}
+          onClickGuardarAgendar={onClickGuardarAgendar}
+          dataComplete={dataComplete}
+          onChangeSexo={handleChangeSexo}
+          sexos={sexos}
+          {...props} />
       }
     </Formik>
   );

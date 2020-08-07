@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import TableComponent from '../../components/table/TableComponent';
 import { makeStyles } from '@material-ui/core';
 import ModalPaciente from '../../components/modales/modal_paciente';
-import ModHistorico from '../../components/modales/modal_historico';
+import MenuHistoricos from '../../components/modales/modal_historico';
 import { ButtonCustom } from '../../components/basic/ButtonCustom';
 
 const useStyles = makeStyles(theme => ({
@@ -44,7 +44,7 @@ export const PacientesContainer = (props) => {
       }
       {
         openHistoric ? 
-        <ModHistorico
+        <MenuHistoricos
           open={openHistoric}
           onClose={handleClose}
           paciente={paciente} /> : ''

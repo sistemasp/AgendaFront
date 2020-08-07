@@ -12,7 +12,7 @@ import { Paper, Button, TextField } from '@material-ui/core';
 import TableComponent from '../../components/table/TableComponent';
 import ModalCita from '../../components/modales/modal_cita';
 import { Multiselect } from 'multiselect-react-dropdown';
-import ModalPago2 from '../../components/modales/modal_pago2';
+import ModalPagos from '../../components/modales/modal_pagos';
 import { toFormatterCurrency } from '../../utils/utils';
 import ModalImprimirTratamiento from '../../components/modales/imprimir/tratamiento';
 
@@ -115,7 +115,7 @@ export const AgendarTratamientoContainer = (props) => {
 			}
 			{
 				openModalPagos ?
-					<ModalPago2
+					<ModalPagos
 						open={openModalPagos}
 						onClose={onCloseVerPagos}
 						cita={cita}
@@ -157,11 +157,11 @@ export const AgendarTratamientoContainer = (props) => {
 							onSelect={(e) => onChangeTratamientos(e)} // Function will trigger on select event
 							onRemove={(e) => onChangeTratamientos(e)} // Function will trigger on remove event
 							placeholder="Selecciona tratamientos"
-							selectedValues={values.tratamientos_precios} // Preselected value to persist in dropdown
+							selectedValues={values.tratamientos} // Preselected value to persist in dropdown
 						/>
 					</Grid>
 					{
-						values.tratamientos_precios.map((item, index) =>
+						values.tratamientos.map((item, index) =>
 							<Grid item xs={12} sm={2}>
 								<TextField
 									className={classes.button}
@@ -297,7 +297,7 @@ export const AgendarTratamientoContainer = (props) => {
 							variant="contained"
 							color="primary"
 							disabled={!isValid || isSubmitting || !paciente.nombres || !values.servicio
-								|| values.tratamientos_precios.length === 0 || !values.fecha_hora || !values.precio
+								|| values.tratamientos.length === 0 || !values.fecha_hora || !values.precio
 								|| !values.tiempo}
 							onClick={() => onClickAgendar(values)} >
 							Agendar

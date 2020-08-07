@@ -1,7 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
-import { TextField, Button, Grid } from '@material-ui/core';
+import { TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { ButtonCustom } from '../../basic/ButtonCustom';
 
 function getModalStyle() {
   const top = 50;
@@ -28,6 +29,11 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     width: '100%',
+    color: '#FFFFFF',
+  },
+  formControl: {
+    minWidth: 120,
+    width: '100%',
   },
 }));
 
@@ -38,18 +44,22 @@ const ModalFormPaciente = (props) => {
   const [modalStyle] = React.useState(getModalStyle);
 
   const {
-		values,
-		errors,
-		touched,
-		handleSubmit,
-		handleChange,
+    values,
+    errors,
+    touched,
+    handleSubmit,
+    handleChange,
+    handleBlur,
     isValid,
     onClickCancel,
     onClickGuardar,
     onClickGuardarAgendar,
     open,
+    sexos,
   } = props;
-  
+
+  console.log("isValid", isValid);
+
   return (
     <div>
       <Modal
@@ -61,26 +71,27 @@ const ModalFormPaciente = (props) => {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <TextField
-                className={classes.textField}
-                name="nombres"
-                helperText={touched.nombres ? errors.nombres : ""}
-                error={Boolean(errors.nombres)}
-                label="Nombres"
-                value={values.nombres}
-                onChange={handleChange}
-                variant="outlined" />
+                  className={classes.textField}
+                  name="nombres"
+                  helperText={touched.nombres ? errors.nombres : ""}
+                  error={Boolean(errors.nombres)}
+                  label="Nombres"
+                  value={values.nombres}
+                  onChange={handleChange}
+                  variant="outlined" />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                className={classes.textField}
-                name="apellidos"
-                helperText={touched.apellidos ? errors.apellidos : ""}
-                error={Boolean(errors.apellidos)}
-                label="Apellidos"
-                value={values.apellidos}
-                onChange={handleChange}
-                variant="outlined" />
+                  className={classes.textField}
+                  name="apellidos"
+                  helperText={touched.apellidos ? errors.apellidos : ""}
+                  error={Boolean(errors.apellidos)}
+                  label="Apellidos"
+                  value={values.apellidos}
+                  onChange={handleChange}
+                  variant="outlined" />
               </Grid>
+              {/*
               <Grid item xs={12}>
                 <TextField
                 className={classes.textField}
@@ -107,42 +118,58 @@ const ModalFormPaciente = (props) => {
                 onChange={handleChange}
                 variant="outlined" />
               </Grid>
+              */}
               <Grid item xs={12}>
                 <TextField
-                className={classes.textField}
-                name="telefono"
-                helperText={touched.telefono ? errors.telefono : ""}
-                error={Boolean(errors.telefono)}
-                label="Telefono"
-                value={values.telefono}
-                onChange={handleChange}
-                inputProps={{
-                  maxLength: "10",
-                }}
-                variant="outlined"
-                 />
+                  className={classes.textField}
+                  name="telefono"
+                  helperText={touched.telefono ? errors.telefono : ""}
+                  error={Boolean(errors.telefono)}
+                  label="Telefono"
+                  value={values.telefono}
+                  onChange={handleChange}
+                  inputProps={{
+                    maxLength: "10",
+                  }}
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="simple-select-outlined-hora">Sexo</InputLabel>
+                  <Select
+                    labelId="simple-select-outlined-medico"
+                    id="simple-select-outlined-medico"
+                    value={values.sexo}
+                    error={Boolean(errors.sexo)}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    label="Sexo" >
+                    {sexos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Button
+                <ButtonCustom
                   className={classes.button}
                   color="primary"
                   variant="contained"
+                  disabled={!isValid}
                   onClick={(e) => onClickGuardar(e, values)}
-                  disabled={!isValid} >
-                    Guardar
-                </Button>
+                  text='Guardar' />
               </Grid>
+
               <Grid item xs={12} sm={6}>
                 <Button
                   className={classes.button}
                   color="secondary"
                   variant="contained"
                   onClick={onClickCancel} >
-                    Cancelar
+                  Cancelar
                 </Button>
               </Grid>
             </Grid>
-            
+
           </form>
         </div>
       </Modal>
@@ -150,4 +177,4 @@ const ModalFormPaciente = (props) => {
   );
 }
 
-  export default ModalFormPaciente;
+export default ModalFormPaciente;

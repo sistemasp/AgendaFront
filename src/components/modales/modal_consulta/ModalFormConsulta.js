@@ -5,7 +5,7 @@ import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid } fr
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { CheckCustom } from '../../basic/CheckCustom';
-import ModalPago2 from '../modal_pago2';
+import ModalPagos from '../modal_pagos';
 
 function getModalStyle() {
   const top = 50;
@@ -94,7 +94,7 @@ const ModalFormConsulta = (props) => {
           <form onSubmit={handleSubmit}>
             {
               openModalPagos ?
-                <ModalPago2
+                <ModalPagos
                   open={openModalPagos}
                   onClose={onCloseModalPagos}
                   onGuardarModalPagos={onGuardarModalPagos}
@@ -109,6 +109,9 @@ const ModalFormConsulta = (props) => {
               </Grid>
               <Grid item xs={12}>
                 <h2 className={classes.label}>{values.fecha_actual} - {values.hora_actual} hrs</h2>
+              </Grid>
+              <Grid item xs={12}>
+                <h3 className={classes.label}>Frecuencia: {values.frecuencia.nombre}</h3>
               </Grid>
               <Grid item xs={12}>
                 {

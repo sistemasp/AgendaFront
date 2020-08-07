@@ -94,7 +94,7 @@ const ModalFormImprimirTratamiento = (props) => {
             <br />
             <br />
             {
-              datos.tratamientos_precios.map(tratamiento => {
+              datos.tratamientos.map(tratamiento => {
                 return <Fragment>
                   <Grid item xs={10} className={classes.labelItem}>
                     <h4 className={classes.labelItemLeft}>{`${tratamiento.nombre}:`}</h4>

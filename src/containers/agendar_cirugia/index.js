@@ -1,13 +1,11 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import { AgendarConsultaContainer } from "./agendar_consulta";
 import {
 	findScheduleInConsultByDateAndSucursal,
 	findConsultsByDateAndSucursal,
 	createConsult,
 	findEmployeesByRolId,
 	showAllTipoCitas,
-	showAllFrecuencias,
 } from "../../services";
 import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
@@ -17,7 +15,7 @@ import * as Yup from "yup";
 import { toFormatterCurrency, addZero, generateFolioCita } from "../../utils/utils";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
-import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
+import { AgendarCirugiaContainer } from "./agendar_cirugia";
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -41,7 +39,7 @@ const validationSchema = Yup.object({
 		.required("Los nombres del pacientes son requeridos")
 });
 
-const AgendarConsulta = (props) => {
+const AgendarCirugia = (props) => {
 
 	const classes = useStyles();
 
@@ -57,7 +55,6 @@ const AgendarConsulta = (props) => {
 	const [message, setMessage] = useState('');
 	const [horarios, setHorarios] = useState([]);
 	const [medicos, setMedicos] = useState([]);
-	const [frecuencias, setFrecuencias] = useState([]);
 	const [tipoCitas, setTipoCitas] = useState([]);
 	const [promovendedores, setPromovendedores] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
@@ -94,7 +91,6 @@ const AgendarConsulta = (props) => {
 		{ title: 'Hora atendido', field: 'hora_atencion' },
 		{ title: 'Hora salida', field: 'hora_salida' },
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
-		{ title: 'Frecuencia', field: 'frecuencia.nombre' },
 		{ title: 'Tipo Consulta', field: 'tipo_cita.nombre' },
 		{ title: 'Quien confirma', field: 'quien_confirma.nombre' },
 		{ title: 'Medico', field: 'medico_nombre' },
@@ -127,7 +123,7 @@ const AgendarConsulta = (props) => {
 	useEffect(() => {
 
 		const loadConsultas = async () => {
-			const response = await findConsultsByDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal._id);
+			const response = await findConsultsByDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
 					const fecha = new Date(item.fecha_hora);
@@ -163,19 +159,11 @@ const AgendarConsulta = (props) => {
 			}
 		}
 
-		const loadFrecuencias = async () => {
-			const response = await showAllFrecuencias();
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setFrecuencias(response.data);
-			}
-		}
-
 		setIsLoading(true);
 		loadConsultas();
 		loadMedicos();
 		loadPromovendedores();
 		loadTipoCitas();
-		loadFrecuencias();
 		setIsLoading(false);
 	}, [sucursal, medicoRolId, promovendedorRolId]);
 
@@ -311,10 +299,6 @@ const AgendarConsulta = (props) => {
 		setValues({ ...values, promovendedor: e.target.value });
 	}
 
-	const handleChangeFrecuencia = (e) => {
-		setValues({ ...values, frecuencia: e.target.value });
-	}
-
 	const handleCloseAlert = () => {
 		setOpenAlert(false);
 	};
@@ -333,11 +317,6 @@ const AgendarConsulta = (props) => {
 	}
 
 	const handleClickVerPagos = (event, rowData) => {
-		setConsulta(rowData);
-		setOpenModalPagos(true);
-	}
-
-	const handleClickCirugia = (event, rowData) => {
 		setConsulta(rowData);
 		setOpenModalPagos(true);
 	}
@@ -372,13 +351,7 @@ const AgendarConsulta = (props) => {
 				icon: AttachMoneyIcon,
 				tooltip: 'Ver pago',
 				onClick: handleClickVerPagos
-			} : '',
-			rowData.pagado ? {
-				icon: LocalHospitalIcon,
-				tooltip: 'Pasar a Cirugias',
-				onClick: handleClickCirugia
-			} : ''
-		),
+			} : ''),
 	];
 
 	return (
@@ -390,7 +363,7 @@ const AgendarConsulta = (props) => {
 						initialValues={values}
 						validationSchema={validationSchema} >
 						{
-							props => <AgendarConsultaContainer
+							props => <AgendarCirugiaContainer
 								horarios={horarios}
 								onChangeFecha={(e) => handleChangeFecha(e)}
 								onChangeFilterDate={(e) => handleChangeFilterDate(e)}
@@ -427,8 +400,6 @@ const AgendarConsulta = (props) => {
 								openModalImprimirConsultas={openModalImprimirConsultas}
 								datosImpresion={datosImpresion}
 								onCloseImprimirConsulta={handleCloseImprimirConsulta}
-								frecuencias={frecuencias}
-								onChangeFrecuencia={(e) => handleChangeFrecuencia(e)}
 								{...props} />
 						}
 					</Formik> :
@@ -445,4 +416,4 @@ const AgendarConsulta = (props) => {
 	);
 }
 
-export default AgendarConsulta;
+export default AgendarCirugia;

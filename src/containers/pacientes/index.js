@@ -58,6 +58,7 @@ const Pacientes = (props) => {
 		{ title: 'Nombres', field: 'nombres' },
 		{ title: 'Apellidos', field: 'apellidos' },
 		{ title: 'Telefono', field: 'telefono' },
+		{ title: 'Sexo', field: 'sexo.nombre' },
 		{ title: 'Fecha de nacimiento', field: 'fecha_nacimiento' },
 		{ title: 'Direccion', field: 'direccion' },
 	];

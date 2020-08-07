@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ModalFormPago2 = (props) => {
+const ModalFormPagos = (props) => {
   const classes = useStyles();
 
   // getModalStyle is not a pure function, we roll the style only on the first render
@@ -161,4 +161,4 @@ const ModalFormPago2 = (props) => {
   );
 }
 
-export default ModalFormPago2;
+export default ModalFormPagos;
