@@ -11,7 +11,7 @@ import {
 	showAllTipoCitas,
 	createTreatmentPrice,
 } from "../../services";
-import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
+import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
 import EditIcon from '@material-ui/icons/Edit';
@@ -99,7 +99,8 @@ const AgendarTratamiento = (props) => {
 		{ title: 'Numero Sesion', field: 'numero_sesion' },
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
 		{ title: 'Tipo Cita', field: 'tipo_cita.nombre' },
-		{ title: 'Quien confirma', field: 'quien_confirma.nombre' },
+		{ title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' },
+		{ title: 'Quien confirma asistencia', field: 'quien_confirma_asistencia.nombre' },
 		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
 		{ title: 'Medico', field: 'medico_nombre' },
 		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
@@ -112,6 +113,15 @@ const AgendarTratamiento = (props) => {
 		{ title: 'Hora salida', field: 'hora_salida' },
 	];
 
+	const components = {
+		Pagination: props => {
+			return <TablePagination
+				{...props}
+				rowsPerPageOptions={[5, 10, 20, 30, citas.length]}
+			/>
+		}
+	}
+	
 	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
 	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
 	const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
@@ -486,6 +496,7 @@ const AgendarTratamiento = (props) => {
 								options={options}
 								citas={citas}
 								actions={actions}
+								components={components}
 								cita={cita}
 								openModal={openModal}
 								empleado={empleado}

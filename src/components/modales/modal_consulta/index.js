@@ -26,7 +26,7 @@ const validationSchema = Yup.object({
     .required("Los nombres del pacientes son requeridos"),
   confirmo: Yup.string("Ingresa la fecha de nacimiento")
     .required("Los nombres del pacientes son requeridos"),
-  quien_confirma: Yup.string("Ingresa la direccion")
+  quien_confirma_asistencia: Yup.string("Ingresa la direccion")
     .required("Los nombres del pacientes son requeridos"),
   asistio: Yup.string("Ingresa el telefono")
     .required("Los nombres del pacientes son requeridos"),
@@ -65,7 +65,7 @@ const ModalConsulta = (props) => {
   const [statements, setStatements] = useState([]);
 
   const [openModalPagos, setOpenModalPagos] = useState(false);
-  
+
   const fecha_cita = new Date(cita.fecha_hora);
   const fecha = `${addZero(fecha_cita.getDate())}/${addZero(Number(fecha_cita.getMonth() + 1))}/${addZero(fecha_cita.getFullYear())}`;
   const hora = `${addZero(Number(fecha_cita.getHours()) + 5)}:${addZero(fecha_cita.getMinutes())}`;
@@ -81,7 +81,8 @@ const ModalConsulta = (props) => {
     telefono: cita.paciente.telefono,
     quien_agenda: cita.quien_agenda,
     tipo_cita: cita.tipo_cita ? cita.tipo_cita._id : '',
-    quien_confirma: cita.quien_confirma,
+    quien_confirma_llamada: cita.quien_confirma_llamada,
+    quien_confirma_asistencia: cita.quien_confirma_asistencia,
     promovendedor: cita.promovendedor ? cita.promovendedor._id : '',
     status: cita.status ? cita.status._id : '',
     precio: cita.precio,
@@ -212,8 +213,9 @@ const ModalConsulta = (props) => {
 
   const handleOnClickActualizarCita = async (event, rowData) => {
     if (rowData.status !== pendienteStatusId) {
-      rowData.quien_confirma = empleado._id;
-      if (rowData.status === asistioStatusId) {
+      rowData.quien_confirma_asistencia = empleado._id;
+      console.log(rowData);
+      if (rowData.status === asistioStatusId && !rowData.hora_llegada) {
         const dateNow = new Date();
         rowData.hora_llegada = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
       }
@@ -282,7 +284,11 @@ const ModalConsulta = (props) => {
     setValues({ ...values, pagado: false });
   }
 
-  const handleGuardarModalPagos = () => {
+  const handleGuardarModalPagos = (pagos) => {
+    setValues({
+      ...values,
+      pagos: pagos,
+    });
     setOpenModalPagos(false);
   }
 

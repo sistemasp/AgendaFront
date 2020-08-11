@@ -38,13 +38,15 @@ const ModalPago = (props) => {
     porcentaje_comision: porcetanjeComision,
     comision: pago.comision ? pago.comision : '',
     cantidad: pago.cantidad ? pago.cantidad : '0',
+    porcentaje_descuento: pago.porcentaje_descuento ? pago.porcentaje_descuento : '0',
+    descuento: pago.descuento ? pago.descuento : '0',
     total: pago.total ? pago.total : '0'
   });
 
   const tarjetaMetodoPagoId = process.env.REACT_APP_METODO_PAGO_TARJETA;
   const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
   const consultaTratamientoId = process.env.REACT_APP_CONSULTA_TRATAMIENTO_ID;
-  
+
   useEffect(() => {
     const loadBancos = async () => {
       const response = await showAllBanco();
@@ -73,57 +75,64 @@ const ModalPago = (props) => {
 
   }, [sucursal]);
 
-const handleChangePaymentMethod = (event) => {
-  const cantidad = values.cantidad;
-  let comision = 0;
-  let total = values.cantidad;
-  if (event.target.value === tarjetaMetodoPagoId) {
-    comision = Number(cantidad) * Number(values.porcentaje_comision) / 100;
-    total = Number(cantidad) + Number(comision);
+  const handleChangePaymentMethod = (event) => {
+    const datos = {
+      ...values,
+      metodo_pago: event.target.value,
+    }
+    calcularTotal(datos);
   }
-  
-  setValues({ 
-    ...values,
-    cantidad: cantidad,
-    comision: comision,
-    total: total,
-    metodo_pago: event.target.value,
-   });
-  //setValues({ ...values, metodo_pago: event.target.value });
-}
 
-const handleChangeBank = (event) => {
-  setValues({ ...values, banco: event.target.value });
-}
-
-const handleChangeCardType = (event) => {
-  setValues({ ...values, tipo_tarjeta: event.target.value });
-}
-
-const handleChangeCantidad = (event) => {
-  const cantidad = event.target.value;
-  let comision = 0;
-  let total = event.target.value;
-  if (values.metodo_pago === tarjetaMetodoPagoId) {
-    comision = Number(cantidad) * Number(values.porcentaje_comision) / 100;
-    total = Number(cantidad) + Number(comision);
+  const handleChangeBank = (event) => {
+    setValues({ ...values, banco: event.target.value });
   }
-  
-  setValues({ 
-    ...values,
-    cantidad: cantidad,
-    comision: comision,
-    total: total,
-   });
-}
 
-const handleChangeConfirmado = (event) => {
-  setValues({ ...values, deposito_confirmado: !values.deposito_confirmado });
-}
+  const handleChangeCardType = (event) => {
+    setValues({ ...values, tipo_tarjeta: event.target.value });
+  }
 
-const handleChangeObservaciones = (event) => {
-  setValues({ ...values, observaciones: event.target.value });
-}
+  const handleChangeDescuento = (event) => {
+    const datos = {
+      ...values,
+      porcentaje_descuento: event.target.value,
+    }
+    calcularTotal(datos); 
+  }
+
+  const handleChangeCantidad = (event) => {
+    const datos = {
+      ...values,
+      cantidad: event.target.value,
+    }
+    calcularTotal(datos);
+  }
+
+  const calcularTotal = (datos) => {
+    const cantidad = datos.cantidad;
+    let comision = 0;
+    const descuento = cantidad * datos.porcentaje_descuento / 100;
+    if (datos.metodo_pago === tarjetaMetodoPagoId) {
+      comision = (Number(cantidad) - Number(descuento))* Number(values.porcentaje_comision) / 100;
+    }
+    let total = cantidad - descuento + comision;
+    setValues({
+      ...values,
+      metodo_pago: datos.metodo_pago,
+      cantidad: cantidad,
+      comision: comision,
+      porcentaje_descuento: datos.porcentaje_descuento,
+      descuento: descuento,
+      total: total,     
+    });
+  }
+
+  const handleChangeConfirmado = (event) => {
+    setValues({ ...values, deposito_confirmado: !values.deposito_confirmado });
+  }
+
+  const handleChangeObservaciones = (event) => {
+    setValues({ ...values, observaciones: event.target.value });
+  }
 
 
   /*const handleClickGuardar = async (event, rowData) => {
@@ -137,25 +146,24 @@ const handleChangeObservaciones = (event) => {
     setValues({ ...values, digitos: event.target.value });
   }
 
-	const handleClickGuardarPago = async (event, rowData) => {
-		rowData.fecha_pago = new Date();
-		rowData.paciente = cita.paciente._id;
-		rowData.medico = cita.medico._id;
-		rowData.servicio = consultaServicioId;
-		rowData.tratamientos = consultaTratamientoId;
-		rowData.quien_recibe_pago = empleado._id;
+  const handleClickGuardarPago = async (event, rowData) => {
+    rowData.fecha_pago = new Date();
+    rowData.paciente = cita.paciente._id;
+    rowData.medico = cita.medico._id;
+    rowData.servicio = consultaServicioId;
+    rowData.tratamientos = consultaTratamientoId;
+    rowData.quien_recibe_pago = empleado._id;
     rowData.sucursal = sucursal;
     rowData.cita = cita._id;
     rowData.porcentaje_comision = `${rowData.metodo_pago === metodoPagoTarjetaId ? porcetanjeComision : '0'} %`;
-    console.log("DATA", rowData);
-		const res = pago._id ? await updatePago(pago._id, rowData) : await createPago(rowData);
+    const res = pago._id ? await updatePago(pago._id, rowData) : await createPago(rowData);
     if (`${res.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
-    || `${res.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+      || `${res.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
       onClose();
       loadPagos();
     }
-	}
-  
+  }
+
   return (
     <Formik
       initialValues={values}
@@ -179,6 +187,7 @@ const handleChangeObservaciones = (event) => {
           onChangeConfirmado={(e) => handleChangeConfirmado(e)}
           onChangeObservaciones={(e) => handleChangeObservaciones(e)}
           onChangeDigitos={(e) => handleChangeDigitos(e)}
+          onChangeDescuento={(e) => handleChangeDescuento(e)}
           {...props} />
       }
     </Formik>

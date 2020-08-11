@@ -262,10 +262,8 @@ export const MainContainer = props => {
 					</TabPanel>
 					<TabPanel value={value} index={1}>
 						<Medicos
-							paciente={pacienteAgendado}
-							setPacienteAgendado={setPacienteAgendado}
 							empleado={empleado}
-							sucursal={sucursal._id} />
+							sucursal={sucursal} />
 					</TabPanel>
 					<TabPanel value={value} index={2}>
 						<Consultorios

@@ -5,6 +5,7 @@ import { TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem } fr
 import { ButtonCustom } from "../../basic/ButtonCustom";
 import { CheckCustom } from '../../basic/CheckCustom';
 import ModalBuscarRazonSocial from '../modal_buscar_razon_social';
+import { toFormatterCurrency } from '../../../utils/utils';
 
 function getModalStyle() {
   const top = 50;
@@ -67,7 +68,7 @@ const ModalFormPago = (props) => {
     onChangeBank,
     onChangeCardType,
     onChangeCantidad,
-    onChangeFactura,
+    onChangeDescuento,
     onChangeConfirmado,
     onChangeObservaciones,
     onChangeDigitos,
@@ -168,16 +169,36 @@ const ModalFormPago = (props) => {
                   variant="outlined" />
               </Grid>
 
+              <Grid item xs={12}>
+                <TextField
+                  className={classes.textField}
+                  name="porcentaje_descuento"
+                  error={Boolean(errors.porcentaje_descuento)}
+                  label="% Descuento"
+                  value={values.porcentaje_descuento}
+                  onChange={onChangeDescuento}
+                  type='Number'
+
+                  onInput={(e) => {
+                    e.target.value = e.target.value > 100 ? 100 : e.target.value;
+                    e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 3)
+                  }}
+                  variant="outlined" />
+              </Grid>
+
+              <Grid item xs={12}>
+                <h3 className={classes.label}>{`${values.porcentaje_descuento}% descuento : ${toFormatterCurrency(values.descuento)}`}</h3>
+              </Grid>
 
               {
                 values.metodo_pago !== process.env.REACT_APP_METODO_PAGO_EFECTIVO && values.metodo_pago !== '' ?
                   <Grid item xs={12}>
-                    <h3 className={classes.label}>{`Comision del ${values.porcentaje_comision}%: ${values.comision}`}</h3>
+                    <h3 className={classes.label}>{`Comision del ${values.porcentaje_comision}%: ${toFormatterCurrency(values.comision)}`}</h3>
                   </Grid> : ''
               }
 
               <Grid item xs={12}>
-                <h2 className={classes.label}>{`Total: ${values.total}`}</h2>
+                <h2 className={classes.label}>{`Total: ${toFormatterCurrency(values.total)}`}</h2>
               </Grid>
 
               {

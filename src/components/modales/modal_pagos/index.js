@@ -21,6 +21,7 @@ const ModalPagos = (props) => {
   const [pago, setPago] = useState({});
   const [openModalPago, setOpenModalPago] = useState(false);
   const [openModalFactura, setOpenModalFactura] = useState(false);
+  const [restante, setRestante] = useState(0);
 
   const handleClickBuscarRazonSocial = (event, rowData) => {
     setPago(rowData);
@@ -80,6 +81,7 @@ const ModalPagos = (props) => {
     const loadPagos = async () => {
       const response = await findPagosByCita(cita._id);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        let acomulado = 0;
         response.data.forEach(item => {
           const fecha = new Date(item.fecha_pago);
           item.fecha = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth())}/${addZero(fecha.getFullYear())}`
@@ -90,12 +92,13 @@ const ModalPagos = (props) => {
           item.banco_nombre = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.banco.nombre;
           item.tipo_tarjeta_nombre = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.tipo_tarjeta.nombre;
           item.digitos_show = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.metodo_pago.nombre;
+          acomulado = Number(acomulado) + Number(item.cantidad);
         });
+        setRestante(Number(cita.precio) - Number(acomulado));
         setPagos(response.data);
       }
     }
     setIsLoading(true);
-
     loadPagos();
 
     setIsLoading(false);
@@ -105,6 +108,7 @@ const ModalPagos = (props) => {
   const loadPagos = async () => {
     const response = await findPagosByCita(cita._id);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      let acomulado = 0;
       response.data.forEach(item => {
         const fecha = new Date(item.fecha_pago);
         item.fecha = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth())}/${addZero(fecha.getFullYear())}`
@@ -115,7 +119,9 @@ const ModalPagos = (props) => {
         item.banco_nombre = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.banco.nombre;
         item.tipo_tarjeta_nombre = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.tipo_tarjeta.nombre;
         item.digitos_show = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.metodo_pago.nombre;
+        acomulado = Number(acomulado) + Number(item.cantidad);
       });
+      setRestante(Number(cita.precio) - Number(acomulado));
       setPagos(response.data);
     }
   }
@@ -165,6 +171,7 @@ const ModalPagos = (props) => {
         openModalFactura={openModalFactura}
         onCloseBuscarRazonSocial={handleCloseBuscarRazonSocial}
         loadPagos={loadPagos}
+        restante={restante}
       />
     </Fragment>
 

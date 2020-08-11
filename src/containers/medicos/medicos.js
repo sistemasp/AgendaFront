@@ -4,6 +4,7 @@ import TableComponent from '../../components/table/TableComponent';
 import { makeStyles } from '@material-ui/core';
 import ModalPaciente from '../../components/modales/modal_paciente';
 import ModHistorico from '../../components/modales/modal_historico';
+import ModalImprimirPagoMedico from '../../components/modales/imprimir/pago_medico';
 
 const useStyles = makeStyles(theme => ({
 	button: {
@@ -19,34 +20,31 @@ export const MedicosContainer = (props) => {
     titulo,
     columns,
     medicos,
-    paciente,
+    medico,
     actions,
     options,
-    open,
+    openPagoMedico,
     openHistoric,
     handleOpen,
     handleClose,
-    onClickGuardar,
-    onClickGuardarAgendar
+    sucursal,
   } = props;
 
   return (
     <Fragment>
       {
-        open ? 
-        <ModalPaciente
-          open={open}
+        openPagoMedico ? 
+        <ModalImprimirPagoMedico
+          open={openPagoMedico}
           onClose={handleClose}
-          paciente={paciente}
-          onClickGuardar={onClickGuardar}
-          onClickGuardarAgendar={onClickGuardarAgendar} /> : ''
+          medico={medico}
+          sucursal={sucursal} /> : ''
       }
       {
         openHistoric ? 
         <ModHistorico
           open={openHistoric}
-          onClose={handleClose}
-          paciente={paciente} /> : ''
+          onClose={handleClose} /> : ''
       }
 
       <TableComponent

@@ -45,20 +45,16 @@ const ModalFormPaciente = (props) => {
 
   const {
     values,
-    errors,
-    touched,
     handleSubmit,
-    handleChange,
-    handleBlur,
-    isValid,
+    onChange,
+    dataComplete,
     onClickCancel,
     onClickGuardar,
-    onClickGuardarAgendar,
     open,
     sexos,
   } = props;
 
-  console.log("isValid", isValid);
+  console.log("dataComplete", dataComplete);
 
   return (
     <div>
@@ -73,22 +69,18 @@ const ModalFormPaciente = (props) => {
                 <TextField
                   className={classes.textField}
                   name="nombres"
-                  helperText={touched.nombres ? errors.nombres : ""}
-                  error={Boolean(errors.nombres)}
                   label="Nombres"
                   value={values.nombres}
-                  onChange={handleChange}
+                  onChange={onChange}
                   variant="outlined" />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   className={classes.textField}
                   name="apellidos"
-                  helperText={touched.apellidos ? errors.apellidos : ""}
-                  error={Boolean(errors.apellidos)}
                   label="Apellidos"
                   value={values.apellidos}
-                  onChange={handleChange}
+                  onChange={onChange}
                   variant="outlined" />
               </Grid>
               {/*
@@ -123,11 +115,9 @@ const ModalFormPaciente = (props) => {
                 <TextField
                   className={classes.textField}
                   name="telefono"
-                  helperText={touched.telefono ? errors.telefono : ""}
-                  error={Boolean(errors.telefono)}
                   label="Telefono"
                   value={values.telefono}
-                  onChange={handleChange}
+                  onChange={onChange}
                   inputProps={{
                     maxLength: "10",
                   }}
@@ -141,9 +131,8 @@ const ModalFormPaciente = (props) => {
                     labelId="simple-select-outlined-medico"
                     id="simple-select-outlined-medico"
                     value={values.sexo}
-                    error={Boolean(errors.sexo)}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                    onChange={onChange}
+                    name="sexo"
                     label="Sexo" >
                     {sexos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                   </Select>
@@ -154,7 +143,7 @@ const ModalFormPaciente = (props) => {
                   className={classes.button}
                   color="primary"
                   variant="contained"
-                  disabled={!isValid}
+                  disabled={dataComplete}
                   onClick={(e) => onClickGuardar(e, values)}
                   text='Guardar' />
               </Grid>

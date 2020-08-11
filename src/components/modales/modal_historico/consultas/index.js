@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { findHistoricByPacienteAndService } from "../../../../services";
+import { findHistoricConsultByPaciente } from "../../../../services";
 import Consultas from './Consultas';
 import { toFormatterCurrency, addZero } from '../../../../utils/utils';
 
@@ -18,10 +18,12 @@ const TabConsultas = (props) => {
   const columns = [
     { title: 'Fecha', field: 'fecha_show' },
     { title: 'Hora', field: 'hora' },
+    { title: 'Medico', field: 'medico.nombre' },
     { title: 'Tipo Cita', field: 'tipo_cita.nombre' },
     { title: 'Estado', field: 'status.nombre' },
     { title: 'Sucursal', field: 'sucursal.nombre' },
     { title: 'Precio', field: 'precio_moneda' },
+    { title: 'Observaciones', field: 'observaciones' },
   ];
 
   const options = {
@@ -41,15 +43,11 @@ const TabConsultas = (props) => {
 
   useEffect(() => {
     const loadHistorial = async () => {
-      console.log('SERVICIO CONSULTA', servicio);
       if (servicio) {
-        const response = await findHistoricByPacienteAndService(paciente._id, servicio._id);
+        const response = await findHistoricConsultByPaciente(paciente._id, servicio._id);
         if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
           response.data.forEach(item => {
             item.precio_moneda = toFormatterCurrency(item.precio);
-            item.show_tratamientos = item.tratamientos.map(tratamiento => {
-              return `${tratamiento.nombre}, `;
-            });
             const date = new Date(item.fecha_hora);
             const dia = addZero(date.getDate());
             const mes = addZero(date.getMonth() + 1);

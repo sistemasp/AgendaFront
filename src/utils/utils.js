@@ -43,7 +43,6 @@ export const exportTableToExcel = (tableID, filename = '') => {
 }
 
 export const generateFolioCita = (cita) => {
-    console.log("CITA", cita);
     const date = new Date(cita.fecha_hora);
     const cons = cita.consecutivo;
     const consecutivo =  cons ? 
@@ -54,6 +53,6 @@ export const generateFolioCita = (cita) => {
             ) 
     ) : 
     'S/C';
-    const folio = `${cita.sucursal.clave}${cita.servicio ? cita.servicio.clave : 'CON'}${date.getFullYear()}${addZero(date.getMonth() + 1)}${date.getDate()}${consecutivo}`;
+    const folio = `${cita.sucursal.clave}${cita.servicio ? cita.servicio.clave : 'CON'}${date.getFullYear()}${addZero(date.getMonth() + 1)}${addZero(date.getDate())}${consecutivo}`;
     return folio;
 }

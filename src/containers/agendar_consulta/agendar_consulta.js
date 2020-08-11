@@ -8,7 +8,7 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { Paper, Button, TextField, Checkbox, FormControlLabel } from '@material-ui/core';
+import { Paper, Button, TextField, Checkbox, FormControlLabel, TablePagination } from '@material-ui/core';
 import TableComponent from '../../components/table/TableComponent';
 import ModalConsulta from '../../components/modales/modal_consulta';
 import { green } from '@material-ui/core/colors';
@@ -68,12 +68,14 @@ export const AgendarConsultaContainer = (props) => {
     onChangePromovendedor,
     onChangeObservaciones,
     onChangeFrecuencia,
+    dataComplete,
     // TABLE DATES PROPERTIES
     titulo,
     columns,
     citas,
     actions,
     options,
+    components,
     // MODALS PROPERTIES
     openModal,
     cita,
@@ -143,45 +145,48 @@ export const AgendarConsultaContainer = (props) => {
         <h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'Selecciona un paciente'}</h1>
 
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={2}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <Grid
-                container
-                justify="center"
-                alignItems="center" >
-                <KeyboardDatePicker
-                  disableToolbar
-                  //disablePast
-                  autoOk
-                  variant="inline"
-                  format="dd/MM/yyyy"
-                  margin="normal"
-                  id="date-picker-inline"
-                  label="Fecha"
-                  value={values.fecha_hora}
-                  onChange={onChangeFecha}
-                  KeyboardButtonProps={{
-                    'aria-label': 'change date',
-                  }}
-                  invalidDateMessage='Selecciona una fecha' />
+          {sucursal === process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID ?
+            <Fragment>
+              <Grid item xs={12} sm={2}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <Grid
+                    container
+                    justify="center"
+                    alignItems="center" >
+                    <KeyboardDatePicker
+                      disableToolbar
+                      //disablePast
+                      autoOk
+                      variant="inline"
+                      format="dd/MM/yyyy"
+                      margin="normal"
+                      id="date-picker-inline"
+                      label="Fecha"
+                      value={values.fecha_hora}
+                      onChange={onChangeFecha}
+                      KeyboardButtonProps={{
+                        'aria-label': 'change date',
+                      }}
+                      invalidDateMessage='Selecciona una fecha' />
+                  </Grid>
+                </MuiPickersUtilsProvider>
               </Grid>
-            </MuiPickersUtilsProvider>
-          </Grid>
-          <Grid item xs={12} sm={2}>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
-              <Select
-                labelId="simple-select-outlined-hora"
-                id="simple-select-outlined-hora"
-                value={values.hora}
-                error={Boolean(errors.hora)}
-                onChange={onChangeHora}
-                disabled={values.fecha_show === ''}
-                label="Hora" >
-                {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
-              </Select>
-            </FormControl>
-          </Grid>
+              <Grid item xs={12} sm={2}>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
+                  <Select
+                    labelId="simple-select-outlined-hora"
+                    id="simple-select-outlined-hora"
+                    value={values.hora}
+                    error={Boolean(errors.hora)}
+                    onChange={onChangeHora}
+                    disabled={values.fecha_show === ''}
+                    label="Hora" >
+                    {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Fragment> : ''}
           <Grid item xs={12} sm={2}>
             <FormControl variant="outlined" className={classes.formControl}>
               <InputLabel id="simple-select-outlined-frecuencia">Frecuencia</InputLabel>
@@ -224,20 +229,21 @@ export const AgendarConsultaContainer = (props) => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={2}>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel id="simple-select-outlined-tipo-cita">Tipo Cita</InputLabel>
-              <Select
-                labelId="simple-select-outlined-tipo-cita"
-                id="simple-select-outlined-tipo-cita"
-                value={values.tipoCita}
-                error={Boolean(errors.tipoCita)}
-                onChange={onChangeTipoCita}
-                label="Tipo Cita" >
-                {tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
-              </Select>
-            </FormControl>
-          </Grid>
+          {sucursal === process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID ?
+            <Grid item xs={12} sm={2}>
+              <FormControl variant="outlined" className={classes.formControl}>
+                <InputLabel id="simple-select-outlined-tipo-cita">Tipo Cita</InputLabel>
+                <Select
+                  labelId="simple-select-outlined-tipo-cita"
+                  id="simple-select-outlined-tipo-cita"
+                  value={values.tipoCita}
+                  error={Boolean(errors.tipoCita)}
+                  onChange={onChangeTipoCita}
+                  label="Tipo Cita" >
+                  {tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+                </Select>
+              </FormControl>
+            </Grid> : ''}
           <Grid item xs={12} sm={2}>
             <TextField
               className={classes.button}
@@ -266,8 +272,7 @@ export const AgendarConsultaContainer = (props) => {
               className={classes.button}
               variant="contained"
               color="primary"
-              disabled={!isValid || isSubmitting || !paciente.nombres || !values.fecha_hora || !values.precio
-                || !values.medico || !values.promovendedor}
+              disabled={!isValid || isSubmitting || dataComplete}
               onClick={() => onClickAgendar(values)} >
               Agendar
             </Button>
@@ -301,7 +306,8 @@ export const AgendarConsultaContainer = (props) => {
         columns={columns}
         data={citas}
         actions={actions}
-        options={options} />
+        options={options}
+        components={components} />
 
     </Fragment>
   );

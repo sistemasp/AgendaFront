@@ -38,21 +38,24 @@ const useStyles = makeStyles(theme => ({
 
 const Medicos = (props) => {
 
+	console.log("PROPS", props);
+
 	const classes = useStyles();
 
-	const [open, setOpen] = useState(false);
+	const {
+		sucursal
+	} = props;
+
+	console.log("sucursal", sucursal);
+
+	const [openPagoMedico, setOpenPagoMedico] = useState(false);
 	const [openHistoric, setOpenHistoric] = useState(false);
 	const [openAlert, setOpenAlert] = useState(false);
-	const [pacientes, setPacientes] = useState([]);
 	const [medicos, setMedicos] = useState([]);
-	const [paciente, setPaciente] = useState({});
+	const [medico, setMedico] = useState({});
 	const [isLoading, setIsLoading] = useState(true);
 	const [message, setMessage] = useState('');
 	const [severity, setSeverity] = useState('success');
-
-	const {
-		onClickAgendar
-	} = props;
 
 	const columns = [
 		{ title: 'Nombre', field: 'nombre' },
@@ -76,12 +79,12 @@ const Medicos = (props) => {
 	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
 
 	const handleOpen = () => {
-		setOpen(true);
+		setOpenPagoMedico(true);
 	};
 
 	const handleClose = () => {
-		setPaciente({});
-		setOpen(false);
+		setMedico({});
+		setOpenPagoMedico(false);
 		setOpenHistoric(false);
 	};
 
@@ -89,27 +92,28 @@ const Medicos = (props) => {
 		setOpenAlert(false);
 	};
 
-	const handleOnClickEditar = (event, rowData) => {
-		setPaciente(rowData);
-		setOpen(true);
-	}
-
+	/*
 	const handleClickHistorico = (event, rowData) => {
-		setPaciente(rowData);
+		setMedico(rowData);
 		setOpenHistoric(true);
+	}*/
+
+	const handleClickGenerarPago = (event, rowData) => {
+		setMedico(rowData);
+		setOpenPagoMedico(true);
 	}
 
 	const actions = [
 		{
 			icon: PaymentIcon,
 			tooltip: 'Generar Pago',
-			onClick: onClickAgendar
+			onClick: handleClickGenerarPago
 		},
-		{
+		/*{
 			icon: HistoryIcon,
 			tooltip: 'Historial de pagos',
 			onClick: handleClickHistorico
-		}
+		}*/
 	];
 
 	useEffect(() => {
@@ -141,10 +145,10 @@ const Medicos = (props) => {
 						titulo='Medicos'
 						actions={actions}
 						options={options}
-						open={open}
+						openPagoMedico={openPagoMedico}
 						openHistoric={openHistoric}
-						paciente={paciente}
-						telefono={paciente.telefono}
+						medico={medico}
+						sucursal={sucursal}
 						handleOpen={handleOpen}
 						handleClose={handleClose} /> :
 					<Backdrop className={classes.backdrop} open={isLoading} >

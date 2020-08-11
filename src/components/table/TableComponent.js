@@ -17,6 +17,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import MaterialTable from 'material-table';
+import { TablePagination } from '@material-ui/core';
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -47,6 +48,7 @@ const TableComponent = props => {
         actions,
         editable,
         options,
+        components,
     } = props;
 
     const localization = {
@@ -67,6 +69,13 @@ const TableComponent = props => {
             filterRow: {
                 filterTooltip: 'Filter'
             }
+        },
+        pagination: {
+            labelRowsSelect: 'Registros',
+            firstTooltip: 'Primer página',
+            previousTooltip: 'Página anterior',
+            nextTooltip: 'Página siguiente',
+            lastTooltip: 'Ultima página',
         }
     };
     
@@ -80,6 +89,7 @@ const TableComponent = props => {
             actions={actions}
             editable={editable}
             options={options}
+            components={components}
         />
     );
 }

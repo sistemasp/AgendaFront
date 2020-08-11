@@ -934,3 +934,17 @@ export const showAllSexos = async () => {
         console.log('showAllSexos', error);
     }
 }
+
+// MEDICOS
+
+export const findConsultsByPayOfDoctor = async (dia, mes, anio, sucursalId, medicoId, atendidoId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta/${dia}/${mes}/${anio}/sucursal/${sucursalId}/medico/${medicoId}/atendido/${atendidoId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findConsultsByPayOfDoctor', error);
+    }
+}

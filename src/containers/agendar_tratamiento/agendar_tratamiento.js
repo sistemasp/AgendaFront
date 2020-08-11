@@ -67,6 +67,7 @@ export const AgendarTratamientoContainer = (props) => {
 		citas,
 		actions,
 		options,
+		components,
 		// MODAL PROPERTIES
 		openModal,
 		cita,
@@ -335,7 +336,8 @@ export const AgendarTratamientoContainer = (props) => {
 				columns={columns}
 				data={citas}
 				actions={actions}
-				options={options} />
+				options={options}
+				components={components} />
 
 		</Fragment>
 	);

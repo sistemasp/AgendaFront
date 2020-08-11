@@ -60,7 +60,6 @@ const Pacientes = (props) => {
 		{ title: 'Telefono', field: 'telefono' },
 		{ title: 'Sexo', field: 'sexo.nombre' },
 		{ title: 'Fecha de nacimiento', field: 'fecha_nacimiento' },
-		{ title: 'Direccion', field: 'direccion' },
 	];
 
 	const options = {
@@ -98,7 +97,6 @@ const Pacientes = (props) => {
 	}
 
 	const handleOnClickGuardar = async (e, val) => {
-		console.log('VALUE', val);
 		setIsLoading(true);
 		const existPatient = paciente._id ? '' : await findPatientByPhoneNumber(val.telefono);
 		setOpenAlert(true);

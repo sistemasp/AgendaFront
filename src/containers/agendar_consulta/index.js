@@ -9,7 +9,7 @@ import {
 	showAllTipoCitas,
 	showAllFrecuencias,
 } from "../../services";
-import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
+import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
 import EditIcon from '@material-ui/icons/Edit';
@@ -96,7 +96,8 @@ const AgendarConsulta = (props) => {
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
 		{ title: 'Frecuencia', field: 'frecuencia.nombre' },
 		{ title: 'Tipo Consulta', field: 'tipo_cita.nombre' },
-		{ title: 'Quien confirma', field: 'quien_confirma.nombre' },
+		{ title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' },
+		{ title: 'Quien confirma asistencia', field: 'quien_confirma_asistencia.nombre' },
 		{ title: 'Medico', field: 'medico_nombre' },
 		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
 		{ title: 'Estado', field: 'status.nombre' },
@@ -104,10 +105,24 @@ const AgendarConsulta = (props) => {
 		{ title: 'Observaciones', field: 'observaciones' },
 	];
 
+	const components = {
+		Pagination: props => {
+			return <TablePagination
+				{...props}
+				rowsPerPageOptions={[5, 10, 20, 30, citas.length]}
+			/>
+		}
+	}
+
 	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
 	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
 	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
 	const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
+	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
+	const tipoCitaSinCitaId = process.env.REACT_APP_TIPO_CITA_SIN_CITA;
+
+	const dataComplete = !paciente.nombres || !values.precio
+		|| !values.medico || !values.promovendedor || (sucursal === sucursalManuelAcunaId ? !values.fecha_hora : false);
 
 	const options = {
 		rowStyle: rowData => {
@@ -140,6 +155,7 @@ const AgendarConsulta = (props) => {
 				});
 				setConsultas(response.data);
 			}
+			setIsLoading(false);
 		}
 
 		const loadMedicos = async () => {
@@ -176,7 +192,6 @@ const AgendarConsulta = (props) => {
 		loadPromovendedores();
 		loadTipoCitas();
 		loadFrecuencias();
-		setIsLoading(false);
 	}, [sucursal, medicoRolId, promovendedorRolId]);
 
 	const loadHorarios = async (date) => {
@@ -256,8 +271,6 @@ const AgendarConsulta = (props) => {
 		setValues({ ...values, tipo_cita: e.target.value });
 	}
 
-
-
 	const handleClickAgendar = async (data) => {
 		setIsLoading(true);
 		data.quien_agenda = empleado._id;
@@ -267,6 +280,16 @@ const AgendarConsulta = (props) => {
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
+
+		if (sucursal._id !== sucursalManuelAcunaId) {
+			const dateNow = new Date();
+			data.hora_llegada = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
+			dateNow.setHours(dateNow.getHours() - 5);
+			dateNow.setMinutes(0);
+			dateNow.setSeconds(0);
+			data.fecha_hora = dateNow;
+			data.tipo_cita = tipoCitaSinCitaId;
+		}
 
 		const response = await createConsult(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
@@ -407,6 +430,7 @@ const AgendarConsulta = (props) => {
 								options={options}
 								citas={citas}
 								actions={actions}
+								components={components}
 								cita={cita}
 								openModal={openModal}
 								empleado={empleado}
@@ -429,6 +453,7 @@ const AgendarConsulta = (props) => {
 								onCloseImprimirConsulta={handleCloseImprimirConsulta}
 								frecuencias={frecuencias}
 								onChangeFrecuencia={(e) => handleChangeFrecuencia(e)}
+								dataComplete={dataComplete}
 								{...props} />
 						}
 					</Formik> :

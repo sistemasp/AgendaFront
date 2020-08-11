@@ -7,6 +7,7 @@ import { CheckCustom } from '../../basic/CheckCustom';
 import TableComponent from '../../table/TableComponent';
 import ModalPago from '../modal_pago';
 import ModalBuscarRazonSocial from '../modal_buscar_razon_social';
+import { toFormatterCurrency } from '../../../utils/utils';
 
 function getModalStyle() {
   const top = 50;
@@ -75,6 +76,7 @@ const ModalFormPagos = (props) => {
     openModalFactura,
     onCloseBuscarRazonSocial,
     actions,
+    restante,
   } = props;
 
   return (
@@ -88,7 +90,8 @@ const ModalFormPagos = (props) => {
             pago={pago}
             empleado={empleado}
             sucursal={sucursal}
-            loadPagos={loadPagos} />
+            loadPagos={loadPagos}
+            restante={restante} />
           : ''
       }
       {
@@ -133,6 +136,10 @@ const ModalFormPagos = (props) => {
             } />
 
           <Grid container xs={12}>
+            <h1>{`MONTO PARA LIQUIDAR PAGO: ${toFormatterCurrency(restante)}`}</h1>
+          </Grid>
+
+          <Grid container xs={12}>
             {
               !cita.pagado ?
                 <Grid item xs={12} sm={6}>
@@ -140,7 +147,7 @@ const ModalFormPagos = (props) => {
                     className={classes.button}
                     color="primary"
                     variant="contained"
-                    onClick={onGuardarModalPagos}
+                    onClick={() => onGuardarModalPagos(pagos)}
                     disabled={pagos == ![]}
                     text='Guardar' />
                 </Grid> : ''
