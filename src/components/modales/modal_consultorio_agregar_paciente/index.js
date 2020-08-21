@@ -28,7 +28,6 @@ const ModalConsultorioAgregarPaciente = (props) => {
   const [values, setValues] = useState({
   });
 
-  const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
   const enConsultorioStatusId = process.env.REACT_APP_EN_CONSULTORIO_STATUS_ID;
 
   useEffect(() => {
@@ -50,6 +49,7 @@ const ModalConsultorioAgregarPaciente = (props) => {
     let updateConsulta = consulta;
     updateConsulta.status = enConsultorioStatusId;
     updateConsulta.hora_atencion = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
+    updateConsulta.medico = values.consultorio.medico;
     await updateConsult(consulta._id, updateConsulta);
 
     setValues({ consultorio: { paciente: consulta.paciente._id } });

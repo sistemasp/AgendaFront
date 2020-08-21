@@ -48,7 +48,7 @@ const ModalConsulta = (props) => {
   const {
     open,
     onClose,
-    cita,
+    consulta,
     empleado,
     loadConsultas,
     sucursal,
@@ -66,7 +66,7 @@ const ModalConsulta = (props) => {
 
   const [openModalPagos, setOpenModalPagos] = useState(false);
 
-  const fecha_cita = new Date(cita.fecha_hora);
+  const fecha_cita = new Date(consulta.fecha_hora);
   const fecha = `${addZero(fecha_cita.getDate())}/${addZero(Number(fecha_cita.getMonth() + 1))}/${addZero(fecha_cita.getFullYear())}`;
   const hora = `${addZero(Number(fecha_cita.getHours()) + 5)}:${addZero(fecha_cita.getMinutes())}`;
 
@@ -76,21 +76,21 @@ const ModalConsulta = (props) => {
     hora: hora,
     fecha_actual: fecha,
     hora_actual: hora,
-    paciente: cita.paciente,
-    paciente_nombre: `${cita.paciente.nombres} ${cita.paciente.apellidos}`,
-    telefono: cita.paciente.telefono,
-    quien_agenda: cita.quien_agenda,
-    tipo_cita: cita.tipo_cita ? cita.tipo_cita._id : '',
-    quien_confirma_llamada: cita.quien_confirma_llamada,
-    quien_confirma_asistencia: cita.quien_confirma_asistencia,
-    promovendedor: cita.promovendedor ? cita.promovendedor._id : '',
-    status: cita.status ? cita.status._id : '',
-    precio: cita.precio,
-    motivos: cita.motivos,
-    observaciones: cita.observaciones,
-    medico: cita.medico ? cita.medico._id : '',
-    pagado: cita.pagado,
-    frecuencia: cita.frecuencia,
+    paciente: consulta.paciente,
+    paciente_nombre: `${consulta.paciente.nombres} ${consulta.paciente.apellidos}`,
+    telefono: consulta.paciente.telefono,
+    quien_agenda: consulta.quien_agenda,
+    tipo_cita: consulta.tipo_cita ? consulta.tipo_cita._id : '',
+    quien_confirma_llamada: consulta.quien_confirma_llamada,
+    quien_confirma_asistencia: consulta.quien_confirma_asistencia,
+    promovendedor: consulta.promovendedor ? consulta.promovendedor._id : '',
+    status: consulta.status ? consulta.status._id : '',
+    precio: consulta.precio,
+    motivos: consulta.motivos,
+    observaciones: consulta.observaciones,
+    medico: consulta.medico ? consulta.medico._id : '',
+    pagado: consulta.pagado,
+    frecuencia: consulta.frecuencia,
   });
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
@@ -149,7 +149,7 @@ const ModalConsulta = (props) => {
     loadStaus();
     loadHorarios();
     setIsLoading(false);
-  }, [cita, promovendedorRolId, medicoRolId]);
+  }, [consulta, promovendedorRolId, medicoRolId]);
 
   const loadHorarios = async (date) => {
     const dia = date ? date.getDate() : values.fecha_show.getDate();
@@ -214,7 +214,6 @@ const ModalConsulta = (props) => {
   const handleOnClickActualizarCita = async (event, rowData) => {
     if (rowData.status !== pendienteStatusId) {
       rowData.quien_confirma_asistencia = empleado._id;
-      console.log(rowData);
       if (rowData.status === asistioStatusId && !rowData.hora_llegada) {
         const dateNow = new Date();
         rowData.hora_llegada = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
@@ -222,7 +221,7 @@ const ModalConsulta = (props) => {
     }
 
     if (rowData.status === reagendoStatusId) {
-      await updateConsult(cita._id, rowData);
+      await updateConsult(consulta._id, rowData);
       rowData.quien_agenda = empleado._id;
       rowData.sucursal = sucursal;
       rowData.status = pendienteStatusId;
@@ -253,7 +252,7 @@ const ModalConsulta = (props) => {
         fecha_show: rowData.fecha_show,
         fecha: `${dia}/${mes}/${anio}`
       });
-      await updateConsult(cita._id, rowData);
+      await updateConsult(consulta._id, rowData);
       await loadConsultas(rowData.fecha_show);
     }
     onClose();
@@ -296,43 +295,37 @@ const ModalConsulta = (props) => {
     <Fragment>
       {
         !isLoading ?
-          <Formik
-            enableReinitialize
-            initialValues={values}
-            validationSchema={validationSchema} >
-            {
-              props => <ModalFormConsulta
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-                open={open}
-                onClose={onClose}
-                cita={cita}
-                empleado={empleado}
-                onClickActualizarCita={handleOnClickActualizarCita}
-                onChangeFecha={(e) => handleChangeFecha(e)}
-                onChangeHora={(e) => handleChangeHora(e)}
-                onChangeTipoCita={(e) => handleChangeTipoCita(e)}
-                onChangeStatus={(e) => handleChangeStatus(e)}
-                onChangePromovendedor={(e) => handleChangePromovendedor(e)}
-                onChangeMedico={(e) => handleChangeMedico(e)}
-                onChangeTiempo={(e) => handleChangeTiempo(e)}
-                horarios={horarios}
-                promovendedores={promovendedores}
-                doctores={doctores}
-                tipoCitas={tipoCitas}
-                statements={statements}
-                onChangeSesion={handleChangeSesion}
-                onChangePrecio={handleChangePrecio}
-                onChangeMotivos={handleChangeMotivos}
-                onChangeObservaciones={handleChangeObservaciones}
-                onChangePagado={(e) => handleChangePagado(e)}
-                openModalPagos={openModalPagos}
-                onCloseModalPagos={handleCloseModalPagos}
-                onGuardarModalPagos={handleGuardarModalPagos}
-                sucursal={sucursal}
-                {...props} />
-            }
-          </Formik> :
+          <ModalFormConsulta
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+            open={open}
+            values={values}
+            onClose={onClose}
+            consulta={consulta}
+            empleado={empleado}
+            onClickActualizarCita={handleOnClickActualizarCita}
+            onChangeFecha={(e) => handleChangeFecha(e)}
+            onChangeHora={(e) => handleChangeHora(e)}
+            onChangeTipoCita={(e) => handleChangeTipoCita(e)}
+            onChangeStatus={(e) => handleChangeStatus(e)}
+            onChangePromovendedor={(e) => handleChangePromovendedor(e)}
+            onChangeMedico={(e) => handleChangeMedico(e)}
+            onChangeTiempo={(e) => handleChangeTiempo(e)}
+            horarios={horarios}
+            promovendedores={promovendedores}
+            doctores={doctores}
+            tipoCitas={tipoCitas}
+            statements={statements}
+            onChangeSesion={handleChangeSesion}
+            onChangePrecio={handleChangePrecio}
+            onChangeMotivos={handleChangeMotivos}
+            onChangeObservaciones={handleChangeObservaciones}
+            onChangePagado={(e) => handleChangePagado(e)}
+            openModalPagos={openModalPagos}
+            onCloseModalPagos={handleCloseModalPagos}
+            onGuardarModalPagos={handleGuardarModalPagos}
+            sucursal={sucursal}
+            tipoServicioId={consultaServicioId} /> :
           <Backdrop className={classes.backdrop} open={isLoading} >
             <CircularProgress color="inherit" />
           </Backdrop>

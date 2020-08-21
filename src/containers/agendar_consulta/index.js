@@ -8,6 +8,7 @@ import {
 	findEmployeesByRolId,
 	showAllTipoCitas,
 	showAllFrecuencias,
+	findCirugiaByConsultaId,
 } from "../../services";
 import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
@@ -27,6 +28,12 @@ const useStyles = makeStyles(theme => ({
 	backdrop: {
 		zIndex: theme.zIndex.drawer + 1,
 		color: '#fff',
+	},
+	pagago: {
+		color: '#11A532',
+	},
+	no_pagago: {
+		color: '#DC3132',
 	},
 }));
 
@@ -53,6 +60,8 @@ const AgendarConsulta = (props) => {
 		history,
 	} = props;
 
+	const date = new Date();
+
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
 	const [horarios, setHorarios] = useState([]);
@@ -62,20 +71,30 @@ const AgendarConsulta = (props) => {
 	const [promovendedores, setPromovendedores] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [disableDate, setDisableDate] = useState(true);
+	const [isHoliDay, setIsHoliDay] = useState(false);
 	const [values, setValues] = useState({
 		hora: '',
 		paciente: `${paciente._id}`,
-		precio: '',
+		precio: isHoliDay ? sucursal.precio_festivo : // Dia Festivo
+			date.getDay() === 6 ? (date.getHours() >= 13 ? sucursal.precio_sabado_vespertino : sucursal.precio_sabado_matutino) // SABADO
+				: (date.getHours() >= 14 ? sucursal.precio_vespertino : sucursal.precio_matutino), // L-V
 	});
+	console.log("SUCURSAL", sucursal);
+	console.log("date.getDay()", date.getDay());
+	console.log("date.getHours()", date.getHours());
+	console.log("date.getUTCHours()", date.getUTCHours());
 	const [citas, setConsultas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
 	const [openModalPagos, setOpenModalPagos] = useState(false);
-	const [cita, setConsulta] = useState();
+	const [openModalCirugias, setOpenModalCirugias] = useState(false);
+	const [consulta, setConsulta] = useState();
 	const [openModalImprimirConsultas, setOpenModalImprimirConsultas] = useState(false);
 	const [datosImpresion, setDatosImpresion] = useState();
+	const [cirugia, setCirugia] = useState(
+		{
+			materiales: []
+		});
 
-
-	const date = new Date();
 	const dia = addZero(date.getDate());
 	const mes = addZero(date.getMonth() + 1);
 	const anio = date.getFullYear();
@@ -84,6 +103,13 @@ const AgendarConsulta = (props) => {
 		fecha_show: date,
 		fecha: `${dia}/${mes}/${anio}`,
 	});
+
+	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
+	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
+	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
+	const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
+	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
+	const tipoCitaSinCitaId = process.env.REACT_APP_TIPO_CITA_SIN_CITA;
 
 	const columns = [
 		{ title: 'Folio', field: 'folio' },
@@ -96,7 +122,7 @@ const AgendarConsulta = (props) => {
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
 		{ title: 'Frecuencia', field: 'frecuencia.nombre' },
 		{ title: 'Tipo Consulta', field: 'tipo_cita.nombre' },
-		{ title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' },
+		sucursal._id === sucursalManuelAcunaId ? { title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' } : {},
 		{ title: 'Quien confirma asistencia', field: 'quien_confirma_asistencia.nombre' },
 		{ title: 'Medico', field: 'medico_nombre' },
 		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
@@ -114,15 +140,8 @@ const AgendarConsulta = (props) => {
 		}
 	}
 
-	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
-	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
-	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
-	const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
-	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
-	const tipoCitaSinCitaId = process.env.REACT_APP_TIPO_CITA_SIN_CITA;
-
 	const dataComplete = !paciente.nombres || !values.precio
-		|| !values.medico || !values.promovendedor || (sucursal === sucursalManuelAcunaId ? !values.fecha_hora : false);
+		|| !values.medico || !values.promovendedor || (sucursal._id === sucursalManuelAcunaId ? !values.fecha_hora : false);
 
 	const options = {
 		rowStyle: rowData => {
@@ -132,7 +151,7 @@ const AgendarConsulta = (props) => {
 			};
 		},
 		headerStyle: {
-			backgroundColor: '#2BA6C6',
+			backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
 			color: '#FFF',
 			fontWeight: 'bolder',
 			fontSize: '18px'
@@ -289,6 +308,7 @@ const AgendarConsulta = (props) => {
 			dateNow.setSeconds(0);
 			data.fecha_hora = dateNow;
 			data.tipo_cita = tipoCitaSinCitaId;
+			// data.quien_confirma_asistencia = empleado._id;
 		}
 
 		const response = await createConsult(data);
@@ -360,16 +380,30 @@ const AgendarConsulta = (props) => {
 		setOpenModalPagos(true);
 	}
 
-	const handleClickCirugia = (event, rowData) => {
+	const handleClickCirugia = async(event, rowData) => {
+		const response = await findCirugiaByConsultaId(rowData._id);
+		console.log("RESPONSE", response);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			if (response.data !== '') {
+				setCirugia(response.data);
+			}
+		}
 		setConsulta(rowData);
-		setOpenModalPagos(true);
+		setOpenModalCirugias(true);
 	}
 
-	const handleCloseVerPagos = (event, rowData) => {
+	const handleCloseVerPagos = () => {
 		setOpenModalPagos(false);
 	}
 
-	const handleCloseImprimirConsulta = (event, rowData) => {
+	const handleCloseCirugia = () => {
+		setCirugia({
+			materiales: [],
+		});
+		setOpenModalCirugias(false);
+	}
+
+	const handleCloseImprimirConsulta = () => {
 		setOpenModalImprimirConsultas(false);
 	}
 
@@ -387,15 +421,17 @@ const AgendarConsulta = (props) => {
 		},
 		{
 			icon: EditIcon,
-			tooltip: 'Editar cita',
+			tooltip: 'Editar consulta',
 			onClick: handleOnClickEditarConsulta
 		}, //: ''
 		rowData => (
 			rowData.pagado ? {
 				icon: AttachMoneyIcon,
 				tooltip: 'Ver pago',
-				onClick: handleClickVerPagos
-			} : '',
+				onClick: handleClickVerPagos,
+			} : ''
+		),
+		rowData => (
 			rowData.pagado ? {
 				icon: LocalHospitalIcon,
 				tooltip: 'Pasar a Cirugias',
@@ -431,10 +467,10 @@ const AgendarConsulta = (props) => {
 								citas={citas}
 								actions={actions}
 								components={components}
-								cita={cita}
+								consulta={consulta}
 								openModal={openModal}
 								empleado={empleado}
-								sucursal={sucursal._id}
+								sucursal={sucursal}
 								onClickCancel={handleCloseModal}
 								loadConsultas={loadConsultas}
 								tipoCitas={tipoCitas}
@@ -448,12 +484,15 @@ const AgendarConsulta = (props) => {
 								setFilterDate={setFilterDate}
 								OnCloseVerPagos={handleCloseVerPagos}
 								openModalPagos={openModalPagos}
+								openModalCirugias={openModalCirugias}
 								openModalImprimirConsultas={openModalImprimirConsultas}
 								datosImpresion={datosImpresion}
 								onCloseImprimirConsulta={handleCloseImprimirConsulta}
 								frecuencias={frecuencias}
 								onChangeFrecuencia={(e) => handleChangeFrecuencia(e)}
 								dataComplete={dataComplete}
+								onCloseCirugia={handleCloseCirugia}
+								cirugia={cirugia}
 								{...props} />
 						}
 					</Formik> :

@@ -53,6 +53,9 @@ export const generateFolioCita = (cita) => {
             ) 
     ) : 
     'S/C';
-    const folio = `${cita.sucursal.clave}${cita.servicio ? cita.servicio.clave : 'CON'}${date.getFullYear()}${addZero(date.getMonth() + 1)}${addZero(date.getDate())}${consecutivo}`;
+
+    const turno = date.getUTCHours() >= (date.getDay() === 6 ? 13 : 14) ? 'TV' : 'TM';
+
+    const folio = `${cita.sucursal.clave}${cita.servicio ? cita.servicio.clave : 'CON'}${date.getFullYear()}${addZero(date.getMonth() + 1)}${addZero(date.getDate())}${turno}${consecutivo}`;
     return folio;
 }

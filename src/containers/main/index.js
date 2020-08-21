@@ -12,7 +12,7 @@ const MenuMain = (props) => {
 
 	const [pacienteAgendado, setPacienteAgendado] = useState({});
 	const [value, setValue] = useState(0);
-	const [open, setOpen] = useState(false);
+	const [openModalPassword, setOpenModalPassword] = useState(false);
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
 	const [severity, setSeverity] = useState('success');
@@ -43,15 +43,15 @@ const MenuMain = (props) => {
 	}
 
 	const handleClickCambioPassword = () => {
-		setOpen(true);
+		setOpenModalPassword(true);
 	}
 
 	const handleOpen = () => {
-		setOpen(true);
+		setOpenModalPassword(true);
 	}
 
 	const handleClose = () => {
-		setOpen(false);
+		setOpenModalPassword(false);
 	}
 
 	const handleCloseAlert = () => {
@@ -69,7 +69,7 @@ const MenuMain = (props) => {
 						onClickAgendar={handleAgendar}
 						empleado={empleado}
 						sucursal={sucursal}
-						open={open}
+						openModalPassword={openModalPassword}
 						onClickLogout={handleLogout}
 						onClickCambioPassword={handleClickCambioPassword}
 						onOpen={handleOpen}
@@ -88,7 +88,7 @@ const MenuMain = (props) => {
 							onClickAgendar={handleAgendar}
 							empleado={empleado}
 							sucursal={sucursal}
-							open={open}
+							openModalPassword={openModalPassword}
 							onClickLogout={handleLogout}
 							onClickCambioPassword={handleClickCambioPassword}
 							onOpen={handleOpen}

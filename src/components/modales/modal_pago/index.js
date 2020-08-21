@@ -14,13 +14,15 @@ const ModalPago = (props) => {
   const {
     open,
     onClose,
-    cita,
+    servicio,
     empleado,
     setOpenAlert,
     setMessage,
     sucursal,
     loadPagos,
     pago,
+    restante,
+    tipoServicioId,
   } = props;
 
   const porcetanjeComision = process.env.REACT_APP_COMISION_PAGO_TARJETA;
@@ -102,7 +104,7 @@ const ModalPago = (props) => {
   const handleChangeCantidad = (event) => {
     const datos = {
       ...values,
-      cantidad: event.target.value,
+      cantidad: Number(event.target.value) > Number(restante) ? restante : event.target.value ,
     }
     calcularTotal(datos);
   }
@@ -148,14 +150,16 @@ const ModalPago = (props) => {
 
   const handleClickGuardarPago = async (event, rowData) => {
     rowData.fecha_pago = new Date();
-    rowData.paciente = cita.paciente._id;
-    rowData.medico = cita.medico._id;
+    rowData.paciente = servicio.paciente._id;
+    rowData.medico = servicio.medico._id;
     rowData.servicio = consultaServicioId;
     rowData.tratamientos = consultaTratamientoId;
     rowData.quien_recibe_pago = empleado._id;
     rowData.sucursal = sucursal;
-    rowData.cita = cita._id;
-    rowData.porcentaje_comision = `${rowData.metodo_pago === metodoPagoTarjetaId ? porcetanjeComision : '0'} %`;
+    rowData.servicio = servicio._id;
+    rowData.tipo_servicio = tipoServicioId;
+    rowData.porcentaje_comision = `${rowData.metodo_pago === metodoPagoTarjetaId ? porcetanjeComision : '0'}%`;
+    rowData.porcentaje_descuento = `${rowData.porcentaje_descuento} %`;
     const res = pago._id ? await updatePago(pago._id, rowData) : await createPago(rowData);
     if (`${res.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
       || `${res.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {

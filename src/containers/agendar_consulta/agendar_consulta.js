@@ -14,6 +14,8 @@ import ModalConsulta from '../../components/modales/modal_consulta';
 import { green } from '@material-ui/core/colors';
 import ModalPagos from '../../components/modales/modal_pagos';
 import ModalImprimirConsulta from '../../components/modales/imprimir/consulta';
+import { toFormatterCurrency } from '../../utils/utils';
+import ModalCirugia from '../../components/modales/modal_cirugia';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -78,7 +80,7 @@ export const AgendarConsultaContainer = (props) => {
     components,
     // MODALS PROPERTIES
     openModal,
-    cita,
+    consulta,
     onClickActualizarCita,
     onClickCancel,
     onChangeTipoCita,
@@ -93,7 +95,12 @@ export const AgendarConsultaContainer = (props) => {
     openModalImprimirConsultas,
     datosImpresion,
     onCloseImprimirConsulta,
+    openModalCirugias,
+    onCloseCirugia,
+    cirugia,
   } = props;
+
+  console.log("CONSULTA", consulta);
 
   return (
     <Fragment>
@@ -101,7 +108,7 @@ export const AgendarConsultaContainer = (props) => {
         openModal ?
           <ModalConsulta
             open={openModal}
-            cita={cita}
+            consulta={consulta}
             onClickActualizarCita={onClickActualizarCita}
             onClose={onClickCancel}
             onChangeServicio={onChangeServicio}
@@ -114,7 +121,7 @@ export const AgendarConsultaContainer = (props) => {
             tratamientos={tratamientos}
             horarios={horarios}
             empleado={empleado}
-            sucursal={sucursal}
+            sucursal={sucursal._id}
             loadConsultas={loadConsultas}
             setOpenAlert={setOpenAlert}
             setMessage={setMessage}
@@ -126,9 +133,22 @@ export const AgendarConsultaContainer = (props) => {
           <ModalPagos
             open={openModalPagos}
             onClose={OnCloseVerPagos}
-            cita={cita}
+            servicio={consulta}
             empleado={empleado}
-            sucursal={sucursal}
+            sucursal={sucursal._id}
+            setMessage={setMessage}
+            setOpenAlert={setOpenAlert} />
+          : ''
+      }
+      {
+        openModalCirugias ?
+        <ModalCirugia
+            open={openModalCirugias}
+            onClose={onCloseCirugia}
+            consulta={consulta}
+            cirugia={cirugia}
+            empleado={empleado}
+            sucursal={sucursal._id}
             setMessage={setMessage}
             setOpenAlert={setOpenAlert} />
           : ''
@@ -145,7 +165,7 @@ export const AgendarConsultaContainer = (props) => {
         <h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'Selecciona un paciente'}</h1>
 
         <Grid container spacing={3}>
-          {sucursal === process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID ?
+          {sucursal._id === process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID ?
             <Fragment>
               <Grid item xs={12} sm={2}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -229,7 +249,7 @@ export const AgendarConsultaContainer = (props) => {
               </Select>
             </FormControl>
           </Grid>
-          {sucursal === process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID ?
+          {sucursal._id === process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID ?
             <Grid item xs={12} sm={2}>
               <FormControl variant="outlined" className={classes.formControl}>
                 <InputLabel id="simple-select-outlined-tipo-cita">Tipo Cita</InputLabel>
@@ -247,18 +267,6 @@ export const AgendarConsultaContainer = (props) => {
           <Grid item xs={12} sm={2}>
             <TextField
               className={classes.button}
-              name="precio"
-              //helperText={touched.precio ? errors.precio : ""}
-              error={Boolean(errors.precio)}
-              label="Precio"
-              value={values.precio}
-              type='Number'
-              onChange={onChangePrecio}
-              variant="outlined" />
-          </Grid>
-          <Grid item xs={12} sm={2}>
-            <TextField
-              className={classes.button}
               name="observaciones"
               //helperText={touched.observaciones ? errors.observaciones : ""}
               error={Boolean(errors.observaciones)}
@@ -266,6 +274,9 @@ export const AgendarConsultaContainer = (props) => {
               value={values.observaciones}
               onChange={onChangeObservaciones}
               variant="outlined" />
+          </Grid>
+          <Grid item xs={12} sm={2}>
+            <h1>{toFormatterCurrency(values.precio)}</h1>
           </Grid>
           <Grid item xs={12} sm={2}>
             <Button

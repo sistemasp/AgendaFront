@@ -69,7 +69,7 @@ const ModalFormPagos = (props) => {
     onClickNewPago,
     onClickCancelPago,
     loadPagos,
-    cita,
+    servicio,
     empleado,
     sucursal,
     onGuardarModalPagos,
@@ -77,6 +77,7 @@ const ModalFormPagos = (props) => {
     onCloseBuscarRazonSocial,
     actions,
     restante,
+    tipoServicioId,
   } = props;
 
   return (
@@ -86,12 +87,13 @@ const ModalFormPagos = (props) => {
           <ModalPago
             open={openModalPago}
             onClose={onClickCancelPago}
-            cita={cita}
+            servicio={servicio}
             pago={pago}
             empleado={empleado}
             sucursal={sucursal}
             loadPagos={loadPagos}
-            restante={restante} />
+            restante={restante}
+            tipoServicioId={tipoServicioId} />
           : ''
       }
       {
@@ -109,7 +111,7 @@ const ModalFormPagos = (props) => {
         <div style={modalStyle} className={classes.paper}>
 
           {
-            !cita.pagado ?
+            !servicio.pagado ?
               <Grid item xs={12} sm={12}>
                 <Button
                   className={classes.button}
@@ -141,7 +143,7 @@ const ModalFormPagos = (props) => {
 
           <Grid container xs={12}>
             {
-              !cita.pagado ?
+              !servicio.pagado ?
                 <Grid item xs={12} sm={6}>
                   <ButtonCustom
                     className={classes.button}
@@ -158,7 +160,7 @@ const ModalFormPagos = (props) => {
                 color="secondary"
                 variant="contained"
                 onClick={onClickCancel} >
-                {!cita.pagado ? 'Cancelar' : 'Salir'}
+                {!servicio.pagado ? 'Cancelar' : 'Salir'}
               </Button>
             </Grid>
           </Grid>

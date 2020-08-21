@@ -421,7 +421,6 @@ const AgendarTratamiento = (props) => {
 		setIsLoading(true);
 		setCita(rowData);
 		// await loadTratamientos(rowData.servicio);
-		console.log('rowData', rowData);
 		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio._id);
 		setOpenModal(true);
 		setIsLoading(false);

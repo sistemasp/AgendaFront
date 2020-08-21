@@ -22,7 +22,8 @@ const ModalPaciente = (props) => {
     nombres: paciente.nombres,
     apellidos: paciente.apellidos,
     telefono: paciente.telefono,
-    sexo: paciente.sexo._id,
+    sexo: paciente.sexo ? paciente.sexo._id : '',
+    fecha_nacimiento: paciente.fecha_nacimiento ? paciente.fecha_nacimiento : '',
   });
 
   const handleChange = (e) => {
@@ -33,7 +34,7 @@ const ModalPaciente = (props) => {
   }
 
   const dataComplete = !values.nombres || !values.apellidos
-    || !values.sexo || !values.telefono;
+    || !values.sexo || !values.telefono || !values.fecha_nacimiento || values.fecha_nacimiento.length !== 10;
 
   useEffect(() => {
 

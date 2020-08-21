@@ -7,7 +7,7 @@ import InputIcon from '@material-ui/icons/Input';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import DirectionsWalkIcon from '@material-ui/icons/DirectionsWalk';
-import { addZero } from "../../utils/utils";
+import { addZero, generateFolioCita } from "../../utils/utils";
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -61,6 +61,7 @@ const ListaEspera = (props) => {
 	const columnsEspera = [
 		{ title: 'Nombre', field: 'paciente_nombre' },
 		{ title: 'Hora llegada', field: 'hora_llegada' },
+		{ title: 'Folio', field: 'folio' },
 		{ title: 'Medico', field: 'medico_nombre' },
 	];
 
@@ -100,6 +101,7 @@ const ListaEspera = (props) => {
 		const response = await findSurgeryBySucursalIdWaitingList(sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
+				item.folio = generateFolioCita(item);
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'LIBRE';
 				item.medico_nombre = item.medico ? item.medico.nombre : 'SIN MEDICO';
 			});
@@ -111,6 +113,7 @@ const ListaEspera = (props) => {
 		const response = await waitingList(sucursal, asistioStatusId);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
+				item.folio = generateFolioCita(item);
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
 				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
 			});
@@ -185,6 +188,7 @@ const ListaEspera = (props) => {
 			const response = await findSurgeryBySucursalIdWaitingList(sucursal);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				response.data.forEach(item => {
+					item.folio = generateFolioCita(item);
 					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'LIBRE';
 					item.medico_nombre = item.medico ? item.medico.nombre : 'SIN MEDICO';
 				});
@@ -196,6 +200,7 @@ const ListaEspera = (props) => {
 			const response = await waitingList(sucursal, asistioStatusId);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				response.data.forEach(item => {
+					item.folio = generateFolioCita(item);
 					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
 					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
 				});

@@ -54,8 +54,6 @@ const ModalFormPaciente = (props) => {
     sexos,
   } = props;
 
-  console.log("dataComplete", dataComplete);
-
   return (
     <div>
       <Modal
@@ -87,21 +85,6 @@ const ModalFormPaciente = (props) => {
               <Grid item xs={12}>
                 <TextField
                 className={classes.textField}
-                name="fecha_nacimiento"
-                helperText={touched.fecha_nacimiento ? errors.fecha_nacimiento : ""}
-                error={Boolean(errors.fecha_nacimiento)}
-                label="Fecha de nacimiento"
-                value={values.fecha_nacimiento}
-                onChange={handleChange}
-                inputProps={{
-                  maxLength: "10",
-                  placeholder: "dd/mm/aaaa"
-                }}
-                variant="outlined" />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                className={classes.textField}
                 name="direccion"
                 helperText={touched.direccion ? errors.direccion : ""}
                 error={Boolean(errors.direccion)}
@@ -123,6 +106,19 @@ const ModalFormPaciente = (props) => {
                   }}
                   variant="outlined"
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  className={classes.textField}
+                  name="fecha_nacimiento"
+                  label="Fecha de nacimiento"
+                  value={values.fecha_nacimiento}
+                  onChange={onChange}
+                  inputProps={{
+                    maxLength: "10",
+                    placeholder: "dd/mm/aaaa"
+                  }}
+                  variant="outlined" />
               </Grid>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>

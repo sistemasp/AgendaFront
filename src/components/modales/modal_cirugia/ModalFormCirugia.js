@@ -1,0 +1,269 @@
+import React, { Fragment } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@material-ui/core';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import { CheckCustom } from '../../basic/CheckCustom';
+import ModalPagos from '../modal_pagos';
+import { Multiselect } from 'multiselect-react-dropdown';
+import { toFormatterCurrency } from '../../../utils/utils';
+
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
+
+const useStyles = makeStyles(theme => ({
+  paper: {
+    position: 'absolute',
+    width: 700,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  textField: {
+    width: '100%',
+  },
+  formControl: {
+    minWidth: 120,
+    width: '100%',
+  },
+  button: {
+    width: '100%',
+  },
+  label: {
+    marginTop: '0px',
+    marginBottom: '0px',
+  },
+  labelItemRight: {
+    marginTop: '0px',
+    marginBottom: '0px',
+    textAlign: 'right',
+  }
+}));
+
+const canceloStatusId = process.env.REACT_APP_CANCELO_STATUS_ID;
+const noAsistioStatusId = process.env.REACT_APP_NO_ASISTIO_STATUS_ID;
+const reagendoStatusId = process.env.REACT_APP_REAGENDO_STATUS_ID;
+
+const ModalFormCirugia = (props) => {
+  const classes = useStyles();
+
+  // getModalStyle is not a pure function, we roll the style only on the first render
+  const [modalStyle] = React.useState(getModalStyle);
+
+  const {
+    values,
+    handleSubmit,
+    onClose,
+    onClickCrearCirugia,
+    open,
+    onChangePrecio,
+    onChangePagado,
+    sucursal,
+    materiales,
+    onChangeMateriales,
+    onChangeItemPrecio,
+    dataComplete,
+    onChangeBiopsia,
+    onChangeCantidadBiopsias,
+    onChange,
+    patologos,
+    onChangeCostoBiopsias,
+    openModalPagos,
+    onCloseModalPagos,
+    onGuardarModalPagos,
+    consulta,
+    empleado,
+    tipoServicioId,
+  } = props;
+
+  console.log("VALEUS", values);
+
+  return (
+    <div>
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={open} >
+        <div style={modalStyle} className={classes.paper}>
+          <form onSubmit={handleSubmit}>
+            {
+              openModalPagos ?
+                <ModalPagos
+                  open={openModalPagos}
+                  onClose={onCloseModalPagos}
+                  onGuardarModalPagos={onGuardarModalPagos}
+                  servicio={values}
+                  empleado={empleado}
+                  sucursal={sucursal}
+                  tipoServicioId={tipoServicioId} />
+                : ''
+            }
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                <h1 className={classes.label}>CIRUGIA</h1>
+              </Grid>
+              <Grid item xs={12}>
+                <h2 className={classes.label}>{values.consulta.paciente_nombre} ({values.consulta.paciente.telefono})</h2>
+              </Grid>
+              <Grid item xs={12}>
+                <h2 className={classes.label}>Medico: {values.consulta.medico.nombre}</h2>
+              </Grid>
+
+              <Grid item xs={12} >
+                <Multiselect
+                  options={materiales} // Options to display in the dropdown
+                  displayValue="nombre" // Property name to display in the dropdown options
+                  onSelect={(e) => onChangeMateriales(e)} // Function will trigger on select event
+                  onRemove={(e) => onChangeMateriales(e)} // Function will trigger on remove event
+                  placeholder="Selecciona materiales"
+                  selectedValues={values.materiales} // Preselected value to persist in dropdown
+                />
+              </Grid>
+              {
+                values.materiales.map((item, index) =>
+                  <Grid item xs={12} sm={4}>
+                    <TextField
+                      className={classes.button}
+                      name={item.precio}
+                      label={`Precio: ${item.nombre}`}
+                      value={item.precio}
+                      type='Number'
+                      onChange={(e) => onChangeItemPrecio(e, index)}
+                      variant="outlined" />
+                  </Grid>)
+              }
+
+              <Grid item xs={12}>
+                <TextField
+                  className={classes.textField}
+                  name="precio"
+                  label="Precio cirugia"
+                  value={values.precio}
+                  type='Number'
+                  onChange={onChangePrecio}
+                  onInput={(e) => {
+                    e.target.value = e.target.value < 0 ? 0 : e.target.value;
+                    e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 5)
+                  }}
+                  variant="outlined" />
+              </Grid>
+
+              {
+                values._id ?
+                  <Grid item xs={12} sm={2}>
+                    <CheckCustom
+                      checked={values.hasBiopsia}
+                      onChange={onChangeBiopsia}
+                      name="checkedG"
+                      label="Biopsias" />
+                  </Grid>
+                  : ''
+              }
+
+              {values.hasBiopsia ?
+                <Fragment>
+
+
+                  <Grid item xs={12} sm={3}>
+                    <TextField
+                      className={classes.textField}
+                      name="cantidad_biopsias"
+                      label="Cantidad Biopsias"
+                      value={values.cantidad_biopsias}
+                      type='Number'
+                      onChange={onChange}
+                      onInput={(e) => {
+                        e.target.value = e.target.value <= 0 ? 1 : e.target.value;
+                        e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 1)
+                      }}
+                      variant="outlined" />
+                  </Grid>
+
+                  <Grid item xs={12} sm={3}>
+                    <TextField
+                      className={classes.textField}
+                      name="costo_biopsias"
+                      label="Costo Biopsias"
+                      value={values.costo_biopsias}
+                      type='Number'
+                      onChange={onChangeCostoBiopsias}
+                      onInput={(e) => {
+                        e.target.value = e.target.value <= 0 ? 0 : e.target.value;
+                        e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 4)
+                      }}
+                      variant="outlined" />
+                  </Grid>
+
+                  <Grid item xs={12} sm={4}>
+                    <FormControl variant="outlined" className={classes.formControl}>
+                      <InputLabel id="simple-select-outlined-hora">Patólogo</InputLabel>
+                      <Select
+                        labelId="simple-select-outlined-patologo"
+                        id="simple-select-outlined-patologo"
+                        value={values.patologo}
+                        onChange={onChange}
+                        name="patologo"
+                        label="Patólogo" >
+                        {patologos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                </Fragment> : ''
+              }
+
+              {
+                values._id ?
+                  <Grid item xs={12}>
+                    <CheckCustom
+                      checked={values.pagado}
+                      onChange={onChangePagado}
+                      disabled={values.pagado}
+                      name="checkedG"
+                      label="Pagado" />
+                  </Grid> : ''
+              }
+              <Grid item xs={12}>
+                <h1 className={classes.labelItemRight}>Total: {toFormatterCurrency(values.total)}</h1>
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Button
+                  className={classes.button}
+                  color="primary"
+                  variant="contained"
+                  onClick={(e) => onClickCrearCirugia(e, values)}
+                //disabled={!dataComplete} 
+                >
+                  Guardar
+                </Button>
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Button
+                  className={classes.button}
+                  color="secondary"
+                  variant="contained"
+                  onClick={onClose} >
+                  Cancelar
+              </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </div>
+      </Modal>
+    </div>
+  );
+}
+
+export default ModalFormCirugia;

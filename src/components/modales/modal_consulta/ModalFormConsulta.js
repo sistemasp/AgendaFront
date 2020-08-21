@@ -55,8 +55,7 @@ const ModalFormConsulta = (props) => {
 
   const {
     values,
-    errors,
-    cita,
+    consulta,
     empleado,
     handleSubmit,
     onChangeFecha,
@@ -64,7 +63,6 @@ const ModalFormConsulta = (props) => {
     onChangeTipoCita,
     onChangeStatus,
     onChangePromovendedor,
-    isValid,
     onClose,
     onCloseModalPagos,
     onClickActualizarCita,
@@ -82,6 +80,7 @@ const ModalFormConsulta = (props) => {
     openModalPagos,
     sucursal,
     onGuardarModalPagos,
+    tipoServicioId,
   } = props;
   
   return (
@@ -98,9 +97,10 @@ const ModalFormConsulta = (props) => {
                   open={openModalPagos}
                   onClose={onCloseModalPagos}
                   onGuardarModalPagos={onGuardarModalPagos}
-                  cita={cita}
+                  servicio={consulta}
                   empleado={empleado}
-                  sucursal={sucursal} />
+                  sucursal={sucursal}
+                  tipoServicioId={tipoServicioId} />
                 : ''
             }
             <Grid container spacing={1}>
@@ -123,7 +123,6 @@ const ModalFormConsulta = (props) => {
                         labelId="simple-select-outlined-medico"
                         id="simple-select-outlined-medico"
                         value={values.medico}
-                        error={Boolean(errors.medico)}
                         onChange={onChangeMedico}
                         label="Medico" >
                         {doctores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
@@ -142,7 +141,6 @@ const ModalFormConsulta = (props) => {
                         labelId="simple-select-outlined-tipo-cita"
                         id="simple-select-outlined-tipo-cita"
                         value={values.tipo_cita}
-                        error={Boolean(errors.tipo_cita)}
                         onChange={onChangeTipoCita}
                         label="Tipo cita" >
                         {tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
@@ -161,7 +159,6 @@ const ModalFormConsulta = (props) => {
                         labelId="simple-select-outlined-promovendedor"
                         id="simple-select-outlined-promovendedor"
                         value={values.promovendedor}
-                        error={Boolean(errors.promovendedor)}
                         onChange={onChangePromovendedor}
                         label="Promovendedor" >
                         {promovendedores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
@@ -177,7 +174,6 @@ const ModalFormConsulta = (props) => {
                     labelId="simple-select-outlined-statements"
                     id="simple-select-outlined-statements"
                     value={values.status}
-                    error={Boolean(errors.statements)}
                     onChange={onChangeStatus}
                     label="Estado" >
                     {statements.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
@@ -215,7 +211,6 @@ const ModalFormConsulta = (props) => {
                           labelId="simple-select-outlined-hora"
                           id="simple-select-outlined-hora"
                           value={values.hora}
-                          error={Boolean(errors.hora)}
                           onChange={onChangeHora}
                           label="Hora" >
                           {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
@@ -232,8 +227,6 @@ const ModalFormConsulta = (props) => {
                     <TextField
                       className={classes.textField}
                       name="motivos"
-                      //helperText={touched.numero_sesion ? errors.numero_sesion : ""}
-                      error={Boolean(errors.motivos)}
                       label="Motivos"
                       value={values.motivos}
                       onChange={onChangeMotivos}
@@ -245,8 +238,6 @@ const ModalFormConsulta = (props) => {
                 <TextField
                   className={classes.textField}
                   name="precio"
-                  //helperText={touched.precio ? errors.precio : ""}
-                  error={Boolean(errors.precio)}
                   label="Precio"
                   value={values.precio}
                   type='Number'
@@ -258,8 +249,6 @@ const ModalFormConsulta = (props) => {
                 <TextField
                   className={classes.textField}
                   name="observaciones"
-                  //helperText={touched.observaciones ? errors.observaciones : ""}
-                  error={Boolean(errors.observaciones)}
                   label="Observaciones"
                   value={values.observaciones}
                   onChange={onChangeObservaciones}
@@ -281,8 +270,7 @@ const ModalFormConsulta = (props) => {
                   className={classes.button}
                   color="primary"
                   variant="contained"
-                  onClick={(e) => onClickActualizarCita(e, values)}
-                  disabled={!isValid} >
+                  onClick={(e) => onClickActualizarCita(e, values)} >
                   Guardar
                 </Button>
               </Grid>

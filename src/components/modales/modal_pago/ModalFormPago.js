@@ -73,8 +73,6 @@ const ModalFormPago = (props) => {
     onChangeObservaciones,
     onChangeDigitos,
     open,
-    openModalFactura,
-    onCloseBuscarRazonSocial,
   } = props;
 
   return (
@@ -188,6 +186,10 @@ const ModalFormPago = (props) => {
 
               <Grid item xs={12}>
                 <h3 className={classes.label}>{`${values.porcentaje_descuento}% descuento : ${toFormatterCurrency(values.descuento)}`}</h3>
+              </Grid>
+
+              <Grid item xs={12}>
+                <h3 className={classes.label}>{`Subtotal : ${toFormatterCurrency((Number(values.cantidad) - Number(values.descuento)))}`}</h3>
               </Grid>
 
               {

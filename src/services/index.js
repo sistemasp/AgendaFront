@@ -720,6 +720,18 @@ export const findPagosByCita = async (idCita) => {
     }
 }
 
+export const findPagosByTipoServicioAndServicio = async (idTipoServicio, idServicio) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/pago/pagos/tipo_servicio/${idTipoServicio}/servicio/${idServicio}`,
+            method: 'GET',
+        });
+        return response;
+    } catch (error) {
+        console.log('findPagosByTipoServicioAndServicio', error);
+    }
+}
+
 export const updatePago = async (pagoId, pago) => {
     try {
         const response = await axios({
@@ -948,3 +960,45 @@ export const findConsultsByPayOfDoctor = async (dia, mes, anio, sucursalId, medi
         console.log('findConsultsByPayOfDoctor', error);
     }
 }
+
+// MATERIALES
+
+export const showAllMaterials = async () => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/material`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllMaterials', error);
+    }
+}
+
+// CIRUGIA
+
+export const createCirugia = async (cirugia) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cirugia`,
+            method: 'POST',
+            data: cirugia
+        });
+        return response;
+    } catch (error) {
+        console.log('createCirugia', error);
+    }
+}
+
+export const findCirugiaByConsultaId = async (consultaId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cirugia/consulta/${consultaId}`,
+            method: 'GET',
+        });
+        return response;
+    } catch (error) {
+        console.log('findCirugiaByConsultaId', error);
+    }
+}
+

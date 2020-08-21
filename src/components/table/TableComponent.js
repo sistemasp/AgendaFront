@@ -17,7 +17,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import MaterialTable from 'material-table';
-import { TablePagination } from '@material-ui/core';
+import { TablePagination, makeStyles } from '@material-ui/core';
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -39,7 +39,33 @@ const tableIcons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
+const useStyles = makeStyles({
+    root: {
+        backgroundColor: "blue",
+        color: "green"
+    },
+    toolbar: {
+        backgroundColor: "white"
+    },
+    caption: {
+        color: "red",
+        fontSize: "20px"
+    },
+    selectIcon: {
+        color: "green"
+    },
+    select: {
+        color: "green",
+        fontSize: "20px"
+    },
+    actions: {
+        color: "blue"
+    }
+});
+
 const TableComponent = props => {
+
+    const classes = useStyles();
 
     const {
         titulo,
@@ -78,7 +104,7 @@ const TableComponent = props => {
             lastTooltip: 'Ultima página',
         }
     };
-    
+
     return (
         <MaterialTable
             title={titulo}
@@ -90,6 +116,14 @@ const TableComponent = props => {
             editable={editable}
             options={options}
             components={components}
+            classes={{
+                root: classes.root,
+                toolbar: classes.toolbar,
+                caption: classes.caption,
+                selectIcon: classes.selectIcon,
+                select: classes.select,
+                actions: classes.actions
+            }}
         />
     );
 }

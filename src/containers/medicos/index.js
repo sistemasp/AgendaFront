@@ -38,15 +38,11 @@ const useStyles = makeStyles(theme => ({
 
 const Medicos = (props) => {
 
-	console.log("PROPS", props);
-
 	const classes = useStyles();
 
 	const {
 		sucursal
 	} = props;
-
-	console.log("sucursal", sucursal);
 
 	const [openPagoMedico, setOpenPagoMedico] = useState(false);
 	const [openHistoric, setOpenHistoric] = useState(false);

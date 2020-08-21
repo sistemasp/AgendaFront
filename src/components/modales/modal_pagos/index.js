@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { findPagosByCita } from '../../../services';
+import { findPagosByTipoServicioAndServicio } from '../../../services';
 import { addZero, toFormatterCurrency } from '../../../utils/utils';
 import ModalFormPagos from './ModalFormPagos';
 import AssignmentIcon from '@material-ui/icons/Assignment';
@@ -11,9 +11,10 @@ const ModalPagos = (props) => {
     onClose,
     sucursal,
     handleClickGuardarPago,
-    cita,
+    servicio,
     empleado,
     onGuardarModalPagos,
+    tipoServicioId,
   } = props;
 
   const [isLoading, setIsLoading] = useState(true);
@@ -38,6 +39,9 @@ const ModalPagos = (props) => {
     { title: 'Hora', field: 'hora' },
     { title: 'Metodo pago', field: 'metodo_pago.nombre' },
     { title: 'Cantidad', field: 'cantidad_moneda' },
+    { title: 'Descuento(%)', field: 'porcentaje_descuento' },
+    { title: 'Descuento', field: 'descuento_moneda' },
+    { title: 'Subtotal', field: 'subtotal_moneda' },
     { title: 'Comision(%)', field: 'porcentaje_comision' },
     { title: 'Comision', field: 'comision_moneda' },
     { title: 'Total', field: 'total_moneda' },
@@ -48,9 +52,11 @@ const ModalPagos = (props) => {
     { title: 'Observaciones', field: 'observaciones' },
   ];
 
+  console.log("SERVICIO", servicio);
+  
   const options = {
     headerStyle: {
-      backgroundColor: '#5DADE2',
+      backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
       color: '#FFF',
       fontWeight: 'bolder',
       fontSize: '18px'
@@ -77,9 +83,11 @@ const ModalPagos = (props) => {
 
   const efectivoMetodoPagoId = process.env.REACT_APP_METODO_PAGO_EFECTIVO;
 
+  console.log("SERVICIO", servicio);
+
   useEffect(() => {
     const loadPagos = async () => {
-      const response = await findPagosByCita(cita._id);
+      const response = await findPagosByTipoServicioAndServicio(tipoServicioId, servicio._id);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         let acomulado = 0;
         response.data.forEach(item => {
@@ -87,6 +95,8 @@ const ModalPagos = (props) => {
           item.fecha = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth())}/${addZero(fecha.getFullYear())}`
           item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
           item.cantidad_moneda = toFormatterCurrency(item.cantidad);
+          item.descuento_moneda = toFormatterCurrency(item.descuento);
+          item.subtotal_moneda = toFormatterCurrency((Number(item.cantidad) - Number(item.descuento)));
           item.comision_moneda = toFormatterCurrency(item.comision);
           item.total_moneda = toFormatterCurrency(item.total);
           item.banco_nombre = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.banco.nombre;
@@ -94,7 +104,7 @@ const ModalPagos = (props) => {
           item.digitos_show = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.metodo_pago.nombre;
           acomulado = Number(acomulado) + Number(item.cantidad);
         });
-        setRestante(Number(cita.precio) - Number(acomulado));
+        setRestante(Number(servicio.total ? servicio.total : servicio.precio) - Number(acomulado));
         setPagos(response.data);
       }
     }
@@ -103,10 +113,10 @@ const ModalPagos = (props) => {
 
     setIsLoading(false);
 
-  }, []);
+  }, [tipoServicioId, servicio]);
 
   const loadPagos = async () => {
-    const response = await findPagosByCita(cita._id);
+    const response = await findPagosByTipoServicioAndServicio(tipoServicioId, servicio._id);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       let acomulado = 0;
       response.data.forEach(item => {
@@ -114,6 +124,8 @@ const ModalPagos = (props) => {
         item.fecha = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth())}/${addZero(fecha.getFullYear())}`
         item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
         item.cantidad_moneda = toFormatterCurrency(item.cantidad);
+        item.descuento_moneda = toFormatterCurrency(item.descuento);
+        item.subtotal_moneda = toFormatterCurrency((Number(item.cantidad) - Number(item.descuento)));
         item.comision_moneda = toFormatterCurrency(item.comision);
         item.total_moneda = toFormatterCurrency(item.total);
         item.banco_nombre = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.banco.nombre;
@@ -121,7 +133,7 @@ const ModalPagos = (props) => {
         item.digitos_show = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.metodo_pago.nombre;
         acomulado = Number(acomulado) + Number(item.cantidad);
       });
-      setRestante(Number(cita.precio) - Number(acomulado));
+      setRestante(Number(servicio.total ? servicio.total : servicio.precio) - Number(acomulado));
       setPagos(response.data);
     }
   }
@@ -163,15 +175,16 @@ const ModalPagos = (props) => {
         options={options}
         actions={actions}
         localization={localization}
-        cita={cita}
+        servicio={servicio}
         empleado={empleado}
         sucursal={sucursal}
         onGuardarModalPagos={onGuardarModalPagos}
-        titulo={`Pagos: ${cita.paciente.nombres} ${cita.paciente.apellidos}`}
+        titulo={`Pagos: ${servicio.paciente.nombres} ${servicio.paciente.apellidos}`}
         openModalFactura={openModalFactura}
         onCloseBuscarRazonSocial={handleCloseBuscarRazonSocial}
         loadPagos={loadPagos}
         restante={restante}
+        tipoServicioId={tipoServicioId}
       />
     </Fragment>
 
