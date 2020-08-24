@@ -7,6 +7,8 @@ import {
   showAllStatus,
   createCirugia,
   showAllMaterials,
+  updateCirugia,
+  createConsecutivo,
 } from "../../../services";
 import * as Yup from "yup";
 import { Formik } from 'formik';
@@ -70,6 +72,7 @@ const ModalCirugia = (props) => {
     fecha_hora: cirugia.fecha_hora,
     consulta: consulta,
     consecutivo: cirugia.consecutivo,
+    sucursal: cirugia.sucursal ? cirugia.sucursal : consulta.sucursal,
     precio: cirugia.precio ? cirugia.precio : 0,
     total: cirugia.total ? cirugia.total : 0,
     materiales: cirugia.materiales,
@@ -126,11 +129,27 @@ const ModalCirugia = (props) => {
 
   const handleClickCrearCirugia = async (event, data) => {
     data.fecha_hora = new Date();
-    const response = await createCirugia(data);
-    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-      setOpenAlert(true);
-      setMessage('La Cirugia se guardo correctamente');
 
+    const response = data._id ? await updateCirugia(data._id, data) : await createCirugia(data);
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
+      || `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+      if (data._id) {
+        setOpenAlert(true);
+        setMessage('La Cirugia se actualizo correctamente');
+      } else {
+        const consecutivo = {
+          consecutivo: response.data.consecutivo,
+          tipo_servicio: cirugiaServicioId,
+          servicio: response.data._id,
+          fecha_hora: new Date(),
+          status: response.data.status,
+        }
+        const responseConsecutivo = await createConsecutivo(consecutivo);
+        if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+          setOpenAlert(true);
+          setMessage('La Cirugia se guardo correctamente');
+        }
+      }
     }
     onClose();
   }
@@ -179,13 +198,14 @@ const ModalCirugia = (props) => {
   const handleGuardarModalPagos = (pagos) => {
     setValues({
       ...values,
+      pagado: true,
       pagos: pagos,
     });
     setOpenModalPagos(false);
   }
 
   const handleChangePagado = (e) => {
-    setValues({ ...values, pagado: !values.pagado });
+    //setValues({ ...values, pagado: !values.pagado });
     setOpenModalPagos(!values.pagado);
   }
 

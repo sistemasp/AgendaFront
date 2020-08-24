@@ -66,6 +66,7 @@ const ModalFormImprimirPagoMedico = (props) => {
   const {
     sucursal,
     consultas,
+    cirugias,
     medico,
     onClose,
     onClickImprimir,
@@ -126,6 +127,44 @@ const ModalFormImprimirPagoMedico = (props) => {
                     </Grid>
                     <Grid item xs={4} >
                       <h4 className={classes.labelItemCenter}>{`${consulta.consecutivo}`}</h4>
+                    </Grid>
+                    <Grid item xs={4} >
+                      <h4 className={classes.labelItemRight}> {`${toFormatterCurrency(pagoMedico)}`} </h4>
+                    </Grid>
+                  </Fragment>
+                })
+                : ''
+            }
+
+            <h1>
+              <br />
+            </h1>
+            <Grid item xs={12} className={classes.label}>
+              <h2 className={classes.labelItemLeft}> CIRUGIAS </h2>
+            </Grid>
+            <Grid item xs={4} >
+              <h3 className={classes.labelItemLeft}>{`Paciente`}</h3>
+            </Grid>
+            <Grid item xs={4} >
+              <h3 className={classes.labelItemCenter}>{`Consecutivo`}</h3>
+            </Grid>
+            <Grid item xs={4} >
+              <h3 className={classes.labelItemRight}> {`Cantidad a pagar`} </h3>
+            </Grid>
+            <Grid item xs={12} className={classes.label}>
+              <h5 className={classes.labelItemCenter}>__________________________________________________________________________________________________________________________________________</h5>
+            </Grid>
+            {
+              cirugias ?
+                cirugias.map(cirugia => {
+                  const pagoMedico = Number(cirugia.precio) * Number(medico.porcentaje) / 100;
+                  pagoTotal += Number(pagoMedico);
+                  return <Fragment>
+                    <Grid item xs={4} >
+                      <h4 className={classes.labelItemLeft}>{`${cirugia.paciente.nombres} ${cirugia.paciente.apellidos}`}</h4>
+                    </Grid>
+                    <Grid item xs={4} >
+                      <h4 className={classes.labelItemCenter}>{`${cirugia.consecutivo}`}</h4>
                     </Grid>
                     <Grid item xs={4} >
                       <h4 className={classes.labelItemRight}> {`${toFormatterCurrency(pagoMedico)}`} </h4>

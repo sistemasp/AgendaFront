@@ -961,6 +961,18 @@ export const findConsultsByPayOfDoctor = async (dia, mes, anio, sucursalId, medi
     }
 }
 
+export const findCirugiasByPayOfDoctor = async (dia, mes, anio, sucursalId, medicoId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cirugia/${dia}/${mes}/${anio}/sucursal/${sucursalId}/medico/${medicoId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findCirugiasByPayOfDoctor', error);
+    }
+}
+
 // MATERIALES
 
 export const showAllMaterials = async () => {
@@ -990,6 +1002,19 @@ export const createCirugia = async (cirugia) => {
     }
 }
 
+export const updateCirugia = async (idCirugia, cirugia) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cirugia/${idCirugia}`,
+            method: 'PUT',
+            data: cirugia
+        });
+        return response;
+    } catch (error) {
+        console.log('updateCirugia', error);
+    }
+}
+
 export const findCirugiaByConsultaId = async (consultaId) => {
     try {
         const response = await axios({
@@ -1002,3 +1027,17 @@ export const findCirugiaByConsultaId = async (consultaId) => {
     }
 }
 
+// CONSECUTIVOS 
+
+export const createConsecutivo = async (consecutivo) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consecutivo`,
+            method: 'POST',
+            data: consecutivo
+        });
+        return response;
+    } catch (error) {
+        console.log('createConsecutivo', error);
+    }
+}

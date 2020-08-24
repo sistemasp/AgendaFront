@@ -86,8 +86,6 @@ const ModalFormCirugia = (props) => {
     tipoServicioId,
   } = props;
 
-  console.log("VALEUS", values);
-
   return (
     <div>
       <Modal

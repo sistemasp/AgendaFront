@@ -9,6 +9,7 @@ import {
 	showAllTipoCitas,
 	showAllFrecuencias,
 	findCirugiaByConsultaId,
+	createConsecutivo,
 } from "../../services";
 import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
@@ -79,10 +80,7 @@ const AgendarConsulta = (props) => {
 			date.getDay() === 6 ? (date.getHours() >= 13 ? sucursal.precio_sabado_vespertino : sucursal.precio_sabado_matutino) // SABADO
 				: (date.getHours() >= 14 ? sucursal.precio_vespertino : sucursal.precio_matutino), // L-V
 	});
-	console.log("SUCURSAL", sucursal);
-	console.log("date.getDay()", date.getDay());
-	console.log("date.getHours()", date.getHours());
-	console.log("date.getUTCHours()", date.getUTCHours());
+
 	const [citas, setConsultas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
 	const [openModalPagos, setOpenModalPagos] = useState(false);
@@ -112,7 +110,7 @@ const AgendarConsulta = (props) => {
 	const tipoCitaSinCitaId = process.env.REACT_APP_TIPO_CITA_SIN_CITA;
 
 	const columns = [
-		{ title: 'Folio', field: 'folio' },
+		{ title: 'Folio', field: 'consecutivo' },
 		{ title: 'Hora', field: 'hora' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
 		{ title: 'Telefono', field: 'paciente.telefono' },
@@ -313,23 +311,33 @@ const AgendarConsulta = (props) => {
 
 		const response = await createConsult(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-			setOpenAlert(true);
-			setMessage('La Consulta se agendo correctamente');
-			setValues({
-				servicio: '',
-				tratamiento: '',
-				fecha_show: '',
-				fecha: '',
-				hora: '',
-				paciente: {},
-				precio: '',
-				tipo_cita: '',
-				citado: '',
-				pagado: false,
-			});
-			setDisableDate(true);
-			setPacienteAgendado({});
-			loadConsultas(new Date());
+			const consecutivo = {
+				consecutivo: response.data.consecutivo,
+				tipo_servicio: consultaServicioId,
+				servicio: response.data._id,
+				fecha_hora: new Date(),
+				status: response.data.status,
+			}
+			const responseConsecutivo = await createConsecutivo(consecutivo);
+			if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+				setOpenAlert(true);
+				setMessage('La Consulta se agendo correctamente');
+				setValues({
+					servicio: '',
+					tratamiento: '',
+					fecha_show: '',
+					fecha: '',
+					hora: '',
+					paciente: {},
+					precio: '',
+					tipo_cita: '',
+					citado: '',
+					pagado: false,
+				});
+				setDisableDate(true);
+				setPacienteAgendado({});
+				loadConsultas(new Date());
+			}
 		}
 		setIsLoading(false);
 	};
@@ -380,9 +388,8 @@ const AgendarConsulta = (props) => {
 		setOpenModalPagos(true);
 	}
 
-	const handleClickCirugia = async(event, rowData) => {
+	const handleClickCirugia = async (event, rowData) => {
 		const response = await findCirugiaByConsultaId(rowData._id);
-		console.log("RESPONSE", response);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			if (response.data !== '') {
 				setCirugia(response.data);
