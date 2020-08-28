@@ -170,8 +170,6 @@ const ModalFormCirugia = (props) => {
 
               {values.hasBiopsia ?
                 <Fragment>
-
-
                   <Grid item xs={12} sm={3}>
                     <TextField
                       className={classes.textField}

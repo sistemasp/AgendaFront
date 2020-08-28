@@ -10,6 +10,8 @@ import ReportesConsultas from './reportes/reportes_consultas';
 import ReportesTratamientos from './reportes/reportes_tratamientos';
 import ReportesPagos from './reportes/reportes_pagos';
 import ReportesFacturas from './reportes/reportes_facturas';
+import ReportesCirugias from './reportes/reportes_cirugias';
+import ReportesBiopsias from './reportes/reportes_biopsias';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -70,10 +72,12 @@ export const MenuContainer = props => {
 		<div className={classes.root}>
 			<AppBar className={classes.bar} position="static">
 				<Tabs value={value} onChange={onChangeTab} aria-label="simple tabs">
-					<Tab label="Reportes Consulta" {...a11yProps(0)} />
-					<Tab label="Reportes Tratamiento" {...a11yProps(1)} />
-					<Tab label="Reportes Pagos" {...a11yProps(2)} />
-					<Tab label="Reportes Facturas" {...a11yProps(3)} />
+					<Tab label="Consulta" {...a11yProps(0)} />
+					<Tab label="Tratamiento" {...a11yProps(1)} />
+					<Tab label="Pagos" {...a11yProps(2)} />
+					<Tab label="Facturas" {...a11yProps(3)} />
+					<Tab label="Cirugias" {...a11yProps(4)} />
+					<Tab label="Biopsias" {...a11yProps(5)} />
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>
@@ -90,6 +94,14 @@ export const MenuContainer = props => {
 			</TabPanel>
 			<TabPanel value={value} index={3}>
 				<ReportesFacturas
+					sucursal={sucursal} />
+			</TabPanel>
+			<TabPanel value={value} index={4}>
+				<ReportesCirugias
+					sucursal={sucursal} />
+			</TabPanel>
+			<TabPanel value={value} index={5}>
+				<ReportesBiopsias
 					sucursal={sucursal} />
 			</TabPanel>
 		</div>

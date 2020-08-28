@@ -98,9 +98,8 @@ export const AgendarConsultaContainer = (props) => {
     openModalCirugias,
     onCloseCirugia,
     cirugia,
+    tipoServicioId,
   } = props;
-
-  console.log("CONSULTA", consulta);
 
   return (
     <Fragment>
@@ -137,7 +136,8 @@ export const AgendarConsultaContainer = (props) => {
             empleado={empleado}
             sucursal={sucursal._id}
             setMessage={setMessage}
-            setOpenAlert={setOpenAlert} />
+            setOpenAlert={setOpenAlert}
+            tipoServicioId={tipoServicioId} />
           : ''
       }
       {

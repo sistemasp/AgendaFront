@@ -55,6 +55,7 @@ const ReportesPagos = (props) => {
 		{ title: 'Digitos', field: 'digitos' },
 		{ title: 'Factura', field: 'factura' },
 		{ title: 'Deposito confirmado', field: 'deposito_confirmado' },
+		{ title: 'Sucursal', field: 'sucursal.nombre'},
 		{ title: 'Observaciones', field: 'observaciones' },
 	];
 

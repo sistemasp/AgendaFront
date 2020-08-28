@@ -71,7 +71,9 @@ const ModalFormImprimirPagoMedico = (props) => {
     onClose,
     onClickImprimir,
     open,
+    onCambioTurno,
     show,
+    turno,
   } = props;
 
   let pagoTotal = 0;
@@ -92,12 +94,52 @@ const ModalFormImprimirPagoMedico = (props) => {
             <Grid item xs={12} className={classes.label}>
               <h2 className={classes.labelItemCenter} >"Al cuidado de tu Piel"</h2>
             </Grid>
+
             <Grid item xs={12} className={classes.label}>
               <h2 className={classes.labelItemCenter}>Sucursal: {sucursal.nombre}</h2>
             </Grid>
             <Grid item xs={12} className={classes.label}>
               <h3 className={classes.labelItemCenter}>Médico: {medico.nombre}</h3>
             </Grid>
+            <Grid item xs={12} className={classes.label}>
+              <h3 className={classes.labelItemCenter}>Turno {turno === 'm' ? 'MATUTINO' : 'VESPERTINO'}</h3>
+            </Grid>
+            {
+              show ?
+                <Fragment>
+                  <Grid item xs={12}>
+                    <Button
+                      className={classes.button}
+                      color="primary"
+                      variant="contained"
+                      onClick={onClickImprimir} >
+                      Imprimir
+                </Button>
+                  </Grid>
+                  <br />
+                  <Grid item xs={12}>
+                    <Button
+                      className={classes.button}
+                      color="primary"
+                      variant="contained"
+                      onClick={onCambioTurno} >
+                      Cambio turno
+                </Button>
+                  </Grid>
+                  <br />
+                  <Grid item xs={12}>
+                    <Button
+                      className={classes.button}
+                      color="secondary"
+                      variant="contained"
+                      onClick={onClose} >
+                      Cerrar
+              </Button>
+                  </Grid>
+                </Fragment> : ''
+
+            }
+
             <br />
             <br />
 
@@ -205,32 +247,6 @@ const ModalFormImprimirPagoMedico = (props) => {
                 <h4 className={classes.labelItemCenter}>{`Firma Médico⁭⁭⁭⁭⁭⁭⁭⁭`}</h4>
               </Grid>
             </Grid>
-
-            {
-              show ?
-                <Fragment>
-                  <Grid item xs={12}>
-                    <Button
-                      className={classes.button}
-                      color="primary"
-                      variant="contained"
-                      onClick={onClickImprimir} >
-                      Imprimir
-                </Button>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Button
-                      className={classes.button}
-                      color="secondary"
-                      variant="contained"
-                      onClick={onClose} >
-                      Cerrar
-              </Button>
-                  </Grid>
-                </Fragment> : ''
-
-            }
           </Grid>
         </div>
       </Modal>

@@ -9,6 +9,7 @@ import {
   showAllMaterials,
   updateCirugia,
   createConsecutivo,
+  createBiopsia,
 } from "../../../services";
 import * as Yup from "yup";
 import { Formik } from 'formik';
@@ -81,7 +82,9 @@ const ModalCirugia = (props) => {
     paciente: consulta.paciente,
     medico: consulta.medico,
     hasBiopsia: cirugia.hasBiopsia,
-    costo_biopsias: 0,
+    cantidad_biopsias: cirugia.biopsias ? cirugia.biopsias.length : 0,
+    costo_biopsias: cirugia.costo_biopsias ? cirugia.costo_biopsias : 0,
+    patologo: cirugia.patologo ? cirugia.patologo._id : undefined,
   });
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
@@ -128,8 +131,32 @@ const ModalCirugia = (props) => {
   }
 
   const handleClickCrearCirugia = async (event, data) => {
-    data.fecha_hora = new Date();
+    const fecha_actual = new Date();
+    fecha_actual.setHours(fecha_actual.getHours() - 5);
+    data.fecha_hora = fecha_actual;
+    const idBiopsias = [];
+    if (data.hasBiopsia) {
+      const biopsias = [];
 
+      for (var i = 0; i < data.cantidad_biopsias; i++) {
+        const biopsia = {
+          fecha_realizacion: fecha_actual,
+          consulta: data.consulta._id,
+          medico: data.medico._id,
+          paciente: data.paciente._id,
+          sucursal: data.sucursal,
+          patologo: data.patologo
+        };
+        biopsias.push(biopsia);
+      }
+      const resp = await createBiopsia(biopsias);
+      if (`${resp.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+        resp.data.map( item => {
+          idBiopsias.push(item._id);
+        });
+      }
+    }
+    data.biopsias = idBiopsias;
     const response = data._id ? await updateCirugia(data._id, data) : await createCirugia(data);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
       || `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
@@ -141,6 +168,7 @@ const ModalCirugia = (props) => {
           consecutivo: response.data.consecutivo,
           tipo_servicio: cirugiaServicioId,
           servicio: response.data._id,
+          sucursal: data.sucursal,
           fecha_hora: new Date(),
           status: response.data.status,
         }
@@ -174,6 +202,10 @@ const ModalCirugia = (props) => {
       total: total
     });
   };
+
+  console.log("VALUES", values);
+  console.log("PATOLOGO", patologos);
+
 
   const handleChangeCostoBiopsias = e => {
     let total = 0;

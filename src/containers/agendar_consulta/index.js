@@ -315,6 +315,7 @@ const AgendarConsulta = (props) => {
 				consecutivo: response.data.consecutivo,
 				tipo_servicio: consultaServicioId,
 				servicio: response.data._id,
+				sucursal: sucursal._id,
 				fecha_hora: new Date(),
 				status: response.data.status,
 			}
@@ -500,6 +501,7 @@ const AgendarConsulta = (props) => {
 								dataComplete={dataComplete}
 								onCloseCirugia={handleCloseCirugia}
 								cirugia={cirugia}
+								tipoServicioId={consultaServicioId}
 								{...props} />
 						}
 					</Formik> :

@@ -50,6 +50,9 @@ export const ListaEsperaContainer = (props) => {
             loadConsultorios={loadConsultorios}
             sucursal={sucursal} /> : ''
       }
+
+      <h1>LISTA DE ESPERA</h1>
+      
       <TableComponent
         titulo={tituloConsultorios}
         columns={columnsConsultorios}

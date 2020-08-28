@@ -961,6 +961,18 @@ export const findConsultsByPayOfDoctor = async (dia, mes, anio, sucursalId, medi
     }
 }
 
+export const findConsultsByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, medicoId, atendidoId, turno) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta/${dia}/${mes}/${anio}/sucursal/${sucursalId}/medico/${medicoId}/atendido/${atendidoId}/turno/${turno}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findConsultsByPayOfDoctorTurno', error);
+    }
+}
+
 export const findCirugiasByPayOfDoctor = async (dia, mes, anio, sucursalId, medicoId) => {
     try {
         const response = await axios({
@@ -970,6 +982,18 @@ export const findCirugiasByPayOfDoctor = async (dia, mes, anio, sucursalId, medi
         return response;
     } catch (error) {
         console.log('findCirugiasByPayOfDoctor', error);
+    }
+}
+
+export const findCirugiasByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, medicoId, turno) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cirugia/${dia}/${mes}/${anio}/sucursal/${sucursalId}/medico/${medicoId}/turno/${turno}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findCirugiasByPayOfDoctorTurno', error);
     }
 }
 
@@ -1027,6 +1051,18 @@ export const findCirugiaByConsultaId = async (consultaId) => {
     }
 }
 
+export const findCirugiasByRangeDateAndSucursal = async (diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cirugia/fecha_inicio/${diai}/${mesi}/${anioi}/fecha_fin/${diaf}/${mesf}/${aniof}/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findCirugiasByRangeDateAndSucursal', error);
+    }
+}
+
 // CONSECUTIVOS 
 
 export const createConsecutivo = async (consecutivo) => {
@@ -1039,5 +1075,32 @@ export const createConsecutivo = async (consecutivo) => {
         return response;
     } catch (error) {
         console.log('createConsecutivo', error);
+    }
+}
+
+// BIOPSIA
+
+export const createBiopsia = async (biopsias) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/biopsia`,
+            method: 'POST',
+            data: biopsias
+        });
+        return response;
+    } catch (error) {
+        console.log('createBiopsia', error);
+    }
+}
+
+export const findBiopsiasByRangeDateAndSucursal = async (diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/biopsia/fecha_inicio/${diai}/${mesi}/${anioi}/fecha_fin/${diaf}/${mesf}/${aniof}/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findBiopsiasByRangeDateAndSucursal', error);
     }
 }

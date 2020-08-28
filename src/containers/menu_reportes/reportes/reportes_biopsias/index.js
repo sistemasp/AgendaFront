@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import { ReportesConsultasContainer } from "./reportes_consultas";
-import { findConsultsByRangeDateAndSucursal } from "../../../../services";
+import { ReportesBiopsiasContainer } from "./reportes_consultas";
+import { findBiopsiasByRangeDateAndSucursal } from "../../../../services";
 import { Backdrop, CircularProgress } from "@material-ui/core";
 import { toFormatterCurrency, addZero } from "../../../../utils/utils";
 
@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-const ReportesConsultas = (props) => {
+const ReportesBiopsias = (props) => {
 
 	const classes = useStyles();
 
@@ -39,21 +39,26 @@ const ReportesConsultas = (props) => {
 	});
 
 	const columns = [
+		{ title: 'Consecutivo', field: 'consecutivo' },
 		{ title: 'Fecha', field: 'fecha_show' },
 		{ title: 'Hora', field: 'hora' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
 		{ title: 'Telefono', field: 'paciente.telefono' },
-		{ title: 'Hora llegada', field: 'hora_llegada' },
-		{ title: 'Hora atendido', field: 'hora_atencion' },
-		{ title: 'Hora salida', field: 'hora_salida' },
-		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
-		{ title: 'Frecuencia', field: 'frecuencia.nombre' },
-		{ title: 'Tipo Consulta', field: 'tipo_cita.nombre' },
-		{ title: 'Quien confirma', field: 'quien_confirma.nombre' },
-		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
+		{ title: 'Folio consulta', field: 'folio_consulta' },
+		{ title: 'Folio cirugia', field: 'folio_consulta' },
 		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Patologo', field: 'patologo_nombre' },
+		{ title: 'Costo biopsias', field: 'costo_biopsia_moneda' },
+		{ title: 'Con pago', field: 'con_pago' },
+		{ title: 'Fecha entrega patologo', field: 'fecha_entrega_patologo' },
+		{ title: 'Quien entrega', field: 'quien_entrega' },
+		{ title: 'Fecha entrega resultado', field: 'fecha_entrega_resultado' },
+		{ title: 'Quien recibe', field: 'quien_recibe' },
+		{ title: 'Diagnositico', field: 'diagnostico' },
+		{ title: 'A quien se entrega', field: 'a_quien_se_entrega' },
+		{ title: 'Fecha entrega', field: 'fecha_entrega' },
+		{ title: 'Quien lo entrega', field: 'quien_lo_entrega' },
 		{ title: 'Estado', field: 'status.nombre' },
-		{ title: 'Precio', field: 'precio_moneda' },
 		{ title: 'Sucursal', field: 'sucursal.nombre'},
 		{ title: 'Observaciones', field: 'observaciones' },
 	];
@@ -79,7 +84,7 @@ const ReportesConsultas = (props) => {
 	useEffect(() => {
 
 		const loadCitas = async () => {
-			const response = await findConsultsByRangeDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(),
+			const response = await findBiopsiasByRangeDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(),
 				date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
 
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -130,7 +135,7 @@ const ReportesConsultas = (props) => {
 	}
 
 	const loadCitas = async (startDate, endDate) => {
-		const response = await findConsultsByRangeDateAndSucursal(startDate.getDate(), (startDate.getMonth() + 1), startDate.getFullYear(),
+		const response = await findBiopsiasByRangeDateAndSucursal(startDate.getDate(), (startDate.getMonth() + 1), startDate.getFullYear(),
 			endDate.getDate(), (endDate.getMonth() + 1), endDate.getFullYear(), sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			await response.data.forEach(item => {
@@ -153,12 +158,12 @@ const ReportesConsultas = (props) => {
 		<Fragment>
 			{
 				!isLoading ?
-					<ReportesConsultasContainer
+					<ReportesBiopsiasContainer
 						onChangeStartDate={(e) => handleChangeStartDate(e)}
 						onChangeEndDate={(e) => handleChangeEndDate(e)}
 						startDate={startDate.fecha_show}
 						endDate={endDate.fecha_show}
-						titulo={`REPORTES CONSULTAS(${startDate.fecha} - ${endDate.fecha})`}
+						titulo={`REPORTES BIOPSIAS(${startDate.fecha} - ${endDate.fecha})`}
 						columns={columns}
 						options={options}
 						citas={citas}
@@ -174,4 +179,4 @@ const ReportesConsultas = (props) => {
 	);
 }
 
-export default ReportesConsultas;
+export default ReportesBiopsias;

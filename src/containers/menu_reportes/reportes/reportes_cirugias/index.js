@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import { ReportesConsultasContainer } from "./reportes_consultas";
-import { findConsultsByRangeDateAndSucursal } from "../../../../services";
+import { ReportesCirugiasContainer } from "./reportes_consultas";
+import { findCirugiasByRangeDateAndSucursal } from "../../../../services";
 import { Backdrop, CircularProgress } from "@material-ui/core";
 import { toFormatterCurrency, addZero } from "../../../../utils/utils";
 
@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-const ReportesConsultas = (props) => {
+const ReportesCirugias = (props) => {
 
 	const classes = useStyles();
 
@@ -41,21 +41,20 @@ const ReportesConsultas = (props) => {
 	const columns = [
 		{ title: 'Fecha', field: 'fecha_show' },
 		{ title: 'Hora', field: 'hora' },
+		{ title: 'Consecutivo', field: 'consecutivo' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
-		{ title: 'Telefono', field: 'paciente.telefono' },
-		{ title: 'Hora llegada', field: 'hora_llegada' },
-		{ title: 'Hora atendido', field: 'hora_atencion' },
-		{ title: 'Hora salida', field: 'hora_salida' },
-		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
-		{ title: 'Frecuencia', field: 'frecuencia.nombre' },
-		{ title: 'Tipo Consulta', field: 'tipo_cita.nombre' },
-		{ title: 'Quien confirma', field: 'quien_confirma.nombre' },
-		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
+		{ title: 'Folio consulta', field: 'folio_consulta' },
 		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Materiales', field: 'materiales_show' },
+		{ title: 'Biopsias', field: 'biopsias_show' },
+		{ title: 'Costo biopsias', field: 'costo_biopsia_moneda' },
+		{ title: 'Patologo', field: 'patologo_nombre' },		
 		{ title: 'Estado', field: 'status.nombre' },
 		{ title: 'Precio', field: 'precio_moneda' },
+		{ title: 'Total', field: 'total_moneda' },
 		{ title: 'Sucursal', field: 'sucursal.nombre'},
 		{ title: 'Observaciones', field: 'observaciones' },
+
 	];
 
 	const options = {
@@ -79,7 +78,7 @@ const ReportesConsultas = (props) => {
 	useEffect(() => {
 
 		const loadCitas = async () => {
-			const response = await findConsultsByRangeDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(),
+			const response = await findCirugiasByRangeDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(),
 				date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
 
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -130,7 +129,7 @@ const ReportesConsultas = (props) => {
 	}
 
 	const loadCitas = async (startDate, endDate) => {
-		const response = await findConsultsByRangeDateAndSucursal(startDate.getDate(), (startDate.getMonth() + 1), startDate.getFullYear(),
+		const response = await findCirugiasByRangeDateAndSucursal(startDate.getDate(), (startDate.getMonth() + 1), startDate.getFullYear(),
 			endDate.getDate(), (endDate.getMonth() + 1), endDate.getFullYear(), sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			await response.data.forEach(item => {
@@ -153,12 +152,12 @@ const ReportesConsultas = (props) => {
 		<Fragment>
 			{
 				!isLoading ?
-					<ReportesConsultasContainer
+					<ReportesCirugiasContainer
 						onChangeStartDate={(e) => handleChangeStartDate(e)}
 						onChangeEndDate={(e) => handleChangeEndDate(e)}
 						startDate={startDate.fecha_show}
 						endDate={endDate.fecha_show}
-						titulo={`REPORTES CONSULTAS(${startDate.fecha} - ${endDate.fecha})`}
+						titulo={`REPORTES CIRUGIAS(${startDate.fecha} - ${endDate.fecha})`}
 						columns={columns}
 						options={options}
 						citas={citas}
@@ -174,4 +173,4 @@ const ReportesConsultas = (props) => {
 	);
 }
 
-export default ReportesConsultas;
+export default ReportesCirugias;
