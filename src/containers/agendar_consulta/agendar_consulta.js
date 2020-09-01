@@ -46,7 +46,6 @@ export const AgendarConsultaContainer = (props) => {
 
   const {
     values,
-    errors,
     servicios,
     tratamientos,
     horarios,
@@ -59,9 +58,6 @@ export const AgendarConsultaContainer = (props) => {
     filterDate,
     paciente,
     onClickAgendar,
-    isValid,
-    isSubmitting,
-    onChangePrecio,
     empleado,
     medicos,
     tipoCitas,
@@ -71,6 +67,8 @@ export const AgendarConsultaContainer = (props) => {
     onChangeObservaciones,
     onChangeFrecuencia,
     dataComplete,
+    frecuenciaPrimeraVezId,
+    fercuenciaReconsultaId,
     // TABLE DATES PROPERTIES
     titulo,
     columns,
@@ -142,7 +140,7 @@ export const AgendarConsultaContainer = (props) => {
       }
       {
         openModalCirugias ?
-        <ModalCirugia
+          <ModalCirugia
             open={openModalCirugias}
             onClose={onCloseCirugia}
             consulta={consulta}
@@ -198,7 +196,6 @@ export const AgendarConsultaContainer = (props) => {
                     labelId="simple-select-outlined-hora"
                     id="simple-select-outlined-hora"
                     value={values.hora}
-                    error={Boolean(errors.hora)}
                     onChange={onChangeHora}
                     disabled={values.fecha_show === ''}
                     label="Hora" >
@@ -214,41 +211,51 @@ export const AgendarConsultaContainer = (props) => {
                 labelId="simple-select-outlined-frecuencia"
                 id="simple-select-outlined-frecuencia"
                 value={values.frecuencia}
-                error={Boolean(errors.frecuencia)}
                 onChange={onChangeFrecuencia}
                 label="frecuencia" >
                 {frecuencias.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={2}>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel id="simple-select-outlined-hora">Medico</InputLabel>
-              <Select
-                labelId="simple-select-outlined-medico"
-                id="simple-select-outlined-medico"
-                value={values.medico}
-                error={Boolean(errors.medico)}
-                onChange={onChangeMedicos}
-                label="Medico" >
-                {medicos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} sm={2}>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel id="simple-select-outlined-promovendedor">Promovendedor</InputLabel>
-              <Select
-                labelId="simple-select-outlined-promovendedor"
-                id="simple-select-outlined-promovendedor"
-                value={values.promovendedor}
-                error={Boolean(errors.promovendedor)}
-                onChange={onChangePromovendedor}
-                label="Promovendedor" >
-                {promovendedores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
-              </Select>
-            </FormControl>
-          </Grid>
+          {
+            values.frecuencia === frecuenciaPrimeraVezId
+              ? <Grid item xs={12} sm={2}>
+                <h2> {values.medico.nombre} </h2>
+              </Grid>
+              : <Grid item xs={12} sm={2}>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="simple-select-outlined-hora">Medico</InputLabel>
+                  <Select
+                    labelId="simple-select-outlined-medico"
+                    id="simple-select-outlined-medico"
+                    value={values.medico}
+                    onChange={onChangeMedicos}
+                    label="Medico" >
+                    {medicos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+                  </Select>
+                </FormControl>
+              </Grid>
+          }
+          {
+            values.frecuencia === fercuenciaReconsultaId
+              ? <Grid item xs={12} sm={2}>
+                <h2> {values.promovendedor.nombre} </h2>
+              </Grid>
+              : <Grid item xs={12} sm={2}>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="simple-select-outlined-promovendedor">Promovendedor</InputLabel>
+                  <Select
+                    labelId="simple-select-outlined-promovendedor"
+                    id="simple-select-outlined-promovendedor"
+                    value={values.promovendedor}
+                    onChange={onChangePromovendedor}
+                    label="Promovendedor" >
+                    {promovendedores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+          }
           {sucursal._id === process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID ?
             <Grid item xs={12} sm={2}>
               <FormControl variant="outlined" className={classes.formControl}>
@@ -257,7 +264,6 @@ export const AgendarConsultaContainer = (props) => {
                   labelId="simple-select-outlined-tipo-cita"
                   id="simple-select-outlined-tipo-cita"
                   value={values.tipoCita}
-                  error={Boolean(errors.tipoCita)}
                   onChange={onChangeTipoCita}
                   label="Tipo Cita" >
                   {tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
@@ -269,7 +275,6 @@ export const AgendarConsultaContainer = (props) => {
               className={classes.button}
               name="observaciones"
               //helperText={touched.observaciones ? errors.observaciones : ""}
-              error={Boolean(errors.observaciones)}
               label="Observaciones"
               value={values.observaciones}
               onChange={onChangeObservaciones}
@@ -283,7 +288,7 @@ export const AgendarConsultaContainer = (props) => {
               className={classes.button}
               variant="contained"
               color="primary"
-              disabled={!isValid || isSubmitting || dataComplete}
+              disabled={dataComplete}
               onClick={() => onClickAgendar(values)} >
               Agendar
             </Button>

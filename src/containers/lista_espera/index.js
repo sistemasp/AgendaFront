@@ -47,6 +47,8 @@ const ListaEspera = (props) => {
 	const [severity, setSeverity] = useState('success');
 	const [openModalAsignar, setOpenModalAsignar] = useState(false);
 	const [consulta, setConsulta] = useState('');
+	const [cambio, setCambio] = useState(false);
+	const [paciente, setPaciente] = useState({});
 
 	const {
 		sucursal,
@@ -60,8 +62,9 @@ const ListaEspera = (props) => {
 
 	const columnsEspera = [
 		{ title: 'Nombre', field: 'paciente_nombre' },
+		{ title: 'Servicio', field: 'tipo_servicio.nombre' },
 		{ title: 'Hora llegada', field: 'hora_llegada' },
-		{ title: 'Folio', field: 'folio' },
+		{ title: 'Consecutivo', field: 'consecutivo' },
 		{ title: 'Medico', field: 'medico_nombre' },
 	];
 
@@ -83,6 +86,11 @@ const ListaEspera = (props) => {
 	}
 
 	const optionsEspera = {
+		rowStyle: rowData => {
+			return {
+				backgroundColor: rowData.tipo_servicio.color
+			};
+		},
 		headerStyle: {
 			backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
 			color: '#FFF',
@@ -122,11 +130,26 @@ const ListaEspera = (props) => {
 	}
 
 	const handleOnClickAsignarPaciente = (event, rowData) => {
+		console.log("ROWWWWDATA", rowData);
 		setConsulta(rowData);
+		setPaciente(rowData.paciente);
+		setCambio(false);
 		setOpenModalAsignar(true);
 	}
 
+	const handleOnCambiarPaciente = async (event, rowData) => {
+		console.log("ROWWWWDATA", rowData);
+		setConsulta(rowData.consulta);
+		setPaciente(rowData.paciente);
+		setCambio(true);
+		setOpenModalAsignar(true);
+		rowData.disponible = true;
+		await updateSurgery(rowData._id, rowData);
+		await breakFreeSurgeryByIdPaciente(rowData._id);
+	}
+
 	const handleOnClickLiberar = async (event, rowData) => {
+		console.log("ROWWWWDATA", rowData);
 		const dateNow = new Date();
 		let updateConsulta = rowData.consulta;
 		updateConsulta.status = atendidoStatusId;
@@ -159,7 +182,13 @@ const ListaEspera = (props) => {
 				icon: DirectionsWalkIcon,
 				tooltip: 'Salida paciente',
 				onClick: handleOnClickLiberar
-			} : '')
+			} : ''),
+		rowData => (
+			!rowData.disponible ? {
+				icon: InputIcon,
+				tooltip: 'Cambiar de consultorio',
+				onClick: handleOnCambiarPaciente
+			} : ''),
 	];
 
 	const handleClose = () => {
@@ -170,18 +199,6 @@ const ListaEspera = (props) => {
 	const handleCloseAlert = () => {
 		setOpenAlert(false);
 	};
-
-	const handleClickGuardar = async (event, data) => {
-		setIsLoading(true);
-		data.sucursal = sucursal;
-		const response = await createSurgery(data);
-		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-			setOpenAlert(true);
-			setMessage('El pasiente entró al consultorio');
-			loadConsultorios();
-		}
-		setIsLoading(false);
-	}
 
 	useEffect(() => {
 		const loadConsultorios = async () => {
@@ -232,12 +249,13 @@ const ListaEspera = (props) => {
 						openModalAsignar={openModalAsignar}
 						consulta={consulta}
 						handleClose={handleClose}
-						handleClickGuardar={handleClickGuardar}
+						cambio={cambio}
 						loadListaEspera={loadListaEspera}
 						loadConsultorios={loadConsultorios}
 						sucursal={sucursal}
 						setOpenAlert={setOpenAlert}
-						setMessage={setMessage} /> :
+						setMessage={setMessage}
+						paciente={paciente} /> :
 					<Backdrop className={classes.backdrop} open={isLoading} >
 						<CircularProgress color="inherit" />
 					</Backdrop>

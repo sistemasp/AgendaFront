@@ -29,7 +29,7 @@ const ModalPaciente = (props) => {
   const handleChange = (e) => {
     setValues({
       ...values,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value.toUpperCase()
     });
   }
 

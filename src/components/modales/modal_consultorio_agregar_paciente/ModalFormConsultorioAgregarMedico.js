@@ -53,7 +53,6 @@ const ModalFormConsultorioAgregarPaciente = (props) => {
   const {
     values,
     errors,
-    touched,
     handleSubmit,
     onChangeConsultorio,
     isValid,
@@ -61,6 +60,8 @@ const ModalFormConsultorioAgregarPaciente = (props) => {
     onClickGuardar,
     open,
     consultorios,
+    cambio,
+    paciente,
   } = props;
 
   return (
@@ -73,7 +74,10 @@ const ModalFormConsultorioAgregarPaciente = (props) => {
           <form onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <h2 className={classes.label}>{values.nombre}</h2>
+                <h2 className={classes.label}>{cambio ? 'Cambiar de ' : 'Asignar a '}consultorio</h2>
+              </Grid>
+              <Grid item xs={12}>
+                <h2 className={classes.label}>{`${paciente.nombres}`}</h2>
               </Grid>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
@@ -96,17 +100,20 @@ const ModalFormConsultorioAgregarPaciente = (props) => {
                   variant="contained"
                   onClick={(e) => onClickGuardar(e, values)}
                   disabled={!isValid}
-                  text='Pasar' />
+                  text={cambio ? 'Cambio' : 'Pasar'} />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <Button
-                  className={classes.button}
-                  color="secondary"
-                  variant="contained"
-                  onClick={onClickCancel} >
-                  Cancelar
+              {!cambio
+                ? <Grid item xs={12} sm={6}>
+                  <Button
+                    className={classes.button}
+                    color="secondary"
+                    variant="contained"
+                    onClick={onClickCancel} >
+                    Cancelar
                 </Button>
-              </Grid>
+                </Grid>
+                : ''
+              }
             </Grid>
 
           </form>

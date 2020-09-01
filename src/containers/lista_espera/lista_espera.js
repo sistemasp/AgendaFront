@@ -33,11 +33,12 @@ export const ListaEsperaContainer = (props) => {
     loadListaEspera,
     loadConsultorios,
     sucursal,
+    cambio,
+    paciente,
   } = props;
 
   return (
     <Fragment>
-
       {
         openModalAsignar ?
           <ModalConsultorioAgregarPaciente
@@ -48,7 +49,9 @@ export const ListaEsperaContainer = (props) => {
             setMessage={setMessage}
             loadListaEspera={loadListaEspera}
             loadConsultorios={loadConsultorios}
-            sucursal={sucursal} /> : ''
+            sucursal={sucursal}
+            cambio={cambio}
+            paciente={paciente} /> : ''
       }
 
       <h1>LISTA DE ESPERA</h1>

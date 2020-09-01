@@ -134,6 +134,7 @@ const ModalCirugia = (props) => {
     const fecha_actual = new Date();
     fecha_actual.setHours(fecha_actual.getHours() - 5);
     data.fecha_hora = fecha_actual;
+    data.tipo_servicio = cirugiaServicioId;
     const idBiopsias = [];
     if (data.hasBiopsia) {
       const biopsias = [];
@@ -145,7 +146,8 @@ const ModalCirugia = (props) => {
           medico: data.medico._id,
           paciente: data.paciente._id,
           sucursal: data.sucursal,
-          patologo: data.patologo
+          patologo: data.patologo,
+          tipo_servicio: biopsiaServicioId,
         };
         biopsias.push(biopsia);
       }

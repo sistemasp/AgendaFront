@@ -20,6 +20,8 @@ const ModalConsultorioAgregarPaciente = (props) => {
     loadListaEspera,
     loadConsultorios,
     sucursal,
+    cambio,
+    paciente,
   } = props;
 
   const [isLoading, setIsLoading] = useState(true);
@@ -45,27 +47,30 @@ const ModalConsultorioAgregarPaciente = (props) => {
 
   const handleClickGuardar = async (event, rowData) => {
     setIsLoading(true);
-    const dateNow = new Date();
-    let updateConsulta = consulta;
-    updateConsulta.status = enConsultorioStatusId;
-    updateConsulta.hora_atencion = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
-    updateConsulta.medico = values.consultorio.medico;
-    await updateConsult(consulta._id, updateConsulta);
+
+    if (!cambio) {
+      const dateNow = new Date();
+      let updateConsulta = consulta;
+      updateConsulta.status = enConsultorioStatusId;
+      updateConsulta.hora_atencion = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
+      updateConsulta.medico = values.consultorio.medico;
+      await updateConsult(consulta._id, updateConsulta);
+    }
 
     setValues({ consultorio: { paciente: consulta.paciente._id } });
     let consul = values.consultorio;
     consul.consulta = consulta._id;
-    consul.paciente = consulta.paciente._id;
+    consul.paciente = paciente._id;
     consul.disponible = false;
 
     const response = await updateSurgery(consul._id, consul);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setOpenAlert(true);
       setMessage('El paciente se agrego al consultorio correctamente');
-      onClose();
-      await loadListaEspera();
-      await loadConsultorios();
     }
+    onClose();
+    await loadListaEspera();
+    await loadConsultorios();
     setIsLoading(false);
   }
 
@@ -75,6 +80,7 @@ const ModalConsultorioAgregarPaciente = (props) => {
 
   return (
     <Formik
+      enableReinitialize
       initialValues={values}
       validationSchema={validationSchema} >
       {
@@ -87,6 +93,8 @@ const ModalConsultorioAgregarPaciente = (props) => {
           isLoading={isLoading}
           consultorios={consultorios}
           onChangeConsultorio={(e) => handleChangeConsultorio(e)}
+          cambio={cambio}
+          paciente={paciente}
           {...props} />
       }
     </Formik>

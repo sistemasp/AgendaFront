@@ -91,6 +91,7 @@ const ModalConsulta = (props) => {
     medico: consulta.medico ? consulta.medico._id : '',
     pagado: consulta.pagado,
     frecuencia: consulta.frecuencia,
+    hora_llegada: consulta.hora_llegada,
   });
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
@@ -212,6 +213,7 @@ const ModalConsulta = (props) => {
   }
 
   const handleOnClickActualizarCita = async (event, rowData) => {
+
     if (rowData.status !== pendienteStatusId) {
       rowData.quien_confirma_asistencia = empleado._id;
       if (rowData.status === asistioStatusId && !rowData.hora_llegada) {

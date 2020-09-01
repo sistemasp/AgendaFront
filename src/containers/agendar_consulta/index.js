@@ -13,9 +13,7 @@ import {
 } from "../../services";
 import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
-import { Formik } from 'formik';
 import EditIcon from '@material-ui/icons/Edit';
-import * as Yup from "yup";
 import { toFormatterCurrency, addZero, generateFolioCita } from "../../utils/utils";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
@@ -37,17 +35,6 @@ const useStyles = makeStyles(theme => ({
 		color: '#DC3132',
 	},
 }));
-
-const validationSchema = Yup.object({
-	servicio: Yup.string("Ingresa los nombres")
-		.required("El servicio es requerido."),
-	tratamiento: Yup.string("Ingresa los apellidos")
-		.required("El tratamiento es requerido"),
-	fecha: Yup.string("Ingresa la fecha de nacimiento")
-		.required("Los nombres del pacientes son requeridos"),
-	hora: Yup.string("Ingresa la direccion")
-		.required("Los nombres del pacientes son requeridos")
-});
 
 const AgendarConsulta = (props) => {
 
@@ -108,6 +95,12 @@ const AgendarConsulta = (props) => {
 	const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
 	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
 	const tipoCitaSinCitaId = process.env.REACT_APP_TIPO_CITA_SIN_CITA;
+	const medicoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
+	const promovendedorSinAsignarId = process.env.REACT_APP_PROMOVENDEDOR_SIN_ASIGNAR_ID;
+	const frecuenciaPrimeraVezId = process.env.REACT_APP_FRECUENCIA_PRIMERA_VEZ_ID;
+	const fercuenciaReconsultaId = process.env.REACT_APP_FRECUENCIA_RECONSULTA_ID;
+	const tipoCitaRevisionId = process.env.REACT_APP_TIPO_CITA_REVISION_ID;
+	const tipoCitaDerivadaId = process.env.REACT_APP_TIPO_CITA_DERIVADA_ID;
 
 	const columns = [
 		{ title: 'Folio', field: 'consecutivo' },
@@ -296,6 +289,7 @@ const AgendarConsulta = (props) => {
 		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
+		data.tipo_servicio = consultaServicioId;
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 
 		if (sucursal._id !== sucursalManuelAcunaId) {
@@ -305,7 +299,7 @@ const AgendarConsulta = (props) => {
 			dateNow.setMinutes(0);
 			dateNow.setSeconds(0);
 			data.fecha_hora = dateNow;
-			data.tipo_cita = tipoCitaSinCitaId;
+			data.tipo_cita = data.frecuencia === frecuenciaPrimeraVezId ? tipoCitaRevisionId : tipoCitaDerivadaId;
 			// data.quien_confirma_asistencia = empleado._id;
 		}
 
@@ -356,7 +350,7 @@ const AgendarConsulta = (props) => {
 	}
 
 	const handleChangeObservaciones = e => {
-		setValues({ ...values, observaciones: e.target.value });
+		setValues({ ...values, observaciones: e.target.value.toUpperCase() });
 	}
 
 	const handleChangePromovendedor = (e) => {
@@ -364,7 +358,19 @@ const AgendarConsulta = (props) => {
 	}
 
 	const handleChangeFrecuencia = (e) => {
-		setValues({ ...values, frecuencia: e.target.value });
+		const frecuencia = e.target.value._id;
+		const medico = medicos.filter( item => {
+			return item._id === medicoDirectoId;
+		});
+		const promovendedor = promovendedores.filter( item => {
+			return item._id === promovendedorSinAsignarId;
+		});
+		setValues({
+			...values,
+			frecuencia: frecuencia,
+			medico: frecuencia === frecuenciaPrimeraVezId ? medico[0] : {},
+			promovendedor: frecuencia === fercuenciaReconsultaId ? promovendedor[0] : {},
+		});
 	}
 
 	const handleCloseAlert = () => {
@@ -452,59 +458,54 @@ const AgendarConsulta = (props) => {
 		<Fragment>
 			{
 				!isLoading ?
-					<Formik
-						enableReinitialize
-						initialValues={values}
-						validationSchema={validationSchema} >
-						{
-							props => <AgendarConsultaContainer
-								horarios={horarios}
-								onChangeFecha={(e) => handleChangeFecha(e)}
-								onChangeFilterDate={(e) => handleChangeFilterDate(e)}
-								onChangeHora={(e) => handleChangeHora(e)}
-								filterDate={filterDate.fecha_show}
-								paciente={paciente}
-								disableDate={disableDate}
-								onClickAgendar={handleClickAgendar}
-								onChangePrecio={(e) => handleChangePrecio(e)}
-								onChangeTiempo={(e) => handleChangeTiempo(e)}
-								onChangeObservaciones={(e) => handleChangeObservaciones(e)}
-								titulo={`CONSULTAS (${filterDate.fecha})`}
-								columns={columns}
-								options={options}
-								citas={citas}
-								actions={actions}
-								components={components}
-								consulta={consulta}
-								openModal={openModal}
-								empleado={empleado}
-								sucursal={sucursal}
-								onClickCancel={handleCloseModal}
-								loadConsultas={loadConsultas}
-								tipoCitas={tipoCitas}
-								onChangeTipoCita={(e) => handleChangeTipoCita(e)}
-								medicos={medicos}
-								promovendedores={promovendedores}
-								onChangeMedicos={(e) => handleChangeMedicos(e)}
-								onChangePromovendedor={(e) => handleChangePromovendedor(e)}
-								setOpenAlert={setOpenAlert}
-								setMessage={setMessage}
-								setFilterDate={setFilterDate}
-								OnCloseVerPagos={handleCloseVerPagos}
-								openModalPagos={openModalPagos}
-								openModalCirugias={openModalCirugias}
-								openModalImprimirConsultas={openModalImprimirConsultas}
-								datosImpresion={datosImpresion}
-								onCloseImprimirConsulta={handleCloseImprimirConsulta}
-								frecuencias={frecuencias}
-								onChangeFrecuencia={(e) => handleChangeFrecuencia(e)}
-								dataComplete={dataComplete}
-								onCloseCirugia={handleCloseCirugia}
-								cirugia={cirugia}
-								tipoServicioId={consultaServicioId}
-								{...props} />
-						}
-					</Formik> :
+					<AgendarConsultaContainer
+						values={values}
+						horarios={horarios}
+						onChangeFecha={(e) => handleChangeFecha(e)}
+						onChangeFilterDate={(e) => handleChangeFilterDate(e)}
+						onChangeHora={(e) => handleChangeHora(e)}
+						filterDate={filterDate.fecha_show}
+						paciente={paciente}
+						disableDate={disableDate}
+						onClickAgendar={handleClickAgendar}
+						onChangePrecio={(e) => handleChangePrecio(e)}
+						onChangeTiempo={(e) => handleChangeTiempo(e)}
+						onChangeObservaciones={(e) => handleChangeObservaciones(e)}
+						titulo={`CONSULTAS (${filterDate.fecha})`}
+						columns={columns}
+						options={options}
+						citas={citas}
+						actions={actions}
+						components={components}
+						consulta={consulta}
+						openModal={openModal}
+						empleado={empleado}
+						sucursal={sucursal}
+						onClickCancel={handleCloseModal}
+						loadConsultas={loadConsultas}
+						tipoCitas={tipoCitas}
+						onChangeTipoCita={(e) => handleChangeTipoCita(e)}
+						medicos={medicos}
+						promovendedores={promovendedores}
+						onChangeMedicos={(e) => handleChangeMedicos(e)}
+						onChangePromovendedor={(e) => handleChangePromovendedor(e)}
+						setOpenAlert={setOpenAlert}
+						setMessage={setMessage}
+						setFilterDate={setFilterDate}
+						OnCloseVerPagos={handleCloseVerPagos}
+						openModalPagos={openModalPagos}
+						openModalCirugias={openModalCirugias}
+						openModalImprimirConsultas={openModalImprimirConsultas}
+						datosImpresion={datosImpresion}
+						onCloseImprimirConsulta={handleCloseImprimirConsulta}
+						frecuencias={frecuencias}
+						onChangeFrecuencia={(e) => handleChangeFrecuencia(e)}
+						dataComplete={dataComplete}
+						onCloseCirugia={handleCloseCirugia}
+						cirugia={cirugia}
+						tipoServicioId={consultaServicioId}
+						frecuenciaPrimeraVezId={frecuenciaPrimeraVezId}
+						fercuenciaReconsultaId={fercuenciaReconsultaId} /> :
 					<Backdrop className={classes.backdrop} open={isLoading} >
 						<CircularProgress color="inherit" />
 					</Backdrop>
