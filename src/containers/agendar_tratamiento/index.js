@@ -10,6 +10,7 @@ import {
 	findEmployeesByRolId,
 	showAllTipoCitas,
 	createTreatmentPrice,
+	findAreasByTreatmentServicio,
 } from "../../services";
 import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
@@ -66,6 +67,7 @@ const AgendarTratamiento = (props) => {
 	const [values, setValues] = useState({
 		servicio: '',
 		tratamientos: [],
+		areas: [],
 		paciente: `${paciente._id}`,
 		precio: 0,
 		tipo_cita: {},
@@ -73,6 +75,7 @@ const AgendarTratamiento = (props) => {
 		observaciones: '',
 	});
 	const [citas, setCitas] = useState([]);
+	const [areas, setAreas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
 	const [cita, setCita] = useState();
 	const [openModalPagos, setOpenModalPagos] = useState(false);
@@ -250,6 +253,28 @@ const AgendarTratamiento = (props) => {
 	};
 
 	const handleChangeTratamientos = async (items) => {
+		items.map(async (item) => {
+			const response = await findAreasByTreatmentServicio(item.servicio, item._id);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setAreas(response.data);
+			}
+		});
+		setIsLoading(true);
+		let precio = 0;
+		items.map((item) => {
+			precio = Number(precio) + Number(item.precio);
+		});
+		setValues({
+			...values,
+			fecha_hora: '',
+			precio: precio,
+			tratamientos: items
+		});
+		setDisableDate(false);
+		setIsLoading(false);
+	}
+
+	const handleChangeAreas = async (items) => {
 		setIsLoading(true);
 		let precio = 0;
 		items.map((item) => {
@@ -476,9 +501,11 @@ const AgendarTratamiento = (props) => {
 							props => <AgendarTratamientoContainer
 								servicios={servicios}
 								tratamientos={tratamientos}
+								areas={areas}
 								horarios={horarios}
 								onChangeServicio={(e) => handleChangeServicio(e)}
 								onChangeTratamientos={(e) => handleChangeTratamientos(e)}
+								onChangeAreas={(e) => handleChangeAreas(e)}
 								onChangeFecha={(e) => handleChangeFecha(e)}
 								onChangeFilterDate={(e) => handleChangeFilterDate(e)}
 								onChangeHora={(e) => handleChangeHora(e)}

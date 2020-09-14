@@ -130,7 +130,6 @@ const ListaEspera = (props) => {
 	}
 
 	const handleOnClickAsignarPaciente = (event, rowData) => {
-		console.log("ROWWWWDATA", rowData);
 		setConsulta(rowData);
 		setPaciente(rowData.paciente);
 		setCambio(false);
@@ -138,7 +137,6 @@ const ListaEspera = (props) => {
 	}
 
 	const handleOnCambiarPaciente = async (event, rowData) => {
-		console.log("ROWWWWDATA", rowData);
 		setConsulta(rowData.consulta);
 		setPaciente(rowData.paciente);
 		setCambio(true);
@@ -149,7 +147,6 @@ const ListaEspera = (props) => {
 	}
 
 	const handleOnClickLiberar = async (event, rowData) => {
-		console.log("ROWWWWDATA", rowData);
 		const dateNow = new Date();
 		let updateConsulta = rowData.consulta;
 		updateConsulta.status = atendidoStatusId;

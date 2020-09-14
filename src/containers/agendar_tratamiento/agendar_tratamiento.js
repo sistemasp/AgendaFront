@@ -38,10 +38,12 @@ export const AgendarTratamientoContainer = (props) => {
 		errors,
 		servicios,
 		tratamientos,
+		areas,
 		horarios,
 		tipoCitas,
 		onChangeServicio,
 		onChangeTratamientos,
+		onChangeAreas,
 		onChangeFecha,
 		onChangeHora,
 		onChangeFilterDate,
@@ -162,17 +164,19 @@ export const AgendarTratamientoContainer = (props) => {
 						/>
 					</Grid>
 					{
-						values.tratamientos.map((item, index) =>
-							<Grid item xs={12} sm={2}>
-								<TextField
-									className={classes.button}
-									name={item.precio}
-									label={`Precio: ${item.nombre}`}
-									value={item.precio}
-									type='Number'
-									onChange={(e) => onChangeItemPrecio(e, index)}
-									variant="outlined" />
-							</Grid>)
+						values.tratamientos.map((item, index) => {
+							
+							return <Grid item xs={12} sm={2}>
+								<Multiselect
+									options={areas} // Options to display in the dropdown
+									displayValue="nombre" // Property name to display in the dropdown options
+									onSelect={(e) => onChangeAreas(e)} // Function will trigger on select event
+									onRemove={(e) => onChangeAreas(e)} // Function will trigger on remove event
+									placeholder={`Areas de ${item.nombre}`}
+									selectedValues={values.areas} // Preselected value to persist in dropdown
+								/>
+							</Grid>
+							})
 					}
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>

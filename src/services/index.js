@@ -97,6 +97,21 @@ export const findTreatmentByServicio = async (servicioId) => {
         console.log('findTreatmentByServicio', error);
     }
 }
+
+// AREAS
+
+export const findAreasByTreatmentServicio = async (servicioId, tratamientoId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/area/servicio/${servicioId}/tratamiento/${tratamientoId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findAreasByTreatmentServicio', error);
+    }
+}
+
 // HORARIO
 
 export const getAllSchedules = async () => {
