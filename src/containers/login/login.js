@@ -57,69 +57,71 @@ export const LoginContainer = (props) => {
 
 	return (
 		<Paper>
-			<Grid container className={classes.root} justify="center" spacing={3}>
-				<Grid item xs={12}>
-					<FormControl variant="outlined" className={classes.margin, classes.textField}>
-						<InputLabel id="simple-select-outlined-sucursal">Sucursales</InputLabel>
-						<Select
-							labelId="simple-select-outlined-sucursal"
-							id="simple-select-outlined-sucursal"
-							value={values.sucursal}
-							error={Boolean(errors.sucursal)}
-							onChange={onChangeSucursal}
-							label="Servicio" >
-								{ sucursales 
-									? sucursales.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)
-									: '' }
-						</Select>
-					</FormControl>
+			<form>
+				<Grid container className={classes.root} justify="center" spacing={3}>
+					<Grid item xs={12}>
+						<FormControl variant="outlined" className={classes.margin, classes.textField}>
+							<InputLabel id="simple-select-outlined-sucursal">Sucursales</InputLabel>
+							<Select
+								labelId="simple-select-outlined-sucursal"
+								id="simple-select-outlined-sucursal"
+								value={values.sucursal}
+								error={Boolean(errors.sucursal)}
+								onChange={onChangeSucursal}
+								label="Servicio" >
+									{ sucursales 
+										? sucursales.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)
+										: '' }
+							</Select>
+						</FormControl>
+					</Grid>
+					<Grid item xs={12}>
+						<TextField
+							className={classes.textField}
+							name="employee_number"
+							helperText={touched.employee_number ? errors.employee_number : ""}
+							error={Boolean(errors.employee_number)}
+							label="Numero de empleado"
+							value={values.employee_number}
+							onChange={handleChangeNumber}
+							variant="outlined" />
+					</Grid>
+					<Grid item xs={12}>
+						<FormControl className={classes.textField} variant="outlined">
+						<InputLabel htmlFor="outlined-adornment-password">Contraseña</InputLabel>
+						<OutlinedInput
+							id="outlined-adornment-password"
+							type={values.showPassword ? 'text' : 'password'}
+							value={values.password}
+							onChange={handleChangePassword}
+							endAdornment={
+							<InputAdornment position="end">
+								<IconButton
+								aria-label="toggle password visibility"
+								onClick={handleClickShowPassword}
+								onMouseDown={handleMouseDownPassword}
+								edge="end"
+								>
+								{values.showPassword ? <Visibility /> : <VisibilityOff />}
+								</IconButton>
+							</InputAdornment>
+							}
+							labelWidth={70}
+						/>
+						</FormControl>
+					</Grid>
+					<Grid item xs={12}>
+						<ButtonCustom 
+							className={classes.button}
+							type="submit"
+							color="primary"
+							variant="contained"
+							onClick={handleSubmit}
+							disabled={!isValid || !values.employee_number || !values.sucursal.nombre || !values.password}
+							text='ENTRAR' />
+					</Grid>
 				</Grid>
-				<Grid item xs={12}>
-					<TextField
-						className={classes.textField}
-						name="employee_number"
-						helperText={touched.employee_number ? errors.employee_number : ""}
-						error={Boolean(errors.employee_number)}
-						label="Numero de empleado"
-						value={values.employee_number}
-						onChange={handleChangeNumber}
-						variant="outlined" />
-				</Grid>
-				<Grid item xs={12}>
-					<FormControl className={classes.textField} variant="outlined">
-					<InputLabel htmlFor="outlined-adornment-password">Contraseña</InputLabel>
-					<OutlinedInput
-						id="outlined-adornment-password"
-						type={values.showPassword ? 'text' : 'password'}
-						value={values.password}
-						onChange={handleChangePassword}
-						endAdornment={
-						<InputAdornment position="end">
-							<IconButton
-							aria-label="toggle password visibility"
-							onClick={handleClickShowPassword}
-							onMouseDown={handleMouseDownPassword}
-							edge="end"
-							>
-							{values.showPassword ? <Visibility /> : <VisibilityOff />}
-							</IconButton>
-						</InputAdornment>
-						}
-						labelWidth={70}
-					/>
-					</FormControl>
-				</Grid>
-				<Grid item xs={12}>
-					<ButtonCustom 
-						className={classes.button}
-						type="submit"
-						color="primary"
-						variant="contained"
-						onClick={handleSubmit}
-						disabled={!isValid || !values.employee_number || !values.sucursal.nombre || !values.password}
-						text='ENTRAR' />
-				</Grid>
-			</Grid>
+			</form>
 		</Paper>
 	);
 };
