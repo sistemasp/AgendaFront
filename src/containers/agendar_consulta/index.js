@@ -289,7 +289,7 @@ const AgendarConsulta = (props) => {
 		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
-		data.tipo_servicio = consultaServicioId;
+		data.servicio = consultaServicioId;
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 
 		if (sucursal._id !== sucursalManuelAcunaId) {

@@ -52,7 +52,7 @@ const AgendarTratamiento = (props) => {
 		setPacienteAgendado,
 		sucursal,
 	} = props;
-
+	
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
 	const [servicios, setServicios] = useState([]);
@@ -99,6 +99,7 @@ const AgendarTratamiento = (props) => {
 		{ title: 'Telefono', field: 'paciente.telefono' },
 		{ title: 'Servicio', field: 'servicio.nombre' },
 		{ title: 'Tratamientos', field: 'show_tratamientos' },
+		{ title: 'Areas', field: 'show_areas' },
 		{ title: 'Numero Sesion', field: 'numero_sesion' },
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
 		{ title: 'Tipo Cita', field: 'tipo_cita.nombre' },
@@ -129,12 +130,15 @@ const AgendarTratamiento = (props) => {
 	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
 	const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
 	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
+	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
+	const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
+	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 
 	const options = {
 		rowStyle: rowData => {
 			return {
 				color: rowData.status.color,
-				backgroundColor: rowData.pagado ? '#10CC88' : ''
+				backgroundColor: rowData.pagado ? process.env.REACT_APP_PAGADO_COLOR : ''
 			};
 		},
 		headerStyle: {
@@ -167,6 +171,9 @@ const AgendarTratamiento = (props) => {
 					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
 					item.show_tratamientos = item.tratamientos.map(tratamiento => {
 						return `${tratamiento.nombre}, `;
+					});
+					item.show_areas = item.areas.map(area => {
+						return `${area.nombre}, `;
 					});
 				});
 				setCitas(response.data);
@@ -218,6 +225,13 @@ const AgendarTratamiento = (props) => {
 		}
 	}
 
+	const loadAreas = async (tratamiento) => {
+		const response = await findAreasByTreatmentServicio(tratamiento.servicio, tratamiento._id);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setAreas(response.data);
+			}
+	}
+
 	const loadHorarios = async (date) => {
 		const dia = date ? date.getDate() : values.fecha_hora.getDate();
 		const mes = Number(date ? date.getMonth() : values.fecha_hora.getMonth()) + 1;
@@ -252,6 +266,7 @@ const AgendarTratamiento = (props) => {
 		setIsLoading(false);
 	};
 
+	/*
 	const handleChangeTratamientos = async (items) => {
 		items.map(async (item) => {
 			const response = await findAreasByTreatmentServicio(item.servicio, item._id);
@@ -272,19 +287,36 @@ const AgendarTratamiento = (props) => {
 		});
 		setDisableDate(false);
 		setIsLoading(false);
-	}
+	} */
+
+	const handleChangeTratamientos = async (e) => {
+		setIsLoading(true);
+		setValues({
+			...values,
+			fecha_hora: '',
+			precio: 0,
+			tratamientos: [e.target.value],
+		});
+		loadAreas(e.target.value);
+		setIsLoading(false);
+	};
 
 	const handleChangeAreas = async (items) => {
 		setIsLoading(true);
 		let precio = 0;
 		items.map((item) => {
-			precio = Number(precio) + Number(item.precio);
+			const itemPrecio = 
+			sucursal === sucursalManuelAcunaId ? item.precio_ma // Precio Manuel Acuña
+			: (sucursal === sucursalOcciId ? item.precio_oc // Precio Occidental
+				: (sucursal === sucursalFedeId ? item.precio_fe // Precio Federalismo
+					: 0 )); // Error
+			precio = Number(precio) + Number(itemPrecio);
 		});
 		setValues({
 			...values,
 			fecha_hora: '',
 			precio: precio,
-			tratamientos: items
+			areas: items
 		});
 		setDisableDate(false);
 		setIsLoading(false);
@@ -343,6 +375,9 @@ const AgendarTratamiento = (props) => {
 				item.show_tratamientos = item.tratamientos.map(tratamiento => {
 					return `${tratamiento.nombre}, `;
 				});
+				item.show_areas = item.areas.map(area => {
+					return `${area.nombre}, `;
+				});
 			});
 			setCitas(response.data);
 		}
@@ -370,12 +405,8 @@ const AgendarTratamiento = (props) => {
 		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
-		/*const response = await createTreatmentPrice(data.tratamientos);
-		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-			console.log("RESPONSE DATA", response.data);
-
-		}*/
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
+
 		const response = await createDate(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			setOpenAlert(true);
@@ -391,6 +422,7 @@ const AgendarTratamiento = (props) => {
 				tipo_cita: {},
 			});
 			setTratamientos([]);
+			setAreas([]);
 			setDisableDate(true);
 			setPacienteAgendado({});
 			loadCitas(new Date());
@@ -510,7 +542,7 @@ const AgendarTratamiento = (props) => {
 								onChangeFilterDate={(e) => handleChangeFilterDate(e)}
 								onChangeHora={(e) => handleChangeHora(e)}
 								onChangeObservaciones={(e) => handleChangeObservaciones(e)}
-								filterDate={filterDate.fecha_hora}
+								filterDate={filterDate.fecha_show}
 								paciente={paciente}
 								disableDate={disableDate}
 								promovendedores={promovendedores}

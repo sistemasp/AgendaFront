@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ModalFormConsultorio = (props) => {
+const ModalFormCabina = (props) => {
   const classes = useStyles();
 
   // getModalStyle is not a pure function, we roll the style only on the first render
@@ -61,7 +61,7 @@ const ModalFormConsultorio = (props) => {
           <form onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <h2>Consultorio</h2>
+                <h2>Cabina</h2>
                 </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -101,4 +101,4 @@ const ModalFormConsultorio = (props) => {
   );
 }
 
-  export default ModalFormConsultorio;
+  export default ModalFormCabina;

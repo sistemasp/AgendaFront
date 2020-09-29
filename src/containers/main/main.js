@@ -225,9 +225,9 @@ export const MainContainer = props => {
 						<ListItemIcon> <People /> </ListItemIcon>
 						<ListItemText primary={'Medicos'} />
 					</ListItem>
-					<ListItem button key={'Consultorios'} onClick={(e) => onChangeTab(e, 2, handleDrawerClose)}>
+					<ListItem button key={'Consultorios / Cabinas'} onClick={(e) => onChangeTab(e, 2, handleDrawerClose)}>
 						<ListItemIcon> <AirlineSeatReclineNormalIcon /> </ListItemIcon>
-						<ListItemText primary={'Consultorios'} />
+						<ListItemText primary={'Consultorios / Cabinas'} />
 					</ListItem>
 					<ListItem button key={'Corte'} onClick={(e) => onChangeTab(e, 3, handleDrawerClose)}>
 						<ListItemIcon> <AttachMoneyIcon /> </ListItemIcon>

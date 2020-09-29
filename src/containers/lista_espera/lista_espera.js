@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
-
 import TableComponent from '../../components/table/TableComponent';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core';
 import ModalConsultorioAgregarPaciente from '../../components/modales/modal_consultorio_agregar_paciente';
+import ModalCabinaAgregarPaciente from '../../components/modales/modal_cabina_agregar_paciente';
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -16,22 +17,33 @@ export const ListaEsperaContainer = (props) => {
 
   const {
     tituloConsultorios,
-    tituloEspera,
+    tituloCabinas,
+    tituloEsperaConsultas,
+    tituloEsperaTratamientos,
     columnsConsultorios,
+    columnsCabinas,
     columnsEspera,
     consultorios,
-    listaEspera,
-    consulta,
+    cabinas,
+    listaEsperaConsultas,
+    listaEsperaTratamientos,
     optionsEspera,
     optionsConsultorio,
-    actionsEspera,
+    actionsEsperaConsultorio,
+    actionsEsperaCabina,
     actionsConsultorio,
-    openModalAsignar,
+    actionsCabina,
+    openModalConsultorioAsignar,
+    openModalCabinaAsignar,
+    tipo_servicio,
+    servicio,
     handleClose,
     setOpenAlert,
     setMessage,
-    loadListaEspera,
+    loadListaEsperaConsultas,
+    loadListaEsperaTratamientos,
     loadConsultorios,
+    loadCabinas,
     sucursal,
     cambio,
     paciente,
@@ -40,35 +52,81 @@ export const ListaEsperaContainer = (props) => {
   return (
     <Fragment>
       {
-        openModalAsignar ?
+        openModalConsultorioAsignar ?
           <ModalConsultorioAgregarPaciente
-            open={openModalAsignar}
+            open={openModalConsultorioAsignar}
             onClose={handleClose}
-            consulta={consulta}
+            tipo_servicio={tipo_servicio}
+            servicio={servicio}
             setOpenAlert={setOpenAlert}
             setMessage={setMessage}
-            loadListaEspera={loadListaEspera}
+            loadListaEsperaConsultas={loadListaEsperaConsultas}
+            loadListaEsperaTratamientos={loadListaEsperaTratamientos}
             loadConsultorios={loadConsultorios}
             sucursal={sucursal}
             cambio={cambio}
             paciente={paciente} /> : ''
       }
 
-      <h1>LISTA DE ESPERA</h1>
-      
-      <TableComponent
-        titulo={tituloConsultorios}
-        columns={columnsConsultorios}
-        data={consultorios}
-        actions={actionsConsultorio}
-        options={optionsConsultorio} />
+      {
+        openModalCabinaAsignar ? 
+        <ModalCabinaAgregarPaciente
+            open={openModalCabinaAsignar}
+            onClose={handleClose}
+            tipo_servicio={tipo_servicio}
+            servicio={servicio}
+            setOpenAlert={setOpenAlert}
+            setMessage={setMessage}
+            loadListaEsperaConsultas={loadListaEsperaConsultas}
+            loadListaEsperaTratamientos={loadListaEsperaTratamientos}
+            loadCabinas={loadCabinas}
+            sucursal={sucursal}
+            cambio={cambio}
+            paciente={paciente} />
+        : ''
+      }
 
-      <TableComponent
-        titulo={tituloEspera}
-        columns={columnsEspera}
-        data={listaEspera}
-        actions={actionsEspera}
-        options={optionsEspera} />
+      <h1>LISTA DE ESPERA</h1>
+
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6}>
+          <TableComponent
+            titulo={tituloConsultorios}
+            columns={columnsConsultorios}
+            data={consultorios}
+            actions={actionsConsultorio}
+            options={optionsConsultorio} />
+
+          <br />
+
+          <TableComponent
+            titulo={tituloEsperaConsultas}
+            columns={columnsEspera}
+            data={listaEsperaConsultas}
+            actions={actionsEsperaConsultorio}
+            options={optionsEspera} />
+
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TableComponent
+            titulo={tituloCabinas}
+            columns={columnsCabinas}
+            data={cabinas}
+            actions={actionsCabina}
+            options={optionsConsultorio} />
+
+          <br />
+
+          <TableComponent
+            titulo={tituloEsperaTratamientos}
+            columns={columnsEspera}
+            data={listaEsperaTratamientos}
+            actions={actionsEsperaCabina}
+            options={optionsEspera} />
+
+        </Grid>
+      </Grid>
+
     </Fragment>
   );
 }

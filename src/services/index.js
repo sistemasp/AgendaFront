@@ -272,6 +272,18 @@ export const findHistoricByPacienteAndService = async (pacienteId, serviceId) =>
     }
 }
 
+export const findDateById = async (citaId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cita/${citaId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findDateById', error);
+    }
+}
+
 export const createDate = async (cita) => {
     try {
         const response = await axios({
@@ -295,6 +307,18 @@ export const updateDate = async (dateId, cita) => {
         return response;
     } catch (error) {
         console.log('updateDate', error);
+    }
+}
+
+export const waitingListTratamiento = async (sucursalId, statusAsistioId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cita/sucursal/${sucursalId}/asistio/${statusAsistioId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('waitingListTratamiento', error);
     }
 }
 
@@ -477,6 +501,94 @@ export const breakFreeSurgeryByIdMedico = async (surgeryId) => {
     }
 }
 
+// CABINAS
+
+export const findCabinaBySucursalId = async (sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cabina/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findCabinaBySucursalId', error);
+    }
+}
+
+export const findCabinaBySucursalIdWaitingList = async (sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cabina/waitinglist/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findCabinaBySucursalIdWaitingList', error);
+    }
+}
+
+export const findCabinaBySucursalIdAndFree = async (sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cabina/sucursal/${sucursalId}/libre`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findCabinaBySucursalIdAndFree', error);
+    }
+}
+
+export const createCabina = async (cabina) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cabina`,
+            method: 'POST',
+            data: cabina
+        });
+        return response;
+    } catch (error) {
+        console.log('createCabina', error);
+    }
+}
+
+export const updateCabina = async (surgeryId, surgery) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cabina/${surgeryId}`,
+            method: 'PUT',
+            data: surgery
+        });
+        return response;
+    } catch (error) {
+        console.log('updateCabina', error);
+    }
+}
+
+export const breakFreeCabinaByIdPaciente = async (surgeryId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cabina/liberar/paciente/${surgeryId}`,
+            method: 'PUT'
+        });
+        return response;
+    } catch (error) {
+        console.log('breakFreeCabinaByIdPaciente', error);
+    }
+}
+
+export const breakFreeCabinaByIdMedico = async (surgeryId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cabina/liberar/medico/${surgeryId}`,
+            method: 'PUT'
+        });
+        return response;
+    } catch (error) {
+        console.log('breakFreeCabinaByIdMedico', error);
+    }
+}
+
 // CONSULTAS
 
 export const getAllConsults = async () => {
@@ -575,6 +687,20 @@ export const findHistoricConsultByMedico = async (medicoId) => {
     }
 }
 
+export const findConsultById = async (consultId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta/${consultId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findConsultById', error);
+    }
+}
+
+
+
 export const createConsult = async (consulta) => {
     try {
         const response = await axios({
@@ -601,7 +727,7 @@ export const updateConsult = async (dateId, consulta) => {
     }
 }
 
-export const waitingList = async (sucursalId, statusAsistioId) => {
+export const waitingListConsulta = async (sucursalId, statusAsistioId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/consulta/sucursal/${sucursalId}/asistio/${statusAsistioId}`,
@@ -609,7 +735,7 @@ export const waitingList = async (sucursalId, statusAsistioId) => {
         });
         return response;
     } catch (error) {
-        console.log('waitingList', error);
+        console.log('waitingListConsulta', error);
     }
 }
 

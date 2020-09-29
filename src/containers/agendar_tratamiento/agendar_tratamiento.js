@@ -121,11 +121,12 @@ export const AgendarTratamientoContainer = (props) => {
 					<ModalPagos
 						open={openModalPagos}
 						onClose={onCloseVerPagos}
-						cita={cita}
+						servicio={cita}
 						empleado={empleado}
 						sucursal={sucursal}
 						setMessage={setMessage}
-						setOpenAlert={setOpenAlert} />
+						setOpenAlert={setOpenAlert}
+						tipoServicioId={cita.servicio._id} />
 					: ''
 			}
 			{
@@ -153,31 +154,42 @@ export const AgendarTratamientoContainer = (props) => {
 							</Select>
 						</FormControl>
 					</Grid>
+					{
+						false ?
+							<Grid item xs={12} sm={2}>
+								<Multiselect
+									options={tratamientos} // Options to display in the dropdown
+									displayValue="nombre" // Property name to display in the dropdown options
+									onSelect={(e) => onChangeTratamientos(e)} // Function will trigger on select event
+									onRemove={(e) => onChangeTratamientos(e)} // Function will trigger on remove event
+									placeholder="Selecciona tratamientos"
+									selectedValues={values.tratamientos} // Preselected value to persist in dropdown
+								/>
+							</Grid> :
+							<Grid item xs={12} sm={2}>
+								<FormControl variant="outlined" className={classes.formControl}>
+									<InputLabel id="simple-select-outlined-tratamientos">Tratamientos</InputLabel>
+									<Select
+										labelId="simple-select-outlined-tratamientos"
+										id="simple-select-outlined-tratamientos"
+										value={values.tratamientos[0]}
+										onChange={(e) => onChangeTratamientos(e)}
+										label="Tratamientos" >
+										{tratamientos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+									</Select>
+								</FormControl>
+							</Grid>
+					}
 					<Grid item xs={12} sm={2}>
 						<Multiselect
-							options={tratamientos} // Options to display in the dropdown
+							options={areas} // Options to display in the dropdown
 							displayValue="nombre" // Property name to display in the dropdown options
-							onSelect={(e) => onChangeTratamientos(e)} // Function will trigger on select event
-							onRemove={(e) => onChangeTratamientos(e)} // Function will trigger on remove event
-							placeholder="Selecciona tratamientos"
-							selectedValues={values.tratamientos} // Preselected value to persist in dropdown
+							onSelect={(e) => onChangeAreas(e)} // Function will trigger on select event
+							onRemove={(e) => onChangeAreas(e)} // Function will trigger on remove event
+							placeholder={`Areas`}
+							selectedValues={values.areas} // Preselected value to persist in dropdown
 						/>
 					</Grid>
-					{
-						values.tratamientos.map((item, index) => {
-							
-							return <Grid item xs={12} sm={2}>
-								<Multiselect
-									options={areas} // Options to display in the dropdown
-									displayValue="nombre" // Property name to display in the dropdown options
-									onSelect={(e) => onChangeAreas(e)} // Function will trigger on select event
-									onRemove={(e) => onChangeAreas(e)} // Function will trigger on remove event
-									placeholder={`Areas de ${item.nombre}`}
-									selectedValues={values.areas} // Preselected value to persist in dropdown
-								/>
-							</Grid>
-							})
-					}
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
 							<InputLabel id="simple-select-outlined-hora">Medico</InputLabel>

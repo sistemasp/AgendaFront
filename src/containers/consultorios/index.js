@@ -2,7 +2,14 @@ import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { Backdrop, CircularProgress } from '@material-ui/core';
 import { ConsultorioContainer } from './consultorios';
-import { findSurgeryBySucursalId, createSurgery, breakFreeSurgeryByIdMedico } from '../../services';
+import {
+	findSurgeryBySucursalId,
+	createSurgery,
+	breakFreeSurgeryByIdMedico,
+	findCabinaBySucursalId,
+	createCabina,
+	breakFreeCabinaByIdMedico
+} from '../../services';
 import AirlineSeatReclineExtraIcon from '@material-ui/icons/AirlineSeatReclineExtra';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -37,11 +44,14 @@ const Consultorios = (props) => {
 
 	const classes = useStyles();
 
-	const [openModal, setOpenModal] = useState(false);
+	const [openModalConsultorio, setOpenModalConsultorio] = useState(false);
+	const [openModalCabina, setOpenModalCabina] = useState(false);
 	const [openModalAsignar, setOpenModalAsignar] = useState(false);
 	const [openAlert, setOpenAlert] = useState(false);
 	const [consultorios, setConsultorios] = useState([]);
 	const [consultorio, setConsultorio] = useState({});
+	const [cabinas, setCabinas] = useState([]);
+	const [cabina, setCabina] = useState({});
 	const [isLoading, setIsLoading] = useState(true);
 	const [message, setMessage] = useState('');
 	const [severity, setSeverity] = useState('success');
@@ -50,9 +60,15 @@ const Consultorios = (props) => {
 		sucursal,
 	} = props;
 
-	const columns = [
+	const columnsConsultorio = [
 		{ title: 'Nombre', field: 'nombre' },
 		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Paciente', field: 'paciente_nombre' },
+	];
+
+	const columnsCabina = [
+		{ title: 'Nombre', field: 'nombre' },
+		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
 	];
 
@@ -79,13 +95,29 @@ const Consultorios = (props) => {
 		}
 	}
 
-	const handleOpen = () => {
-		setOpenModal(true);
+	const loadCabinas = async () => {
+		const response = await findCabinaBySucursalId(sucursal);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			response.data.forEach(item => {
+				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
+				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
+			});
+			setCabinas(response.data);
+		}
+	}
+
+	const handleOpenConsultorio = () => {
+		setOpenModalConsultorio(true);
+	};
+
+	const handleOpenCabina = () => {
+		setOpenModalCabina(true);
 	};
 
 	const handleClose = () => {
 		setConsultorio({});
-		setOpenModal(false);
+		setOpenModalConsultorio(false);
+		setOpenModalCabina(false);
 		setOpenModalAsignar(false);
 	};
 
@@ -107,7 +139,7 @@ const Consultorios = (props) => {
 		}
 	}
 
-	const handleClickGuardar = async (event, data) => {
+	const handleClickGuardarConsultorio = async (event, data) => {
 		setIsLoading(true);
 		data.sucursal = sucursal;
 		const response = await createSurgery(data);
@@ -116,23 +148,61 @@ const Consultorios = (props) => {
 			setMessage('El consultorio se guardo correctamente');
 			loadConsultorios();
 		}
-		setOpenModal(false);
+		setOpenModalConsultorio(false);
 		setIsLoading(false);
 	}
 
-	const actions = [
+	const handleOnClickLiberarCabina = async (event, rowData) => {
+		const response = await breakFreeCabinaByIdMedico(rowData._id);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			setOpenAlert(true);
+			setMessage('Salio la cosmetologa');
+			await loadConsultorios();
+		}
+	}
+
+	const handleClickGuardarCabina = async (event, data) => {
+		setIsLoading(true);
+		data.sucursal = sucursal;
+		const response = await createCabina(data);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+			setOpenAlert(true);
+			setMessage('La cabina se guardo correctamente');
+			loadCabinas();
+		}
+		setOpenModalCabina(false);
+		setIsLoading(false);
+	}
+
+	const actionsConsultorio = [
 		rowData => (
-			!rowData.medico ? 
-			{
-				icon: AirlineSeatReclineExtraIcon,
-				tooltip: 'Asignar un medico',
-				onClick: handleOnClickAsignarMedico
-			} : 
-			(!rowData.paciente ? {
-				icon: DirectionsWalkIcon,
-				tooltip: 'Liberar consultorio',
-				onClick: handleOnClickLiberarConsultorio
-			} : '')
+			!rowData.medico ?
+				{
+					icon: AirlineSeatReclineExtraIcon,
+					tooltip: 'Asignar un medico',
+					onClick: handleOnClickAsignarMedico
+				} :
+				(!rowData.paciente ? {
+					icon: DirectionsWalkIcon,
+					tooltip: 'Liberar consultorio',
+					onClick: handleOnClickLiberarConsultorio
+				} : '')
+		)
+	];
+
+	const actionsCabina = [
+		rowData => (
+			!rowData.cosmetologa ?
+				{
+					icon: AirlineSeatReclineExtraIcon,
+					tooltip: 'Asignar una cosmetologa',
+					onClick: handleOnClickAsignarMedico
+				} :
+				(!rowData.paciente ? {
+					icon: DirectionsWalkIcon,
+					tooltip: 'Liberar consultorio',
+					onClick: handleOnClickLiberarConsultorio
+				} : '')
 		)
 	];
 
@@ -147,8 +217,20 @@ const Consultorios = (props) => {
 				setConsultorios(response.data);
 			}
 		}
+
+		const loadCabinas = async () => {
+			const response = await findCabinaBySucursalId(sucursal);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				response.data.forEach(item => {
+					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
+					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
+				});
+				setCabinas(response.data);
+			}
+		}
 		setIsLoading(true);
 		loadConsultorios();
+		loadCabinas();
 		setIsLoading(false);
 	}, [sucursal]);
 
@@ -157,17 +239,25 @@ const Consultorios = (props) => {
 			{
 				!isLoading ?
 					<ConsultorioContainer
-						columns={columns}
-						titulo='Consultorios'
-						actions={actions}
+						columnsConsultorio={columnsConsultorio}
+						columnsCabina={columnsCabina}
+						tituloConsultorio='Consultorios'
+						tituloCabina='Cabinas'
+						actionsConsultorio={actionsConsultorio}
+						actionsCabina={actionsCabina}
 						options={options}
-						openModal={openModal}
+						openModalConsultorio={openModalConsultorio}
+						openModalCabina={openModalCabina}
 						openModalAsignar={openModalAsignar}
 						consultorio={consultorio}
 						consultorios={consultorios}
-						handleOpen={handleOpen}
+						cabinas={cabinas}
+						cabina={cabina}
+						handleOpenConsultorio={handleOpenConsultorio}
+						handleOpenCabina={handleOpenCabina}
 						handleClose={handleClose}
-						handleClickGuardar={handleClickGuardar}
+						handleClickGuardarConsultorio={handleClickGuardarConsultorio}
+						handleClickGuardarCabina={handleClickGuardarCabina}
 						setOpenAlert={setOpenAlert}
 						setMessage={setMessage}
 						loadConsultorios={loadConsultorios} /> :

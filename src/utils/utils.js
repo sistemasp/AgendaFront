@@ -58,5 +58,5 @@ export const generateFolioCita = (cita) => {
 
     const folio = `${cita.sucursal.clave}${cita.servicio ? cita.servicio.clave : 'CON'}${date.getFullYear()}${addZero(date.getMonth() + 1)}${addZero(date.getDate())}${turno}${consecutivo}`;
     //return folio;
-    return consecutivo;
+    return cons;
 }

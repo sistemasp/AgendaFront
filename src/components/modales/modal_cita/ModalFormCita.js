@@ -7,6 +7,7 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 import { Multiselect } from 'multiselect-react-dropdown';
 import { CheckCustom } from '../../basic/CheckCustom';
 import ModalPagos from '../modal_pagos';
+import ModalConfirmacion from '../modal_confirmacion';
 
 function getModalStyle() {
   const top = 50;
@@ -90,6 +91,9 @@ const ModalFormCita = (props) => {
     cita,
     empleado,
     sucursal,
+    openModalConfirmacion,
+    onCloseModalConfirmacion,
+    onConfirmModalConfirmacion,
   } = props;
 
   return (
@@ -106,9 +110,19 @@ const ModalFormCita = (props) => {
                   open={openModalPagos}
                   onClose={onCloseModalPagos}
                   onGuardarModalPagos={onGuardarModalPagos}
-                  cita={cita}
+                  servicio={cita}
                   empleado={empleado}
-                  sucursal={sucursal} />
+                  sucursal={sucursal}
+                  tipoServicioId={cita.servicio._id} />
+                : ''
+            }
+            {
+              openModalConfirmacion ?
+                <ModalConfirmacion
+                  open={openModalConfirmacion}
+                  onClose={onCloseModalConfirmacion}
+                  onConfirm={onConfirmModalConfirmacion}
+                  empleado={empleado} />
                 : ''
             }
             <Grid container spacing={1}>

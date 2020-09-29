@@ -17,6 +17,8 @@ const ModalPagos = (props) => {
     tipoServicioId,
   } = props;
 
+  console.log("SERVICIOOOOO", servicio);
+
   const [isLoading, setIsLoading] = useState(true);
   const [pagos, setPagos] = useState([]);
   const [pago, setPago] = useState({});

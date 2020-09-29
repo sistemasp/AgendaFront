@@ -72,8 +72,10 @@ const ModalCita = (props) => {
   const [doctores, setDoctores] = useState([]);
   const [tipoCitas, setTipoCitas] = useState([]);
   const [statements, setStatements] = useState([]);
+  const [previousState, setPreviousState] = useState();
 
   const [openModalPagos, setOpenModalPagos] = useState(false);
+  const [openModalConfirmacion, setOpenModalConfirmacion] = useState(false);
 
   const fecha_cita = new Date(cita.fecha_hora);
   const fecha = `${addZero(fecha_cita.getDate())}/${addZero(Number(fecha_cita.getMonth() + 1))}/${addZero(fecha_cita.getFullYear())}`;
@@ -251,6 +253,11 @@ const ModalCita = (props) => {
   }
 
   const handleChangeStatus = e => {
+    setPreviousState(values.status);
+    const estado = statements.find( statement => {
+      return statement._id === e.target.value;
+    });
+    setOpenModalConfirmacion(estado.confirmacion);
     setValues({ ...values, status: e.target.value });
   }
 
@@ -348,6 +355,15 @@ const ModalCita = (props) => {
     setValues({ ...values, pagado: false });
   }
 
+  const handleCloseModalConfirmacion = () => {
+    setOpenModalConfirmacion(false);
+    setValues({ ...values, status: previousState });
+  }
+
+  const handleConfirmModalConfirmacion = () => {
+    setOpenModalConfirmacion(false);
+  }
+
   const handleGuardarModalPagos = () => {
     setOpenModalPagos(false);
   }
@@ -395,6 +411,9 @@ const ModalCita = (props) => {
                 onGuardarModalPagos={handleGuardarModalPagos}
                 sucursal={sucursal}
                 empleado={empleado}
+                openModalConfirmacion={openModalConfirmacion}
+                onCloseModalConfirmacion={handleCloseModalConfirmacion}
+                onConfirmModalConfirmacion={handleConfirmModalConfirmacion}
                 {...props} />
             }
           </Formik> :
