@@ -2,7 +2,11 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import { addZero, generateFolioCita } from '../../../../utils/utils';
 import ModalFormImprimirPagoMedico from './ModalFormImprimirPagoMedico';
-import { findConsultsByPayOfDoctorTurno, findCirugiasByPayOfDoctorTurno } from '../../../../services';
+import { 
+  findConsultsByPayOfDoctorTurno,
+  findCirugiasByPayOfDoctorTurno,
+  findDatesByPayOfDoctorTurno,
+ } from '../../../../services';
 
 const useStyles = makeStyles(theme => ({
   backdrop: {
@@ -25,6 +29,7 @@ const ModalImprimirPagoMedico = (props) => {
   const [show, setShow] = useState(true);
   const [consultas, setConsultas] = useState([]);
   const [cirugias, setCirugias] = useState([]);
+  const [citas, setCitas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [turno, setTurno] = useState('m');
 
@@ -48,9 +53,19 @@ const ModalImprimirPagoMedico = (props) => {
       setIsLoading(false);
     }
 
+    const loadCitas = async () => {
+      const date = new Date();
+      const response = await findDatesByPayOfDoctorTurno(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal._id, medico._id, atendidoId, turno);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setCitas(response.data);
+      }
+      setIsLoading(false);
+    }
+
     setIsLoading(true);
     loadConsultas();
     loadCirugias();
+    loadCitas();
 
   }, [sucursal, medico, atendidoId, turno]);
 
@@ -71,6 +86,15 @@ const ModalImprimirPagoMedico = (props) => {
     setIsLoading(false);
   }
 
+  const loadCitas = async () => {
+    const date = new Date();
+    const response = await findDatesByPayOfDoctorTurno(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal._id, medico._id, atendidoId, turno);
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setCitas(response.data);
+    }
+    setIsLoading(false);
+  }
+
   const handleClickImprimir = (e) => {
 
     setShow(false);
@@ -82,11 +106,12 @@ const ModalImprimirPagoMedico = (props) => {
 
   const handleCambioTurno = () => {
     setTurno(turno === 'm' ? 'v' : 'm');
-    // setTimeout(() => {
+  };
+
+  const handleObtenerInformacion = () => {
       loadConsultas();
       loadCirugias();
-    //}, 15);
-
+      loadCitas();
   };
 
   return (
@@ -100,9 +125,11 @@ const ModalImprimirPagoMedico = (props) => {
         sucursal={sucursal}
         consultas={consultas}
         cirugias={cirugias}
+        citas={citas}
         turno={turno}
         onClickImprimir={handleClickImprimir}
-        onCambioTurno={handleCambioTurno}
+        onCambioTurno={() => handleCambioTurno()}
+        onObtenerInformacion={() => handleObtenerInformacion()}
         show={show} />
     </Fragment>
 

@@ -321,6 +321,17 @@ export const waitingListTratamiento = async (sucursalId, statusAsistioId) => {
         console.log('waitingListTratamiento', error);
     }
 }
+export const findDatesByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, medicoId, atendidoId, turno) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cita/${dia}/${mes}/${anio}/sucursal/${sucursalId}/medico/${medicoId}/atendido/${atendidoId}/turno/${turno}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findDatesByPayOfDoctorTurno', error);
+    }
+}
 
 // RECEPCIONISTAS
 

@@ -25,7 +25,7 @@ import AirlineSeatReclineNormalIcon from '@material-ui/icons/AirlineSeatReclineN
 import { Button, Grid } from '@material-ui/core';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import ModalPassword from '../../components/modales/modal_password';
-import Medicos from '../medicos';
+import Medicos from '../menu_medicos';
 import Consultorios from '../consultorios';
 import Corte from '../corte';
 import ListaEspera from '../lista_espera';

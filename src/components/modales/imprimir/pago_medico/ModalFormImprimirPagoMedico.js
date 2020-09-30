@@ -13,6 +13,8 @@ function getModalStyle() {
     top: `${top}%`,
     left: `${left}%`,
     transform: `translate(-${top}%, -${left}%)`,
+    overflow: 'scroll',
+    height: '90%',
   };
 }
 
@@ -24,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
     paddingLeft: 30,
-    paddingRight: 30
+    paddingRight: 30,
   },
   textField: {
     width: '100%',
@@ -67,11 +69,13 @@ const ModalFormImprimirPagoMedico = (props) => {
     sucursal,
     consultas,
     cirugias,
+    citas,
     medico,
     onClose,
     onClickImprimir,
     open,
     onCambioTurno,
+    onObtenerInformacion,
     show,
     turno,
   } = props;
@@ -117,15 +121,25 @@ const ModalFormImprimirPagoMedico = (props) => {
                 </Button>
                   </Grid>
                   <br />
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={12}>
                     <Button
                       className={classes.button}
                       color="primary"
                       variant="contained"
-                      onClick={onCambioTurno} >
+                      onClick={() => onCambioTurno()} >
                       Cambio turno
                 </Button>
                   </Grid>
+                  {
+                  /*<Grid item xs={12} sm={6}>
+                    <Button
+                      className={classes.button}
+                      color="primary"
+                      variant="contained"
+                      onClick={() => onObtenerInformacion() } >
+                      Traer información
+                </Button>
+            </Grid>*/}
                   <br />
                   <Grid item xs={12}>
                     <Button
@@ -215,7 +229,43 @@ const ModalFormImprimirPagoMedico = (props) => {
                 })
                 : ''
             }
-
+            <h1>
+              <br />
+            </h1>
+            <Grid item xs={12} className={classes.label}>
+              <h2 className={classes.labelItemLeft}> TRATAMIENTOS </h2>
+            </Grid>
+            <Grid item xs={4} >
+              <h3 className={classes.labelItemLeft}>{`Paciente`}</h3>
+            </Grid>
+            <Grid item xs={4} >
+              <h3 className={classes.labelItemCenter}>{`Consecutivo`}</h3>
+            </Grid>
+            <Grid item xs={4} >
+              <h3 className={classes.labelItemRight}> {`Cantidad a pagar`} </h3>
+            </Grid>
+            <Grid item xs={12} className={classes.label}>
+              <h5 className={classes.labelItemCenter}>__________________________________________________________________________________________________________________________________________</h5>
+            </Grid>
+            {
+              citas ?
+                citas.map(cita => {
+                  const pagoMedico = Number(cita.precio) * Number(medico.porcentaje) / 100;
+                  pagoTotal += Number(pagoMedico);
+                  return <Fragment>
+                    <Grid item xs={4} >
+                      <h4 className={classes.labelItemLeft}>{`${cita.paciente.nombres} ${cita.paciente.apellidos}`}</h4>
+                    </Grid>
+                    <Grid item xs={4} >
+                      <h4 className={classes.labelItemCenter}>{`${cita.consecutivo}`}</h4>
+                    </Grid>
+                    <Grid item xs={4} >
+                      <h4 className={classes.labelItemRight}> {`${toFormatterCurrency(pagoMedico)}`} </h4>
+                    </Grid>
+                  </Fragment>
+                })
+                : ''
+            }
             <br />
             <br />
 

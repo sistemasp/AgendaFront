@@ -11,6 +11,7 @@ import {
 	showAllTipoCitas,
 	createTreatmentPrice,
 	findAreasByTreatmentServicio,
+	createConsecutivo,
 } from "../../services";
 import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
@@ -52,7 +53,7 @@ const AgendarTratamiento = (props) => {
 		setPacienteAgendado,
 		sucursal,
 	} = props;
-	
+
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
 	const [servicios, setServicios] = useState([]);
@@ -125,7 +126,7 @@ const AgendarTratamiento = (props) => {
 			/>
 		}
 	}
-	
+
 	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
 	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
 	const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
@@ -227,9 +228,9 @@ const AgendarTratamiento = (props) => {
 
 	const loadAreas = async (tratamiento) => {
 		const response = await findAreasByTreatmentServicio(tratamiento.servicio, tratamiento._id);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setAreas(response.data);
-			}
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			setAreas(response.data);
+		}
 	}
 
 	const loadHorarios = async (date) => {
@@ -305,11 +306,11 @@ const AgendarTratamiento = (props) => {
 		setIsLoading(true);
 		let precio = 0;
 		items.map((item) => {
-			const itemPrecio = 
-			sucursal === sucursalManuelAcunaId ? item.precio_ma // Precio Manuel Acuña
-			: (sucursal === sucursalOcciId ? item.precio_oc // Precio Occidental
-				: (sucursal === sucursalFedeId ? item.precio_fe // Precio Federalismo
-					: 0 )); // Error
+			const itemPrecio =
+				sucursal === sucursalManuelAcunaId ? item.precio_ma // Precio Manuel Acuña
+					: (sucursal === sucursalOcciId ? item.precio_oc // Precio Occidental
+						: (sucursal === sucursalFedeId ? item.precio_fe // Precio Federalismo
+							: 0)); // Error
 			precio = Number(precio) + Number(itemPrecio);
 		});
 		setValues({
@@ -409,23 +410,35 @@ const AgendarTratamiento = (props) => {
 
 		const response = await createDate(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-			setOpenAlert(true);
-			setMessage('La Cita se agendo correctamente');
-			setValues({
-				servicio: '',
-				tratamientos: [],
-				medico: '',
-				promovendedor: '',
-				cosmetologa: '',
-				paciente: `${paciente._id}`,
-				precio: '',
-				tipo_cita: {},
-			});
-			setTratamientos([]);
-			setAreas([]);
-			setDisableDate(true);
-			setPacienteAgendado({});
-			loadCitas(new Date());
+			console.log("FDLGSDLG", response.data, sucursal);
+			const consecutivo = {
+				consecutivo: response.data.consecutivo,
+				tipo_servicio: response.data.servicio,
+				servicio: response.data._id,
+				sucursal: sucursal,
+				fecha_hora: new Date(),
+				status: response.data.status,
+			}
+			const responseConsecutivo = await createConsecutivo(consecutivo);
+			if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+				setOpenAlert(true);
+				setMessage('La Cita se agendo correctamente');
+				setValues({
+					servicio: '',
+					tratamientos: [],
+					medico: '',
+					promovendedor: '',
+					cosmetologa: '',
+					paciente: `${paciente._id}`,
+					precio: '',
+					tipo_cita: {},
+				});
+				setTratamientos([]);
+				setAreas([]);
+				setDisableDate(true);
+				setPacienteAgendado({});
+				loadCitas(new Date());
+			}
 		}
 
 		setIsLoading(false);
@@ -438,7 +451,7 @@ const AgendarTratamiento = (props) => {
 		newTratamientos.map((item) => {
 			precio = Number(precio) + Number(item.precio);
 		});
-		setValues({ 
+		setValues({
 			...values,
 			tratamientos: newTratamientos,
 			precio: precio,

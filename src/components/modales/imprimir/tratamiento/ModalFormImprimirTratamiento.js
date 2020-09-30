@@ -46,6 +46,13 @@ const useStyles = makeStyles(theme => ({
     marginBottom: '0px',
     textAlign: 'left',
   },
+  labelSubItemLeft: {
+    marginTop: '0px',
+    marginBottom: '0px',
+    marginLeft: '15px',
+    marginRight: '15px',
+    textAlign: 'left',
+  },
   labelItemRight: {
     marginTop: '0px',
     marginBottom: '0px',
@@ -66,6 +73,10 @@ const ModalFormImprimirTratamiento = (props) => {
     open,
     show,
   } = props;
+
+  const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
+	const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
+	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 
   return (
     <div>
@@ -91,18 +102,37 @@ const ModalFormImprimirTratamiento = (props) => {
             <br />
             <br />
             <br />
+            {console.log(datos.tratamientos)}
             {
               datos.tratamientos.map(tratamiento => {
                 return <Fragment>
                   <Grid item xs={10} className={classes.labelItem}>
-                    <h4 className={classes.labelItemLeft}>{`${tratamiento.nombre}:`}</h4>
+                    <h3 className={classes.labelItemLeft}>{`${tratamiento.nombre}:`}</h3>
                   </Grid>
-                  <Grid item xs={2} className={classes.labelItem}>
-                    <h4 className={classes.labelItemRight}> {`${toFormatterCurrency(tratamiento.precio)}`} </h4>
-                  </Grid>
+                  <br />
+                  {
+                    datos.areas.filter(area => {
+                      return tratamiento._id === area.tratamiento;
+                    }).map(area => {
+                      return <Fragment>
+                        <Grid item xs={10} className={classes.labelItem}>
+                          <h4 className={classes.labelSubItemLeft}>{`${area.nombre}`}</h4>
+                        </Grid>
+                        <Grid item xs={2} className={classes.labelItem}>
+                          <h4 className={classes.labelItemRight}> {`${toFormatterCurrency(
+                            datos.sucursal._id === sucursalManuelAcunaId ? area.precio_ma // Precio Manuel Acuña
+                            : (datos.sucursal._id === sucursalOcciId ? area.precio_oc // Precio Occidental
+                              : (datos.sucursal._id === sucursalFedeId ? area.precio_fe // Precio Federalismo
+                                : 0 )) // Error
+                            )}`} </h4>
+                        </Grid>
+                      </Fragment>
+                    })
+                  }
                 </Fragment>
               })
             }
+            <br />
             <Grid item xs={12} className={classes.labelItemRight}>
               <h1 className={classes.labelItemRight}>TOTAL: {datos.precio_moneda}</h1>
             </Grid>

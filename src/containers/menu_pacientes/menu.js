@@ -82,10 +82,8 @@ export const MenuContainer = props => {
 					<Tab label="Pacientes" {...a11yProps(0)} />
 					<Tab label="Agendar consulta" {...a11yProps(1)} />
 					<Tab label="Agendar tratamiento" {...a11yProps(2)} />
-					<Tab label="Agendar cirugía" {...a11yProps(3)} />
-					<Tab label="Consultas" {...a11yProps(4)} />
-					<Tab label="Tratamientos" {...a11yProps(5)} />
-					<Tab label="Cirugias" {...a11yProps(6)} />
+					<Tab label="Consultas" {...a11yProps(3)} />
+					<Tab label="Tratamientos" {...a11yProps(4)} />
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>
@@ -110,22 +108,11 @@ export const MenuContainer = props => {
 					sucursal={sucursal._id} />
 			</TabPanel>
 			<TabPanel value={value} index={3}>
-				<AgendarCirugia
-					paciente={pacienteAgendado}
-					setPacienteAgendado={setPacienteAgendado}
-					empleado={empleado}
-					sucursal={sucursal._id} />
-			</TabPanel>
-			<TabPanel value={value} index={4}>
 				<Consultas
 					sucursal={sucursal._id} />
 			</TabPanel>
-			<TabPanel value={value} index={5}>
+			<TabPanel value={value} index={4}>
 				<Citas
-					sucursal={sucursal._id} />
-			</TabPanel>
-			<TabPanel value={value} index={6}>
-				<Cirugias
 					sucursal={sucursal._id} />
 			</TabPanel>
 		</div>

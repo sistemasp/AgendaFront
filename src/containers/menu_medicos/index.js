@@ -122,7 +122,7 @@ const Medicos = (props) => {
 					const fecha_baja = new Date(item.fecha_baja);
 					const fecha_baja_show = `${addZero(fecha_baja.getDate())}/${addZero(Number(fecha_baja.getMonth() + 1))}/${fecha_baja.getFullYear()}`;
 					item.fecha_ingreso_show = fecha_ingreso_show;
-					item.fecha_baja_show = item.fecha_baja ? fecha_baja_show : '-';
+					item.fecha_baja_show = item.fecha_baja ? fecha_baja_show : 'VIGENTE';
 				});
 				setMedicos(response.data);
 			}
