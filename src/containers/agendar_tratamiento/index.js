@@ -143,7 +143,7 @@ const AgendarTratamiento = (props) => {
 			};
 		},
 		headerStyle: {
-			backgroundColor: '#2BA6C6',
+			backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
 			color: '#FFF',
 			fontWeight: 'bolder',
 			fontSize: '18px'
@@ -410,7 +410,6 @@ const AgendarTratamiento = (props) => {
 
 		const response = await createDate(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-			console.log("FDLGSDLG", response.data, sucursal);
 			const consecutivo = {
 				consecutivo: response.data.consecutivo,
 				tipo_servicio: response.data.servicio,

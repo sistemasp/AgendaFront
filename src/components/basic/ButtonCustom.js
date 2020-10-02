@@ -3,7 +3,7 @@ import { createMuiTheme, Button, ThemeProvider } from "@material-ui/core";
 
 const theme = createMuiTheme({
 	palette: {
-		primary: { main: '#2BA6C6' },
+		primary: { main: process.env.REACT_APP_TOP_BAR_COLOR },
 	}
 });
 

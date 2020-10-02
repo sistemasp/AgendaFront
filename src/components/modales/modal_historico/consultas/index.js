@@ -34,7 +34,7 @@ const TabConsultas = (props) => {
 			};
 		},
 		headerStyle: {
-			backgroundColor: '#2BA6C6',
+			backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
 			color: '#FFF',
 			fontWeight: 'bolder',
 			fontSize: '18px'

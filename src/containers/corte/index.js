@@ -53,14 +53,13 @@ const Corte = (props) => {
 	} = props;
 
 	const columns = [
-		{ title: 'Nombre', field: 'nombre' },
-		{ title: 'Medico', field: 'nombre_medico' },
-		{ title: 'Paciente', field: 'nombre_paciente' },
+		{ title: 'Concepto', field: 'nombre' },
+		{ title: 'Cantidad', field: 'nombre_medico' },
 	];
 
 	const options = {
 		headerStyle: {
-			backgroundColor: '#2BA6C6',
+			backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
 			color: '#FFF',
 			fontWeight: 'bolder',
 			fontSize: '18px'

@@ -89,7 +89,7 @@ export const ListaEsperaContainer = (props) => {
       <h1>LISTA DE ESPERA</h1>
 
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
           <TableComponent
             titulo={tituloConsultorios}
             columns={columnsConsultorios}
@@ -107,7 +107,25 @@ export const ListaEsperaContainer = (props) => {
             options={optionsEspera} />
 
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
+          <TableComponent
+            titulo={tituloCabinas}
+            columns={columnsCabinas}
+            data={cabinas}
+            actions={actionsCabina}
+            options={optionsConsultorio} />
+
+          <br />
+
+          <TableComponent
+            titulo={tituloEsperaTratamientos}
+            columns={columnsEspera}
+            data={listaEsperaTratamientos}
+            actions={actionsEsperaCabina}
+            options={optionsEspera} />
+
+        </Grid>
+        <Grid item xs={12} sm={4}>
           <TableComponent
             titulo={tituloCabinas}
             columns={columnsCabinas}
