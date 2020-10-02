@@ -12,6 +12,7 @@ import {
 	createTreatmentPrice,
 	findAreasByTreatmentServicio,
 	createConsecutivo,
+	showAllMedios,
 } from "../../services";
 import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
@@ -54,6 +55,16 @@ const AgendarTratamiento = (props) => {
 		sucursal,
 	} = props;
 
+	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
+	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
+	const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
+	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
+	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
+	const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
+	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
+	const medicoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
+	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
+
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
 	const [servicios, setServicios] = useState([]);
@@ -63,6 +74,7 @@ const AgendarTratamiento = (props) => {
 	const [promovendedores, setPromovendedores] = useState([]);
 	const [cosmetologas, setCosmetologas] = useState([]);
 	const [tipoCitas, setTipoCitas] = useState([]);
+	const [medios, setMedios] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [disableDate, setDisableDate] = useState(true);
 	const [values, setValues] = useState({
@@ -74,6 +86,7 @@ const AgendarTratamiento = (props) => {
 		tipo_cita: {},
 		tiempo: '',
 		observaciones: '',
+		medico: { _id: medicoDirectoId},
 	});
 	const [citas, setCitas] = useState([]);
 	const [areas, setAreas] = useState([]);
@@ -103,11 +116,12 @@ const AgendarTratamiento = (props) => {
 		{ title: 'Areas', field: 'show_areas' },
 		{ title: 'Numero Sesion', field: 'numero_sesion' },
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
-		{ title: 'Tipo Cita', field: 'tipo_cita.nombre' },
+		{ title: 'Medio', field: 'medio.nombre' },
 		{ title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' },
 		{ title: 'Quien confirma asistencia', field: 'quien_confirma_asistencia.nombre' },
 		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
 		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Tipo Cita', field: 'tipo_cita.nombre' },
 		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
 		{ title: 'Estado', field: 'status.nombre' },
 		{ title: 'Precio', field: 'precio_moneda' },
@@ -126,14 +140,6 @@ const AgendarTratamiento = (props) => {
 			/>
 		}
 	}
-
-	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
-	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
-	const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
-	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
-	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
-	const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
-	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 
 	const options = {
 		rowStyle: rowData => {
@@ -210,6 +216,13 @@ const AgendarTratamiento = (props) => {
 			}
 		}
 
+		const loadMedios = async () => {
+			const response = await showAllMedios();
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setMedios(response.data);
+			}
+		}
+
 		setIsLoading(true);
 		loadCitas();
 		loadPromovendedores();
@@ -217,6 +230,7 @@ const AgendarTratamiento = (props) => {
 		loadServicios();
 		loadMedicos();
 		loadTipoCitas();
+		loadMedios();
 	}, [sucursal]);
 
 	const loadTratamientos = async (servicio) => {
@@ -406,6 +420,7 @@ const AgendarTratamiento = (props) => {
 		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
+		data.tipo_cita = data.medico._id === medicoDirectoId ? tipoCitaNoAplicaId : data.tipo_cita;
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 
 		const response = await createDate(data);
@@ -475,6 +490,10 @@ const AgendarTratamiento = (props) => {
 
 	const handleChangeTipoCita = (e) => {
 		setValues({ ...values, tipo_cita: e.target.value });
+	}
+
+	const handleChangeMedio = (e) => {
+		setValues({ ...values, medio: e.target.value });
 	}
 
 	const handleCloseAlert = () => {
@@ -574,7 +593,9 @@ const AgendarTratamiento = (props) => {
 								loadCitas={loadCitas}
 								medicos={medicos}
 								tipoCitas={tipoCitas}
+								medios={medios}
 								onChangeTipoCita={(e) => handleChangeTipoCita(e)}
+								onChangeMedio={(e) => handleChangeMedio(e)}
 								onChangeDoctors={(e) => handleChangeDoctors(e)}
 								onChangePromovendedor={(e) => handleChangePromovendedor(e)}
 								onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
@@ -588,6 +609,7 @@ const AgendarTratamiento = (props) => {
 								setOpenAlert={setOpenAlert}
 								setMessage={setMessage}
 								setFilterDate={setFilterDate}
+								medicoDirectoId={medicoDirectoId}
 								{...props} />
 						}
 					</Formik> :

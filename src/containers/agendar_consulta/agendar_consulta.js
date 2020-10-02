@@ -61,6 +61,7 @@ export const AgendarConsultaContainer = (props) => {
     empleado,
     medicos,
     tipoCitas,
+    medios,
     promovendedores,
     onChangeMedicos,
     onChangePromovendedor,
@@ -82,6 +83,7 @@ export const AgendarConsultaContainer = (props) => {
     onClickActualizarCita,
     onClickCancel,
     onChangeTipoCita,
+    onChangeMedio,
     onChangeAsistio,
     loadConsultas,
     sucursal,
@@ -113,6 +115,7 @@ export const AgendarConsultaContainer = (props) => {
             onChangeFecha={onChangeFecha}
             onChangeHora={onChangeHora}
             onChangeTipoCita={onChangeTipoCita}
+            onChangeMedio={onChangeMedio}
             onChangeAsistio={onChangeAsistio}
             servicios={servicios}
             tratamientos={tratamientos}
@@ -257,19 +260,22 @@ export const AgendarConsultaContainer = (props) => {
 
           }
           {sucursal._id === process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID ?
-            <Grid item xs={12} sm={2}>
-              <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel id="simple-select-outlined-tipo-cita">Tipo Cita</InputLabel>
-                <Select
-                  labelId="simple-select-outlined-tipo-cita"
-                  id="simple-select-outlined-tipo-cita"
-                  value={values.tipoCita}
-                  onChange={onChangeTipoCita}
-                  label="Tipo Cita" >
-                  {tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
-                </Select>
-              </FormControl>
-            </Grid> : ''}
+            <Fragment>
+              <Grid item xs={12} sm={2}>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="simple-select-outlined-tipo-cita">Medio</InputLabel>
+                  <Select
+                    labelId="simple-select-outlined-tipo-cita"
+                    id="simple-select-outlined-tipo-cita"
+                    value={values.medio}
+                    onChange={onChangeMedio}
+                    label="Medio" >
+                    {medios.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Fragment>
+            : ''}
           <Grid item xs={12} sm={2}>
             <TextField
               className={classes.button}

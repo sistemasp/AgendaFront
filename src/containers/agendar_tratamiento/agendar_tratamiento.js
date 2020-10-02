@@ -62,7 +62,9 @@ export const AgendarTratamientoContainer = (props) => {
 		onChangeDoctors,
 		onChangePromovendedor,
 		onChangeCosmetologa,
-		onChangeItemPrecio,
+		onChangeMedio,
+		medios,
+		medicoDirectoId,
 		// TABLE DATES PROPERTIES
 		titulo,
 		columns,
@@ -105,6 +107,7 @@ export const AgendarTratamientoContainer = (props) => {
 						onChangeFecha={onChangeFecha}
 						onChangeHora={onChangeHora}
 						onChangeTipoCita={onChangeTipoCita}
+						onChangeMedio={onChangeMedio}
 						onChangeAsistio={onChangeAsistio}
 						servicios={servicios}
 						tratamientos={tratamientos}
@@ -204,6 +207,24 @@ export const AgendarTratamientoContainer = (props) => {
 							</Select>
 						</FormControl>
 					</Grid>
+					{
+						medicoDirectoId !== values.medico._id ?
+							<Grid item xs={12} sm={2}>
+								<FormControl variant="outlined" className={classes.formControl}>
+									<InputLabel id="simple-select-outlined-tipo-cita">Tipo Cita</InputLabel>
+									<Select
+										labelId="simple-select-outlined-tipo-cita"
+										id="simple-select-outlined-tipo-cita"
+										value={values.tipoCita}
+										error={Boolean(errors.tipoCita)}
+										onChange={onChangeTipoCita}
+										label="Tipo Cita" >
+										{tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+									</Select>
+								</FormControl>
+							</Grid>
+							: ''
+					}
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
 							<InputLabel id="simple-select-outlined-promovendedor">Promovendedor</InputLabel>
@@ -275,15 +296,14 @@ export const AgendarTratamientoContainer = (props) => {
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
-							<InputLabel id="simple-select-outlined-tipo-cita">Tipo Cita</InputLabel>
+							<InputLabel id="simple-select-outlined-tipo-cita">Medio</InputLabel>
 							<Select
 								labelId="simple-select-outlined-tipo-cita"
 								id="simple-select-outlined-tipo-cita"
-								value={values.tipoCita}
-								error={Boolean(errors.tipoCita)}
-								onChange={onChangeTipoCita}
-								label="Tipo Cita" >
-								{tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+								value={values.medio}
+								onChange={onChangeMedio}
+								label="Medio" >
+								{medios.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
 					</Grid>

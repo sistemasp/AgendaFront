@@ -7,6 +7,7 @@ import {
 	createConsult,
 	findEmployeesByRolId,
 	showAllTipoCitas,
+	showAllMedios,
 	showAllFrecuencias,
 	findCirugiaByConsultaId,
 	createConsecutivo,
@@ -56,6 +57,7 @@ const AgendarConsulta = (props) => {
 	const [medicos, setMedicos] = useState([]);
 	const [frecuencias, setFrecuencias] = useState([]);
 	const [tipoCitas, setTipoCitas] = useState([]);
+	const [medios, setMedios] = useState([]);
 	const [promovendedores, setPromovendedores] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [disableDate, setDisableDate] = useState(true);
@@ -94,13 +96,13 @@ const AgendarConsulta = (props) => {
 	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
 	const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
 	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
-	const tipoCitaSinCitaId = process.env.REACT_APP_TIPO_CITA_SIN_CITA;
 	const medicoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
 	const promovendedorSinAsignarId = process.env.REACT_APP_PROMOVENDEDOR_SIN_ASIGNAR_ID;
 	const frecuenciaPrimeraVezId = process.env.REACT_APP_FRECUENCIA_PRIMERA_VEZ_ID;
 	const fercuenciaReconsultaId = process.env.REACT_APP_FRECUENCIA_RECONSULTA_ID;
-	const tipoCitaRevisionId = process.env.REACT_APP_TIPO_CITA_REVISION_ID;
-	const tipoCitaDerivadaId = process.env.REACT_APP_TIPO_CITA_DERIVADA_ID;
+	const tipoCitaRevisionId = process.env.REACT_APP_TIPO_CITA_REVISADO_ID;
+	const tipoCitaDerivadaId = process.env.REACT_APP_TIPO_CITA_DERIVADO_ID;
+	const medioSinCitaId = process.env.REACT_APP_MEDIO_SIN_CITA_ID;
 
 	const columns = [
 		{ title: 'Folio', field: 'consecutivo' },
@@ -112,6 +114,7 @@ const AgendarConsulta = (props) => {
 		{ title: 'Hora salida', field: 'hora_salida' },
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
 		{ title: 'Frecuencia', field: 'frecuencia.nombre' },
+		sucursal._id === sucursalManuelAcunaId ? { title: 'Medio', field: 'medio.nombre' }  : {},
 		{ title: 'Tipo Consulta', field: 'tipo_cita.nombre' },
 		sucursal._id === sucursalManuelAcunaId ? { title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' } : {},
 		{ title: 'Quien confirma asistencia', field: 'quien_confirma_asistencia.nombre' },
@@ -189,6 +192,13 @@ const AgendarConsulta = (props) => {
 			}
 		}
 
+		const loadMedios = async () => {
+			const response = await showAllMedios();
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setMedios(response.data);
+			}
+		}
+
 		const loadFrecuencias = async () => {
 			const response = await showAllFrecuencias();
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -202,6 +212,7 @@ const AgendarConsulta = (props) => {
 		loadPromovendedores();
 		loadTipoCitas();
 		loadFrecuencias();
+		loadMedios();
 	}, [sucursal, medicoRolId, promovendedorRolId]);
 
 	const loadHorarios = async (date) => {
@@ -281,6 +292,10 @@ const AgendarConsulta = (props) => {
 		setValues({ ...values, tipo_cita: e.target.value });
 	}
 
+	const handleChangeMedio = (e) => {
+		setValues({ ...values, medio: e.target.value });
+	}
+
 	const handleClickAgendar = async (data) => {
 		setIsLoading(true);
 		data.quien_agenda = empleado._id;
@@ -290,6 +305,7 @@ const AgendarConsulta = (props) => {
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
 		data.servicio = consultaServicioId;
+		data.tipo_cita = data.frecuencia === frecuenciaPrimeraVezId ? tipoCitaRevisionId : tipoCitaDerivadaId;
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 
 		if (sucursal._id !== sucursalManuelAcunaId) {
@@ -299,7 +315,7 @@ const AgendarConsulta = (props) => {
 			dateNow.setMinutes(0);
 			dateNow.setSeconds(0);
 			data.fecha_hora = dateNow;
-			data.tipo_cita = data.frecuencia === frecuenciaPrimeraVezId ? tipoCitaRevisionId : tipoCitaDerivadaId;
+			data.medio = medioSinCitaId;
 			// data.quien_confirma_asistencia = empleado._id;
 		}
 
@@ -484,7 +500,9 @@ const AgendarConsulta = (props) => {
 						onClickCancel={handleCloseModal}
 						loadConsultas={loadConsultas}
 						tipoCitas={tipoCitas}
+						medios={medios}
 						onChangeTipoCita={(e) => handleChangeTipoCita(e)}
+						onChangeMedio={(e) => handleChangeMedio(e)}
 						medicos={medicos}
 						promovendedores={promovendedores}
 						onChangeMedicos={(e) => handleChangeMedicos(e)}

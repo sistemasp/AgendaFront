@@ -764,6 +764,20 @@ export const showAllTipoCitas = async () => {
     }
 }
 
+// MEDIO
+
+export const showAllMedios = async () => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/medio`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllMedios', error);
+    }
+}
+
 // STATUS
 
 export const showAllStatus = async () => {
