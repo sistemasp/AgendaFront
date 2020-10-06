@@ -6,6 +6,7 @@ import { ButtonCustom } from '../../components/basic/ButtonCustom';
 import ModalConsultorio from '../../components/modales/modal_consultorio';
 import ModalConsultorioAgregarMedico from '../../components/modales/modal_consultorio_agregar_medico';
 import ModalCabina from '../../components/modales/modal_cabina';
+import ModalSalaCirugia from '../../components/modales/modal_sala_cirugia';
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -26,16 +27,24 @@ export const ConsultorioContainer = (props) => {
     consultorio,
     cabinas,
     cabina,
+    tituloSalaCirugia,
+    columnsSalaCirugia,
+    salaCirugias,
+    salaCirugia,
+    actionsSalaCirugia,
     actionsConsultorio,
     actionsCabina,
     options,
     openModalConsultorio,
     openModalCabina,
+    openModalSalaCirugia,
     handleOpenConsultorio,
     handleOpenCabina,
+    handleOpenSalaCirugia,
     handleClose,
     handleClickGuardarConsultorio,
     handleClickGuardarCabina,
+    handleClickGuardarSalaCirugia,
     openModalAsignar,
     setOpenAlert,
     setMessage,
@@ -65,6 +74,16 @@ export const ConsultorioContainer = (props) => {
             setMessage={setMessage} /> : ''
       }
       {
+        openModalSalaCirugia ?
+          <ModalSalaCirugia
+            open={openModalSalaCirugia}
+            onClose={handleClose}
+            salaCirugia={salaCirugia}
+            handleClickGuardar={handleClickGuardarSalaCirugia}
+            setOpenAlert={setOpenAlert}
+            setMessage={setMessage} /> : ''
+      }
+      {
         openModalAsignar ?
           <ModalConsultorioAgregarMedico
             open={openModalAsignar}
@@ -76,7 +95,7 @@ export const ConsultorioContainer = (props) => {
       }
 
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
           <ButtonCustom
             className={classes.button}
             color="primary"
@@ -92,7 +111,7 @@ export const ConsultorioContainer = (props) => {
             options={options} />
         </Grid>
 
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={4}>
           <ButtonCustom
             className={classes.button}
             color="primary"
@@ -105,6 +124,21 @@ export const ConsultorioContainer = (props) => {
             columns={columnsCabina}
             data={cabinas}
             actions={actionsCabina}
+            options={options} />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <ButtonCustom
+            className={classes.button}
+            color="primary"
+            variant="contained"
+            onClick={handleOpenSalaCirugia}
+            text='Nueva Sala de cirugia' />
+
+          <TableComponent
+            titulo={tituloSalaCirugia}
+            columns={columnsSalaCirugia}
+            data={salaCirugias}
+            actions={actionsSalaCirugia}
             options={options} />
         </Grid>
       </Grid>

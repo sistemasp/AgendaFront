@@ -8,7 +8,9 @@ import {
 	breakFreeSurgeryByIdMedico,
 	findCabinaBySucursalId,
 	createCabina,
-	breakFreeCabinaByIdMedico
+	breakFreeCabinaByIdMedico,
+	createSalaCirugia,
+	findSalaCirugiaBySucursalId
 } from '../../services';
 import AirlineSeatReclineExtraIcon from '@material-ui/icons/AirlineSeatReclineExtra';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -46,12 +48,15 @@ const Consultorios = (props) => {
 
 	const [openModalConsultorio, setOpenModalConsultorio] = useState(false);
 	const [openModalCabina, setOpenModalCabina] = useState(false);
+	const [openModalSalaCirugia, setOpenModalSalaCirugia] = useState(false);
 	const [openModalAsignar, setOpenModalAsignar] = useState(false);
 	const [openAlert, setOpenAlert] = useState(false);
 	const [consultorios, setConsultorios] = useState([]);
 	const [consultorio, setConsultorio] = useState({});
 	const [cabinas, setCabinas] = useState([]);
 	const [cabina, setCabina] = useState({});
+	const [salaCirugias, setSalaCirugias] = useState([]);
+	const [salaCirugia, setSalaCirugia] = useState({});
 	const [isLoading, setIsLoading] = useState(true);
 	const [message, setMessage] = useState('');
 	const [severity, setSeverity] = useState('success');
@@ -69,6 +74,12 @@ const Consultorios = (props) => {
 	const columnsCabina = [
 		{ title: 'Nombre', field: 'nombre' },
 		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
+		{ title: 'Paciente', field: 'paciente_nombre' },
+	];
+
+	const columnsSalaCirugia = [
+		{ title: 'Nombre', field: 'nombre' },
+		{ title: 'Medico', field: 'medico_nombre' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
 	];
 
@@ -106,6 +117,17 @@ const Consultorios = (props) => {
 		}
 	}
 
+	const loadSalaCirugia = async () => {
+		const response = await findSalaCirugiaBySucursalId(sucursal);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			response.data.forEach(item => {
+				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
+				item.medico_nombre = item.medico ? item.medico.nombre : 'SIN ASIGNAR';
+			});
+			setSalaCirugias(response.data);
+		}
+	}
+
 	const handleOpenConsultorio = () => {
 		setOpenModalConsultorio(true);
 	};
@@ -114,11 +136,16 @@ const Consultorios = (props) => {
 		setOpenModalCabina(true);
 	};
 
+	const handleOpenSalaCirugia = () => {
+		setOpenModalSalaCirugia(true);
+	};
+
 	const handleClose = () => {
 		setConsultorio({});
 		setOpenModalConsultorio(false);
 		setOpenModalCabina(false);
 		setOpenModalAsignar(false);
+		setOpenModalSalaCirugia(false);
 	};
 
 	const handleCloseAlert = () => {
@@ -174,6 +201,19 @@ const Consultorios = (props) => {
 		setIsLoading(false);
 	}
 
+	const handleClickGuardarSalaCirugia = async (event, data) => {
+		setIsLoading(true);
+		data.sucursal = sucursal;
+		const response = await createSalaCirugia(data);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+			setOpenAlert(true);
+			setMessage('La sala de cirugia se guardo correctamente');
+			loadSalaCirugia();
+		}
+		setOpenModalSalaCirugia(false);
+		setIsLoading(false);
+	}
+
 	const actionsConsultorio = [
 		rowData => (
 			!rowData.medico ?
@@ -206,6 +246,22 @@ const Consultorios = (props) => {
 		)
 	];
 
+	const actionsSalaCirugia = [
+		rowData => (
+			!rowData.medico ?
+				{
+					icon: AirlineSeatReclineExtraIcon,
+					tooltip: 'Asignar un medico',
+					onClick: handleOnClickAsignarMedico
+				} :
+				(!rowData.paciente ? {
+					icon: DirectionsWalkIcon,
+					tooltip: 'Liberar sala de cirugia',
+					onClick: handleOnClickLiberarConsultorio
+				} : '')
+		)
+	];
+
 	useEffect(() => {
 		const loadConsultorios = async () => {
 			const response = await findSurgeryBySucursalId(sucursal);
@@ -228,9 +284,22 @@ const Consultorios = (props) => {
 				setCabinas(response.data);
 			}
 		}
+
+		const loadSalaCirugia = async () => {
+			const response = await findSalaCirugiaBySucursalId(sucursal);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				response.data.forEach(item => {
+					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
+					item.medico_nombre = item.medico ? item.medico.nombre : 'SIN ASIGNAR';
+				});
+				setSalaCirugias(response.data);
+			}
+		}
+
 		setIsLoading(true);
 		loadConsultorios();
 		loadCabinas();
+		loadSalaCirugia();
 		setIsLoading(false);
 	}, [sucursal]);
 
@@ -241,23 +310,31 @@ const Consultorios = (props) => {
 					<ConsultorioContainer
 						columnsConsultorio={columnsConsultorio}
 						columnsCabina={columnsCabina}
+						columnsSalaCirugia={columnsSalaCirugia}
 						tituloConsultorio='Consultorios'
 						tituloCabina='Cabinas'
+						tituloSalaCirugia='Sala Cirugias'
 						actionsConsultorio={actionsConsultorio}
+						actionsSalaCirugia={actionsSalaCirugia}
 						actionsCabina={actionsCabina}
 						options={options}
 						openModalConsultorio={openModalConsultorio}
 						openModalCabina={openModalCabina}
+						openModalSalaCirugia={openModalSalaCirugia}
 						openModalAsignar={openModalAsignar}
 						consultorio={consultorio}
 						consultorios={consultorios}
 						cabinas={cabinas}
 						cabina={cabina}
+						salaCirugias={salaCirugias}
+						salaCirugia={salaCirugia}
 						handleOpenConsultorio={handleOpenConsultorio}
 						handleOpenCabina={handleOpenCabina}
+						handleOpenSalaCirugia={handleOpenSalaCirugia}
 						handleClose={handleClose}
 						handleClickGuardarConsultorio={handleClickGuardarConsultorio}
 						handleClickGuardarCabina={handleClickGuardarCabina}
+						handleClickGuardarSalaCirugia={handleClickGuardarSalaCirugia}
 						setOpenAlert={setOpenAlert}
 						setMessage={setMessage}
 						loadConsultorios={loadConsultorios} /> :

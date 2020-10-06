@@ -385,6 +385,18 @@ export const findEmployeesByRolId = async (rolId) => {
     }
 }
 
+export const findEmployeesByRolIdAvailable = async (rolId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/empleado/rol/${rolId}/available`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findEmployeesByRolIdAvailable', error);
+    }
+}
+
 export const updateEmployee = async (employeeId, employee) => {
     try {
         const response = await axios({
@@ -509,6 +521,94 @@ export const breakFreeSurgeryByIdMedico = async (surgeryId) => {
         return response;
     } catch (error) {
         console.log('breakFreeSurgeryByIdMedico', error);
+    }
+}
+
+// SALA DE CIRUGIA
+
+export const findSalaCirugiaBySucursalId = async (sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/salacirugia/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findSalaCirugiaBySucursalId', error);
+    }
+}
+
+export const findSalaCirugiaBySucursalIdWaitingList = async (sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/salacirugia/waitinglist/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findSalaCirugiaBySucursalIdWaitingList', error);
+    }
+}
+
+export const findSalaCirugiaBySucursalIdAndFree = async (sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/salacirugia/sucursal/${sucursalId}/libre`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findSalaCirugiaBySucursalIdAndFree', error);
+    }
+}
+
+export const createSalaCirugia = async (consultorio) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/salacirugia`,
+            method: 'POST',
+            data: consultorio
+        });
+        return response;
+    } catch (error) {
+        console.log('createSalaCirugia', error);
+    }
+}
+
+export const updateSalaCirugia = async (salaCirugiaId, surgery) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/salacirugia/${salaCirugiaId}`,
+            method: 'PUT',
+            data: surgery
+        });
+        return response;
+    } catch (error) {
+        console.log('updateSalaCirugia', error);
+    }
+}
+
+export const breakFreeSalaCirugiaByIdPaciente = async (salaCirugiaId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/salacirugia/liberar/paciente/${salaCirugiaId}`,
+            method: 'PUT'
+        });
+        return response;
+    } catch (error) {
+        console.log('breakFreeSalaCirugiaByIdPaciente', error);
+    }
+}
+
+export const breakFreeSalaCirugiaByIdMedico = async (salaCirugiaId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/salacirugia/liberar/medico/${salaCirugiaId}`,
+            method: 'PUT'
+        });
+        return response;
+    } catch (error) {
+        console.log('breakFreeSalaCirugiaByIdMedico', error);
     }
 }
 
@@ -709,7 +809,6 @@ export const findConsultById = async (consultId) => {
         console.log('findConsultById', error);
     }
 }
-
 
 
 export const createConsult = async (consulta) => {
@@ -1292,6 +1391,19 @@ export const findEsteticasByRangeDateAndSucursal = async (diai, mesi, anioi, dia
         console.log('findEsteticasByRangeDateAndSucursal', error);
     }
 }
+
+export const waitingListEstetica = async (sucursalId, statusAsistioId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/estetica/sucursal/${sucursalId}/asistio/${statusAsistioId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('waitingListEstetica', error);
+    }
+}
+
 
 // CONSECUTIVOS 
 

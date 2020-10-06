@@ -4,12 +4,11 @@ import { Backdrop, CircularProgress } from '@material-ui/core';
 import { ListaEsperaContainer } from './lista_espera';
 import {
 	findSurgeryBySucursalIdWaitingList,
-	createSurgery,
 	waitingListConsulta,
 	waitingListTratamiento,
+	waitingListEstetica,
 	updateSurgery,
 	updateConsult,
-	breakFreeSurgeryById,
 	breakFreeSurgeryByIdPaciente,
 	findConsultById,
 	findCabinaBySucursalId,
@@ -17,6 +16,8 @@ import {
 	updateDate,
 	updateCabina,
 	breakFreeCabinaByIdPaciente,
+	findSalaCirugiaBySucursalIdWaitingList,
+	findSalaCirugiaBySucursalId,
 } from '../../services';
 import InputIcon from '@material-ui/icons/Input';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -57,8 +58,10 @@ const ListaEspera = (props) => {
 	const [consultorios, setConsultorios] = useState([]);
 	const [cabinas, setCabinas] = useState([]);
 	const [cabina, setCabina] = useState({});
+	const [salaCirugias, setSalaCirugias] = useState([]);
 	const [listaEsperaConsultas, setListaEsperaConsultas] = useState([]);
 	const [listaEsperaTratamientos, setListaEsperaTratamientos] = useState([]);
+	const [listaEsperaEstetica, setListaEsperaEstetica] = useState([]);
 	const [consultorio, setConsultorio] = useState({});
 	const [isLoading, setIsLoading] = useState(true);
 	const [message, setMessage] = useState('');
@@ -84,6 +87,12 @@ const ListaEspera = (props) => {
 		{ title: 'Cabina', field: 'nombre' },
 		{ title: 'Nombre', field: 'paciente_nombre' },
 		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
+	];
+
+	const columnsSalaCirugias = [
+		{ title: 'Sala', field: 'nombre' },
+		{ title: 'Nombre', field: 'paciente_nombre' },
+		{ title: 'Medico', field: 'medico_nombre' },
 	];
 
 	const columnsEspera = [
@@ -162,7 +171,7 @@ const ListaEspera = (props) => {
 			response.data.forEach(item => {
 				item.folio = generateFolioCita(item);
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 			});
 			setListaEsperaTratamientos(response.data);
 		}
@@ -226,7 +235,7 @@ const ListaEspera = (props) => {
 					await loadListaEsperaTratamientos();
 				}
 			}
-		}  else { // SI ES TRATAMIENTO 
+		} else { // SI ES TRATAMIENTO 
 			console.log("Tratamiento");
 			const responseCita = await findDateById(rowData.servicio);
 			if (`${responseCita.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -269,6 +278,15 @@ const ListaEspera = (props) => {
 		} //: ''
 	];
 
+	const actionsEsperaSalaCirugia = [
+		//new Date(anio, mes - 1, dia) < filterDate.fecha_show  ? 
+		{
+			icon: InputIcon,
+			tooltip: 'Asiganar a cabina',
+			onClick: handleOnClickCabinaAsignarPaciente
+		} //: ''
+	];
+
 	const actionsConsultorio = [
 		//new Date(anio, mes - 1, dia) < filterDate.fecha_show  ? 
 		rowData => (
@@ -297,6 +315,22 @@ const ListaEspera = (props) => {
 			!rowData.disponible ? {
 				icon: InputIcon,
 				tooltip: 'Cambiar de cabina',
+				onClick: handleOnCabinaCambiarPaciente
+			} : ''),
+	];
+
+	const actionsSalaCirugia = [
+		//new Date(anio, mes - 1, dia) < filterDate.fecha_show  ? 
+		rowData => (
+			!rowData.disponible ? {
+				icon: DirectionsWalkIcon,
+				tooltip: 'Salida paciente',
+				onClick: handleOnClickLiberar
+			} : ''),
+		rowData => (
+			!rowData.disponible ? {
+				icon: InputIcon,
+				tooltip: 'Cambiar de sala de cirugia',
 				onClick: handleOnCabinaCambiarPaciente
 			} : ''),
 	];
@@ -343,7 +377,7 @@ const ListaEspera = (props) => {
 				response.data.forEach(item => {
 					item.folio = generateFolioCita(item);
 					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 				});
 				setListaEsperaTratamientos(response.data);
 			}
@@ -360,11 +394,38 @@ const ListaEspera = (props) => {
 			}
 		}
 
+		const loadSalaCirugias = async () => {
+			const response = await findSalaCirugiaBySucursalId(sucursal);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				response.data.forEach(item => {
+					item.folio = generateFolioCita(item);
+					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'LIBRE';
+					item.medico_nombre = item.medico ? item.medico.nombre : 'SIN MEDICO';
+				});
+				setSalaCirugias(response.data);
+			}
+		}
+
+		const loadListaEsperaEstetica = async () => {
+			const response = await waitingListEstetica(sucursal, asistioStatusId);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				response.data.forEach(item => {
+					item.folio = generateFolioCita(item);
+					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
+					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				});
+				setListaEsperaEstetica(response.data);
+				setIsLoading(false);
+			}
+		}
+
 		loadConsultorios();
 		loadListaEsperaConsultas();
 		loadListaEsperaTratamientos();
 		loadCabinas();
-		setIsLoading(false);
+		loadSalaCirugias();
+		loadListaEsperaEstetica();
+		
 	}, [sucursal, asistioStatusId]);
 
 	const loadCabinas = async () => {
@@ -386,10 +447,13 @@ const ListaEspera = (props) => {
 						columnsConsultorios={columnsConsultorios}
 						columnsEspera={columnsEspera}
 						columnsCabinas={columnsCabinas}
+						columnsSalaCirugias={columnsSalaCirugias}
 						tituloConsultorios='Consultorios'
 						tituloCabinas='Cabinas'
+						tituloSalaCirugia='Sala Cirugias'
 						tituloEsperaConsultas='Consultas en espera'
 						tituloEsperaTratamientos='Tratamientos en espera'
+						tituloEsperaSalaCirugia="Cirugias en espera"
 						optionsEspera={optionsEspera}
 						optionsConsultorio={optionsConsultorio}
 						consultorio={consultorio}
@@ -414,7 +478,12 @@ const ListaEspera = (props) => {
 						sucursal={sucursal}
 						setOpenAlert={setOpenAlert}
 						setMessage={setMessage}
-						paciente={paciente} /> :
+						paciente={paciente}
+						salaCirugias={salaCirugias}
+						actionsSalaCirugia={actionsSalaCirugia}
+						listaEsperaEstetica={listaEsperaEstetica}
+						actionsEsperaSalaCirugia={actionsEsperaSalaCirugia}
+					/> :
 					<Backdrop className={classes.backdrop} open={isLoading} >
 						<CircularProgress color="inherit" />
 					</Backdrop>

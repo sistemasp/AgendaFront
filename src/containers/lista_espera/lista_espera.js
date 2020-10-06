@@ -47,6 +47,13 @@ export const ListaEsperaContainer = (props) => {
     sucursal,
     cambio,
     paciente,
+    tituloSalaCirugia,
+    columnsSalaCirugias,
+    salaCirugias,
+    actionsSalaCirugia,
+    tituloEsperaSalaCirugia,
+    listaEsperaSalaCirugia,
+    actionsEsperaSalaCirugia,
   } = props;
 
   return (
@@ -69,8 +76,8 @@ export const ListaEsperaContainer = (props) => {
       }
 
       {
-        openModalCabinaAsignar ? 
-        <ModalCabinaAgregarPaciente
+        openModalCabinaAsignar ?
+          <ModalCabinaAgregarPaciente
             open={openModalCabinaAsignar}
             onClose={handleClose}
             tipo_servicio={tipo_servicio}
@@ -83,7 +90,7 @@ export const ListaEsperaContainer = (props) => {
             sucursal={sucursal}
             cambio={cambio}
             paciente={paciente} />
-        : ''
+          : ''
       }
 
       <h1>LISTA DE ESPERA</h1>
@@ -127,19 +134,19 @@ export const ListaEsperaContainer = (props) => {
         </Grid>
         <Grid item xs={12} sm={4}>
           <TableComponent
-            titulo={tituloCabinas}
-            columns={columnsCabinas}
-            data={cabinas}
-            actions={actionsCabina}
+            titulo={tituloSalaCirugia}
+            columns={columnsSalaCirugias}
+            data={salaCirugias}
+            actions={actionsSalaCirugia}
             options={optionsConsultorio} />
 
           <br />
 
           <TableComponent
-            titulo={tituloEsperaTratamientos}
+            titulo={tituloEsperaSalaCirugia}
             columns={columnsEspera}
-            data={listaEsperaTratamientos}
-            actions={actionsEsperaCabina}
+            data={listaEsperaSalaCirugia}
+            actions={actionsEsperaSalaCirugia}
             options={optionsEspera} />
 
         </Grid>

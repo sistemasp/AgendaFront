@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import * as Yup from "yup";
 import { Formik } from 'formik';
 import ModalFormConsultorioAgregarMedico from './ModalFormConsultorioAgregarMedico';
-import { findEmployeesByRolId, updateSurgery } from '../../../services';
+import { findEmployeesByRolIdAvailable, updateSurgery, updateEmployee } from '../../../services';
 
 const validationSchema = Yup.object({
   nombre: Yup.string("Ingresa los nombres")
@@ -31,7 +31,7 @@ const ModalConsultorioAgregarMedico = (props) => {
 
   useEffect(() => {
     const loadMedicos = async () => {
-      const response = await findEmployeesByRolId(medicoRolId);
+      const response = await findEmployeesByRolIdAvailable(medicoRolId);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setMedicos(response.data);
       }
@@ -42,6 +42,8 @@ const ModalConsultorioAgregarMedico = (props) => {
   }, [medicoRolId]);
 
   const handleClickGuardar = async (event, rowData) => {
+    values.medico.disponible = false;
+    await updateEmployee(values.medico._id, values.medico);
     values.disponible = true;
     const response = await updateSurgery(values._id, values);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
