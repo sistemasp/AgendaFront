@@ -6,6 +6,7 @@ import {
   findConsultsByPayOfDoctorTurno,
   findCirugiasByPayOfDoctorTurno,
   findDatesByPayOfDoctorTurno,
+  findEsteticasByPayOfDoctorTurno,
  } from '../../../../services';
 
 const useStyles = makeStyles(theme => ({
@@ -30,6 +31,7 @@ const ModalImprimirPagoMedico = (props) => {
   const [consultas, setConsultas] = useState([]);
   const [cirugias, setCirugias] = useState([]);
   const [citas, setCitas] = useState([]);
+  const [esteticas, setEsteticas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [turno, setTurno] = useState('m');
 
@@ -50,7 +52,6 @@ const ModalImprimirPagoMedico = (props) => {
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setCirugias(response.data);
       }
-      setIsLoading(false);
     }
 
     const loadCitas = async () => {
@@ -59,6 +60,14 @@ const ModalImprimirPagoMedico = (props) => {
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setCitas(response.data);
       }
+    }
+
+    const loadEsteticas = async () => {
+      const date = new Date();
+      const response = await findEsteticasByPayOfDoctorTurno(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal._id, medico._id, turno);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setEsteticas(response.data);
+      }
       setIsLoading(false);
     }
 
@@ -66,6 +75,7 @@ const ModalImprimirPagoMedico = (props) => {
     loadConsultas();
     loadCirugias();
     loadCitas();
+    loadEsteticas();
 
   }, [sucursal, medico, atendidoId, turno]);
 
@@ -95,6 +105,15 @@ const ModalImprimirPagoMedico = (props) => {
     setIsLoading(false);
   }
 
+  const loadEsteticas = async () => {
+    const date = new Date();
+    const response = await findEsteticasByPayOfDoctorTurno(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal._id, medico._id, turno);
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setEsteticas(response.data);
+    }
+    setIsLoading(false);
+  }
+
   const handleClickImprimir = (e) => {
 
     setShow(false);
@@ -112,6 +131,7 @@ const ModalImprimirPagoMedico = (props) => {
       loadConsultas();
       loadCirugias();
       loadCitas();
+      loadEsteticas();
   };
 
   return (
@@ -126,6 +146,7 @@ const ModalImprimirPagoMedico = (props) => {
         consultas={consultas}
         cirugias={cirugias}
         citas={citas}
+        esteticas={esteticas}
         turno={turno}
         onClickImprimir={handleClickImprimir}
         onCambioTurno={() => handleCambioTurno()}

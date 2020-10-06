@@ -11,6 +11,7 @@ import {
 	showAllFrecuencias,
 	findCirugiaByConsultaId,
 	createConsecutivo,
+	findEsteticaByConsultaId,
 } from "../../services";
 import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
@@ -19,6 +20,7 @@ import { toFormatterCurrency, addZero, generateFolioCita } from "../../utils/uti
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
+import FaceIcon from '@material-ui/icons/Face';
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -74,13 +76,16 @@ const AgendarConsulta = (props) => {
 	const [openModal, setOpenModal] = useState(false);
 	const [openModalPagos, setOpenModalPagos] = useState(false);
 	const [openModalCirugias, setOpenModalCirugias] = useState(false);
+	const [openModalEstetica, setOpenModalEstetica] = useState(false);
 	const [consulta, setConsulta] = useState();
 	const [openModalImprimirConsultas, setOpenModalImprimirConsultas] = useState(false);
 	const [datosImpresion, setDatosImpresion] = useState();
-	const [cirugia, setCirugia] = useState(
-		{
-			materiales: []
-		});
+	const [cirugia, setCirugia] = useState({
+		materiales: []
+	});
+	const [estetica, setEstetica] = useState({
+		materiales: []
+	});
 
 	const dia = addZero(date.getDate());
 	const mes = addZero(date.getMonth() + 1);
@@ -114,7 +119,7 @@ const AgendarConsulta = (props) => {
 		{ title: 'Hora salida', field: 'hora_salida' },
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
 		{ title: 'Frecuencia', field: 'frecuencia.nombre' },
-		sucursal._id === sucursalManuelAcunaId ? { title: 'Medio', field: 'medio.nombre' }  : {},
+		sucursal._id === sucursalManuelAcunaId ? { title: 'Medio', field: 'medio.nombre' } : {},
 		{ title: 'Tipo Consulta', field: 'tipo_cita.nombre' },
 		sucursal._id === sucursalManuelAcunaId ? { title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' } : {},
 		{ title: 'Quien confirma asistencia', field: 'quien_confirma_asistencia.nombre' },
@@ -375,10 +380,10 @@ const AgendarConsulta = (props) => {
 
 	const handleChangeFrecuencia = (e) => {
 		const frecuencia = e.target.value._id;
-		const medico = medicos.filter( item => {
+		const medico = medicos.filter(item => {
 			return item._id === medicoDirectoId;
 		});
-		const promovendedor = promovendedores.filter( item => {
+		const promovendedor = promovendedores.filter(item => {
 			return item._id === promovendedorSinAsignarId;
 		});
 		setValues({
@@ -422,6 +427,17 @@ const AgendarConsulta = (props) => {
 		setOpenModalCirugias(true);
 	}
 
+	const handleClickEstetica = async (event, rowData) => {
+		const response = await findEsteticaByConsultaId(rowData._id);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			if (response.data !== '') {
+				setEstetica(response.data);
+			}
+		}
+		setConsulta(rowData);
+		setOpenModalEstetica(true);
+	}
+
 	const handleCloseVerPagos = () => {
 		setOpenModalPagos(false);
 	}
@@ -431,6 +447,13 @@ const AgendarConsulta = (props) => {
 			materiales: [],
 		});
 		setOpenModalCirugias(false);
+	}
+
+	const handleCloseEstetica = () => {
+		setEstetica({
+			materiales: [],
+		});
+		setOpenModalEstetica(false);
 	}
 
 	const handleCloseImprimirConsulta = () => {
@@ -466,6 +489,13 @@ const AgendarConsulta = (props) => {
 				icon: LocalHospitalIcon,
 				tooltip: 'Pasar a Cirugias',
 				onClick: handleClickCirugia
+			} : ''
+		),
+		rowData => (
+			rowData.pagado ? {
+				icon: FaceIcon,
+				tooltip: 'Toxina y Rellenos',
+				onClick: handleClickEstetica
 			} : ''
 		),
 	];
@@ -513,6 +543,7 @@ const AgendarConsulta = (props) => {
 						OnCloseVerPagos={handleCloseVerPagos}
 						openModalPagos={openModalPagos}
 						openModalCirugias={openModalCirugias}
+						openModalEstetica={openModalEstetica}
 						openModalImprimirConsultas={openModalImprimirConsultas}
 						datosImpresion={datosImpresion}
 						onCloseImprimirConsulta={handleCloseImprimirConsulta}
@@ -520,7 +551,9 @@ const AgendarConsulta = (props) => {
 						onChangeFrecuencia={(e) => handleChangeFrecuencia(e)}
 						dataComplete={dataComplete}
 						onCloseCirugia={handleCloseCirugia}
+						onCloseEstetica={handleCloseEstetica}
 						cirugia={cirugia}
+						estetica={estetica}
 						tipoServicioId={consultaServicioId}
 						frecuenciaPrimeraVezId={frecuenciaPrimeraVezId}
 						fercuenciaReconsultaId={fercuenciaReconsultaId} /> :

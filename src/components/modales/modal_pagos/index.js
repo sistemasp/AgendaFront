@@ -17,8 +17,6 @@ const ModalPagos = (props) => {
     tipoServicioId,
   } = props;
 
-  console.log("SERVICIOOOOO", servicio);
-
   const [isLoading, setIsLoading] = useState(true);
   const [pagos, setPagos] = useState([]);
   const [pago, setPago] = useState({});
@@ -84,8 +82,6 @@ const ModalPagos = (props) => {
   ];
 
   const efectivoMetodoPagoId = process.env.REACT_APP_METODO_PAGO_EFECTIVO;
-
-  console.log("SERVICIO", servicio);
 
   useEffect(() => {
     const loadPagos = async () => {

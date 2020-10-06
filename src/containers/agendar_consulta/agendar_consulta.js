@@ -16,6 +16,7 @@ import ModalPagos from '../../components/modales/modal_pagos';
 import ModalImprimirConsulta from '../../components/modales/imprimir/consulta';
 import { toFormatterCurrency } from '../../utils/utils';
 import ModalCirugia from '../../components/modales/modal_cirugia';
+import ModalEstetica from '../../components/modales/modal_estetica';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -98,7 +99,11 @@ export const AgendarConsultaContainer = (props) => {
     openModalCirugias,
     onCloseCirugia,
     cirugia,
+    estetica,
     tipoServicioId,
+    openModalEstetica,
+    onCloseEstetica,
+
   } = props;
 
   return (
@@ -148,6 +153,19 @@ export const AgendarConsultaContainer = (props) => {
             onClose={onCloseCirugia}
             consulta={consulta}
             cirugia={cirugia}
+            empleado={empleado}
+            sucursal={sucursal._id}
+            setMessage={setMessage}
+            setOpenAlert={setOpenAlert} />
+          : ''
+      }
+{
+        openModalEstetica ?
+          <ModalEstetica
+            open={openModalEstetica}
+            onClose={onCloseEstetica}
+            consulta={consulta}
+            estetica={estetica}
             empleado={empleado}
             sucursal={sucursal._id}
             setMessage={setMessage}

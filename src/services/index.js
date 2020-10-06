@@ -1163,6 +1163,18 @@ export const findCirugiasByPayOfDoctorTurno = async (dia, mes, anio, sucursalId,
     }
 }
 
+export const findEsteticasByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, medicoId, turno) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/estetica/${dia}/${mes}/${anio}/sucursal/${sucursalId}/medico/${medicoId}/turno/${turno}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findEsteticasByPayOfDoctorTurno', error);
+    }
+}
+
 // MATERIALES
 
 export const showAllMaterials = async () => {
@@ -1229,6 +1241,58 @@ export const findCirugiasByRangeDateAndSucursal = async (diai, mesi, anioi, diaf
     }
 }
 
+// ESTETICA ( TOXINAS Y RELLENOS )
+
+export const createEstetica = async (estetica) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/estetica`,
+            method: 'POST',
+            data: estetica
+        });
+        return response;
+    } catch (error) {
+        console.log('createEstetica', error);
+    }
+}
+
+export const updateEstetica = async (idEstetica, estetica) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/estetica/${idEstetica}`,
+            method: 'PUT',
+            data: estetica
+        });
+        return response;
+    } catch (error) {
+        console.log('updateEstetica', error);
+    }
+}
+
+export const findEsteticaByConsultaId = async (consultaId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/estetica/consulta/${consultaId}`,
+            method: 'GET',
+        });
+        return response;
+    } catch (error) {
+        console.log('findEsteticaByConsultaId', error);
+    }
+}
+
+export const findEsteticasByRangeDateAndSucursal = async (diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/estetica/fecha_inicio/${diai}/${mesi}/${anioi}/fecha_fin/${diaf}/${mesf}/${aniof}/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findEsteticasByRangeDateAndSucursal', error);
+    }
+}
+
 // CONSECUTIVOS 
 
 export const createConsecutivo = async (consecutivo) => {
@@ -1268,5 +1332,33 @@ export const findBiopsiasByRangeDateAndSucursal = async (diai, mesi, anioi, diaf
         return response;
     } catch (error) {
         console.log('findBiopsiasByRangeDateAndSucursal', error);
+    }
+}
+
+// TIPO ESTETICA
+
+export const showAllTipoEsteticas = async () => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/tipoestetica`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllTipoEsteticas', error);
+    }
+}
+
+// MATERIALES ESTETICA
+
+export const showAllMaterialEsteticas = async () => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/materialestetica`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllMaterialEsteticas', error);
     }
 }

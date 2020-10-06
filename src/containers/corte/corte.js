@@ -4,7 +4,6 @@ import TableComponent from '../../components/table/TableComponent';
 import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { ButtonCustom } from '../../components/basic/ButtonCustom';
-import ModalFormConsultorio from '../../components/modales/modal_consultorio/ModalFormConsultorio';
 import ModalConsultorio from '../../components/modales/modal_consultorio';
 
 const useStyles = makeStyles(theme => ({
