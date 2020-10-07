@@ -99,6 +99,10 @@ const AgendarConsulta = (props) => {
 	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
 	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
 	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
+	const enProcedimientoStatusId = process.env.REACT_APP_EN_PROCEDIMIENTO_STATUS_ID;
+	const enConsultorioStatusId = process.env.REACT_APP_EN_CONSULTORIO_STATUS_ID;
+	const enCabinaStatusId = process.env.REACT_APP_EN_CABINA_STATUS_ID;
+	const atendidoStatusId = process.env.REACT_APP_ATENDIDO_STATUS_ID;
 	const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
 	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
 	const medicoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
@@ -484,20 +488,24 @@ const AgendarConsulta = (props) => {
 				onClick: handleClickVerPagos,
 			} : ''
 		),
-		rowData => (
-			rowData.pagado ? {
-				icon: LocalHospitalIcon,
-				tooltip: 'Pasar a Cirugias',
-				onClick: handleClickCirugia
-			} : ''
-		),
-		rowData => (
-			rowData.pagado ? {
-				icon: FaceIcon,
-				tooltip: 'Toxina y Rellenos',
-				onClick: handleClickEstetica
-			} : ''
-		),
+		rowData => {
+			return (rowData.status._id === enProcedimientoStatusId || rowData.status._id === enConsultorioStatusId
+				|| rowData.status._id === enCabinaStatusId || rowData.status._id === atendidoStatusId)
+				? {
+					icon: LocalHospitalIcon,
+					tooltip: 'Pasar a Cirugias',
+					onClick: handleClickCirugia
+				} : ''
+		},
+		rowData => {
+			return (rowData.status._id === enProcedimientoStatusId || rowData.status._id === enConsultorioStatusId
+				|| rowData.status._id === enCabinaStatusId || rowData.status._id === atendidoStatusId)
+				? {
+					icon: FaceIcon,
+					tooltip: 'Toxina y Rellenos',
+					onClick: handleClickEstetica
+				} : ''
+		},
 	];
 
 	return (
