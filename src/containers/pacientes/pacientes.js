@@ -22,6 +22,7 @@ export const PacientesContainer = (props) => {
     pacientes,
     paciente,
     actions,
+    components,
     options,
     open,
     openHistoric,
@@ -62,7 +63,8 @@ export const PacientesContainer = (props) => {
         columns={columns}
         data={pacientes}
         actions={actions}
-        options={options} />
+        options={options}
+        components={components} />
     </Fragment>
   );
 }

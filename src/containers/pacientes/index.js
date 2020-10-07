@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import { Backdrop, CircularProgress } from '@material-ui/core';
+import { Backdrop, CircularProgress, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core';
 import { PacientesContainer } from './pacientes';
 import { getAllPatients, updatePatient, createPatient, findPatientByPhoneNumber } from '../../services';
 import EditIcon from '@material-ui/icons/Edit';
@@ -15,6 +15,10 @@ function Alert(props) {
 }
 
 const useStyles = makeStyles(theme => ({
+	formControl: {
+		width: '100%',
+		margin: '5px',
+	},
 	backdrop: {
 		zIndex: theme.zIndex.drawer + 1,
 		color: '#fff',
@@ -184,6 +188,48 @@ const Pacientes = (props) => {
 		}
 	];
 
+	const onChangeActions = (e, rowData) => {
+		const action = e.target.value;
+		switch (action) {
+			case 'Agendar consulta':
+				onClickAgendarConsulta(e, rowData);
+				break;
+			case 'Agendar tratamiento':
+				onClickAgendarTratamiento(e, rowData);
+				break;
+			case 'Actualizar registro':
+				handleOnClickEditar(e, rowData);
+				break;
+			case 'Ver Historico':
+				handleClickHistorico(e, rowData);
+				break;
+		}
+	}
+
+	const components = {
+		Actions: props => {
+			return <Fragment>
+				<FormControl variant="outlined" className={classes.formControl}>
+					<InputLabel id="simple-select-outlined-hora"></InputLabel>
+					<Select
+						labelId="simple-select-outlined-actions"
+						id="simple-select-outlined-actions"
+						onChange={(e) => onChangeActions(e, props.data)}
+						label="Acciones">
+						{
+							props.actions.map((item, index) => {
+								return <MenuItem
+									key={index}
+									value={item.tooltip}
+								>{item.tooltip}</MenuItem>
+							})
+						}
+					</Select>
+				</FormControl>
+			</Fragment>
+		}
+	};
+
 	useEffect(() => {
 		const loadPacientes = async () => {
 			const response = await getAllPatients();
@@ -212,7 +258,8 @@ const Pacientes = (props) => {
 						onClickGuardar={handleOnClickGuardar}
 						onClickGuardarAgendar={handleOnClickGuardarAgendar}
 						handleOpen={handleOpen}
-						handleClose={handleClose} /> :
+						handleClose={handleClose}
+						components={components} /> :
 					<Backdrop className={classes.backdrop} open={isLoading} >
 						<CircularProgress color="inherit" />
 					</Backdrop>
