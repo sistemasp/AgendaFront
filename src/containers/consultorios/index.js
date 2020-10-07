@@ -10,7 +10,8 @@ import {
 	createCabina,
 	breakFreeCabinaByIdMedico,
 	createSalaCirugia,
-	findSalaCirugiaBySucursalId
+	findSalaCirugiaBySucursalId,
+	updateEmployee
 } from '../../services';
 import AirlineSeatReclineExtraIcon from '@material-ui/icons/AirlineSeatReclineExtra';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -158,6 +159,8 @@ const Consultorios = (props) => {
 	}
 
 	const handleOnClickLiberarConsultorio = async (event, rowData) => {
+		rowData.medico.disponible = true;
+    	await updateEmployee(rowData.medico._id, rowData.medico);
 		const response = await breakFreeSurgeryByIdMedico(rowData._id);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setOpenAlert(true);
