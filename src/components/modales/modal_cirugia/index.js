@@ -11,32 +11,9 @@ import {
   createConsecutivo,
   createBiopsia,
 } from "../../../services";
-import * as Yup from "yup";
-import { Formik } from 'formik';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import { addZero } from '../../../utils/utils';
 import ModalFormCirugia from './ModalFormCirugia';
-
-const validationSchema = Yup.object({
-  fecha: Yup.string("Ingresa los nombres")
-    .required("Los nombres del pacientes son requeridos"),
-  hora: Yup.string("Ingresa los apellidos")
-    .required("Los nombres del pacientes son requeridos"),
-  paciente: Yup.string("Ingresa la fecha de nacimiento")
-    .required("Los nombres del pacientes son requeridos"),
-  numero_sesion: Yup.string("Ingresa los nombres")
-    .required("Los nombres del pacientes son requeridos"),
-  recepcionista: Yup.string("Ingresa los apellidos")
-    .required("Los nombres del pacientes son requeridos"),
-  confirmo: Yup.string("Ingresa la fecha de nacimiento")
-    .required("Los nombres del pacientes son requeridos"),
-  quien_confirma_asistencia: Yup.string("Ingresa la direccion")
-    .required("Los nombres del pacientes son requeridos"),
-  asistio: Yup.string("Ingresa el telefono")
-    .required("Los nombres del pacientes son requeridos"),
-  precio: Yup.string("Ingresa el telefono")
-    .required("Los nombres del pacientes son requeridos"),
-});
 
 const useStyles = makeStyles(theme => ({
   backdrop: {
@@ -92,7 +69,7 @@ const ModalCirugia = (props) => {
   const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
   const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
   const reagendoStatusId = process.env.REACT_APP_REAGENDO_STATUS_ID;
-  const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
+  const enProcedimientoStatusId = process.env.REACT_APP_EN_PROCEDIMIENTO_STATUS_ID;
   const patologoRolId = process.env.REACT_APP_PATOLOGO_ROL_ID;
   const cirugiaServicioId = process.env.REACT_APP_CIRUGIA_SERVICIO_ID;
   const biopsiaServicioId = process.env.REACT_APP_BIOPSIA_SERVICIO_ID;
@@ -134,7 +111,10 @@ const ModalCirugia = (props) => {
     const fecha_actual = new Date();
     fecha_actual.setHours(fecha_actual.getHours() - 5);
     data.fecha_hora = fecha_actual;
-    data.tipo_servicio = cirugiaServicioId;
+    data.servicio = cirugiaServicioId;
+    if (!data._id) {
+      data.status = asistioStatusId;
+    }
     const idBiopsias = [];
     if (data.hasBiopsia) {
       const biopsias = [];
@@ -153,7 +133,7 @@ const ModalCirugia = (props) => {
       }
       const resp = await createBiopsia(biopsias);
       if (`${resp.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-        resp.data.map( item => {
+        resp.data.map(item => {
           idBiopsias.push(item._id);
         });
       }
@@ -162,6 +142,9 @@ const ModalCirugia = (props) => {
     const response = data._id ? await updateCirugia(data._id, data) : await createCirugia(data);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
       || `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+      //consulta.status = enProcedimientoStatusId;
+      await updateConsult(consulta._id, { ...consulta, status: enProcedimientoStatusId });
+      //loadConsultas(new Date(consulta.fecha_hora));
       if (data._id) {
         setOpenAlert(true);
         setMessage('La Cirugia se actualizo correctamente');
@@ -204,10 +187,6 @@ const ModalCirugia = (props) => {
       total: total
     });
   };
-
-  console.log("VALUES", values);
-  console.log("PATOLOGO", patologos);
-
 
   const handleChangeCostoBiopsias = e => {
     let total = 0;

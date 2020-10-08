@@ -35,8 +35,6 @@ const ModalConsultorioAgregarPaciente = (props) => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [consultorios, setConsultorios] = useState([]);
-  //const [consulta, setConsulta] = useState();
-  //const [cita, setCita] = useState();
 
   const [values, setValues] = useState({
   });
@@ -56,8 +54,6 @@ const ModalConsultorioAgregarPaciente = (props) => {
     setIsLoading(false);
 
   }, [sucursal]);
-
- // console.log("CONSULLL", consulta);
 
   const handleClickGuardar = async (event, rowData) => {
     setIsLoading(true);

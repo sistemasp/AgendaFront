@@ -214,7 +214,6 @@ const ModalConsulta = (props) => {
   }
 
   const handleOnClickActualizarCita = async (event, rowData) => {
-    console.log("ROWDDAD", rowData);
     if (rowData.status !== pendienteStatusId) {
       rowData.quien_confirma_asistencia = empleado._id;
       if (rowData.status === asistioStatusId && !rowData.hora_llegada) {

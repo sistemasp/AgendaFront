@@ -47,13 +47,14 @@ const ModalFormPaciente = (props) => {
     values,
     handleSubmit,
     onChange,
+    onChangeSexo,
     dataComplete,
     onClickCancel,
     onClickGuardar,
     open,
     sexos,
   } = props;
-
+  
   return (
     <div>
       <Modal
@@ -127,7 +128,7 @@ const ModalFormPaciente = (props) => {
                     labelId="simple-select-outlined-medico"
                     id="simple-select-outlined-medico"
                     value={values.sexo}
-                    onChange={onChange}
+                    onChange={onChangeSexo}
                     name="sexo"
                     label="Sexo" >
                     {sexos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}

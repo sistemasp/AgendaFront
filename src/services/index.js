@@ -1340,6 +1340,18 @@ export const findCirugiasByRangeDateAndSucursal = async (diai, mesi, anioi, diaf
     }
 }
 
+export const waitingListCirugia = async (sucursalId, statusAsistioId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cirugia/waitingList/sucursal/${sucursalId}/asistio/${statusAsistioId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('waitingListCirugia', error);
+    }
+}
+
 // ESTETICA ( TOXINAS Y RELLENOS )
 
 export const createEstetica = async (estetica) => {

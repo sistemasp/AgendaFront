@@ -8,7 +8,11 @@ import ModalCabinaAgregarPaciente from '../../components/modales/modal_cabina_ag
 const useStyles = makeStyles(theme => ({
   button: {
     color: '#FFFFFF'
-  }
+  },
+  formControl: {
+		width: '100%',
+		margin: '5px',
+	},
 }));
 
 export const ListaEsperaContainer = (props) => {
@@ -27,6 +31,7 @@ export const ListaEsperaContainer = (props) => {
     cabinas,
     listaEsperaConsultas,
     listaEsperaTratamientos,
+    listaEsperaCirugias,
     optionsEspera,
     optionsConsultorio,
     actionsEsperaConsultorio,
@@ -54,6 +59,7 @@ export const ListaEsperaContainer = (props) => {
     tituloEsperaSalaCirugia,
     listaEsperaSalaCirugia,
     actionsEsperaSalaCirugia,
+    componentsConsultorio,
   } = props;
 
   return (
@@ -145,7 +151,7 @@ export const ListaEsperaContainer = (props) => {
           <TableComponent
             titulo={tituloEsperaSalaCirugia}
             columns={columnsEspera}
-            data={listaEsperaSalaCirugia}
+            data={listaEsperaCirugias}
             actions={actionsEsperaSalaCirugia}
             options={optionsEspera} />
 

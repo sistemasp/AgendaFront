@@ -33,6 +33,13 @@ const ModalPaciente = (props) => {
     });
   }
 
+  const handleChangeSexo = (e) => {
+    setValues({
+      ...values,
+      sexo: e.target.value
+    })
+  }
+
   const dataComplete = !values.nombres || !values.apellidos
     || !values.sexo || !values.telefono || !values.fecha_nacimiento || values.fecha_nacimiento.length !== 10;
 
@@ -62,6 +69,7 @@ const ModalPaciente = (props) => {
       onClickGuardarAgendar={onClickGuardarAgendar}
       dataComplete={dataComplete}
       onChange={handleChange}
+      onChangeSexo={handleChangeSexo}
       sexos={sexos} />
 
   );

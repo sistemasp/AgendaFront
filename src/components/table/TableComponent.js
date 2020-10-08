@@ -105,6 +105,9 @@ const TableComponent = props => {
         }
     };
 
+    console.log("ACTIONS,COMPONENTS", actions);
+    console.log("ACTIONS,COMPONENTS", components);
+
     return (
         <MaterialTable
             title={titulo}

@@ -156,6 +156,7 @@ export const AgendarConsultaContainer = (props) => {
             empleado={empleado}
             sucursal={sucursal._id}
             setMessage={setMessage}
+            loadConsultas={loadConsultas}
             setOpenAlert={setOpenAlert} />
           : ''
       }
@@ -169,6 +170,7 @@ export const AgendarConsultaContainer = (props) => {
             empleado={empleado}
             sucursal={sucursal._id}
             setMessage={setMessage}
+            loadConsultas={loadConsultas}
             setOpenAlert={setOpenAlert} />
           : ''
       }
