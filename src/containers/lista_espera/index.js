@@ -96,6 +96,7 @@ const ListaEspera = (props) => {
 		{ title: 'Cabina', field: 'nombre' },
 		{ title: 'Nombre', field: 'paciente_nombre' },
 		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
+		{ title: 'Medico', field: 'medico_nombre' },
 	];
 
 	const columnsSalaCirugias = [
@@ -183,6 +184,7 @@ const ListaEspera = (props) => {
 				item.folio = generateFolioCita(item);
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
+				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
 			});
 			setListaEsperaTratamientos(response.data);
 		}
@@ -250,23 +252,35 @@ const ListaEspera = (props) => {
 	}
 
 	const handleOnConsultorioCambiarPaciente = async (event, rowData) => {
-		//setConsulta(rowData.consulta);
-		setPaciente(rowData.paciente);
-		setCambio(true);
-		setOpenModalConsultorioAsignar(true);
-		rowData.disponible = true;
-		await updateSurgery(rowData._id, rowData);
-		await breakFreeSurgeryByIdPaciente(rowData._id);
+		setIsLoading(true);
+		const response = await breakFreeSurgeryByIdPaciente(rowData._id);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			setPaciente(rowData.paciente);
+			setServicio(rowData.servicio);
+			setTipoServicio(rowData.tipo_servicio);
+			setCambio(true);
+			setOpenModalConsultorioAsignar(true);
+			rowData.disponible = true;
+			await updateSurgery(rowData._id, rowData);
+		};
+		setIsLoading(false);
 	}
 
 	const handleOnCabinaCambiarPaciente = async (event, rowData) => {
 		//setConsulta(rowData.consulta);
-		setPaciente(rowData.paciente);
-		setCambio(true);
-		setOpenModalCabinaAsignar(true);
-		rowData.disponible = true;
-		await updateCabina(rowData._id, rowData);
-		await breakFreeCabinaByIdPaciente(rowData._id);
+		setIsLoading(true);
+		const response = await breakFreeCabinaByIdPaciente(rowData._id);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			rowData.disponible = true;
+			setPaciente(rowData.paciente);
+			setServicio(rowData.servicio);
+			setTipoServicio(rowData.tipo_servicio);
+			setCambio(true);
+			setOpenModalCabinaAsignar(true);
+			//await updateCabina(rowData._id, rowData);
+		}
+		setIsLoading(false);
+
 	}
 
 	const handleOnSalaCirugiaCambiarPaciente = async (event, rowData) => {
@@ -295,10 +309,7 @@ const ListaEspera = (props) => {
 				if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 					setOpenAlert(true);
 					setMessage('Salio el paciente');
-					await loadConsultorios();
-					await loadCabinas();
-					await loadListaEsperaConsultas();
-					await loadListaEsperaTratamientos();
+					await loadAll();
 				}
 			}
 		} else { // SI ES TRATAMIENTO 
@@ -316,10 +327,7 @@ const ListaEspera = (props) => {
 				if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 					setOpenAlert(true);
 					setMessage('Salio el paciente');
-					await loadConsultorios();
-					await loadCabinas();
-					await loadListaEsperaConsultas();
-					await loadListaEsperaTratamientos();
+					await loadAll();
 				}
 			}
 		}
@@ -341,15 +349,9 @@ const ListaEspera = (props) => {
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				setOpenAlert(true);
 				setMessage('Salio el paciente');
-				await loadSalaCirugias();
-				await loadListaEsperaEstetica();
-				await loadConsultorios();
-				await loadCabinas();
-				await loadListaEsperaConsultas();
-				await loadListaEsperaTratamientos();
+				await loadAll();
 			}
 		}
-
 	}
 
 	const actionsEsperaConsultorio = [
@@ -475,7 +477,32 @@ const ListaEspera = (props) => {
 		setOpenAlert(false);
 	};
 
+	const loadCabinas = async () => {
+		const response = await findCabinaBySucursalId(sucursal);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			response.data.forEach(item => {
+				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
+				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
+				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+			});
+			setCabinas(response.data);
+		}
+	}
+
+	const loadAll = async () => {
+		setIsLoading(true);
+		await loadConsultorios();
+		await loadListaEsperaConsultas();
+		await loadListaEsperaTratamientos();
+		await loadCabinas();
+		await loadSalaCirugias();
+		await loadListaEsperaEstetica();
+		await loadListaEsperaCirugias();
+		setIsLoading(false);
+	}
+
 	useEffect(() => {
+		/*
 		const loadConsultorios = async () => {
 			const response = await findSurgeryBySucursalIdWaitingList(sucursal);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -518,6 +545,7 @@ const ListaEspera = (props) => {
 				response.data.forEach(item => {
 					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
 					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
+					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
 				});
 				setCabinas(response.data);
 			}
@@ -567,19 +595,12 @@ const ListaEspera = (props) => {
 		loadSalaCirugias();
 		loadListaEsperaEstetica();
 		loadListaEsperaCirugias();
+		*/
+		loadAll();
 
 	}, [sucursal, asistioStatusId]);
 
-	const loadCabinas = async () => {
-		const response = await findCabinaBySucursalId(sucursal);
-		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-			response.data.forEach(item => {
-				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
-				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-			});
-			setCabinas(response.data);
-		}
-	}
+
 
 	return (
 		<Fragment>
@@ -615,12 +636,7 @@ const ListaEspera = (props) => {
 						servicio={servicio}
 						handleClose={handleClose}
 						cambio={cambio}
-						loadListaEsperaConsultas={loadListaEsperaConsultas}
-						loadListaEsperaTratamientos={loadListaEsperaTratamientos}
-						loadConsultorios={loadConsultorios}
-						loadCabinas={loadCabinas}
-						loadSalaCirugias={loadSalaCirugias}
-						loadListaEsperaCirugias={loadListaEsperaCirugias}
+						loadAll={loadAll}
 						sucursal={sucursal}
 						setOpenAlert={setOpenAlert}
 						setMessage={setMessage}

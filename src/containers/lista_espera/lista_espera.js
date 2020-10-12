@@ -47,12 +47,7 @@ export const ListaEsperaContainer = (props) => {
     handleClose,
     setOpenAlert,
     setMessage,
-    loadListaEsperaConsultas,
-    loadListaEsperaTratamientos,
-    loadConsultorios,
-    loadCabinas,
-    loadSalaCirugias,
-    loadListaEsperaCirugias,
+    loadAll,
     sucursal,
     cambio,
     paciente,
@@ -77,9 +72,7 @@ export const ListaEsperaContainer = (props) => {
             servicio={servicio}
             setOpenAlert={setOpenAlert}
             setMessage={setMessage}
-            loadListaEsperaConsultas={loadListaEsperaConsultas}
-            loadListaEsperaTratamientos={loadListaEsperaTratamientos}
-            loadConsultorios={loadConsultorios}
+            loadAll={loadAll}
             sucursal={sucursal}
             cambio={cambio}
             paciente={paciente} /> : ''
@@ -94,9 +87,7 @@ export const ListaEsperaContainer = (props) => {
             servicio={servicio}
             setOpenAlert={setOpenAlert}
             setMessage={setMessage}
-            loadListaEsperaConsultas={loadListaEsperaConsultas}
-            loadListaEsperaTratamientos={loadListaEsperaTratamientos}
-            loadCabinas={loadCabinas}
+            loadAll={loadAll}
             sucursal={sucursal}
             cambio={cambio}
             paciente={paciente} />
@@ -112,9 +103,7 @@ export const ListaEsperaContainer = (props) => {
             servicio={servicio}
             setOpenAlert={setOpenAlert}
             setMessage={setMessage}
-            loadSalaCirugias={loadSalaCirugias}
-            loadListaEsperaCirugias={loadListaEsperaCirugias}
-            loadCabinas={loadCabinas}
+            loadAll={loadAll}
             sucursal={sucursal}
             cambio={cambio}
             paciente={paciente} />

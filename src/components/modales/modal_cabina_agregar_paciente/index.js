@@ -27,9 +27,7 @@ const ModalCabinaAgregarPaciente = (props) => {
     servicio,
     setOpenAlert,
     setMessage,
-    loadListaEsperaConsultas,
-    loadListaEsperaTratamientos,
-    loadCabinas,
+    loadAll,
     sucursal,
     cambio,
     paciente,
@@ -62,67 +60,36 @@ const ModalCabinaAgregarPaciente = (props) => {
   const handleClickGuardar = async (event, rowData) => {
     setIsLoading(true);
 
-    if (tipo_servicio === consultaServicioId) { // SI ES CONSULTA
-      const responseServicio = await findConsultById(servicio);
-      if (`${responseServicio.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        const consulta = responseServicio.data;
-        if (!cambio) {
-          const dateNow = new Date();
-          let updateConsulta = consulta;
-          updateConsulta.status = enCabinaStatusId;
-          updateConsulta.hora_atencion = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
-          updateConsulta.medico = values.cabina.medico;
-          await updateConsult(consulta._id, updateConsulta);
-        }
 
-        setValues({ cabina: { paciente: consulta.paciente._id } });
-        let consul = values.cabina;
-        consul.consulta = consulta._id;
-        consul.paciente = paciente._id;
-        consul.tipo_servicio = tipo_servicio;
-        consul.servicio = servicio;
-        consul.disponible = false;
-
-        const response = await updateSurgery(consul._id, consul);
-        if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-          setOpenAlert(true);
-          setMessage('El paciente se agrego a la cabina correctamente');
-        }
+    const responseCita = await findDateById(servicio);
+    if (`${responseCita.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      const cita = responseCita.data;
+      if (!cambio) {
+        const dateNow = new Date();
+        let updateCita = cita;
+        updateCita.status = enCabinaStatusId;
+        updateCita.hora_atencion = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
+        updateCita.cosmetologa = values.cabina.cosmetologa;
+        await updateDate(cita._id, updateCita);
       }
-    } else { // SI ES TRATAMIENTO
-      const responseCita = await findDateById(servicio);
-      if (`${responseCita.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        const cita = responseCita.data;
-        console.log("CITTAAAA", cita);
-        if (!cambio) {
-          const dateNow = new Date();
-          let updateCita = cita;
-          updateCita.status = enCabinaStatusId;
-          updateCita.hora_atencion = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
-          updateCita.cosmetologa = values.cabina.cosmetologa;
-          await updateDate(cita._id, updateCita);
-        }
 
-        setValues({ cabina: { paciente: cita.paciente._id } });
-        let cabina = values.cabina;
-        cabina.cita = cita._id;
-        cabina.paciente = paciente._id;
-        cabina.tipo_servicio = tipo_servicio;
-        cabina.servicio = servicio;
-        cabina.disponible = false;
+      setValues({ cabina: { paciente: cita.paciente._id } });
+      let cabina = values.cabina;
+      cabina.cita = cita._id;
+      cabina.paciente = paciente._id;
+      cabina.tipo_servicio = tipo_servicio;
+      cabina.servicio = servicio;
+      cabina.disponible = false;
 
-        const response = await updateCabina(cabina._id, cabina);
-        if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-          setOpenAlert(true);
-          setMessage('El paciente se agrego a la cabina correctamente');
-        }
+      const response = await updateCabina(cabina._id, cabina);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setOpenAlert(true);
+        setMessage('El paciente se agrego a la cabina correctamente');
       }
     }
 
     onClose();
-    await loadListaEsperaConsultas();
-    await loadListaEsperaTratamientos();
-    await loadCabinas();
+    await loadAll();
     setIsLoading(false);
   }
 
