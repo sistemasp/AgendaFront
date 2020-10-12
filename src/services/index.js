@@ -1316,6 +1316,18 @@ export const updateCirugia = async (idCirugia, cirugia) => {
     }
 }
 
+export const findCirugiaById = async (cirugiaId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cirugia/${cirugiaId}`,
+            method: 'GET',
+        });
+        return response;
+    } catch (error) {
+        console.log('findCirugiaById', error);
+    }
+}
+
 export const findCirugiaByConsultaId = async (consultaId) => {
     try {
         const response = await axios({

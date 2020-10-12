@@ -18,6 +18,10 @@ import {
 	breakFreeCabinaByIdPaciente,
 	waitingListCirugia,
 	findSalaCirugiaBySucursalId,
+	findCirugiaById,
+	updateCirugia,
+	updateSalaCirugia,
+	breakFreeSalaCirugiaByIdPaciente,
 } from '../../services';
 import InputIcon from '@material-ui/icons/Input';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -72,6 +76,7 @@ const ListaEspera = (props) => {
 	const [severity, setSeverity] = useState('success');
 	const [openModalConsultorioAsignar, setOpenModalConsultorioAsignar] = useState(false);
 	const [openModalCabinaAsignar, setOpenModalCabinaAsignar] = useState(false);
+	const [openModalSalaCirugiaAsignar, setOpenModalSalaCirugiaAsignar] = useState(false);
 	const [tipo_servicio, setTipoServicio] = useState('');
 	const [servicio, setServicio] = useState('');
 	const [cambio, setCambio] = useState(false);
@@ -145,7 +150,7 @@ const ListaEspera = (props) => {
 	const atendidoStatusId = process.env.REACT_APP_ATENDIDO_STATUS_ID;
 	const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
 	const enProcedimientoStatusId = process.env.REACT_APP_EN_PROCEDIMIENTO_STATUS_ID;
-
+	const enConsultorioStatusId = process.env.REACT_APP_EN_CONSULTORIO_STATUS_ID;
 
 	const loadConsultorios = async () => {
 		const response = await findSurgeryBySucursalIdWaitingList(sucursal);
@@ -183,6 +188,43 @@ const ListaEspera = (props) => {
 		}
 	}
 
+	const loadSalaCirugias = async () => {
+		const response = await findSalaCirugiaBySucursalId(sucursal);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			response.data.forEach(item => {
+				item.folio = generateFolioCita(item);
+				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'LIBRE';
+				item.medico_nombre = item.medico ? item.medico.nombre : 'SIN MEDICO';
+			});
+			setSalaCirugias(response.data);
+		}
+	}
+
+	const loadListaEsperaCirugias = async () => {
+		const response = await waitingListCirugia(sucursal, asistioStatusId);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			response.data.forEach(item => {
+				item.folio = generateFolioCita(item);
+				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'LIBRE';
+				item.medico_nombre = item.medico ? item.medico.nombre : 'SIN MEDICO';
+			});
+			setListaEsperaCirugias(response.data);
+		}
+	}
+
+	const loadListaEsperaEstetica = async () => {
+		const response = await waitingListEstetica(sucursal, asistioStatusId);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			response.data.forEach(item => {
+				item.folio = generateFolioCita(item);
+				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
+				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+			});
+			setListaEsperaEstetica(response.data);
+			setIsLoading(false);
+		}
+	}
+
 	const handleOnClickConsultorioAsignarPaciente = (event, rowData) => {
 		setTipoServicio(rowData.servicio._id);
 		setServicio(rowData._id);
@@ -197,6 +239,14 @@ const ListaEspera = (props) => {
 		setPaciente(rowData.paciente);
 		setCambio(false);
 		setOpenModalCabinaAsignar(true);
+	}
+
+	const handleOnClickSalaCirugiaAsignarPaciente = (event, rowData) => {
+		setTipoServicio(rowData.servicio._id);
+		setServicio(rowData._id);
+		setPaciente(rowData.paciente);
+		setCambio(false);
+		setOpenModalSalaCirugiaAsignar(true);
 	}
 
 	const handleOnConsultorioCambiarPaciente = async (event, rowData) => {
@@ -217,6 +267,16 @@ const ListaEspera = (props) => {
 		rowData.disponible = true;
 		await updateCabina(rowData._id, rowData);
 		await breakFreeCabinaByIdPaciente(rowData._id);
+	}
+
+	const handleOnSalaCirugiaCambiarPaciente = async (event, rowData) => {
+		//setConsulta(rowData.consulta);
+		setPaciente(rowData.paciente);
+		setCambio(true);
+		setOpenModalSalaCirugiaAsignar(true);
+		rowData.disponible = true;
+		await updateSalaCirugia(rowData._id, rowData);
+		await breakFreeSalaCirugiaByIdPaciente(rowData._id);
 	}
 
 	const handleOnClickLiberar = async (event, rowData) => {
@@ -262,8 +322,34 @@ const ListaEspera = (props) => {
 					await loadListaEsperaTratamientos();
 				}
 			}
-
 		}
+	}
+
+	const handleOnClickLiberarSalaCirugia = async (event, rowData) => {
+		const dateNow = new Date();
+		const responseServicio = await findCirugiaById(rowData.servicio);
+		if (`${responseServicio.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			const cirugia = responseServicio.data;
+			await updateConsult(cirugia.consulta._id, { ...cirugia.consulta, status: enConsultorioStatusId });
+			let updateCirugiaData = cirugia;
+			updateCirugiaData.status = atendidoStatusId;
+			updateCirugiaData.hora_salida = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
+			await updateCirugia(cirugia._id, updateCirugiaData);
+			rowData.disponible = true;
+			await updateSalaCirugia(rowData._id, rowData);
+			const response = await breakFreeSalaCirugiaByIdPaciente(rowData._id);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setOpenAlert(true);
+				setMessage('Salio el paciente');
+				await loadSalaCirugias();
+				await loadListaEsperaEstetica();
+				await loadConsultorios();
+				await loadCabinas();
+				await loadListaEsperaConsultas();
+				await loadListaEsperaTratamientos();
+			}
+		}
+
 	}
 
 	const actionsEsperaConsultorio = [
@@ -288,8 +374,8 @@ const ListaEspera = (props) => {
 		//new Date(anio, mes - 1, dia) < filterDate.fecha_show  ? 
 		{
 			icon: InputIcon,
-			tooltip: 'Asiganar a cabina',
-			onClick: handleOnClickCabinaAsignarPaciente
+			tooltip: 'Asiganar a sala de cirugias',
+			onClick: handleOnClickSalaCirugiaAsignarPaciente
 		} //: ''
 	];
 
@@ -368,21 +454,21 @@ const ListaEspera = (props) => {
 			!rowData.disponible ? {
 				icon: DirectionsWalkIcon,
 				tooltip: 'Salida paciente',
-				onClick: handleOnClickLiberar
+				onClick: handleOnClickLiberarSalaCirugia
 			} : ''),
 		rowData => (
 			!rowData.disponible ? {
 				icon: InputIcon,
 				tooltip: 'Cambiar de sala de cirugia',
-				onClick: handleOnCabinaCambiarPaciente
+				onClick: handleOnSalaCirugiaCambiarPaciente
 			} : ''),
 	];
-
 
 	const handleClose = () => {
 		setConsultorio({});
 		setOpenModalConsultorioAsignar(false);
 		setOpenModalCabinaAsignar(false);
+		setOpenModalSalaCirugiaAsignar(false);
 	};
 
 	const handleCloseAlert = () => {
@@ -524,6 +610,7 @@ const ListaEspera = (props) => {
 						actionsCabina={actionsCabina}
 						openModalConsultorioAsignar={openModalConsultorioAsignar}
 						openModalCabinaAsignar={openModalCabinaAsignar}
+						openModalSalaCirugiaAsignar={openModalSalaCirugiaAsignar}
 						tipo_servicio={tipo_servicio}
 						servicio={servicio}
 						handleClose={handleClose}
@@ -532,6 +619,8 @@ const ListaEspera = (props) => {
 						loadListaEsperaTratamientos={loadListaEsperaTratamientos}
 						loadConsultorios={loadConsultorios}
 						loadCabinas={loadCabinas}
+						loadSalaCirugias={loadSalaCirugias}
+						loadListaEsperaCirugias={loadListaEsperaCirugias}
 						sucursal={sucursal}
 						setOpenAlert={setOpenAlert}
 						setMessage={setMessage}

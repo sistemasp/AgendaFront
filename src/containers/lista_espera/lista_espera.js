@@ -4,15 +4,16 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core';
 import ModalConsultorioAgregarPaciente from '../../components/modales/modal_consultorio_agregar_paciente';
 import ModalCabinaAgregarPaciente from '../../components/modales/modal_cabina_agregar_paciente';
+import ModalCirugiaAgregarPaciente from '../../components/modales/modal_cirugia_agregar_paciente';
 
 const useStyles = makeStyles(theme => ({
   button: {
     color: '#FFFFFF'
   },
   formControl: {
-		width: '100%',
-		margin: '5px',
-	},
+    width: '100%',
+    margin: '5px',
+  },
 }));
 
 export const ListaEsperaContainer = (props) => {
@@ -40,6 +41,7 @@ export const ListaEsperaContainer = (props) => {
     actionsCabina,
     openModalConsultorioAsignar,
     openModalCabinaAsignar,
+    openModalSalaCirugiaAsignar,
     tipo_servicio,
     servicio,
     handleClose,
@@ -49,6 +51,8 @@ export const ListaEsperaContainer = (props) => {
     loadListaEsperaTratamientos,
     loadConsultorios,
     loadCabinas,
+    loadSalaCirugias,
+    loadListaEsperaCirugias,
     sucursal,
     cambio,
     paciente,
@@ -92,6 +96,24 @@ export const ListaEsperaContainer = (props) => {
             setMessage={setMessage}
             loadListaEsperaConsultas={loadListaEsperaConsultas}
             loadListaEsperaTratamientos={loadListaEsperaTratamientos}
+            loadCabinas={loadCabinas}
+            sucursal={sucursal}
+            cambio={cambio}
+            paciente={paciente} />
+          : ''
+      }
+
+      {
+        openModalSalaCirugiaAsignar ?
+          <ModalCirugiaAgregarPaciente
+            open={openModalSalaCirugiaAsignar}
+            onClose={handleClose}
+            tipo_servicio={tipo_servicio}
+            servicio={servicio}
+            setOpenAlert={setOpenAlert}
+            setMessage={setMessage}
+            loadSalaCirugias={loadSalaCirugias}
+            loadListaEsperaCirugias={loadListaEsperaCirugias}
             loadCabinas={loadCabinas}
             sucursal={sucursal}
             cambio={cambio}
