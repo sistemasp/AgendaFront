@@ -30,16 +30,12 @@ const ModalCirugiaAgregarPaciente = (props) => {
     servicio,
     setOpenAlert,
     setMessage,
-    loadSalaCirugias,
-    loadListaEsperaCirugias,
-    loadCabinas,
+    loadAll,
     sucursal,
     cambio,
     paciente,
     cirugia,
   } = props;
-
-  console.log("CIcIADASD", cirugia);
 
   const [isLoading, setIsLoading] = useState(true);
   const [salaCirugias, setSalaCirugias] = useState([]);
@@ -83,6 +79,7 @@ const ModalCirugiaAgregarPaciente = (props) => {
       setValues({ sala_cirugia: { paciente: cirugia.paciente._id } });
       let salaCirugia = values.sala_cirugia;
       salaCirugia.cirugia = cirugia._id;
+      salaCirugia.medico = cirugia.medico;
       salaCirugia.paciente = paciente._id;
       salaCirugia.tipo_servicio = tipo_servicio;
       salaCirugia.servicio = servicio;
@@ -95,8 +92,7 @@ const ModalCirugiaAgregarPaciente = (props) => {
       }
     }
 
-    await loadSalaCirugias();
-    await loadListaEsperaCirugias();
+    await loadAll();
     onClose();
     setIsLoading(false);
   }

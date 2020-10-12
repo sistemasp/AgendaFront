@@ -267,7 +267,6 @@ const ListaEspera = (props) => {
 	}
 
 	const handleOnCabinaCambiarPaciente = async (event, rowData) => {
-		//setConsulta(rowData.consulta);
 		setIsLoading(true);
 		const response = await breakFreeCabinaByIdPaciente(rowData._id);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -284,13 +283,18 @@ const ListaEspera = (props) => {
 	}
 
 	const handleOnSalaCirugiaCambiarPaciente = async (event, rowData) => {
-		//setConsulta(rowData.consulta);
-		setPaciente(rowData.paciente);
-		setCambio(true);
-		setOpenModalSalaCirugiaAsignar(true);
-		rowData.disponible = true;
-		await updateSalaCirugia(rowData._id, rowData);
-		await breakFreeSalaCirugiaByIdPaciente(rowData._id);
+		setIsLoading(true);
+		const response = await breakFreeSalaCirugiaByIdPaciente(rowData._id);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			//rowData.disponible = true;
+			setPaciente(rowData.paciente);
+			setServicio(rowData.servicio);
+			setTipoServicio(rowData.tipo_servicio);
+			setCambio(true);
+			setOpenModalSalaCirugiaAsignar(true);
+			//await updateSalaCirugia(rowData._id, rowData);
+		}
+		setIsLoading(false);
 	}
 
 	const handleOnClickLiberar = async (event, rowData) => {
