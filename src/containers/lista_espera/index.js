@@ -22,6 +22,8 @@ import {
 	updateCirugia,
 	updateSalaCirugia,
 	breakFreeSalaCirugiaByIdPaciente,
+	findEsteticaById,
+	updateEstetica,
 } from '../../services';
 import InputIcon from '@material-ui/icons/Input';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -152,6 +154,7 @@ const ListaEspera = (props) => {
 	const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
 	const enProcedimientoStatusId = process.env.REACT_APP_EN_PROCEDIMIENTO_STATUS_ID;
 	const enConsultorioStatusId = process.env.REACT_APP_EN_CONSULTORIO_STATUS_ID;
+	const cirugiaServicioId = process.env.REACT_APP_CIRUGIA_SERVICIO_ID;
 
 	const loadConsultorios = async () => {
 		const response = await findSurgeryBySucursalIdWaitingList(sucursal);
@@ -339,14 +342,15 @@ const ListaEspera = (props) => {
 
 	const handleOnClickLiberarSalaCirugia = async (event, rowData) => {
 		const dateNow = new Date();
-		const responseServicio = await findCirugiaById(rowData.servicio);
+		const responseServicio = rowData.tipo_servicio === cirugiaServicioId ? await findCirugiaById(rowData.servicio) : await findEsteticaById(rowData.servicio);
+		//const responseServicio = await findCirugiaById(rowData.servicio);
 		if (`${responseServicio.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-			const cirugia = responseServicio.data;
-			await updateConsult(cirugia.consulta._id, { ...cirugia.consulta, status: enConsultorioStatusId });
-			let updateCirugiaData = cirugia;
-			updateCirugiaData.status = atendidoStatusId;
-			updateCirugiaData.hora_salida = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
-			await updateCirugia(cirugia._id, updateCirugiaData);
+			const currentService = responseServicio.data;
+			await updateConsult(currentService.consulta._id, { ...currentService.consulta, status: enConsultorioStatusId });
+			let updateData = currentService;
+			updateData.status = atendidoStatusId;
+			updateData.hora_salida = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
+			rowData.tipo_servicio === cirugiaServicioId ? await updateCirugia(currentService._id, updateData) : await updateEstetica(currentService._id, updateData);
 			rowData.disponible = true;
 			await updateSalaCirugia(rowData._id, rowData);
 			const response = await breakFreeSalaCirugiaByIdPaciente(rowData._id);

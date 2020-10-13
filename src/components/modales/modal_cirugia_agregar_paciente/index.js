@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import * as Yup from "yup";
 import { Formik } from 'formik';
 import {
-  findConsultById,
+  findEsteticaById,
   findEmployeesByRolId,
   updateSurgery,
   findCabinaBySucursalIdAndFree,
@@ -13,6 +13,7 @@ import {
   findSalaCirugiaBySucursalIdAndFree,
   findCirugiaById,
   updateCirugia,
+  updateEstetica,
 } from '../../../services';
 import { addZero } from '../../../utils/utils';
 import ModalFormCirugiaAgregarPaciente from './ModalFormCirugiaAgregarPaciente';
@@ -34,7 +35,6 @@ const ModalCirugiaAgregarPaciente = (props) => {
     sucursal,
     cambio,
     paciente,
-    cirugia,
   } = props;
 
   const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +46,7 @@ const ModalCirugiaAgregarPaciente = (props) => {
   });
 
   const enSalaCirugiaStatusId = process.env.REACT_APP_EN_SALA_CIRUGIA_STATUS_ID;
-  const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
+  const cirugiaServicioId = process.env.REACT_APP_CIRUGIA_SERVICIO_ID;
 
   useEffect(() => {
     const loadCabinasDisponibles = async () => {
@@ -64,22 +64,22 @@ const ModalCirugiaAgregarPaciente = (props) => {
   const handleClickGuardar = async (event, rowData) => {
     setIsLoading(true);
 
-    const responseServicio = await findCirugiaById(servicio);
+    const responseServicio = tipo_servicio === cirugiaServicioId ? await findCirugiaById(servicio) : await findEsteticaById(servicio);
     if (`${responseServicio.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-      const cirugia = responseServicio.data;
+      const currentService = responseServicio.data;
       if (!cambio) {
         const dateNow = new Date();
-        let updateCirugiaData = cirugia;
-        updateCirugiaData.status = enSalaCirugiaStatusId;
-        updateCirugiaData.hora_atencion = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
-        updateCirugiaData.medico = values.sala_cirugia.medico;
-        await updateCirugia(cirugia._id, updateCirugiaData);
+        let updateData = currentService;
+        updateData.status = enSalaCirugiaStatusId;
+        updateData.hora_atencion = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
+        updateData.medico = values.sala_cirugia.medico;
+        tipo_servicio === cirugiaServicioId ? await updateCirugia(currentService._id, updateData) : updateEstetica(currentService._id, updateData);
       }
 
-      setValues({ sala_cirugia: { paciente: cirugia.paciente._id } });
+      setValues({ sala_cirugia: { paciente: currentService.paciente._id } });
       let salaCirugia = values.sala_cirugia;
-      salaCirugia.cirugia = cirugia._id;
-      salaCirugia.medico = cirugia.medico;
+      salaCirugia.cirugia = currentService._id;
+      salaCirugia.medico = currentService.medico;
       salaCirugia.paciente = paciente._id;
       salaCirugia.tipo_servicio = tipo_servicio;
       salaCirugia.servicio = servicio;

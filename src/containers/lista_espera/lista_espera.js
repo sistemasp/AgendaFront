@@ -56,10 +56,12 @@ export const ListaEsperaContainer = (props) => {
     salaCirugias,
     actionsSalaCirugia,
     tituloEsperaSalaCirugia,
-    listaEsperaSalaCirugia,
+    listaEsperaEstetica,
     actionsEsperaSalaCirugia,
     componentsConsultorio,
   } = props;
+
+  const listaEsperaSalaCirugia = [...listaEsperaEstetica, ...listaEsperaCirugias];
 
   return (
     <Fragment>
@@ -162,7 +164,7 @@ export const ListaEsperaContainer = (props) => {
           <TableComponent
             titulo={tituloEsperaSalaCirugia}
             columns={columnsEspera}
-            data={listaEsperaCirugias}
+            data={listaEsperaSalaCirugia}
             actions={actionsEsperaSalaCirugia}
             options={optionsEspera} />
 

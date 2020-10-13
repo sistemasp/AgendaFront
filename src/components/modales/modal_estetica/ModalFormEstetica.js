@@ -88,11 +88,15 @@ const ModalFormEstetica = (props) => {
     onClickCrearCirugia,
     open,
     onChangePrecio,
+    onChangePrecioMateriales,
     onChangePagado,
     sucursal,
+    toxinasRellenos,
     materiales,
+    onChangeToxinasRellenos,
     onChangeMateriales,
     onChangeItemUnidades,
+    onChangeItemPrecio,
     dataComplete,
     onChangeBiopsia,
     onChangeCantidadBiopsias,
@@ -140,12 +144,12 @@ const ModalFormEstetica = (props) => {
 
               <Grid item xs={12} >
                 <Multiselect
-                  options={materiales} // Options to display in the dropdown
+                  options={toxinasRellenos} // Options to display in the dropdown
                   displayValue="nombre" // Property name to display in the dropdown options
-                  onSelect={(e) => onChangeMateriales(e)} // Function will trigger on select event
-                  onRemove={(e) => onChangeMateriales(e)} // Function will trigger on remove event
-                  placeholder="Selecciona materiales"
-                  selectedValues={values.materiales} // Preselected value to persist in dropdown
+                  onSelect={(e) => onChangeToxinasRellenos(e)} // Function will trigger on select event
+                  onRemove={(e) => onChangeToxinasRellenos(e)} // Function will trigger on remove event
+                  placeholder="Toxinas y rellenos"
+                  selectedValues={values.toxinas_rellenos} // Preselected value to persist in dropdown
                 />
               </Grid>
               <Grid item xs={3} >
@@ -156,38 +160,64 @@ const ModalFormEstetica = (props) => {
               </Grid>
               <Grid className={classes.labelItemLeft} item xs={3} >
                 <h3 className={classes.labelItemCenter}>{`Precio por unidad`}</h3>
-              </Grid>              
+              </Grid>
               <Grid item xs={3} >
                 <h3 className={classes.labelItemRight}> {`Total`} </h3>
               </Grid>
               {
-                values.materiales.map((item, index) =>
-                  <Fragment>
-                    <Grid item xs={3} >
-                      <h3 className={classes.labelItemLeft}>{item.nombre}</h3>
-                    </Grid>
-                    <Grid item xs={12} sm={3}>
-                      <TextField
-                        className={classes.labelItemCenter}
-                        name={item.unidades}
-                        label={`Unidades`}
-                        value={item.unidades}
-                        type='Number'
-                        onChange={(e) => onChangeItemUnidades(e, index)}
-                        onInput={(e) => {
-                          e.target.value = e.target.value < 0 ? 0 : e.target.value;
-                          e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 3)
-                        }}
-                        variant="outlined" />
-                    </Grid>
-                    <Grid item xs={3} >
-                      <h3 className={classes.labelItemCenter}>{toFormatterCurrency(item.precio)}</h3>
-                    </Grid>
-                    <Grid item xs={3} >
-                      <h3 className={classes.labelItemRight}>{toFormatterCurrency(item.unidades * item.precio)}</h3>
-                    </Grid>
-                  </Fragment>)
+                values.toxinas_rellenos ?
+                  values.toxinas_rellenos.map((item, index) =>
+                    <Fragment>
+                      <Grid item xs={3} >
+                        <h3 className={classes.labelItemLeft}>{item.nombre}</h3>
+                      </Grid>
+                      <Grid item xs={12} sm={3}>
+                        <TextField
+                          className={classes.labelItemCenter}
+                          name={item.unidades}
+                          label={`Unidades`}
+                          value={item.unidades}
+                          type='Number'
+                          onChange={(e) => onChangeItemUnidades(e, index)}
+                          onInput={(e) => {
+                            e.target.value = e.target.value < 0 ? 0 : e.target.value;
+                            e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 3)
+                          }}
+                          variant="outlined" />
+                      </Grid>
+                      <Grid item xs={3} >
+                        <h3 className={classes.labelItemCenter}>{toFormatterCurrency(item.precio)}</h3>
+                      </Grid>
+                      <Grid item xs={3} >
+                        <h3 className={classes.labelItemRight}>{toFormatterCurrency(item.unidades * item.precio)}</h3>
+                      </Grid>
+                    </Fragment>) : ''
               }
+
+              <Grid item xs={12} >
+                <Multiselect
+                  options={materiales} // Options to display in the dropdown
+                  displayValue="nombre" // Property name to display in the dropdown options
+                  onSelect={(e) => onChangeMateriales(e)} // Function will trigger on select event
+                  onRemove={(e) => onChangeMateriales(e)} // Function will trigger on remove event
+                  placeholder="Selecciona materiales"
+                  selectedValues={values.materiales} // Preselected value to persist in dropdown
+                />
+              </Grid>
+              {
+                values.materiales.map((item, index) =>
+                  <Grid item xs={12} sm={4}>
+                    <TextField
+                      className={classes.button}
+                      name={item.precio}
+                      label={`Precio: ${item.nombre}`}
+                      value={item.precio}
+                      type='Number'
+                      onChange={(e) => onChangeItemPrecio(e, index)}
+                      variant="outlined" />
+                  </Grid>)
+              }
+
               <Grid item xs={12}>
                 <TextField
                   className={classes.textField}

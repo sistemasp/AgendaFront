@@ -1392,6 +1392,18 @@ export const updateEstetica = async (idEstetica, estetica) => {
     }
 }
 
+export const findEsteticaById = async (esteticaId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/estetica/${esteticaId}`,
+            method: 'GET',
+        });
+        return response;
+    } catch (error) {
+        console.log('findEsteticaById', error);
+    }
+}
+
 export const findEsteticaByConsultaId = async (consultaId) => {
     try {
         const response = await axios({

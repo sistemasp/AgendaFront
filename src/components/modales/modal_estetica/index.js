@@ -12,6 +12,7 @@ import {
   createBiopsia,
   updateEstetica,
   createEstetica,
+  showAllMaterials,
 } from "../../../services";
 import * as Yup from "yup";
 import { Formik } from 'formik';
@@ -56,17 +57,14 @@ const ModalEstetica = (props) => {
     onClose,
     consulta,
     empleado,
-    loadConsultas,
     sucursal,
     setOpenAlert,
     setMessage,
-    setFilterDate,
     estetica,
   } = props;
 
   const [isLoading, setIsLoading] = useState(true);
-  const [materiales, setMateriales] = useState([]);
-  const [patologos, setPatologos] = useState([]);
+  const [toxinasRellenos, setToxinaRellenos] = useState([]);
 
   const [openModalPagos, setOpenModalPagos] = useState(false);
 
@@ -78,11 +76,15 @@ const ModalEstetica = (props) => {
     sucursal: estetica.sucursal ? estetica.sucursal : consulta.sucursal,
     precio: estetica.precio ? estetica.precio : 0,
     total: estetica.total ? estetica.total : 0,
+    toxinas_rellenos: estetica.toxinas_rellenos,
     materiales: estetica.materiales,
     pagado: estetica.pagado,
     paciente: consulta.paciente,
     medico: consulta.medico,
   });
+  const [materiales, setMateriales] = useState([]);
+
+  console.log("CVALALALA", values);
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
   const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
@@ -91,6 +93,7 @@ const ModalEstetica = (props) => {
   const reagendoStatusId = process.env.REACT_APP_REAGENDO_STATUS_ID;
   const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
   const patologoRolId = process.env.REACT_APP_PATOLOGO_ROL_ID;
+  const enProcedimientoStatusId = process.env.REACT_APP_EN_PROCEDIMIENTO_STATUS_ID;
   const esteticaServicioId = process.env.REACT_APP_ESTETICA_SERVICIO_ID;
   const biopsiaServicioId = process.env.REACT_APP_BIOPSIA_SERVICIO_ID;
 
@@ -98,23 +101,31 @@ const ModalEstetica = (props) => {
 
   useEffect(() => {
 
-    const loadMateriales = async () => {
+    const loadToxinasRellenos = async () => {
       const response = await showAllMaterialEsteticas();
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setToxinaRellenos(response.data);
+      }
+    }
+
+    const loadMateriales = async () => {
+      const response = await showAllMaterials();
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setMateriales(response.data);
       }
     }
 
     setIsLoading(true);
+    loadToxinasRellenos();
     loadMateriales();
     setIsLoading(false);
   }, []);
 
-  const handleChangeMateriales = async (items) => {
+  const handleChangeToxinasRellenos = async (items) => {
     setIsLoading(true);
     setValues({
       ...values,
-      materiales: items
+      toxinas_rellenos: items
     });
     setIsLoading(false);
   }
@@ -123,8 +134,11 @@ const ModalEstetica = (props) => {
     const fecha_actual = new Date();
     fecha_actual.setHours(fecha_actual.getHours() - 5);
     data.fecha_hora = fecha_actual;
-    data.tipo_servicio = esteticaServicioId;
-    console.log("DADADA>", data);
+    data.servicio = esteticaServicioId;
+    if (!data._id) {
+      data.status = asistioStatusId;
+    }
+    const update = data._id ? {} : await updateConsult(consulta._id, { ...consulta, status: enProcedimientoStatusId });
     const response = data._id ? await updateEstetica(data._id, data) : await createEstetica(data);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
       || `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
@@ -159,8 +173,11 @@ const ModalEstetica = (props) => {
 
   const handleChangePrecio = e => {
     let total = 0;
-    values.materiales.map(item => {
+    values.toxinas_rellenos.map(item => {
       total += Number(item.total);
+    });
+    values.materiales.map(item => {
+      total += Number(item.precio);
     });
     total += Number(e.target.value);
     setValues({
@@ -190,20 +207,50 @@ const ModalEstetica = (props) => {
   }
 
   const handleChangeItemUnidades = (e, index) => {
-    const newMateriales = values.materiales;
-    newMateriales[index].unidades = e.target.value;
-    newMateriales[index].total = Number(newMateriales[index].precio) * Number(e.target.value)
+    const newToxinasRellenos = values.toxinas_rellenos;
+    newToxinasRellenos[index].unidades = e.target.value;
+    newToxinasRellenos[index].total = Number(newToxinasRellenos[index].precio) * Number(e.target.value)
     let total = 0;
-    newMateriales.map((item) => {
+    newToxinasRellenos.map((item) => {
       total += Number(item.precio) * Number(item.unidades);
     });
+    values.materiales.map(item => {
+      total += Number(item.precio);
+    });
 
+    total += Number(values.precio);
+    setValues({
+      ...values,
+      toxinas_rellenos: newToxinasRellenos,
+      total: total,
+    });
+  }
+
+  const handleChangeItemPrecio = (e, index) => {
+    const newMateriales = values.materiales;
+    newMateriales[index].precio = e.target.value;
+    let total = 0;
+    newMateriales.map((item) => {
+      total += Number(item.precio);
+    });
+    values.toxinas_rellenos.map(item => {
+      total += Number(item.total);
+    });
     total += Number(values.precio);
     setValues({
       ...values,
       materiales: newMateriales,
       total: total,
     });
+  }
+
+  const handleChangeMateriales = async (items) => {
+    setIsLoading(true);
+    setValues({
+      ...values,
+      materiales: items
+    });
+    setIsLoading(false);
   }
 
   return (
@@ -223,10 +270,13 @@ const ModalEstetica = (props) => {
             openModalPagos={openModalPagos}
             onCloseModalPagos={handleCloseModalPagos}
             onGuardarModalPagos={handleGuardarModalPagos}
-            onChangeMateriales={(e) => handleChangeMateriales(e)}
+            onChangeToxinasRellenos={(e) => handleChangeToxinasRellenos(e)}
             sucursal={sucursal}
+            toxinasRellenos={toxinasRellenos}
             materiales={materiales}
             onChangeItemUnidades={handleChangeItemUnidades}
+            onChangeItemPrecio={handleChangeItemPrecio}
+            onChangeMateriales={handleChangeMateriales}
             values={values}
             dataComplete={dataComplete}
             onChangePagado={(e) => handleChangePagado(e)}
