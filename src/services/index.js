@@ -1238,6 +1238,18 @@ export const findConsultsByPayOfDoctorTurno = async (dia, mes, anio, sucursalId,
     }
 }
 
+export const findConsultsByPayOfDoctorTurnoFrecuencia = async (dia, mes, anio, sucursalId, medicoId, atendidoId, turno, frecuenciaId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta/${dia}/${mes}/${anio}/sucursal/${sucursalId}/medico/${medicoId}/atendido/${atendidoId}/turno/${turno}/frecuencia/${frecuenciaId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findConsultsByPayOfDoctorTurnoFrecuencia', error);
+    }
+}
+
 export const findCirugiasByPayOfDoctor = async (dia, mes, anio, sucursalId, medicoId) => {
     try {
         const response = await axios({
@@ -1508,5 +1520,32 @@ export const showAllMaterialEsteticas = async () => {
         return response;
     } catch (error) {
         console.log('showAllMaterialEsteticas', error);
+    }
+}
+
+// PAGO MEDICO
+
+export const createPagoMedico = async (pagoMedico) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/pagoMedico`,
+            method: 'POST',
+            data: pagoMedico
+        });
+        return response;
+    } catch (error) {
+        console.log('createPagoMedico', error);
+    }
+}
+
+export const showTodayPagoMedicoBySucursalTurno = async (medicoId, sucursalId, turno) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/pagoMedico/${medicoId}/sucursal/${sucursalId}/turno/${turno}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showTodayPagoMedicoBySucursalTurno', error);
     }
 }

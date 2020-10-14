@@ -37,12 +37,11 @@ const ModalPago = (props) => {
   const [values, setValues] = useState({
     metodo_pago: pago.metodo_pago ? pago.metodo_pago._id : '',
     observaciones: pago.observaciones ? pago.observaciones : '',
-    porcentaje_comision: porcetanjeComision,
-    comision: pago.comision ? pago.comision : '',
     cantidad: pago.cantidad ? pago.cantidad : '0',
     porcentaje_descuento: pago.porcentaje_descuento ? pago.porcentaje_descuento : '0',
     descuento: pago.descuento ? pago.descuento : '0',
-    total: pago.total ? pago.total : '0'
+    total: pago.total ? pago.total : '0',
+    pago_anticipado: pago.pago_anticipado,
   });
 
   const tarjetaMetodoPagoId = process.env.REACT_APP_METODO_PAGO_TARJETA;
@@ -111,17 +110,12 @@ const ModalPago = (props) => {
 
   const calcularTotal = (datos) => {
     const cantidad = datos.cantidad;
-    let comision = 0;
     const descuento = cantidad * datos.porcentaje_descuento / 100;
-    if (datos.metodo_pago === tarjetaMetodoPagoId) {
-      comision = (Number(cantidad) - Number(descuento))* Number(values.porcentaje_comision) / 100;
-    }
-    let total = cantidad - descuento + comision;
+    let total = cantidad - descuento;
     setValues({
       ...values,
       metodo_pago: datos.metodo_pago,
       cantidad: cantidad,
-      comision: comision,
       porcentaje_descuento: datos.porcentaje_descuento,
       descuento: descuento,
       total: total,     
@@ -132,6 +126,10 @@ const ModalPago = (props) => {
     setValues({ ...values, deposito_confirmado: !values.deposito_confirmado });
   }
 
+  const handleChangePagoAnticipado = (event) => {
+    setValues({ ...values, pago_anticipado: !values.pago_anticipado });
+  }
+  
   const handleChangeObservaciones = (event) => {
     setValues({ ...values, observaciones: event.target.value });
   }
@@ -158,7 +156,6 @@ const ModalPago = (props) => {
     rowData.sucursal = sucursal;
     rowData.servicio = servicio._id;
     rowData.tipo_servicio = tipoServicioId;
-    rowData.porcentaje_comision = `${rowData.metodo_pago === metodoPagoTarjetaId ? porcetanjeComision : '0'}%`;
     rowData.porcentaje_descuento = `${rowData.porcentaje_descuento} %`;
     const res = pago._id ? await updatePago(pago._id, rowData) : await createPago(rowData);
     if (`${res.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
@@ -192,6 +189,7 @@ const ModalPago = (props) => {
           onChangeObservaciones={(e) => handleChangeObservaciones(e)}
           onChangeDigitos={(e) => handleChangeDigitos(e)}
           onChangeDescuento={(e) => handleChangeDescuento(e)}
+          onChangePagoAnticipado={(e) => handleChangePagoAnticipado(e)}
           {...props} />
       }
     </Formik>

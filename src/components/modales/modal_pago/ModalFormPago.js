@@ -74,6 +74,7 @@ const ModalFormPago = (props) => {
     onChangeConfirmado,
     onChangeObservaciones,
     onChangeDigitos,
+    onChangePagoAnticipado,
     open,
   } = props;
 
@@ -194,13 +195,6 @@ const ModalFormPago = (props) => {
                 <h3 className={classes.label}>{`Subtotal : ${toFormatterCurrency((Number(values.cantidad) - Number(values.descuento)))}`}</h3>
               </Grid>
 
-              {
-                values.metodo_pago !== process.env.REACT_APP_METODO_PAGO_EFECTIVO && values.metodo_pago !== '' ?
-                  <Grid item xs={12}>
-                    <h3 className={classes.label}>{`Comision del ${values.porcentaje_comision}%: ${toFormatterCurrency(values.comision)}`}</h3>
-                  </Grid> : ''
-              }
-
               <Grid item xs={12}>
                 <h2 className={classes.label}>{`Total: ${toFormatterCurrency(values.total)}`}</h2>
               </Grid>
@@ -246,6 +240,14 @@ const ModalFormPago = (props) => {
                   onClick={onClickCancel} >
                   Cancelar
                 </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <CheckCustom
+                  checked={values.pago_anticipado}
+                  onChange={onChangePagoAnticipado}
+                  name="checkedC"
+                  label="Pago anticipado"
+                />
               </Grid>
             </Grid>
 

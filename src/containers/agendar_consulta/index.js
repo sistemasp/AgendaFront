@@ -492,7 +492,7 @@ const AgendarConsulta = (props) => {
 		),
 		rowData => {
 			return (rowData.status._id === enProcedimientoStatusId || rowData.status._id === enConsultorioStatusId
-				|| rowData.status._id === enCabinaStatusId || rowData.status._id === atendidoStatusId)
+				|| rowData.status._id === enCabinaStatusId)
 				? {
 					icon: LocalHospitalIcon,
 					tooltip: 'Pasar a Cirugias',
@@ -501,7 +501,7 @@ const AgendarConsulta = (props) => {
 		},
 		rowData => {
 			return (rowData.status._id === enProcedimientoStatusId || rowData.status._id === enConsultorioStatusId
-				|| rowData.status._id === enCabinaStatusId || rowData.status._id === atendidoStatusId)
+				|| rowData.status._id === enCabinaStatusId)
 				? {
 					icon: FaceIcon,
 					tooltip: 'Toxina y Rellenos',

@@ -67,21 +67,29 @@ const ModalFormImprimirPagoMedico = (props) => {
 
   const {
     sucursal,
-    consultas,
+    consultasPrimeraVez,
+    consultasReconsultas,
     cirugias,
     citas,
     esteticas,
     medico,
     onClose,
     onClickImprimir,
+    onClickPagar,
     open,
     onCambioTurno,
     onObtenerInformacion,
     show,
     turno,
+    pagoMedico,
   } = props;
 
   let pagoTotal = 0;
+
+  const revisadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_REVISADO_ID;
+  const derivadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_DERIVADO_ID;
+  const realizadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_REALIZADO_ID;
+  const noAplicaTipoCitaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
 
   return (
     <div>
@@ -112,17 +120,32 @@ const ModalFormImprimirPagoMedico = (props) => {
             {
               show ?
                 <Fragment>
-                  <Grid item xs={12}>
-                    <Button
-                      className={classes.button}
-                      color="primary"
-                      variant="contained"
-                      onClick={onClickImprimir} >
-                      Imprimir
-                </Button>
-                  </Grid>
+                  {
+                    pagoMedico.pagado ?
+                      <Grid item xs={12}>
+                        <Button
+                          className={classes.button}
+                          color="primary"
+                          variant="contained"
+                          onClick={onClickImprimir} >
+                          Imprimir
+                        </Button>
+                      </Grid>
+                      : 
+                      pagoTotal > 0 ?
+                      <Grid item xs={12}>
+                        <Button
+                          className={classes.button}
+                          color="primary"
+                          variant="contained"
+                          onClick={onClickPagar} >
+                          Pagar
+                       </Button>
+                      </Grid> : ''
+                  }
+
                   <br />
-                  <Grid item xs={12} sm={12}>
+                  <Grid item xs={12} sm={6}>
                     <Button
                       className={classes.button}
                       color="primary"
@@ -131,16 +154,16 @@ const ModalFormImprimirPagoMedico = (props) => {
                       Cambio turno
                 </Button>
                   </Grid>
-                  {
-                  /*<Grid item xs={12} sm={6}>
+
+                  <Grid item xs={12} sm={6}>
                     <Button
                       className={classes.button}
                       color="primary"
                       variant="contained"
-                      onClick={() => onObtenerInformacion() } >
+                      onClick={() => onObtenerInformacion()} >
                       Traer información
                 </Button>
-            </Grid>*/}
+                  </Grid>
                   <br />
                   <Grid item xs={12}>
                     <Button
@@ -159,7 +182,7 @@ const ModalFormImprimirPagoMedico = (props) => {
             <br />
 
             <Grid item xs={12} className={classes.label}>
-              <h2 className={classes.labelItemLeft}> CONSULTAS </h2>
+              <h2 className={classes.labelItemLeft}> CONSULTAS PRIMERA VEZ</h2>
             </Grid>
             <Grid item xs={4} >
               <h3 className={classes.labelItemLeft}>{`Paciente`}</h3>
@@ -174,9 +197,56 @@ const ModalFormImprimirPagoMedico = (props) => {
               <h5 className={classes.labelItemCenter}>__________________________________________________________________________________________________________________________________________</h5>
             </Grid>
             {
-              consultas ?
-                consultas.map(consulta => {
-                  const pagoMedico = Number(consulta.precio) * Number(medico.porcentaje) / 100;
+              consultasPrimeraVez ?
+                consultasPrimeraVez.map(consulta => {
+                  let totalPagos = 0;
+                  consulta.pagos.map(pago => {
+                    totalPagos += Number(pago.total);
+                  });
+                  const pagoMedico = Number(totalPagos) * Number(medico.porcentaje) / 100;
+                  pagoTotal += Number(pagoMedico);
+                  return <Fragment>
+                    <Grid item xs={4} >
+                      <h4 className={classes.labelItemLeft}>{`${consulta.paciente.nombres} ${consulta.paciente.apellidos}`}</h4>
+                    </Grid>
+                    <Grid item xs={4} >
+                      <h4 className={classes.labelItemCenter}>{`${consulta.consecutivo}`}</h4>
+                    </Grid>
+                    <Grid item xs={4} >
+                      <h4 className={classes.labelItemRight}> {`${toFormatterCurrency(pagoMedico)}`} </h4>
+                    </Grid>
+                  </Fragment>
+                })
+                : ''
+            }
+
+            <h1>
+              <br />
+            </h1>
+
+            <Grid item xs={12} className={classes.label}>
+              <h2 className={classes.labelItemLeft}> CONSULTAS RECONSULTA</h2>
+            </Grid>
+            <Grid item xs={4} >
+              <h3 className={classes.labelItemLeft}>{`Paciente`}</h3>
+            </Grid>
+            <Grid item xs={4} >
+              <h3 className={classes.labelItemCenter}>{`Consecutivo`}</h3>
+            </Grid>
+            <Grid item xs={4} >
+              <h3 className={classes.labelItemRight}> {`Cantidad a pagar`} </h3>
+            </Grid>
+            <Grid item xs={12} className={classes.label}>
+              <h5 className={classes.labelItemCenter}>__________________________________________________________________________________________________________________________________________</h5>
+            </Grid>
+            {
+              consultasReconsultas ?
+                consultasReconsultas.map(consulta => {
+                  let totalPagos = 0;
+                  consulta.pagos.map(pago => {
+                    totalPagos += Number(pago.total);
+                  });
+                  const pagoMedico = Number(totalPagos) * Number(medico.porcentaje) / 100;
                   pagoTotal += Number(pagoMedico);
                   return <Fragment>
                     <Grid item xs={4} >
@@ -251,7 +321,24 @@ const ModalFormImprimirPagoMedico = (props) => {
             {
               citas ?
                 citas.map(cita => {
-                  const pagoMedico = Number(cita.precio) * Number(medico.porcentaje) / 100;
+                  let comisionMedico = 0;
+                  cita.areas.map(area => {
+                    switch (cita.tipo_cita) {
+                      case revisadoTipoCitaId:
+                        comisionMedico += Number(area.comision_revisado);
+                        break;
+                      case derivadoTipoCitaId:
+                        comisionMedico += Number(area.comision_derivado);
+                        break;
+                      case realizadoTipoCitaId:
+                        comisionMedico += Number(area.comision_realizado);
+                        break;
+                      case noAplicaTipoCitaId:
+                        comisionMedico += Number(0);
+                        break;
+                    }
+                  });
+                  const pagoMedico = comisionMedico;
                   pagoTotal += Number(pagoMedico);
                   return <Fragment>
                     <Grid item xs={4} >
@@ -267,7 +354,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                 })
                 : ''
             }
-             <h1>
+            <h1>
               <br />
             </h1>
             <Grid item xs={12} className={classes.label}>
@@ -287,7 +374,7 @@ const ModalFormImprimirPagoMedico = (props) => {
             </Grid>
             {
               esteticas ?
-              esteticas.map(estetica => {
+                esteticas.map(estetica => {
                   const pagoMedico = Number(estetica.precio) * Number(medico.porcentaje_estetica) / 100;
                   pagoTotal += Number(pagoMedico);
                   return <Fragment>
