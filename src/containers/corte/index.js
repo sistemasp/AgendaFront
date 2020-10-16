@@ -55,6 +55,7 @@ const Corte = (props) => {
 	const columns = [
 		{ title: 'Concepto', field: 'nombre' },
 		{ title: 'Cantidad', field: 'nombre_medico' },
+		{ title: 'Tipo', field: 'tipo' },
 	];
 
 	const options = {
@@ -115,19 +116,6 @@ const Corte = (props) => {
 		setIsLoading(false);
 	}
 
-	const actions = [
-		{
-			icon: Edit,
-			tooltip: 'Generar Pago',
-			onClick: onClickAgendar
-		},
-		{
-			icon: HistoryIcon,
-			tooltip: 'Historial de pagos',
-			onClick: handleClickHistorico
-		}
-	];
-
 	useEffect(() => {
 		const loadConsultorios = async () => {
 			const response = await findSurgeryBySucursalId(sucursal);
@@ -155,7 +143,6 @@ const Corte = (props) => {
 						columns={columns}
 						tituloIngreso='Ingreso'
 						tituloEgreso='Egreso'
-						actions={actions}
 						options={options}
 						openModal={openModal}
 						openHistoric={openHistoric}

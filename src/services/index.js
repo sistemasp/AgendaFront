@@ -1549,3 +1549,18 @@ export const showTodayPagoMedicoBySucursalTurno = async (medicoId, sucursalId, t
         console.log('showTodayPagoMedicoBySucursalTurno', error);
     }
 }
+
+// INGRESO
+
+export const createIngreso = async (ingreso) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/ingreso`,
+            method: 'POST',
+            data: ingreso
+        });
+        return response;
+    } catch (error) {
+        console.log('createPagoMedico', error);
+    }
+}

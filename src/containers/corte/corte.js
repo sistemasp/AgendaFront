@@ -22,7 +22,6 @@ export const CorteContainer = (props) => {
     columns,
     consultorios,
     consultorio,
-    actions,
     options,
     openModal,
     handleOpen,
@@ -49,20 +48,18 @@ export const CorteContainer = (props) => {
         text='Generar corte' />
 
       <Grid container spacing={3}>
-        <Grid item xs={6} sm={6}>
+        <Grid item xs={12} sm={12}>
           <TableComponent
             titulo={tituloIngreso}
             columns={columns}
             data={consultorios}
-            actions={actions}
             options={options} />
         </Grid>
-        <Grid item xs={6} sm={6}>
+        <Grid item xs={12} sm={12}>
           <TableComponent
             titulo={tituloEgreso}
             columns={columns}
             data={consultorios}
-            actions={actions}
             options={options} />
         </Grid>
       </Grid>
