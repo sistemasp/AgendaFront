@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = process.env.REACT_APP_BASE_URL_LOCAL;
+export const baseUrl = process.env.REACT_APP_BASE_URL_LOCAL;
 const urlSepomexGetEstados = 'https://api-sepomex.hckdrk.mx/query/get_estados';
 const urlSepomexGetMunicipos = 'https://api-sepomex.hckdrk.mx/query/get_municipio_por_estado/';
 const urlSepomexGetColonia = 'https://api-sepomex.hckdrk.mx/query/get_colonia_por_municipio/';
@@ -1561,6 +1561,21 @@ export const createIngreso = async (ingreso) => {
         });
         return response;
     } catch (error) {
-        console.log('createPagoMedico', error);
+        console.log('createIngreso', error);
+    }
+}
+
+// EGRESO
+
+export const createEgreso = async (egreso) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/egreso`,
+            method: 'POST',
+            data: egreso
+        });
+        return response;
+    } catch (error) {
+        console.log('createEgreso', error);
     }
 }

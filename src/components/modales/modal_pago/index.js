@@ -174,7 +174,6 @@ const ModalPago = (props) => {
     const res = pago._id ? await updatePago(pago._id, rowData) : await createPago(rowData);
     if (`${res.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
       || `${res.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-      console.log("DADADAD", res.data);
       const data = res.data;
       let tipoIngreso = '';
 

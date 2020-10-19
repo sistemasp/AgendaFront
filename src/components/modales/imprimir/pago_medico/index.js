@@ -10,6 +10,7 @@ import {
   findConsultsByPayOfDoctorTurnoFrecuencia,
   createPagoMedico,
   showTodayPagoMedicoBySucursalTurno,
+  createEgreso,
 } from '../../../../services';
 
 const useStyles = makeStyles(theme => ({
@@ -28,6 +29,7 @@ const ModalImprimirPagoMedico = (props) => {
     onClose,
     medico,
     sucursal,
+    empleado,
     setOpenAlert,
     setMessage,
   } = props;
@@ -50,6 +52,8 @@ const ModalImprimirPagoMedico = (props) => {
   const derivadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_DERIVADO_ID;
   const realizadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_REALIZADO_ID;
   const noAplicaTipoCitaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
+  const pagoMedicoTipoEgresoId = process.env.REACT_APP_TIPO_EGRESO_PAGO_MEDICO_ID;
+  const efectivoMetodoPagoId = process.env.REACT_APP_METODO_PAGO_EFECTIVO;
 
   const loadConsultas = async () => {
     const date = new Date();
@@ -192,18 +196,32 @@ const ModalImprimirPagoMedico = (props) => {
     const response = await createPagoMedico(pagoMedico);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
       || `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-      if (response.data._id) {
+      const data = response.data;
+      if (data._id) {
         //setOpenAlert(true);
         //setMessage('El pago se genero correctamente');
       }
+      const egreso = {
+        tipo_egreso: pagoMedicoTipoEgresoId,
+        recepcionista: empleado,
+        concepto: pagoMedicoTipoEgresoId,
+        cantidad: data.retencion,
+        sucursal: sucursal._id,
+        metodo_pago: efectivoMetodoPagoId,
+      }
+
+      const resp = await createEgreso(egreso);
+      if (`${resp.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+        setIsLoading(false);
+      }
     }
-    setIsLoading(false);
+    
   };
 
   const handleObtenerInformacion = async () => {
 
     await findPagoToday();
-    
+
   };
 
   const handleCambioTurno = () => {

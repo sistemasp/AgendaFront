@@ -41,7 +41,8 @@ const Medicos = (props) => {
 	const classes = useStyles();
 
 	const {
-		sucursal
+		sucursal,
+		empleado,
 	} = props;
 
 	const [openPagoMedico, setOpenPagoMedico] = useState(false);
@@ -145,6 +146,7 @@ const Medicos = (props) => {
 						openHistoric={openHistoric}
 						medico={medico}
 						sucursal={sucursal}
+						empleado={empleado}
 						handleOpen={handleOpen}
 						handleClose={handleClose} /> :
 					<Backdrop className={classes.backdrop} open={isLoading} >

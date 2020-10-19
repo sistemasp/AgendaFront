@@ -132,7 +132,6 @@ const ModalFormImprimirPagoMedico = (props) => {
                         </Button>
                       </Grid>
                       : 
-                      pagoTotal > 0 ?
                       <Grid item xs={12}>
                         <Button
                           className={classes.button}
@@ -141,7 +140,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                           onClick={onClickPagar} >
                           Pagar
                        </Button>
-                      </Grid> : ''
+                      </Grid> 
                   }
 
                   <br />

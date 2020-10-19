@@ -93,10 +93,10 @@ const Pacientes = (props) => {
 	};
 
 	const loadPacientes = async () => {
-		const response = await getAllPatients();
+		/*const response = await getAllPatients();
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setPacientes(response.data);
-		}
+		}*/
 		setIsLoading(false);
 	}
 
@@ -232,10 +232,10 @@ const Pacientes = (props) => {
 
 	useEffect(() => {
 		const loadPacientes = async () => {
-			const response = await getAllPatients();
+			/*const response = await getAllPatients();
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				setPacientes(response.data);
-			}
+			}*/
 			setIsLoading(false);
 		}
 		loadPacientes();

@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core';
 import ModalPaciente from '../../components/modales/modal_paciente';
 import MenuHistoricos from '../../components/modales/modal_historico';
 import { ButtonCustom } from '../../components/basic/ButtonCustom';
+import { baseUrl } from '../../services';
 
 const useStyles = makeStyles(theme => ({
 	button: {
@@ -19,7 +20,6 @@ export const PacientesContainer = (props) => {
   const {
     titulo,
     columns,
-    pacientes,
     paciente,
     actions,
     components,
@@ -31,6 +31,20 @@ export const PacientesContainer = (props) => {
     onClickGuardar,
     onClickGuardarAgendar
   } = props;
+
+  const pacientes = query =>
+  new Promise((resolve, reject) => {
+    const url =  `${baseUrl}/paciente/remote?per_page=${query.pageSize}&page=${query.page + 1}&search=${query.search}`
+    fetch(url)
+      .then(response => response.json())
+      .then(result => {
+        resolve({
+          data: result.data,
+          page: result.page - 1,
+          totalCount: result.total,
+        })
+      })
+  });
 
   return (
     <Fragment>

@@ -28,6 +28,7 @@ export const MedicosContainer = (props) => {
     handleOpen,
     handleClose,
     sucursal,
+    empleado,
   } = props;
 
   return (
@@ -38,7 +39,8 @@ export const MedicosContainer = (props) => {
           open={openPagoMedico}
           onClose={handleClose}
           medico={medico}
-          sucursal={sucursal} /> : ''
+          sucursal={sucursal}
+          empleado={empleado} /> : ''
       }
       {
         openHistoric ? 
