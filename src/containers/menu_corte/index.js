@@ -5,8 +5,8 @@ import { CorteContainer } from './corte';
 import TableComponent from '../../components/table/TableComponent';
 import {
   findEmployeesByRolId,
-  findSurgeryBySucursalId,
-  createSurgery,
+  showCorteTodayBySucursalAndTurno,
+  createCorte,
   showIngresosTodayBySucursalAndTurno,
   showEgresosTodayBySucursalAndTurno,
   showAllMetodoPago,
@@ -53,10 +53,13 @@ const Corte = (props) => {
   const [openAlert, setOpenAlert] = useState(false);
   const [dataIngresos, setDataIngresos] = useState([]);
   const [dataEgresos, setDataEgresos] = useState([]);
+  const [ingresos, setIngresos] = useState([]);
+  const [egresos, setEgresos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
   const [turno, setTurno] = useState('m');
+  const [corte, setCorte] = useState({});
 
   const {
     sucursal,
@@ -75,7 +78,7 @@ const Corte = (props) => {
   ];
 
   const columnsIngresoDetalles = [
-    { title: 'Concepto', field: 'concepto' },    
+    { title: 'Concepto', field: 'concepto' },
     { title: 'Recepcionista', field: 'recepcionista.nombre' },
     { title: 'Cantidad', field: 'cantidad_moneda' },
   ];
@@ -119,10 +122,10 @@ const Corte = (props) => {
       padding: '5px',
     },
     cellStyle: {
-			fontWeight: 'bolder',
-			fontSize: '16px',
-			padding: '0px',
-		},
+      fontWeight: 'bolder',
+      fontSize: '16px',
+      padding: '0px',
+    },
     exportAllData: true,
     exportButton: false,
     exportDelimiter: ';',
@@ -210,10 +213,10 @@ const Corte = (props) => {
             cantidad_ingresos: ingresosPorTipo.length,
             ingresos: ingresosPorTipo,
           }
-  
+
           tipoIngresosDetalles.push(tipoIngresoDetalle);
         }
-        
+
       });
 
       let total = 0;
@@ -267,6 +270,7 @@ const Corte = (props) => {
       data.map((item) => {
         item.cantidad_moneda = toFormatterCurrency(item.cantidad);
       });
+      setIngresos(data);
       await loadDataIngresos(tipoIngresos, data, metodoPagos);
       setIsLoading(false);
     }
@@ -279,6 +283,7 @@ const Corte = (props) => {
       data.map((item) => {
         item.cantidad_moneda = toFormatterCurrency(item.cantidad);
       });
+      setEgresos(data);
       await loadDataEgresos(data, tipoEgresos);
       setIsLoading(false);
     }
@@ -326,8 +331,14 @@ const Corte = (props) => {
   };
 
   const handleObtenerInformacion = async () => {
-    await loadTipoIngresos();
-    await loadTipoEgresos();
+    const response = await showCorteTodayBySucursalAndTurno(sucursal, turno);
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setCorte(response.data);
+      await loadTipoIngresos();
+      await loadTipoEgresos();
+    }
+    setIsLoading(false);
+
   };
 
   const handleCambioTurno = () => {
@@ -337,6 +348,25 @@ const Corte = (props) => {
   useEffect(() => {
     handleObtenerInformacion();
   }, []);
+
+  const handleGenerateCorte = async () => {
+    const create_date = new Date();
+    create_date.setHours(create_date.getHours() - 5);
+    const newCorte = {
+      create_date: create_date,
+      turno: turno,
+      ingresos: ingresos,
+      egresos: egresos,
+      recepcionista: empleado,
+      sucursal: sucursal,
+    }
+    const response = await createCorte(newCorte);
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+      setMessage("Corte generado correctamente.");
+      setOpenAlert(true);
+      handleObtenerInformacion();
+    }
+  }
 
   return (
     <Fragment>
@@ -365,6 +395,8 @@ const Corte = (props) => {
             setSeverity={setSeverity}
             detailPanelIngreso={detailPanelIngreso}
             detailPanelEgreso={detailPanelEgreso}
+            handleGenerateCorte={() => handleGenerateCorte()}
+            corte={corte}
           /> :
           <Backdrop className={classes.backdrop} open={isLoading} >
             <CircularProgress color="inherit" />

@@ -55,6 +55,9 @@ export const CorteContainer = (props) => {
     setSeverity,
     detailPanelIngreso,
     detailPanelEgreso,
+    handleGenerateCorte,
+    onClickImprimirCorte,
+    corte,
   } = props;
 
   let totalIngresos = 0;
@@ -123,12 +126,22 @@ export const CorteContainer = (props) => {
             text='Traer información' />
         </Grid>
         <Grid item xs={4} className={classes.label}>
-          <ButtonCustom
-            className={classes.button}
-            color="primary"
-            variant="contained"
-            onClick={handleOpen}
-            text='Generar corte' />
+          {
+            corte._id ?
+              <ButtonCustom
+                className={classes.button}
+                color="primary"
+                variant="contained"
+                onClick={onClickImprimirCorte}
+                text='Imprimir' />
+              :
+              <ButtonCustom
+                className={classes.button}
+                color="primary"
+                variant="contained"
+                onClick={handleGenerateCorte}
+                text='Generar corte' />
+          }
         </Grid>
         <Grid item xs={12} sm={8}>
           <TableComponent
@@ -138,15 +151,19 @@ export const CorteContainer = (props) => {
             options={options}
             detailPanel={detailPanelIngreso} />
         </Grid>
-        <Grid container xs={4} className={classes.label}>
-          <Grid item xs={12} sm={12}>
-            <ButtonCustom
-              className={classes.button}
-              color="primary"
-              variant="contained"
-              onClick={handleOpenNuevoIngreso}
-              text='Agregar Ingreso' />
-          </Grid>
+        <Grid container xs={4} className={classes.label} spacing={2}>
+          {
+            !corte._id ?
+              <Grid item xs={12} sm={12}>
+                <ButtonCustom
+                  className={classes.button}
+                  color="primary"
+                  variant="contained"
+                  onClick={handleOpenNuevoIngreso}
+                  text='Agregar Ingreso' />
+              </Grid>
+              : ''
+          }
           <Grid item sm={12}>
             <h1>TOTAL INGRESOS</h1>
           </Grid>
@@ -162,15 +179,19 @@ export const CorteContainer = (props) => {
             options={options}
             detailPanel={detailPanelEgreso} />
         </Grid>
-        <Grid container xs={4} className={classes.label}>
-          <Grid item xs={12} sm={12}>
-            <ButtonCustom
-              className={classes.button}
-              color="primary"
-              variant="contained"
-              onClick={handleOpenNuevoEgreso}
-              text='Agregar Egreso' />
-          </Grid>
+        <Grid container xs={4} className={classes.label} spacing={2}>
+          {
+            !corte._id ?
+              <Grid item xs={12} sm={12}>
+                <ButtonCustom
+                  className={classes.button}
+                  color="primary"
+                  variant="contained"
+                  onClick={handleOpenNuevoEgreso}
+                  text='Agregar Egreso' />
+              </Grid>
+              : ''
+          }
           <Grid item sm={12}>
             <h1>TOTAL EGRESOS</h1>
           </Grid>
@@ -179,10 +200,10 @@ export const CorteContainer = (props) => {
           </Grid>
         </Grid>
         <Grid item sm={8}>
-          <h1 className={totalEfectivo > totalEgresos ? classes.label_positivo : classes.label_negativo } >EFECTIVO EN CAJA: {toFormatterCurrency(Number(totalEfectivo) - Number(totalEgresos))}</h1>
+          <h1 className={totalEfectivo > totalEgresos ? classes.label_positivo : classes.label_negativo} >EFECTIVO EN CAJA: {toFormatterCurrency(Number(totalEfectivo) - Number(totalEgresos))}</h1>
         </Grid>
         <Grid item sm={4}>
-          <h1 className={totalIngresos > totalEgresos ? classes.label_positivo : classes.label_negativo }>BALANCE: {toFormatterCurrency(Number(totalIngresos) - Number(totalEgresos))}</h1>
+          <h1 className={totalIngresos > totalEgresos ? classes.label_positivo : classes.label_negativo}>BALANCE: {toFormatterCurrency(Number(totalIngresos) - Number(totalEgresos))}</h1>
         </Grid>
       </Grid>
 

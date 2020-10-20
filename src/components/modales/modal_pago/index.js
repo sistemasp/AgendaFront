@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as Yup from "yup";
 import { Formik } from 'formik';
-import { 
+import {
   updateSurgery,
   findSurgeryBySucursalIdAndFree,
   updateConsult,
@@ -12,8 +12,8 @@ import {
   updatePago,
   createIngreso,
   findTipoIngresoById,
- } from '../../../services';
-import { addZero } from '../../../utils/utils';
+} from '../../../services';
+import { addZero, generateFolioCita } from '../../../utils/utils';
 import ModalFormPago from './ModalFormPago';
 
 const validationSchema = Yup.object({
@@ -215,29 +215,26 @@ const ModalPago = (props) => {
           break;
       }
 
-      const resConcepto = await findTipoIngresoById(tipoIngreso);
       const create_date = new Date();
       create_date.setHours(create_date.getHours() - 5);
 
-      if (`${resConcepto.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        const concepto = resConcepto.data;
-        const ingreso = {
-          create_date: create_date,
-          recepcionista: empleado._id,
-          concepto: concepto.nombre,
-          cantidad: data.total,
-          tipo_ingreso: tipoIngreso,
-          sucursal: sucursal,
-          metodo_pago: data.metodo_pago,
-        }
-        const response = await createIngreso(ingreso);
-        if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-          onClose();
-          loadPagos();
-        }
+      const ingreso = {
+        create_date: create_date,
+        recepcionista: empleado._id,
+        concepto: `Folio: ${generateFolioCita(servicio.consecutivo)}`,
+        cantidad: data.total,
+        tipo_ingreso: tipoIngreso,
+        sucursal: sucursal,
+        metodo_pago: data.metodo_pago,
+      }
+      const response = await createIngreso(ingreso);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+        onClose();
+        loadPagos();
       }
 
-      
+
+
     }
   }
 
