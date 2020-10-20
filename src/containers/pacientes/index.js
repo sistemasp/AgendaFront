@@ -75,7 +75,12 @@ const Pacientes = (props) => {
 		},
 		exportAllData: true,
 		exportButton: false,
-		exportDelimiter: ';'
+		exportDelimiter: ';',
+		cellStyle: {
+			fontWeight: 'bolder',
+			fontSize: '16px',
+			padding: '0px',
+		},
 	}
 
 	const handleOpen = () => {

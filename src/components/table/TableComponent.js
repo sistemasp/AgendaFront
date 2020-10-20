@@ -75,6 +75,7 @@ const TableComponent = props => {
         editable,
         options,
         components,
+        detailPanel,
     } = props;
 
     const localization = {
@@ -105,9 +106,6 @@ const TableComponent = props => {
         }
     };
 
-    console.log("ACTIONS,COMPONENTS", actions);
-    console.log("ACTIONS,COMPONENTS", components);
-
     return (
         <MaterialTable
             title={titulo}
@@ -119,6 +117,7 @@ const TableComponent = props => {
             editable={editable}
             options={options}
             components={components}
+            detailPanel={detailPanel}
             classes={{
                 root: classes.root,
                 toolbar: classes.toolbar,

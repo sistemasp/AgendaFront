@@ -27,7 +27,7 @@ import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import ModalPassword from '../../components/modales/modal_password';
 import Medicos from '../menu_medicos';
 import Consultorios from '../consultorios';
-import Corte from '../corte';
+import Corte from '../menu_corte';
 import ListaEspera from '../lista_espera';
 
 const TabPanel = (props) => {

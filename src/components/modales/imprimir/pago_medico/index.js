@@ -11,6 +11,7 @@ import {
   createPagoMedico,
   showTodayPagoMedicoBySucursalTurno,
   createEgreso,
+  findTipoEgresoById,
 } from '../../../../services';
 
 const useStyles = makeStyles(theme => ({
@@ -201,10 +202,15 @@ const ModalImprimirPagoMedico = (props) => {
         //setOpenAlert(true);
         //setMessage('El pago se genero correctamente');
       }
+
+      const create_date = new Date();
+      create_date.setHours(create_date.getHours() - 5);
+
       const egreso = {
+        create_date: create_date,
         tipo_egreso: pagoMedicoTipoEgresoId,
         recepcionista: empleado,
-        concepto: pagoMedicoTipoEgresoId,
+        concepto: medico.nombre,
         cantidad: data.retencion,
         sucursal: sucursal._id,
         metodo_pago: efectivoMetodoPagoId,
@@ -215,13 +221,11 @@ const ModalImprimirPagoMedico = (props) => {
         setIsLoading(false);
       }
     }
-    
+
   };
 
   const handleObtenerInformacion = async () => {
-
     await findPagoToday();
-
   };
 
   const handleCambioTurno = () => {

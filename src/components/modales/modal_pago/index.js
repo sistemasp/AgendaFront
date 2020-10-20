@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import * as Yup from "yup";
 import { Formik } from 'formik';
-import { updateSurgery, findSurgeryBySucursalIdAndFree, updateConsult, showAllBanco, showAllMetodoPago, showAllTipoTarjeta, createPago, updatePago, createIngreso } from '../../../services';
+import { 
+  updateSurgery,
+  findSurgeryBySucursalIdAndFree,
+  updateConsult,
+  showAllBanco,
+  showAllMetodoPago,
+  showAllTipoTarjeta,
+  createPago,
+  updatePago,
+  createIngreso,
+  findTipoIngresoById,
+ } from '../../../services';
 import { addZero } from '../../../utils/utils';
 import ModalFormPago from './ModalFormPago';
 
@@ -203,21 +214,30 @@ const ModalPago = (props) => {
           tipoIngreso = tipoIngresoOtrosId;
           break;
       }
-      const concepto = tipoIngreso;
-      const ingreso = {
-        create_date: new Date(),
-        recepcionista: empleado._id,
-        concepto: concepto,
-        cantidad: data.total,
-        tipo_ingreso: tipoIngreso,
-        sucursal: sucursal,
-        metodo_pago: data.metodo_pago,
+
+      const resConcepto = await findTipoIngresoById(tipoIngreso);
+      const create_date = new Date();
+      create_date.setHours(create_date.getHours() - 5);
+
+      if (`${resConcepto.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        const concepto = resConcepto.data;
+        const ingreso = {
+          create_date: create_date,
+          recepcionista: empleado._id,
+          concepto: concepto.nombre,
+          cantidad: data.total,
+          tipo_ingreso: tipoIngreso,
+          sucursal: sucursal,
+          metodo_pago: data.metodo_pago,
+        }
+        const response = await createIngreso(ingreso);
+        if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+          onClose();
+          loadPagos();
+        }
       }
-      const response = await createIngreso(ingreso);
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-        onClose();
-        loadPagos();
-      }
+
+      
     }
   }
 

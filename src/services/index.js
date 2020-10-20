@@ -1565,6 +1565,18 @@ export const createIngreso = async (ingreso) => {
     }
 }
 
+export const showIngresosTodayBySucursalAndTurno = async (sucursalId, turno) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/ingreso/sucursal/${sucursalId}/today/turno/${turno}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showIngresosTodayBySucursalAndTurno', error);
+    }
+}
+
 // EGRESO
 
 export const createEgreso = async (egreso) => {
@@ -1577,5 +1589,69 @@ export const createEgreso = async (egreso) => {
         return response;
     } catch (error) {
         console.log('createEgreso', error);
+    }
+}
+
+export const showEgresosTodayBySucursalAndTurno = async (sucursalId, turno) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/egreso/sucursal/${sucursalId}/today/turno/${turno}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showEgresosTodayBySucursalAndTurno', error);
+    }
+}
+
+// TIPO INGRESO
+
+export const showAllTipoIngresos = async () => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/tipoingreso`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllTipoIngresos', error);
+    }
+}
+
+export const findTipoIngresoById = async (tipoIngresoId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/tipoingreso/${tipoIngresoId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findTipoIngresoById', error);
+    }
+}
+
+// TIPO EGRESO
+
+export const showAllTipoEgresos = async () => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/tipoegreso`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllTipoEgresos', error);
+    }
+}
+
+export const findTipoEgresoById = async (tipoEgresoId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/tipoegreso/${tipoEgresoId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findTipoEgresoById', error);
     }
 }
