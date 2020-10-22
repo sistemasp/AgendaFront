@@ -13,7 +13,7 @@ import {
   createIngreso,
   findTipoIngresoById,
 } from '../../../services';
-import { addZero, generateFolioCita } from '../../../utils/utils';
+import { addZero, generateFolio } from '../../../utils/utils';
 import ModalFormPago from './ModalFormPago';
 
 const validationSchema = Yup.object({
@@ -221,7 +221,7 @@ const ModalPago = (props) => {
       const ingreso = {
         create_date: create_date,
         recepcionista: empleado._id,
-        concepto: `Folio: ${generateFolioCita(servicio.consecutivo)}`,
+        concepto: `Folio: ${generateFolio(servicio)}`,
         cantidad: data.total,
         tipo_ingreso: tipoIngreso,
         sucursal: sucursal,

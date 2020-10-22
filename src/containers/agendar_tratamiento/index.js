@@ -19,7 +19,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
 import EditIcon from '@material-ui/icons/Edit';
 import * as Yup from "yup";
-import { toFormatterCurrency, addZero, generateFolioCita } from "../../utils/utils";
+import { toFormatterCurrency, addZero, generateFolio } from "../../utils/utils";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
 
@@ -153,7 +153,8 @@ const AgendarTratamiento = (props) => {
 			color: '#FFF',
 			fontWeight: 'bolder',
 			fontSize: '18px'
-		}
+		},
+		paging: false,
 	}
 
 	useEffect(() => {
@@ -168,7 +169,7 @@ const AgendarTratamiento = (props) => {
 			const response = await findDatesByDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
-					item.folio = generateFolioCita(item);
+					item.folio = generateFolio(item);
 					const fecha = new Date(item.fecha_hora);
 					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
@@ -379,7 +380,7 @@ const AgendarTratamiento = (props) => {
 		const response = await findDatesByDateAndSucursal(filterDate.getDate(), (filterDate.getMonth() + 1), filterDate.getFullYear(), sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
-				item.folio = generateFolioCita(item);
+				item.folio = generateFolio(item);
 				const fecha = new Date(item.fecha_hora);
 				item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);

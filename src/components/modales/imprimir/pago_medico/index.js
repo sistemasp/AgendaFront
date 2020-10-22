@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
-import { addZero, generateFolioCita } from '../../../../utils/utils';
+import { addZero, generateFolio } from '../../../../utils/utils';
 import ModalFormImprimirPagoMedico from './ModalFormImprimirPagoMedico';
 import {
   findConsultsByPayOfDoctorTurno,
@@ -221,7 +221,7 @@ const ModalImprimirPagoMedico = (props) => {
         setIsLoading(false);
       }
     }
-
+    handleObtenerInformacion();
   };
 
   const handleObtenerInformacion = async () => {

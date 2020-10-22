@@ -8,6 +8,7 @@ import ModalConsultorio from '../../components/modales/modal_consultorio';
 import ModalNuevoIngreso from '../../components/modales/modal_nuevo_ingreso';
 import ModalNuevoEgreso from '../../components/modales/modal_nuevo_egreso';
 import { toFormatterCurrency } from '../../utils/utils';
+import ModalImprimirCorte from '../../components/modales/imprimir/corte';
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -46,6 +47,8 @@ export const CorteContainer = (props) => {
     onObtenerInformacion,
     openModalNuevoIngreso,
     openModalNuevoEgreso,
+    openModalImprimir,
+    handleOpenImprimir,
     handleOpenNuevoIngreso,
     handleOpenNuevoEgreso,
     sucursal,
@@ -56,7 +59,6 @@ export const CorteContainer = (props) => {
     detailPanelIngreso,
     detailPanelEgreso,
     handleGenerateCorte,
-    onClickImprimirCorte,
     corte,
   } = props;
 
@@ -105,6 +107,21 @@ export const CorteContainer = (props) => {
             setSeverity={setSeverity} /> : ''
       }
 
+{
+        openModalImprimir ?
+          <ModalImprimirCorte
+            open={openModalImprimir}
+            onClose={handleClose}
+            corte={corte}
+            sucursal={sucursal}
+            empleado={empleado}
+            dataIngresos={dataIngresos}
+            dataEgresos={dataEgresos}
+            setOpenAlert={setOpenAlert}
+            setMessage={setMessage}
+            setSeverity={setSeverity} /> : ''
+      }
+
       <Grid container spacing={2}>
         <Grid item xs={12} className={classes.label}>
           <h2 className={classes.labelItemCenter}>CORTE DEL TURNO: {turno === 'm' ? 'MATUTINO' : 'VESPERTINO'}</h2>
@@ -132,7 +149,7 @@ export const CorteContainer = (props) => {
                 className={classes.button}
                 color="primary"
                 variant="contained"
-                onClick={onClickImprimirCorte}
+                onClick={handleOpenImprimir}
                 text='Imprimir' />
               :
               <ButtonCustom

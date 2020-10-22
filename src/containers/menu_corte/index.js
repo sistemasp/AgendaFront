@@ -50,6 +50,7 @@ const Corte = (props) => {
 
   const [openModalNuevoIngreso, setOpenModalNuevoIngreso] = useState(false);
   const [openModalNuevoEgreso, setOpenModalNuevoEgreso] = useState(false);
+  const [openModalImprimir, setOpenModalInmprimir] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
   const [dataIngresos, setDataIngresos] = useState([]);
   const [dataEgresos, setDataEgresos] = useState([]);
@@ -321,9 +322,14 @@ const Corte = (props) => {
     setOpenModalNuevoEgreso(true);
   };
 
+  const handleOpenImprimir = () => {
+    setOpenModalInmprimir(true);
+  };
+
   const handleClose = () => {
     setOpenModalNuevoIngreso(false);
     setOpenModalNuevoEgreso(false);
+    setOpenModalInmprimir(false);
   };
 
   const handleCloseAlert = () => {
@@ -380,10 +386,12 @@ const Corte = (props) => {
             options={options}
             openModalNuevoIngreso={openModalNuevoIngreso}
             openModalNuevoEgreso={openModalNuevoEgreso}
+            openModalImprimir={openModalImprimir}
             dataIngresos={dataIngresos}
             dataEgresos={dataEgresos}
             handleOpenNuevoIngreso={handleOpenNuevoIngreso}
             handleOpenNuevoEgreso={handleOpenNuevoEgreso}
+            handleOpenImprimir={handleOpenImprimir}
             handleClose={handleClose}
             turno={turno}
             onCambioTurno={() => handleCambioTurno()}

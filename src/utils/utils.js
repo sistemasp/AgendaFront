@@ -42,21 +42,26 @@ export const exportTableToExcel = (tableID, filename = '') => {
     }
 }
 
-export const generateFolioCita = (cita) => {
-    const date = new Date(cita.fecha_hora);
-    const cons = cita.consecutivo;
-    const consecutivo =  cons ? 
+export const generateFolio = (servicio) => {
+    const date = new Date(servicio.fecha_hora);
+    const cons = servicio.consecutivo;
+    /*const consecutivo =  cons ? 
     (
         cons < 10 ? '00' + cons : 
             (
                 cons < 100 ?  '0' + cons : cons
             ) 
     ) : 
-    'S/C';
+    'S/C';*/
 
-    const turno = date.getUTCHours() >= (date.getDay() === 6 ? 13 : 14) ? 'TV' : 'TM';
+    //const turno = date.getUTCHours() >= (date.getDay() === 6 ? 13 : 14) ? 'TV' : 'TM';
 
-    const folio = `${cita.sucursal.clave}${cita.servicio ? cita.servicio.clave : 'CON'}${date.getFullYear()}${addZero(date.getMonth() + 1)}${addZero(date.getDate())}${turno}${consecutivo}`;
+    //const folio = `${cita.sucursal.clave}${cita.servicio ? cita.servicio.clave : 'CON'}${date.getFullYear()}${addZero(date.getMonth() + 1)}${addZero(date.getDate())}${turno}${consecutivo}`;
     //return folio;
     return cons;
+}
+
+export const dateToString = (date) => {
+    const parseDate = new Date(date);
+    return `${addZero(parseDate.getDate())}/${addZero(parseDate.getMonth() + 1)}/${parseDate.getFullYear()}`;
 }

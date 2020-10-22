@@ -16,7 +16,7 @@ import {
 import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import EditIcon from '@material-ui/icons/Edit';
-import { toFormatterCurrency, addZero, generateFolioCita } from "../../utils/utils";
+import { toFormatterCurrency, addZero, generateFolio } from "../../utils/utils";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
@@ -159,7 +159,8 @@ const AgendarConsulta = (props) => {
 			color: '#FFF',
 			fontWeight: 'bolder',
 			fontSize: '18px'
-		}
+		},
+		paging: false,
 	}
 
 	useEffect(() => {
@@ -169,7 +170,7 @@ const AgendarConsulta = (props) => {
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
 					const fecha = new Date(item.fecha_hora);
-					item.folio = generateFolioCita(item);
+					item.folio = generateFolio(item);
 					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
@@ -274,7 +275,7 @@ const AgendarConsulta = (props) => {
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
 				const fecha = new Date(item.fecha_hora);
-				item.folio = generateFolioCita(item);
+				item.folio = generateFolio(item);
 				item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
