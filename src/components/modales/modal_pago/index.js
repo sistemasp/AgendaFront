@@ -72,6 +72,7 @@ const ModalPago = (props) => {
   const tarjetaMetodoPagoId = process.env.REACT_APP_METODO_PAGO_TARJETA;
   const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
   const consultaTratamientoId = process.env.REACT_APP_CONSULTA_TRATAMIENTO_ID;
+  const pagoAnticipadoMetodoPagoId = process.env.REACT_APP_PAGO_ANTICIPADO_METODO_PAGO_ID;
 
   useEffect(() => {
     const loadBancos = async () => {
@@ -182,60 +183,60 @@ const ModalPago = (props) => {
     rowData.servicio = servicio._id;
     rowData.tipo_servicio = tipoServicioId;
     rowData.porcentaje_descuento = `${rowData.porcentaje_descuento} %`;
-    const res = pago._id ? await updatePago(pago._id, rowData) : await createPago(rowData);
-    if (`${res.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
-      || `${res.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-      const data = res.data;
-      let tipoIngreso = '';
 
-      switch (data.tipo_servicio) {
-        case servicioFacialId:
-          tipoIngreso = tipoIngresoFacialesId;
-          break;
-        case servicioLaserId:
-          tipoIngreso = tipoIngresoLaserId;
-          break;
-        case servicioAparatologiaId:
-          tipoIngreso = tipoIngresoAparatologiaId;
-          break;
-        case servicioConsultaId:
-          tipoIngreso = tipoIngresoConsultaId;
-          break;
-        case servicioCirugiaId:
-          tipoIngreso = tipoIngresoCirugiaId;
-          break;
-        case servicioBiopsiaId:
-          tipoIngreso = tipoIngresoOtrosId;
-          break;
-        case servicioEsteticaId:
-          tipoIngreso = tipoIngresoEsteticaId;
-          break
-        default:
-          tipoIngreso = tipoIngresoOtrosId;
-          break;
-      }
+    let tipoIngreso = '';
 
-      const create_date = new Date();
-      create_date.setHours(create_date.getHours() - 5);
+    switch (rowData.tipo_servicio) {
+      case servicioFacialId:
+        tipoIngreso = tipoIngresoFacialesId;
+        break;
+      case servicioLaserId:
+        tipoIngreso = tipoIngresoLaserId;
+        break;
+      case servicioAparatologiaId:
+        tipoIngreso = tipoIngresoAparatologiaId;
+        break;
+      case servicioConsultaId:
+        tipoIngreso = tipoIngresoConsultaId;
+        break;
+      case servicioCirugiaId:
+        tipoIngreso = tipoIngresoCirugiaId;
+        break;
+      case servicioBiopsiaId:
+        tipoIngreso = tipoIngresoOtrosId;
+        break;
+      case servicioEsteticaId:
+        tipoIngreso = tipoIngresoEsteticaId;
+        break
+      default:
+        tipoIngreso = tipoIngresoOtrosId;
+        break;
+    }
 
-      const ingreso = {
-        create_date: create_date,
-        recepcionista: empleado._id,
-        concepto: `Folio: ${generateFolio(servicio)}`,
-        cantidad: data.total,
-        tipo_ingreso: tipoIngreso,
-        sucursal: sucursal,
-        metodo_pago: data.metodo_pago,
-      }
-      const response = await createIngreso(ingreso);
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+    const create_date = new Date();
+    create_date.setHours(create_date.getHours() - 5);
+
+    const ingreso = {
+      create_date: create_date,
+      recepcionista: empleado._id,
+      concepto: `Folio: ${generateFolio(servicio)}`,
+      cantidad: rowData.total,
+      tipo_ingreso: tipoIngreso,
+      sucursal: sucursal,
+      metodo_pago: rowData.pago_anticipado ? pagoAnticipadoMetodoPagoId : rowData.metodo_pago,
+    }
+    const response = await createIngreso(ingreso);
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+      rowData.ingreso = response.data._id;
+      const res = pago._id ? await updatePago(pago._id, rowData) : await createPago(rowData);
+      if (`${res.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
+        || `${res.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
         onClose();
         loadPagos();
       }
-
-
-
     }
+
+
   }
 
   return (

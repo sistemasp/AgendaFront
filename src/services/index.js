@@ -961,7 +961,6 @@ export const findPaysByRangeDateAndSucursal = async (diai, mesi, anioi, diaf, me
 }
 
 export const findPagoByIds = async (pagosIds) => {
-    console.log('PAGOS IDS', pagosIds);
     try {
         const response = await axios({
             url: `${baseUrl}/pago/pagos/${pagosIds}`,
@@ -1007,6 +1006,18 @@ export const updatePago = async (pagoId, pago) => {
         return response;
     } catch (error) {
         console.log('updatePago', error);
+    }
+}
+
+export const deletePago = async (pagoId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/pago/${pagoId}`,
+            method: 'DELETE'
+        });
+        return response;
+    } catch (error) {
+        console.log('deletePago', error);
     }
 }
 
@@ -1574,6 +1585,43 @@ export const showIngresosTodayBySucursalAndTurno = async (sucursalId, turno) => 
         return response;
     } catch (error) {
         console.log('showIngresosTodayBySucursalAndTurno', error);
+    }
+}
+
+export const findIngresoById = async (ingresoId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/ingreso/${ingresoId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findIngresoById', error);
+    }
+}
+
+export const updateIngreso = async (ingresoId, ingreso) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/ingreso/${ingresoId}`,
+            method: 'PUT',
+            data: ingreso
+        });
+        return response;
+    } catch (error) {
+        console.log('updateIngreso', error);
+    }
+}
+
+export const deleteIngreso = async (ingresoId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/ingreso/${ingresoId}`,
+            method: 'DELETE'
+        });
+        return response;
+    } catch (error) {
+        console.log('deleteIngreso', error);
     }
 }
 

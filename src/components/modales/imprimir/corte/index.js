@@ -33,12 +33,10 @@ const ModalImprimirCorte = (props) => {
   const [metodoPagos, setMetodoPagos] = useState([]);
 
   const handleClickImprimir = (e) => {
-
-    setShow(false);
     setTimeout(() => {
       window.print();
-    }, 0);
-    setTimeout(() => { setShow(true); }, 15);
+    }, 500);
+    setTimeout(() => { onClose(); }, 550);
   }
 
   useEffect(() => {
@@ -67,6 +65,7 @@ const ModalImprimirCorte = (props) => {
     loadTipoIngreso();
     loadTipoEgreso();
     loadMetodoPago();
+    handleClickImprimir();
   }, []);
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { 
+import {
   getAllServices,
   findTreatmentByServicio,
   getAllSchedules,
@@ -9,6 +9,11 @@ import {
   showAllTipoCitas,
   showAllStatus,
   createDate,
+  updateIngreso,
+  updatePago,
+  deleteIngreso,
+  deletePago,
+  findIngresoById,
 } from "../../../services";
 import * as Yup from "yup";
 import ModalFormCita from './ModalFormCita';
@@ -42,10 +47,10 @@ const validationSchema = Yup.object({
 });
 
 const useStyles = makeStyles(theme => ({
-	backdrop: {
-		zIndex: theme.zIndex.drawer + 1,
-		color: '#fff',
-	},
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
 }));
 
 const ModalCita = (props) => {
@@ -107,6 +112,7 @@ const ModalCita = (props) => {
     medico: cita.medico ? cita.medico._id : '',
     tiempo: cita.tiempo,
     pagado: cita.pagado,
+    pagos: cita.pagos,
   });
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
@@ -115,6 +121,9 @@ const ModalCita = (props) => {
   const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
   const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
   const reagendoStatusId = process.env.REACT_APP_REAGENDO_STATUS_ID;
+  const canceloCPServicioId = process.env.REACT_APP_CANCELO_CP_STATUS_ID;
+  const canceloSPServicioId = process.env.REACT_APP_CANCELO_SP_STATUS_ID;
+  const pagoAnticipadoMetodoPagoId = process.env.REACT_APP_PAGO_ANTICIPADO_METODO_PAGO_ID;
 
   useEffect(() => {
     const loadTratamientos = async () => {
@@ -154,19 +163,19 @@ const ModalCita = (props) => {
     }
 
     const loadTipoCitas = async () => {
-			const response = await showAllTipoCitas();
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setTipoCitas(response.data);
-			}
-			setIsLoading(false);
+      const response = await showAllTipoCitas();
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setTipoCitas(response.data);
+      }
+      setIsLoading(false);
     }
-    
+
     const loadStaus = async () => {
       const response = await showAllStatus();
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setStatements(response.data);
-			}
-			setIsLoading(false);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setStatements(response.data);
+      }
+      setIsLoading(false);
     }
 
     setIsLoading(true);
@@ -214,30 +223,30 @@ const ModalCita = (props) => {
   const handleChangeFecha = async (date) => {
     setIsLoading(true);
     const fechaObservaciones = `${addZero(date.getDate())}/${addZero(Number(date.getMonth() + 1))}/${date.getFullYear()} - ${values.hora} hrs`;
-		await setValues({
-			...values,
+    await setValues({
+      ...values,
       nueva_fecha_hora: date,
       observaciones: fechaObservaciones,
-		});
-		await loadHorarios(date);
+    });
+    await loadHorarios(date);
     setIsLoading(false);
-	};
+  };
 
-	const handleChangeHora = e => {
-		setIsLoading(true);
-		const hora = (e.target.value).split(':');
-		const date = new Date(values.nueva_fecha_hora);
-		date.setHours(Number(hora[0]) - 5); // -5 por zona horaria
-		date.setMinutes(hora[1]);
+  const handleChangeHora = e => {
+    setIsLoading(true);
+    const hora = (e.target.value).split(':');
+    const date = new Date(values.nueva_fecha_hora);
+    date.setHours(Number(hora[0]) - 5); // -5 por zona horaria
+    date.setMinutes(hora[1]);
     date.setSeconds(0);
     const fechaObservaciones = `${addZero(date.getDate())}/${addZero(Number(date.getMonth() + 1))}/${date.getFullYear()} - ${e.target.value} hrs`;
-		setValues({
+    setValues({
       ...values,
       nueva_fecha_hora: date,
       hora: e.target.value,
       observaciones: fechaObservaciones,
     });
-		setIsLoading(false);
+    setIsLoading(false);
   };
 
   const handleChangeTipoCita = e => {
@@ -254,7 +263,7 @@ const ModalCita = (props) => {
 
   const handleChangeStatus = e => {
     setPreviousState(values.status);
-    const estado = statements.find( statement => {
+    const estado = statements.find(statement => {
       return statement._id === e.target.value;
     });
     setOpenModalConfirmacion(estado.confirmacion);
@@ -279,6 +288,26 @@ const ModalCita = (props) => {
   }
 
   const handleOnClickActualizarCita = async (event, rowData) => {
+    if (rowData.pagado) {
+      if (rowData.status === canceloCPServicioId) {
+        rowData.pagos.forEach(async (pago) => {
+          pago.pago_anticipado = true;
+          const ingreso = await findIngresoById(pago.ingreso);
+          if (`${ingreso.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+            const updateIngresoData = ingreso.data;
+            updateIngresoData.metodo_pago = pagoAnticipadoMetodoPagoId;
+            await updateIngreso(updateIngresoData._id, updateIngresoData);
+            await updatePago(pago._id, pago);
+          }
+        });
+      } else if (rowData.status === canceloSPServicioId) {
+        rowData.pagos.forEach(async (pago) => {
+          await deleteIngreso(pago.ingreso);
+          await deletePago(pago._id);
+        });
+        rowData.pagado = false;
+      }
+    }
     if (rowData.status._id !== pendienteStatusId) {
       rowData.quien_confirma = empleado._id;
       if (rowData.status === asistioStatusId) {
@@ -364,7 +393,11 @@ const ModalCita = (props) => {
     setOpenModalConfirmacion(false);
   }
 
-  const handleGuardarModalPagos = () => {
+  const handleGuardarModalPagos = (pagos) => {
+    setValues({
+      ...values,
+      pagos: pagos,
+    });
     setOpenModalPagos(false);
   }
 
