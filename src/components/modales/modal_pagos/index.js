@@ -42,8 +42,6 @@ const ModalPagos = (props) => {
     { title: 'Descuento(%)', field: 'porcentaje_descuento' },
     { title: 'Descuento', field: 'descuento_moneda' },
     { title: 'Subtotal', field: 'subtotal_moneda' },
-    { title: 'Comision(%)', field: 'porcentaje_comision' },
-    { title: 'Comision', field: 'comision_moneda' },
     { title: 'Total', field: 'total_moneda' },
     { title: 'Banco', field: 'banco_nombre' },
     { title: 'Tipo Tarjeta', field: 'tipo_tarjeta_nombre' },
@@ -51,8 +49,6 @@ const ModalPagos = (props) => {
     { title: 'Pago confirmado', field: 'deposito_confirmado' },
     { title: 'Observaciones', field: 'observaciones' },
   ];
-
-  console.log("SERVICIO", servicio);
   
   const options = {
     headerStyle: {

@@ -6,6 +6,7 @@ import bannerMePiel from './../../../../bannerMePiel.PNG';
 import { EventNote } from '@material-ui/icons';
 import Corte from '../../../../containers/menu_corte';
 import { dateToString, toFormatterCurrency } from '../../../../utils/utils';
+import { number } from 'yup';
 
 function getModalStyle() {
   const top = 50;
@@ -51,6 +52,12 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center',
     marginTop: '0px',
     marginBottom: '0px',
+  },
+  label_utilidad_perdida: {
+    textAlign: 'center',
+    marginTop: '0px',
+    marginBottom: '0px',
+    fontSize: '38px',
   },
   label_title_ingresos: {
     backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
@@ -127,6 +134,8 @@ const ModalFormImprimirCorte = (props) => {
   let retirosParciales = 0;
   let otrosEgresos = 0;
 
+  let totalesIngresos = [0, 0, 0, 0, 0, 0, 0, 0];
+
   return (
     <div>
       <Modal
@@ -191,23 +200,26 @@ const ModalFormImprimirCorte = (props) => {
                         {
                           dataIngresos ? dataIngresos.filter(dataIngreso => {
                             return dataIngreso.metodo_pago === metodoPago.nombre
-                          }).map(dataIngreso => {
+                          }).map((dataIngreso) => {
                             totalIngresos += dataIngreso.total;
                             totalEfectivo += dataIngreso.metodo_pago === 'EFECTIVO' ? dataIngreso.total : 0;
 
                             return (
                               <Fragment>
                                 {
-                                  tipoIngresos.map(tipoIngreso => {
+                                  tipoIngresos.map((tipoIngreso, index) => {
                                     const ingreso = dataIngreso.tipo_ingresos_detalles.find(detalle => {
                                       return detalle.tipo_ingreso === tipoIngreso.nombre;
                                     });
-                                    return <Grid item xs={true} className={classes.label}>
-                                      <h3 className={classes.label_cells}>{ingreso ? ingreso.total_moneda : '-'}</h3>
-                                    </Grid>
+                                    totalesIngresos[index] += ingreso ? Number(ingreso.total) : Number(0);
+                                    return (
+                                      <Grid item xs={true} className={classes.label}>
+                                        <p className={classes.label_cells}>{ingreso ? ingreso.total_moneda : '-'}</p>
+                                      </Grid>
+                                    )
                                   })
                                 }
-                                <Grid item xs={true} className={classes.label_cells}>
+                                <Grid item xs={true} className={classes.label_cells_total}>
                                   <h3 className={classes.label_cells}>{dataIngreso.total_moneda}</h3>
                                 </Grid>
                               </Fragment>
@@ -222,6 +234,18 @@ const ModalFormImprimirCorte = (props) => {
               }
               <Grid item xs={true} className={classes.label}>
                 <h3 className={classes.label_cells_totales}>TOTALES</h3>
+              </Grid>
+              {
+                totalesIngresos.map(val => {
+                  return (
+                    <Grid item xs={true} className={classes.label}>
+                      <h3 className={classes.label_cells_totales}>{toFormatterCurrency(val)}</h3>
+                    </Grid>
+                  )
+                })
+              }
+              <Grid item xs={true} className={classes.label}>
+                <h3 className={classes.label_cells_totales}>{toFormatterCurrency(totalIngresos)}</h3>
               </Grid>
             </Grid>
             {
@@ -243,14 +267,14 @@ const ModalFormImprimirCorte = (props) => {
                       <p className={classes.label_title_ingresos}>CANTIDAD</p>
                     </Grid>
                     {
-                      dataEgreso.egresos_por_tipo.map(egreso => {
+                      dataEgreso.egresos_por_tipo.map((egreso) => {
                         return (
                           <Fragment>
                             <Grid item xs={9} className={classes.label}>
                               <h3 className={classes.label_cells_concepto}>{egreso.concepto}</h3>
                             </Grid>
                             <Grid item xs={3} className={classes.label}>
-                              <h3 className={classes.label_cells_total}>{egreso.cantidad_moneda}</h3>
+                              <p className={classes.label_cells_total}>{egreso.cantidad_moneda}</p>
                             </Grid>
                           </Fragment>
 
@@ -261,7 +285,7 @@ const ModalFormImprimirCorte = (props) => {
                 );
               })
             }
-            <Grid container xs={6} className={classes.grid_right}>
+            <Grid container xs={6} className={classes.grid_left}>
               <Grid item xs={12} className={classes.label}>
                 <h2 className={classes.label_title_descripcion}> BALANCE </h2>
               </Grid>
@@ -273,42 +297,61 @@ const ModalFormImprimirCorte = (props) => {
               </Grid>
 
               <Grid item xs={8} className={classes.label}>
-                <p className={classes.label_cells_concepto}>TOTAL INGRESOS BRUTOS</p>
+                <h3 className={classes.label_cells_concepto}>TOTAL INGRESOS BRUTOS</h3>
               </Grid>
               <Grid item xs={4} className={classes.label}>
-                <p className={classes.label_cells}>{toFormatterCurrency(totalIngresos)}</p>
+                <h3 className={classes.label_cells}>{toFormatterCurrency(totalIngresos)}</h3>
               </Grid>
 
               <Grid item xs={8} className={classes.label}>
-                <p className={classes.label_cells_concepto}>TOTAL EN EFECTIVO</p>
+                <h3 className={classes.label_cells_concepto}>TOTAL EN EFECTIVO</h3>
               </Grid>
               <Grid item xs={4} className={classes.label}>
-                <p className={classes.label_cells}>{toFormatterCurrency(totalEfectivo)}</p>
+                <h3 className={classes.label_cells}>{toFormatterCurrency(totalEfectivo)}</h3>
               </Grid>
 
               <Grid item xs={8} className={classes.label}>
-                <p className={classes.label_cells_concepto}>TOTAL PAGO MEDICOS</p>
+                <h3 className={classes.label_cells_concepto}>TOTAL PAGO MEDICOS</h3>
               </Grid>
               <Grid item xs={4} className={classes.label}>
-                <p className={classes.label_cells}>{toFormatterCurrency(pagoMedicos)}</p>
+                <h3 className={classes.label_cells}>{toFormatterCurrency(pagoMedicos)}</h3>
               </Grid>
 
               <Grid item xs={8} className={classes.label}>
-                <p className={classes.label_cells_concepto}>TOTAL RETIROS PARCIALES</p>
+                <h3 className={classes.label_cells_concepto}>TOTAL RETIROS PARCIALES</h3>
               </Grid>
               <Grid item xs={4} className={classes.label}>
-                <p className={classes.label_cells}>{toFormatterCurrency(retirosParciales)}</p>
+                <h3 className={classes.label_cells}>{toFormatterCurrency(retirosParciales)}</h3>
               </Grid>
 
               <Grid item xs={8} className={classes.label}>
-                <p className={classes.label_cells_concepto}>TOTAL OTROS EGRESOS</p>
+                <h3 className={classes.label_cells_concepto}>TOTAL OTROS EGRESOS</h3>
               </Grid>
               <Grid item xs={4} className={classes.label}>
-                <p className={classes.label_cells}>{toFormatterCurrency(otrosEgresos)}</p>
+                <h3 className={classes.label_cells}>{toFormatterCurrency(otrosEgresos)}</h3>
               </Grid>
-
             </Grid>
+
+            <Grid container xs={6} className={classes.grid_right}>
+              <Grid item xs={12} className={classes.label}>
+                <h1 className={classes.label_utilidad_perdida}>{`UTILIDAD O PÉRDIDA: ${toFormatterCurrency(totalEfectivo - pagoMedicos - retirosParciales - otrosEgresos)}`}<br/><br/></h1>
+              </Grid>
+              <Grid container>
+                <Grid item xs={true}>
+                  <h3 className={classes.label_title_descripcion}>_____________________________</h3>
+                  <h3 className={classes.label_title_descripcion}>REALIZÓ</h3>
+                </Grid>
+
+                <Grid item xs={true} className={classes.label}>
+                  <h3 className={classes.label_title_descripcion}>_____________________________</h3>
+                  <h3 className={classes.label_title_descripcion}>RECIBIÓ</h3>
+                </Grid>
+              </Grid>
+            </Grid>
+
           </Grid>
+
+
         </div>
       </Modal>
     </div>

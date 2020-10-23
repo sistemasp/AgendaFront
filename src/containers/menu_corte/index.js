@@ -217,7 +217,6 @@ const Corte = (props) => {
 
           tipoIngresosDetalles.push(tipoIngresoDetalle);
         }
-
       });
 
       let total = 0;
