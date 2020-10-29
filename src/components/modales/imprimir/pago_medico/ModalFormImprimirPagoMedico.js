@@ -90,6 +90,7 @@ const ModalFormImprimirPagoMedico = (props) => {
   const derivadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_DERIVADO_ID;
   const realizadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_REALIZADO_ID;
   const noAplicaTipoCitaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
+  const manuelAcunaSucursalId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
 
   return (
     <div>
@@ -324,13 +325,13 @@ const ModalFormImprimirPagoMedico = (props) => {
                   cita.areas.map(area => {
                     switch (cita.tipo_cita) {
                       case revisadoTipoCitaId:
-                        comisionMedico += Number(area.comision_revisado);
+                        comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
                         break;
                       case derivadoTipoCitaId:
-                        comisionMedico += Number(area.comision_derivado);
+                        comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
                         break;
                       case realizadoTipoCitaId:
-                        comisionMedico += Number(area.comision_realizado);
+                        comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
                         break;
                       case noAplicaTipoCitaId:
                         comisionMedico += Number(0);

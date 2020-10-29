@@ -60,6 +60,7 @@ export const AgendarTratamientoContainer = (props) => {
 		promovendedores,
 		cosmetologas,
 		onChangeDoctors,
+		onChangeTipoCita,
 		onChangePromovendedor,
 		onChangeCosmetologa,
 		onChangeMedio,
@@ -77,7 +78,6 @@ export const AgendarTratamientoContainer = (props) => {
 		cita,
 		onClickActualizarCita,
 		onClickCancel,
-		onChangeTipoCita,
 		onChangeAsistio,
 		loadCitas,
 		setFilterDate,
@@ -219,7 +219,7 @@ export const AgendarTratamientoContainer = (props) => {
 										error={Boolean(errors.tipoCita)}
 										onChange={onChangeTipoCita}
 										label="Tipo Cita" >
-										{tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+										{tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
 									</Select>
 								</FormControl>
 							</Grid>
@@ -288,7 +288,7 @@ export const AgendarTratamientoContainer = (props) => {
 								value={values.hora}
 								error={Boolean(errors.hora)}
 								onChange={onChangeHora}
-								disabled={values.fecha_hora === ''}
+								disabled={!values.fecha_hora}
 								label="Hora" >
 								{horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
 							</Select>

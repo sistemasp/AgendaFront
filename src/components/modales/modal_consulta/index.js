@@ -244,12 +244,10 @@ const ModalConsulta = (props) => {
       }
     }
 
-    if (rowData.status !== pendienteStatusId) {
-      rowData.quien_confirma_asistencia = empleado._id;
-      if (rowData.status === asistioStatusId && !rowData.hora_llegada) {
-        const dateNow = new Date();
-        rowData.hora_llegada = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
-      }
+    if (rowData.status._id !== pendienteStatusId && rowData.status === asistioStatusId) {
+      rowData.quien_confirma = empleado._id;
+      const dateNow = new Date();
+      rowData.hora_llegada = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
     }
 
     if (rowData.status === reagendoStatusId) {

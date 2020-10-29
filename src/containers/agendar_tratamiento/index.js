@@ -22,6 +22,7 @@ import * as Yup from "yup";
 import { toFormatterCurrency, addZero, generateFolio } from "../../utils/utils";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
+import { ContactPhoneSharp } from "@material-ui/icons";
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;

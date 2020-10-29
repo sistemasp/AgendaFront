@@ -55,6 +55,7 @@ const ModalImprimirPagoMedico = (props) => {
   const noAplicaTipoCitaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
   const pagoMedicoTipoEgresoId = process.env.REACT_APP_TIPO_EGRESO_PAGO_MEDICO_ID;
   const efectivoMetodoPagoId = process.env.REACT_APP_METODO_PAGO_EFECTIVO;
+  const manuelAcunaSucursalId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
 
   const loadConsultas = async () => {
     const date = new Date();
@@ -155,15 +156,17 @@ const ModalImprimirPagoMedico = (props) => {
     citas.forEach(cita => {
       let comisionMedico = 0;
       cita.areas.forEach(area => {
+        console.log("FSFSDFSDF", sucursal._id !== manuelAcunaSucursalId, manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
+
         switch (cita.tipo_cita) {
           case revisadoTipoCitaId:
-            comisionMedico += Number(area.comision_revisado);
+            comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
             break;
           case derivadoTipoCitaId:
-            comisionMedico += Number(area.comision_derivado);
+            comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
             break;
           case realizadoTipoCitaId:
-            comisionMedico += Number(area.comision_realizado);
+            comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
             break;
           case noAplicaTipoCitaId:
             comisionMedico += Number(0);

@@ -129,7 +129,8 @@ const ListaEspera = (props) => {
 		},
 		exportAllData: true,
 		exportButton: false,
-		exportDelimiter: ';'
+		exportDelimiter: ';',
+		paging: false,
 	}
 
 	const optionsEspera = {

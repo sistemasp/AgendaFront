@@ -66,11 +66,14 @@ const AgendarConsulta = (props) => {
 	const [isHoliDay, setIsHoliDay] = useState(false);
 	const [values, setValues] = useState({
 		hora: '',
+		fecha_hora: new Date(),
 		paciente: `${paciente._id}`,
 		precio: isHoliDay ? sucursal.precio_festivo : // Dia Festivo
 			date.getDay() === 6 ? (date.getHours() >= 13 ? sucursal.precio_sabado_vespertino : sucursal.precio_sabado_matutino) // SABADO
 				: (date.getHours() >= 14 ? sucursal.precio_vespertino : sucursal.precio_matutino), // L-V
 	});
+
+	console.log("DATERTETTE", values);
 
 	const [citas, setConsultas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
@@ -171,7 +174,7 @@ const AgendarConsulta = (props) => {
 				await response.data.forEach(item => {
 					const fecha = new Date(item.fecha_hora);
 					item.folio = generateFolio(item);
-					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
+					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
@@ -224,6 +227,7 @@ const AgendarConsulta = (props) => {
 		loadTipoCitas();
 		loadFrecuencias();
 		loadMedios();
+		loadHorarios(values.fecha_hora);
 	}, [sucursal, medicoRolId, promovendedorRolId]);
 
 	const loadHorarios = async (date) => {
@@ -250,7 +254,7 @@ const AgendarConsulta = (props) => {
 		setIsLoading(true);
 		const hora = (e.target.value).split(':');
 		const date = values.fecha_hora;
-		date.setHours(Number(hora[0]) - 5); // -5 por zona horaria
+		date.setHours(Number(hora[0])); // -5 por zona horaria
 		date.setMinutes(hora[1]);
 		date.setSeconds(0);
 		setValues({ ...values, hora: e.target.value, fecha_hora: date });
@@ -276,7 +280,7 @@ const AgendarConsulta = (props) => {
 			response.data.forEach(item => {
 				const fecha = new Date(item.fecha_hora);
 				item.folio = generateFolio(item);
-				item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
+				item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
@@ -317,12 +321,12 @@ const AgendarConsulta = (props) => {
 		data.hora_salida = '--:--';
 		data.servicio = consultaServicioId;
 		data.tipo_cita = data.frecuencia === frecuenciaPrimeraVezId ? tipoCitaRevisionId : tipoCitaDerivadaId;
+		//data.fecha_hora = new Date(values.fecha_hora.toGTMString());
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 
 		if (sucursal._id !== sucursalManuelAcunaId) {
 			const dateNow = new Date();
 			data.hora_llegada = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
-			dateNow.setHours(dateNow.getHours() - 5);
 			dateNow.setMinutes(0);
 			dateNow.setSeconds(0);
 			data.fecha_hora = dateNow;
@@ -330,6 +334,7 @@ const AgendarConsulta = (props) => {
 			data.status = asistioStatusId;
 			// data.quien_confirma_asistencia = empleado._id;
 		}
+		console.log("DATERTETTE", data);
 
 		const response = await createConsult(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
