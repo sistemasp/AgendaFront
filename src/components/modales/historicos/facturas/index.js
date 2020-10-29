@@ -54,9 +54,9 @@ const ModHistoricoFacturas = (props) => {
             item.uso_cfdi_nombre = `${item.uso_cfdi.clave}: ${item.uso_cfdi.descripcion}`;
             const date = new Date(item.fecha_hora);
             const dia = addZero(date.getDate());
-            const mes = addZero(date.getMonth() + 1);
+            const mes = addZero(date.getMonth());
             const anio = date.getFullYear();
-            const hora = Number(date.getHours() + 5);
+            const hora = Number(date.getHours());
             const minutos = date.getMinutes();
             item.fecha_show = `${dia}/${mes}/${anio}`;
             item.hora = `${addZero(hora)}:${addZero(minutos)}`;

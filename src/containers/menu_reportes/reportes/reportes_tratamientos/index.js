@@ -56,7 +56,7 @@ const ReportesTratamientos = (props) => {
 		{ title: 'Motivos', field: 'motivos' },
 		{ title: 'Precio', field: 'precio_moneda' },
 		{ title: 'Tiempo (minutos)', field: 'tiempo' },
-		{ title: 'Sucursal', field: 'sucursal.nombre'},
+		{ title: 'Sucursal', field: 'sucursal.nombre' },
 		{ title: 'Observaciones', field: 'observaciones' },
 	];
 
@@ -82,32 +82,32 @@ const ReportesTratamientos = (props) => {
 		exportDelimiter: ';'
 	}
 
-	useEffect(() => {
-
-		const loadCitas = async () => {
-			const response = await findDatesByRangeDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(),
-				date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
-
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				await response.data.forEach(item => {
-					item.precio_moneda = toFormatterCurrency(item.precio);
-					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
-					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-					item.show_tratamientos = item.tratamientos.map(tratamiento => {
-						return `${tratamiento.nombre}, `;
-					});
-					const date = new Date(item.fecha_hora);
-					item.fecha_show = `${addZero(date.getDate())}/${addZero(date.getMonth() + 1)}/${date.getFullYear()}`;
+	const loadCitas = async (startDate, endDate) => {
+		const response = await findDatesByRangeDateAndSucursal(startDate.getDate(), startDate.getMonth(), startDate.getFullYear(),
+			endDate.getDate(), (endDate.getMonth() + 1), endDate.getFullYear(), sucursal);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			response.data.forEach(item => {
+				const fecha = new Date(item.fecha_hora);
+				item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
+				item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
+				item.precio_moneda = toFormatterCurrency(item.precio);
+				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
+				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
+				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
+				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.show_tratamientos = item.tratamientos.map(tratamiento => {
+					return `${tratamiento.nombre}, `;
 				});
-				setCitas(response.data);
-			}
+			});
+			setCitas(response.data);
 		}
+	}
+
+	useEffect(() => {
 		setIsLoading(true);
-		loadCitas();
+		loadCitas(startDate.fecha_show, endDate.fecha_show);
 		setIsLoading(false);
-	}, [sucursal]);
+	}, [startDate, endDate]);
 
 	const handleChangeStartDate = async (date) => {
 		setIsLoading(true);
@@ -136,28 +136,6 @@ const ReportesTratamientos = (props) => {
 
 	const handleReportes = async () => {
 		await loadCitas(startDate.fecha_show, endDate.fecha_show);
-	}
-
-	const loadCitas = async (startDate, endDate) => {
-		const response = await findDatesByRangeDateAndSucursal(startDate.getDate(), (startDate.getMonth() + 1), startDate.getFullYear(),
-			endDate.getDate(), (endDate.getMonth() + 1), endDate.getFullYear(), sucursal);
-		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-			response.data.forEach(item => {
-				item.precio_moneda = toFormatterCurrency(item.precio);
-
-				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
-				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-				item.show_tratamientos = item.tratamientos.map(tratamiento => {
-					return `${tratamiento.nombre}, `;
-				});
-
-				const date = new Date(item.fecha_hora);
-				item.fecha_show = `${addZero(date.getDate())}/${addZero(date.getMonth() + 1)}/${date.getFullYear()}`;
-			});
-			setCitas(response.data);
-		}
 	}
 
 	const actions = [

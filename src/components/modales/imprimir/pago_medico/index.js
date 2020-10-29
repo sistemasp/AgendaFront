@@ -59,7 +59,7 @@ const ModalImprimirPagoMedico = (props) => {
 
   const loadConsultas = async () => {
     const date = new Date();
-    const response = await findConsultsByPayOfDoctorTurno(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal._id, medico._id, atendidoId, turno);
+    const response = await findConsultsByPayOfDoctorTurno(date.getDate(), date.getMonth(), date.getFullYear(), sucursal._id, medico._id, atendidoId, turno);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setConsultas(response.data);
     }
@@ -67,7 +67,7 @@ const ModalImprimirPagoMedico = (props) => {
 
   const loadConsultasPrimeraVez = async () => {
     const date = new Date();
-    const response = await findConsultsByPayOfDoctorTurnoFrecuencia(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal._id, medico._id, atendidoId, turno, primeraVezFrecuenciaId);
+    const response = await findConsultsByPayOfDoctorTurnoFrecuencia(date.getDate(), date.getMonth(), date.getFullYear(), sucursal._id, medico._id, atendidoId, turno, primeraVezFrecuenciaId);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setConsultasPrimeraVez(response.data);
     }
@@ -75,7 +75,7 @@ const ModalImprimirPagoMedico = (props) => {
 
   const loadConsultasReconsulta = async () => {
     const date = new Date();
-    const response = await findConsultsByPayOfDoctorTurnoFrecuencia(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal._id, medico._id, atendidoId, turno, reconsultaFrecuenciaId);
+    const response = await findConsultsByPayOfDoctorTurnoFrecuencia(date.getDate(), date.getMonth(), date.getFullYear(), sucursal._id, medico._id, atendidoId, turno, reconsultaFrecuenciaId);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setConsultasReconsultas(response.data);
     }
@@ -83,7 +83,7 @@ const ModalImprimirPagoMedico = (props) => {
 
   const loadCirugias = async () => {
     const date = new Date();
-    const response = await findCirugiasByPayOfDoctorTurno(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal._id, medico._id, turno);
+    const response = await findCirugiasByPayOfDoctorTurno(date.getDate(), date.getMonth(), date.getFullYear(), sucursal._id, medico._id, turno);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setCirugias(response.data);
     }
@@ -91,7 +91,7 @@ const ModalImprimirPagoMedico = (props) => {
 
   const loadCitas = async () => {
     const date = new Date();
-    const response = await findDatesByPayOfDoctorTurno(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal._id, medico._id, atendidoId, turno);
+    const response = await findDatesByPayOfDoctorTurno(date.getDate(), date.getMonth(), date.getFullYear(), sucursal._id, medico._id, atendidoId, turno);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setCitas(response.data);
     }
@@ -99,7 +99,7 @@ const ModalImprimirPagoMedico = (props) => {
 
   const loadEsteticas = async () => {
     const date = new Date();
-    const response = await findEsteticasByPayOfDoctorTurno(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal._id, medico._id, turno);
+    const response = await findEsteticasByPayOfDoctorTurno(date.getDate(), date.getMonth(), date.getFullYear(), sucursal._id, medico._id, turno);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setEsteticas(response.data);
     }

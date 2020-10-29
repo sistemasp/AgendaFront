@@ -21,6 +21,7 @@ import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import FaceIcon from '@material-ui/icons/Face';
+import moment from "moment";
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -72,8 +73,6 @@ const AgendarConsulta = (props) => {
 			date.getDay() === 6 ? (date.getHours() >= 13 ? sucursal.precio_sabado_vespertino : sucursal.precio_sabado_matutino) // SABADO
 				: (date.getHours() >= 14 ? sucursal.precio_vespertino : sucursal.precio_matutino), // L-V
 	});
-
-	console.log("DATERTETTE", values);
 
 	const [citas, setConsultas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
@@ -169,7 +168,7 @@ const AgendarConsulta = (props) => {
 	useEffect(() => {
 
 		const loadConsultas = async () => {
-			const response = await findConsultsByDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal._id);
+			const response = await findConsultsByDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(), sucursal._id);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
 					const fecha = new Date(item.fecha_hora);
@@ -232,7 +231,7 @@ const AgendarConsulta = (props) => {
 
 	const loadHorarios = async (date) => {
 		const dia = date ? date.getDate() : values.fecha_show.getDate();
-		const mes = Number(date ? date.getMonth() : values.fecha_show.getMonth()) + 1;
+		const mes = Number(date ? date.getMonth() : values.fecha_show.getMonth());
 		const anio = date ? date.getFullYear() : values.fecha_show.getFullYear();
 		const response = await findScheduleInConsultByDateAndSucursal(consultaServicioId, dia, mes, anio, sucursal._id);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -275,7 +274,7 @@ const AgendarConsulta = (props) => {
 	};
 
 	const loadConsultas = async (filterDate) => {
-		const response = await findConsultsByDateAndSucursal(filterDate.getDate(), (filterDate.getMonth() + 1), filterDate.getFullYear(), sucursal._id);
+		const response = await findConsultsByDateAndSucursal(filterDate.getDate(), filterDate.getMonth(), filterDate.getFullYear(), sucursal._id);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
 				const fecha = new Date(item.fecha_hora);
@@ -323,7 +322,6 @@ const AgendarConsulta = (props) => {
 		data.tipo_cita = data.frecuencia === frecuenciaPrimeraVezId ? tipoCitaRevisionId : tipoCitaDerivadaId;
 		//data.fecha_hora = new Date(values.fecha_hora.toGTMString());
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
-
 		if (sucursal._id !== sucursalManuelAcunaId) {
 			const dateNow = new Date();
 			data.hora_llegada = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
@@ -334,7 +332,6 @@ const AgendarConsulta = (props) => {
 			data.status = asistioStatusId;
 			// data.quien_confirma_asistencia = empleado._id;
 		}
-		console.log("DATERTETTE", data);
 
 		const response = await createConsult(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {

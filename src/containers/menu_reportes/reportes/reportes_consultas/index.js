@@ -76,29 +76,28 @@ const ReportesConsultas = (props) => {
 		exportDelimiter: ';'
 	}
 
-	useEffect(() => {
-
-		const loadCitas = async () => {
-			const response = await findConsultsByRangeDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(),
-				date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
-
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				await response.data.forEach(item => {
-					const fecha = new Date(item.fecha_hora);
-					item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
-					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
-					item.precio_moneda = toFormatterCurrency(item.precio);
-					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
-					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-				});
-				setCitas(response.data);
-			}
+	const loadCitas = async (startDate, endDate) => {
+		const response = await findConsultsByRangeDateAndSucursal(startDate.getDate(), (startDate.getMonth()), startDate.getFullYear(),
+			endDate.getDate(), endDate.getMonth(), endDate.getFullYear(), sucursal);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			await response.data.forEach(item => {
+				const fecha = new Date(item.fecha_hora);
+				item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
+				item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
+				item.precio_moneda = toFormatterCurrency(item.precio);
+				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
+				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
+				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+			});
+			setCitas(response.data);
 		}
+	}
+
+	useEffect(() => {
 		setIsLoading(true);
-		loadCitas();
+		loadCitas(startDate.fecha_show, endDate.fecha_show);
 		setIsLoading(false);
-	}, [sucursal]);
+	}, [startDate, endDate]);
 
 	const handleChangeStartDate = async (date) => {
 		setIsLoading(true);
@@ -127,23 +126,6 @@ const ReportesConsultas = (props) => {
 
 	const handleReportes = async () => {
 		await loadCitas(startDate.fecha_show, endDate.fecha_show);
-	}
-
-	const loadCitas = async (startDate, endDate) => {
-		const response = await findConsultsByRangeDateAndSucursal(startDate.getDate(), (startDate.getMonth() + 1), startDate.getFullYear(),
-			endDate.getDate(), (endDate.getMonth() + 1), endDate.getFullYear(), sucursal);
-		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-			await response.data.forEach(item => {
-				const fecha = new Date(item.fecha_hora);
-				item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
-				item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
-				item.precio_moneda = toFormatterCurrency(item.precio);
-				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
-				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-			});
-			setCitas(response.data);
-		}
 	}
 
 	const actions = [

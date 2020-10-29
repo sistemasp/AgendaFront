@@ -83,7 +83,7 @@ const ModalCita = (props) => {
   const [openModalConfirmacion, setOpenModalConfirmacion] = useState(false);
 
   const fecha_cita = new Date(cita.fecha_hora);
-  const fecha = `${addZero(fecha_cita.getDate())}/${addZero(Number(fecha_cita.getMonth() + 1))}/${addZero(fecha_cita.getFullYear())}`;
+  const fecha = `${addZero(fecha_cita.getDate())}/${addZero(Number(fecha_cita.getMonth()))}/${addZero(fecha_cita.getFullYear())}`;
   const hora = `${addZero(Number(fecha_cita.getHours()) + 5)}:${addZero(fecha_cita.getMinutes())}`;
 
   const [values, setValues] = useState({
@@ -134,7 +134,7 @@ const ModalCita = (props) => {
     }
     const loadHorariosByServicio = async () => {
       const date = new Date(cita.fecha_hora);
-      const response = await findScheduleByDateAndSucursalAndService(date.getDate(), Number(date.getMonth() + 1), date.getFullYear(), cita.sucursal._id, cita.servicio._id);
+      const response = await findScheduleByDateAndSucursalAndService(date.getDate(), Number(date.getMonth()), date.getFullYear(), cita.sucursal._id, cita.servicio._id);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         response.data.push({ hora: values.hora });
         setHorarios(response.data);
@@ -239,7 +239,7 @@ const ModalCita = (props) => {
     date.setHours(Number(hora[0]) - 5); // -5 por zona horaria
     date.setMinutes(hora[1]);
     date.setSeconds(0);
-    const fechaObservaciones = `${addZero(date.getDate())}/${addZero(Number(date.getMonth() + 1))}/${date.getFullYear()} - ${e.target.value} hrs`;
+    const fechaObservaciones = `${addZero(date.getDate())}/${addZero(Number(date.getMonth()))}/${date.getFullYear()} - ${e.target.value} hrs`;
     setValues({
       ...values,
       nueva_fecha_hora: date,
@@ -333,7 +333,7 @@ const ModalCita = (props) => {
         setMessage('El Tratamiento se reagendo correctamente');
       }
       const dia = addZero(rowData.fecha_hora.getDate());
-      const mes = addZero(rowData.fecha_hora.getMonth() + 1);
+      const mes = addZero(rowData.fecha_hora.getMonth());
       const anio = rowData.fecha_hora.getFullYear();
       setFilterDate({
         fecha_show: rowData.fecha_hora,
@@ -342,7 +342,7 @@ const ModalCita = (props) => {
       await loadCitas(rowData.fecha_hora);
     } else {
       const dia = addZero(rowData.fecha_show.getDate());
-      const mes = addZero(rowData.fecha_show.getMonth() + 1);
+      const mes = addZero(rowData.fecha_show.getMonth());
       const anio = rowData.fecha_show.getFullYear();
       setFilterDate({
         fecha_show: rowData.fecha_show,
