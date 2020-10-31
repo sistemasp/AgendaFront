@@ -146,8 +146,8 @@ const AgendarConsulta = (props) => {
 		}
 	}
 
-	const dataComplete = !paciente.nombres || !values.precio
-		|| !values.medico || !values.promovendedor || (sucursal._id === sucursalManuelAcunaId ? !values.fecha_hora : false);
+	const dataComplete = !paciente.nombres || !values.precio || !values.medico
+		 || !values.promovendedor || (sucursal._id === sucursalManuelAcunaId ? (!values.fecha_hora || !values.medio) : false);
 
 	const options = {
 		rowStyle: rowData => {
@@ -395,11 +395,12 @@ const AgendarConsulta = (props) => {
 		const promovendedor = promovendedores.filter(item => {
 			return item._id === promovendedorSinAsignarId;
 		});
+		console.log("VALVALVLALV", frecuencia);
 		setValues({
 			...values,
 			frecuencia: frecuencia,
-			medico: frecuencia === frecuenciaPrimeraVezId ? medico[0] : {},
-			promovendedor: frecuencia === fercuenciaReconsultaId ? promovendedor[0] : {},
+			medico: frecuencia === frecuenciaPrimeraVezId ? medico[0] : undefined,
+			promovendedor: frecuencia === fercuenciaReconsultaId ? promovendedor[0] : undefined,
 		});
 	}
 

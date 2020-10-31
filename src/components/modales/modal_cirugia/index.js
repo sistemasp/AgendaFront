@@ -109,7 +109,6 @@ const ModalCirugia = (props) => {
 
   const handleClickCrearCirugia = async (event, data) => {
     const fecha_actual = new Date();
-    fecha_actual.setHours(fecha_actual.getHours() - 5);
     data.fecha_hora = fecha_actual;
     data.servicio = cirugiaServicioId;
     if (!data._id) {

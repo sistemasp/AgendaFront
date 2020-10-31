@@ -248,10 +248,22 @@ export const findDatesByRangeDateAndSucursal = async (diai, mesi, anioi, diaf, m
     }
 }
 
+export const findDatesByRangeDateAndSucursalAndService = async (diai, mesi, anioi, diaf, mesf, aniof, sucursalId, serviceId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cita/fecha_inicio/${diai}/${mesi}/${anioi}/fecha_fin/${diaf}/${mesf}/${aniof}/sucursal/${sucursalId}/service/${serviceId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findDatesByRangeDateAndSucursalAndService', error);
+    }
+}
+
 export const findHistoricByPaciente = async (pacienteId) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/cita/histotic/${pacienteId}`,
+            url: `${baseUrl}/cita/historic/${pacienteId}`,
             method: 'GET'
         });
         return response;
@@ -263,7 +275,7 @@ export const findHistoricByPaciente = async (pacienteId) => {
 export const findHistoricByPacienteAndService = async (pacienteId, serviceId) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/cita/histotic/${pacienteId}/servicio/${serviceId}`,
+            url: `${baseUrl}/cita/historic/${pacienteId}/servicio/${serviceId}`,
             method: 'GET'
         });
         return response;
@@ -777,7 +789,7 @@ export const findConsultsByRangeDateAndSucursal = async (diai, mesi, anioi, diaf
 export const findHistoricConsultByPaciente = async (pacienteId) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/consulta/histotic/${pacienteId}`,
+            url: `${baseUrl}/consulta/historic/${pacienteId}`,
             method: 'GET'
         });
         return response;
@@ -789,7 +801,7 @@ export const findHistoricConsultByPaciente = async (pacienteId) => {
 export const findHistoricConsultByMedico = async (medicoId) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/consulta/histotic/medico/${medicoId}`,
+            url: `${baseUrl}/consulta/historic/medico/${medicoId}`,
             method: 'GET'
         });
         return response;
@@ -1387,6 +1399,18 @@ export const waitingListCirugia = async (sucursalId, statusAsistioId) => {
     }
 }
 
+export const findCirugiasHistoricByPaciente = async (pacienteId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cirugia/historic/${pacienteId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findCirugiasHistoricByPaciente', error);
+    }
+}
+
 // ESTETICA ( TOXINAS Y RELLENOS )
 
 export const createEstetica = async (estetica) => {
@@ -1463,6 +1487,17 @@ export const waitingListEstetica = async (sucursalId, statusAsistioId) => {
     }
 }
 
+export const findEsteticasHistoricByPaciente = async (pacienteId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/estetica/historic/${pacienteId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findEsteticasHistoricByPaciente', error);
+    }
+}
 
 // CONSECUTIVOS 
 
@@ -1505,6 +1540,19 @@ export const findBiopsiasByRangeDateAndSucursal = async (diai, mesi, anioi, diaf
         console.log('findBiopsiasByRangeDateAndSucursal', error);
     }
 }
+
+export const findBiopsiasHistoricByPaciente = async (pacienteId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/biopsia/historic/${pacienteId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findBiopsiasHistoricByPaciente', error);
+    }
+}
+
 
 // TIPO ESTETICA
 

@@ -1,9 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { findHistoricByPacienteAndService } from "../../../../services";
 import Laser from './Laser';
 import { toFormatterCurrency, addZero } from '../../../../utils/utils';
+import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles(theme => ({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
+}));
 
 const TabLaser = (props) => {
+
+  const classes = useStyles();
 
   const {
     open,
@@ -14,6 +24,7 @@ const TabLaser = (props) => {
   } = props;
 
   const [historial, setHistorial] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const columns = [
     { title: 'Fecha', field: 'fecha_show' },
@@ -29,18 +40,18 @@ const TabLaser = (props) => {
   ];
 
   const options = {
-		rowStyle: rowData => {
-			return {
-				color: rowData.status.color,
-				backgroundColor: rowData.pagado ? process.env.REACT_APP_PAGADO_COLOR : ''
-			};
-		},
-		headerStyle: {
-			backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
-			color: '#FFF',
-			fontWeight: 'bolder',
-			fontSize: '18px'
-		}
+    rowStyle: rowData => {
+      return {
+        color: rowData.status.color,
+        backgroundColor: rowData.pagado ? process.env.REACT_APP_PAGADO_COLOR : ''
+      };
+    },
+    headerStyle: {
+      backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
+      color: '#FFF',
+      fontWeight: 'bolder',
+      fontSize: '18px'
+    }
   }
 
   useEffect(() => {
@@ -65,21 +76,29 @@ const TabLaser = (props) => {
           });
           setHistorial(response.data);
         }
-      }
+      } setIsLoading(false);
     }
 
     loadHistorial();
   }, [paciente, servicio]);
 
   return (
-    <Laser
-      open={open}
-      onClickCancel={onClose}
-      historial={historial}
-      columns={columns}
-      options={options}
-      sucursal={sucursal}
-      titulo={''} />
+    <Fragment>
+      {
+        !isLoading ?
+          <Laser
+            open={open}
+            onClickCancel={onClose}
+            historial={historial}
+            columns={columns}
+            options={options}
+            sucursal={sucursal}
+            titulo={''} /> :
+          <Backdrop className={classes.backdrop} open={isLoading} >
+            <CircularProgress color="inherit" />
+          </Backdrop>
+      }
+    </Fragment>
   );
 }
 

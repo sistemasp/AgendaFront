@@ -12,6 +12,9 @@ import ReportesPagos from './reportes/reportes_pagos';
 import ReportesFacturas from './reportes/reportes_facturas';
 import ReportesCirugias from './reportes/reportes_cirugias';
 import ReportesBiopsias from './reportes/reportes_biopsias';
+import ReportesFaciales from './reportes/reportes_faciales';
+import ReportesLaser from './reportes/reportes_laser';
+import ReportesAparatologia from './reportes/reportes_aparatologia';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -73,11 +76,13 @@ export const MenuContainer = props => {
 			<AppBar className={classes.bar} position="static">
 				<Tabs value={value} onChange={onChangeTab} aria-label="simple tabs">
 					<Tab label="Consulta" {...a11yProps(0)} />
-					<Tab label="Tratamiento" {...a11yProps(1)} />
-					<Tab label="Pagos" {...a11yProps(2)} />
-					<Tab label="Facturas" {...a11yProps(3)} />
-					<Tab label="Cirugias" {...a11yProps(4)} />
-					<Tab label="Biopsias" {...a11yProps(5)} />
+					<Tab label="Faciales" {...a11yProps(1)} />
+					<Tab label="Laser" {...a11yProps(2)} />
+					<Tab label="Aparatologia" {...a11yProps(3)} />
+					<Tab label="Pagos" {...a11yProps(4)} />
+					<Tab label="Facturas" {...a11yProps(5)} />
+					<Tab label="Cirugias" {...a11yProps(6)} />
+					<Tab label="Biopsias" {...a11yProps(7)} />
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>
@@ -85,22 +90,30 @@ export const MenuContainer = props => {
 					sucursal={sucursal} />
 			</TabPanel>
 			<TabPanel value={value} index={1}>
-				<ReportesTratamientos
+				<ReportesFaciales
 					sucursal={sucursal} />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
-				<ReportesPagos
+				<ReportesLaser
 					sucursal={sucursal} />
 			</TabPanel>
 			<TabPanel value={value} index={3}>
-				<ReportesFacturas
+				<ReportesAparatologia
 					sucursal={sucursal} />
 			</TabPanel>
 			<TabPanel value={value} index={4}>
-				<ReportesCirugias
+				<ReportesPagos
 					sucursal={sucursal} />
 			</TabPanel>
 			<TabPanel value={value} index={5}>
+				<ReportesFacturas
+					sucursal={sucursal} />
+			</TabPanel>
+			<TabPanel value={value} index={6}>
+				<ReportesCirugias
+					sucursal={sucursal} />
+			</TabPanel>
+			<TabPanel value={value} index={7}>
 				<ReportesBiopsias
 					sucursal={sucursal} />
 			</TabPanel>

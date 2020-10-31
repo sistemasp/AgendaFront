@@ -12,6 +12,9 @@ import { ButtonCustom } from '../../basic/ButtonCustom';
 import TabAparatologia from './aparatologia';
 import TabFaciales from './faciales';
 import TabLaser from './laser';
+import TabBiopsias from './biopsias';
+import TabCirugias from './cirugias';
+import TabEstetica from './estetica';
 
 function getModalStyle() {
 	const top = 50;
@@ -97,11 +100,6 @@ export const MenuHistoricoContainer = props => {
 		servicios,
 	} = props;
 
-	console.log("SERVICIO", servicios[0]);
-	console.log("SERVICIO", servicios[1]);
-	console.log("SERVICIO", servicios[2]);
-	console.log("SERVICIO", servicios[3]);
-
 	return (
 		<div>
 			<Modal
@@ -128,22 +126,40 @@ export const MenuHistoricoContainer = props => {
 								servicio={servicios[0]} />
 						</TabPanel>
 						<TabPanel value={value} index={1}>
-							<TabConsultas
+							<TabBiopsias
 								paciente={paciente}
 								sucursal={sucursal}
 								servicio={servicios[1]} />
 						</TabPanel>
 						<TabPanel value={value} index={2}>
-							<TabFaciales
+							<TabCirugias
 								paciente={paciente}
 								sucursal={sucursal}
 								servicio={servicios[2]} />
 						</TabPanel>
 						<TabPanel value={value} index={3}>
-							<TabLaser
+							<TabConsultas
 								paciente={paciente}
 								sucursal={sucursal}
 								servicio={servicios[3]} />
+						</TabPanel>
+						<TabPanel value={value} index={4}>
+							<TabEstetica
+								paciente={paciente}
+								sucursal={sucursal}
+								servicio={servicios[4]} />
+						</TabPanel>
+						<TabPanel value={value} index={5}>
+							<TabFaciales
+								paciente={paciente}
+								sucursal={sucursal}
+								servicio={servicios[5]} />
+						</TabPanel>
+						<TabPanel value={value} index={6}>
+							<TabLaser
+								paciente={paciente}
+								sucursal={sucursal}
+								servicio={servicios[6]} />
 						</TabPanel>
 					</div>
 					<Grid item xs={12} sm={12}>

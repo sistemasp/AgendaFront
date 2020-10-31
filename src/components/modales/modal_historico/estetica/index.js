@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { findHistoricConsultByPaciente } from "../../../../services";
-import Consultas from './Consultas';
+import { findEsteticasHistoricByPaciente } from "../../../../services";
+import Estetica from './Estetica';
 import { toFormatterCurrency, addZero } from '../../../../utils/utils';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 
@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const TabConsultas = (props) => {
+const TabEstetica = (props) => {
 
   const classes = useStyles();
 
@@ -29,41 +29,34 @@ const TabConsultas = (props) => {
   const columns = [
     { title: 'Fecha', field: 'fecha_show' },
     { title: 'Hora', field: 'hora' },
+    { title: 'Consecutivo', field: 'consecutivo' },
     { title: 'Medico', field: 'medico.nombre' },
-    { title: 'Tipo Cita', field: 'tipo_cita.nombre' },
-    { title: 'Estado', field: 'status.nombre' },
     { title: 'Sucursal', field: 'sucursal.nombre' },
     { title: 'Precio', field: 'precio_moneda' },
-    { title: 'Observaciones', field: 'observaciones' },
+    { title: 'Total', field: 'precio_moneda' },
   ];
 
   const options = {
-		rowStyle: rowData => {
-			return {
-				color: rowData.status.color,
-				backgroundColor: rowData.pagado ? process.env.REACT_APP_PAGADO_COLOR : ''
-			};
-		},
-		headerStyle: {
-			backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
-			color: '#FFF',
-			fontWeight: 'bolder',
-			fontSize: '18px'
-		}
+    headerStyle: {
+      backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
+      color: '#FFF',
+      fontWeight: 'bolder',
+      fontSize: '18px'
+    }
   }
 
   useEffect(() => {
     const loadHistorial = async () => {
       if (servicio) {
-        const response = await findHistoricConsultByPaciente(paciente._id, servicio._id);
+        const response = await findEsteticasHistoricByPaciente(paciente._id);
         if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
           response.data.forEach(item => {
             item.precio_moneda = toFormatterCurrency(item.precio);
             const date = new Date(item.fecha_hora);
             const dia = addZero(date.getDate());
-            const mes = addZero(date.getMonth() + 1);
+            const mes = addZero(date.getMonth());
             const anio = date.getFullYear();
-            const hora = Number(date.getHours() + 5);
+            const hora = Number(date.getHours());
             const minutos = date.getMinutes();
             item.fecha_show = `${dia}/${mes}/${anio}`;
             item.hora = `${addZero(hora)}:${addZero(minutos)}`;
@@ -81,14 +74,14 @@ const TabConsultas = (props) => {
     <Fragment>
       {
         !isLoading ?
-        <Consultas
-        open={open}
-        onClickCancel={onClose}
-        historial={historial}
-        columns={columns}
-        options={options}
-        sucursal={sucursal}
-        titulo={''} /> :
+          <Estetica
+            open={open}
+            onClickCancel={onClose}
+            historial={historial}
+            columns={columns}
+            options={options}
+            sucursal={sucursal}
+            titulo={''} /> :
           <Backdrop className={classes.backdrop} open={isLoading} >
             <CircularProgress color="inherit" />
           </Backdrop>
@@ -97,4 +90,4 @@ const TabConsultas = (props) => {
   );
 }
 
-export default TabConsultas;
+export default TabEstetica;

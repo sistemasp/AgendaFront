@@ -115,6 +115,13 @@ const ListaEspera = (props) => {
 		{ title: 'Medico', field: 'medico_nombre' },
 	];
 
+	const columnsEsperaConsultas = [
+		{ title: 'Nombre', field: 'paciente_nombre' },
+		{ title: 'Hora llegada', field: 'hora_llegada' },
+		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Consecutivo', field: 'consecutivo' },
+	];
+
 	const optionsConsultorio = {
 		rowStyle: rowData => {
 			return {
@@ -620,6 +627,7 @@ const ListaEspera = (props) => {
 						columnsEspera={columnsEspera}
 						columnsCabinas={columnsCabinas}
 						columnsSalaCirugias={columnsSalaCirugias}
+						columnsEsperaConsultas={columnsEsperaConsultas}
 						tituloConsultorios='Consultorios'
 						tituloCabinas='Cabinas'
 						tituloSalaCirugia='Sala Cirugias'

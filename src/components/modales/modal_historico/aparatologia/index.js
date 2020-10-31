@@ -1,9 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { findHistoricByPacienteAndService } from "../../../../services";
 import Aparatologia from './Aparatologia';
 import { toFormatterCurrency, addZero } from '../../../../utils/utils';
+import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles(theme => ({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
+}));
 
 const TabAparatologia = (props) => {
+
+  const classes = useStyles();
 
   const {
     open,
@@ -14,6 +24,7 @@ const TabAparatologia = (props) => {
   } = props;
 
   const [historial, setHistorial] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const columns = [
     { title: 'Fecha', field: 'fecha_show' },
@@ -25,23 +36,22 @@ const TabAparatologia = (props) => {
   ];
 
   const options = {
-		rowStyle: rowData => {
-			return {
-				color: rowData.status.color,
-				backgroundColor: rowData.pagado ? process.env.REACT_APP_PAGADO_COLOR : ''
-			};
-		},
-		headerStyle: {
-			backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
-			color: '#FFF',
-			fontWeight: 'bolder',
-			fontSize: '18px'
-		}
+    rowStyle: rowData => {
+      return {
+        color: rowData.status.color,
+        backgroundColor: rowData.pagado ? process.env.REACT_APP_PAGADO_COLOR : ''
+      };
+    },
+    headerStyle: {
+      backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
+      color: '#FFF',
+      fontWeight: 'bolder',
+      fontSize: '18px'
+    }
   }
 
   useEffect(() => {
     const loadHistorial = async () => {
-      console.log('SERVICIO CONSULTA', servicio);
       if (servicio) {
         const response = await findHistoricByPacienteAndService(paciente._id, servicio._id);
         if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -52,9 +62,9 @@ const TabAparatologia = (props) => {
             });
             const date = new Date(item.fecha_hora);
             const dia = addZero(date.getDate());
-            const mes = addZero(date.getMonth() + 1);
+            const mes = addZero(date.getMonth());
             const anio = date.getFullYear();
-            const hora = Number(date.getHours() + 5);
+            const hora = Number(date.getHours());
             const minutos = date.getMinutes();
             item.fecha_show = `${dia}/${mes}/${anio}`;
             item.hora = `${addZero(hora)}:${addZero(minutos)}`;
@@ -62,20 +72,29 @@ const TabAparatologia = (props) => {
           setHistorial(response.data);
         }
       }
+      setIsLoading(false);
     }
 
     loadHistorial();
   }, [paciente, servicio]);
 
   return (
-    <Aparatologia
-      open={open}
-      onClickCancel={onClose}
-      historial={historial}
-      columns={columns}
-      options={options}
-      sucursal={sucursal}
-      titulo={''} />
+    <Fragment>
+      {
+        !isLoading ?
+          <Aparatologia
+            open={open}
+            onClickCancel={onClose}
+            historial={historial}
+            columns={columns}
+            options={options}
+            sucursal={sucursal}
+            titulo={''} /> :
+          <Backdrop className={classes.backdrop} open={isLoading} >
+            <CircularProgress color="inherit" />
+          </Backdrop>
+      }
+    </Fragment>
   );
 }
 

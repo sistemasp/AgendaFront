@@ -19,18 +19,18 @@ const MenuHistoricos = (props) => {
     };
 
     useEffect(() => {
-        const loadServicios = async() => {
+        const loadServicios = async () => {
             const response = await getAllServices();
-            if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK ) {
+            if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
                 setServicios(response.data);
             }
         }
         loadServicios();
-      }, []);
+    }, []);
 
     return (
         <Fragment>
-            <MenuHistoricoContainer 
+            <MenuHistoricoContainer
                 onChangeTab={handleChangeTab}
                 empleado={empleado}
                 sucursal={sucursal}
@@ -39,7 +39,7 @@ const MenuHistoricos = (props) => {
                 paciente={paciente}
                 onClickCancel={onClose}
                 servicios={servicios} />
-        </Fragment>        
+        </Fragment>
     );
 }
 

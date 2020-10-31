@@ -1,9 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { findHistoricByPacienteAndService } from "../../../../services";
 import Faciales from './Faciales';
 import { toFormatterCurrency, addZero } from '../../../../utils/utils';
+import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles(theme => ({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
+}));
 
 const TabFaciales = (props) => {
+
+  const classes = useStyles();
 
   const {
     open,
@@ -14,6 +24,7 @@ const TabFaciales = (props) => {
   } = props;
 
   const [historial, setHistorial] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const columns = [
     { title: 'Fecha', field: 'fecha_show' },
@@ -21,25 +32,25 @@ const TabFaciales = (props) => {
     { title: 'Tipo Cita', field: 'tipo_cita.nombre' },
     { title: 'Estado', field: 'status.nombre' },
     { title: 'Sucursal', field: 'sucursal.nombre' },
-    { title: 'Preparo', field: 'quien_prepara'},
-    { title: 'Realiza', field: 'quien_realiza'},
-    { title: 'Acidos', field: 'acidos_show'},
+    { title: 'Preparo', field: 'quien_prepara' },
+    { title: 'Realiza', field: 'quien_realiza' },
+    { title: 'Acidos', field: 'acidos_show' },
     { title: 'Precio', field: 'precio_moneda' },
   ];
 
   const options = {
-		rowStyle: rowData => {
-			return {
-				color: rowData.status.color,
-				backgroundColor: rowData.pagado ? process.env.REACT_APP_PAGADO_COLOR : ''
-			};
-		},
-		headerStyle: {
-			backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
-			color: '#FFF',
-			fontWeight: 'bolder',
-			fontSize: '18px'
-		}
+    rowStyle: rowData => {
+      return {
+        color: rowData.status.color,
+        backgroundColor: rowData.pagado ? process.env.REACT_APP_PAGADO_COLOR : ''
+      };
+    },
+    headerStyle: {
+      backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
+      color: '#FFF',
+      fontWeight: 'bolder',
+      fontSize: '18px'
+    }
   }
 
   useEffect(() => {
@@ -65,20 +76,30 @@ const TabFaciales = (props) => {
           setHistorial(response.data);
         }
       }
+      setIsLoading(false);
     }
 
     loadHistorial();
   }, [paciente, servicio]);
 
   return (
-    <Faciales
-      open={open}
-      onClickCancel={onClose}
-      historial={historial}
-      columns={columns}
-      options={options}
-      sucursal={sucursal}
-      titulo={''} />
+    <Fragment>
+      {
+        !isLoading ?
+          <Faciales
+            open={open}
+            onClickCancel={onClose}
+            historial={historial}
+            columns={columns}
+            options={options}
+            sucursal={sucursal}
+            titulo={''} /> :
+          <Backdrop className={classes.backdrop} open={isLoading} >
+            <CircularProgress color="inherit" />
+          </Backdrop>
+      }
+    </Fragment>
+
   );
 }
 

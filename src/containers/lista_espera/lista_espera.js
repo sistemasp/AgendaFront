@@ -28,6 +28,7 @@ export const ListaEsperaContainer = (props) => {
     columnsConsultorios,
     columnsCabinas,
     columnsEspera,
+    columnsEsperaConsultas,
     consultorios,
     cabinas,
     listaEsperaConsultas,
@@ -127,7 +128,7 @@ export const ListaEsperaContainer = (props) => {
 
           <TableComponent
             titulo={tituloEsperaConsultas}
-            columns={columnsEspera}
+            columns={columnsEsperaConsultas}
             data={listaEsperaConsultas}
             actions={actionsEsperaConsultorio}
             options={optionsEspera} />
