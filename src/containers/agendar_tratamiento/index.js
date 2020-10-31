@@ -339,13 +339,13 @@ const AgendarTratamiento = (props) => {
 		setIsLoading(false);
 	}
 
-	const handleChangeFecha = async (date) => {
+	const handleChangeFecha = (date) => {
 		setIsLoading(true);
-		await setValues({
+		setValues({
 			...values,
 			fecha_hora: date,
 		});
-		await loadHorarios(date);
+		loadHorarios(date);
 		setIsLoading(false);
 	};
 
