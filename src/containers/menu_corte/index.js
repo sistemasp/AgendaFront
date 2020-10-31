@@ -17,7 +17,7 @@ import HistoryIcon from '@material-ui/icons/History';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import Edit from '@material-ui/icons/Edit';
-import { toFormatterCurrency } from "../../utils/utils";
+import { addZero, toFormatterCurrency } from "../../utils/utils";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -80,6 +80,7 @@ const Corte = (props) => {
 
   const columnsIngresoDetalles = [
     { title: 'Concepto', field: 'concepto' },
+    { title: 'Hora', field: 'hora' },
     { title: 'Recepcionista', field: 'recepcionista.nombre' },
     { title: 'Cantidad', field: 'cantidad_moneda' },
   ];
@@ -201,6 +202,8 @@ const Corte = (props) => {
           if (ingreso.metodo_pago._id === metodoPago._id) {
             if (ingreso.tipo_ingreso._id === tipoIngreso._id) {
               totalTipoIngreso += Number(ingreso.cantidad);
+              const date = new Date(ingreso.create_date);
+              ingreso.hora = `${addZero(date.getHours())}:${addZero(date.getMinutes())}`;
               ingresosPorTipo.push(ingreso);
             }
           }

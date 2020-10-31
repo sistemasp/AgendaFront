@@ -214,7 +214,7 @@ const ModalPago = (props) => {
     }
 
     const create_date = new Date();
-    create_date.setHours(create_date.getHours() - 5);
+    create_date.setHours(create_date.getHours());
 
     const ingreso = {
       create_date: create_date,

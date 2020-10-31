@@ -84,8 +84,6 @@ const ModalEstetica = (props) => {
   });
   const [materiales, setMateriales] = useState([]);
 
-  console.log("CVALALALA", values);
-
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
   const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
   const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
