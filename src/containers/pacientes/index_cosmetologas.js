@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Backdrop, CircularProgress } from '@material-ui/core';
 import { getAllPatients, updatePatient, createPatient, findPatientByPhoneNumber } from '../../services';
 import HistoryIcon from '@material-ui/icons/History';
-import { PacientesLecturaContainer } from "./pacientes_lectura";
+import { PacientesCosmetologasContainer } from "./pacientes_cosmetologas";
 
 
 const useStyles = makeStyles(theme => ({
@@ -27,14 +27,13 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const PacientesLectura = (props) => {
+const PacientesForCosmetologas = (props) => {
 
 	const classes = useStyles();
 
 	const [open, setOpen] = useState(false);
 	const [openHistoric, setOpenHistoric] = useState(false);
 	const [openAlert, setOpenAlert] = useState(false);
-	const [pacientes, setPacientes] = useState([]);
 	const [paciente, setPaciente] = useState({});
 	const [isLoading, setIsLoading] = useState(true);
 	const [message, setMessage] = useState('');
@@ -49,7 +48,6 @@ const PacientesLectura = (props) => {
 		{ title: 'Apellidos', field: 'apellidos' },
 		{ title: 'Telefono', field: 'telefono' },
 		{ title: 'Fecha de nacimiento', field: 'fecha_nacimiento' },
-		{ title: 'Direccion', field: 'direccion' },
 	];
 
 	const options = {
@@ -74,78 +72,6 @@ const PacientesLectura = (props) => {
 		setOpenHistoric(false);
 	};
 
-	const handleCloseAlert = () => {
-		setOpenAlert(false);
-	};
-
-	const loadPacientes = async () => {
-		const response = await getAllPatients();
-		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-			setPacientes(response.data);
-		}
-		setIsLoading(false);
-	}
-
-	const handleOnClickGuardar = async (e, val) => {
-		setIsLoading(true);
-		const existPatient = paciente._id ? '' : await findPatientByPhoneNumber(val.telefono);
-		setOpenAlert(true);
-
-		if (`${existPatient.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-			if (existPatient.data.length > 0) {
-				setSeverity('warning');
-				setMessage('YA EXISTE UN REGISTRO CON EL MISMO NUMERO DE TELEFONO');
-				setIsLoading(false);
-				handleClose();
-				return;
-			}
-		}
-
-		const response = paciente._id ? await updatePatient(paciente._id, val) : await createPatient(val);
-		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
-			|| `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-			setSeverity('success');
-			loadPacientes();
-			setMessage(paciente._id ? 'Paciente actualizado correctamente' : 'Paciente creado correctamente');
-		}
-
-		handleClose();
-		setIsLoading(false);
-	}
-
-	const handleOnClickGuardarAgendar = async (e, val) => {
-		setIsLoading(true);
-		const existPatient = paciente._id ? '' : await findPatientByPhoneNumber(val.telefono);
-		setOpenAlert(true);
-
-		if (`${existPatient.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-			if (existPatient.data.length > 0) {
-				setSeverity('warning');
-				setMessage('YA EXISTE UN REGISTRO CON EL MISMO NUMERO DE TELEFONO');
-				setIsLoading(false);
-				handleClose();
-				return;
-			}
-		}
-
-		const response = paciente._id ? await updatePatient(paciente._id, val) : await createPatient(val);
-		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
-			|| `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-			setSeverity('success');
-			loadPacientes();
-			onClickAgendar(e, val);
-			setMessage(paciente._id ? 'Paciente actualizado correctamente' : 'Paciente creado correctamente');
-		}
-
-		handleClose();
-		setIsLoading(false);
-	}
-
-	const handleOnClickEditar = (event, rowData) => {
-		setPaciente(rowData);
-		setOpen(true);
-	}
-
 	const handleClickHistorico = (event, rowData) => {
 		setPaciente(rowData);
 		setOpenHistoric(true);
@@ -161,10 +87,10 @@ const PacientesLectura = (props) => {
 
 	useEffect(() => {
 		const loadPacientes = async () => {
-			const response = await getAllPatients();
+			/*const response = await getAllPatients();
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				setPacientes(response.data);
-			}
+			}*/
 			setIsLoading(false);
 		}
 		loadPacientes();
@@ -174,8 +100,7 @@ const PacientesLectura = (props) => {
 		<Fragment>
 			{
 				!isLoading ?
-					<PacientesLecturaContainer
-						pacientes={pacientes}
+					<PacientesCosmetologasContainer
 						columns={columns}
 						titulo='Pacientes'
 						actions={actions}
@@ -183,7 +108,6 @@ const PacientesLectura = (props) => {
 						open={open}
 						openHistoric={openHistoric}
 						paciente={paciente}
-						telefono={paciente.telefono}
 						handleOpen={handleOpen}
 						handleClose={handleClose} /> :
 					<Backdrop className={classes.backdrop} open={isLoading} >
@@ -194,4 +118,4 @@ const PacientesLectura = (props) => {
 	);
 }
 
-export default PacientesLectura;
+export default PacientesForCosmetologas;

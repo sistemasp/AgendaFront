@@ -6,14 +6,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Pacientes from '../pacientes/index';
 import Citas from '../citas/index';
-import Agendar from '../agendar/index';
-import { Button, Toolbar } from '@material-ui/core';
-import Reportes from '../reportes/index';
-import ModalPassword from '../../components/modal_password';
-import AgendarLectura from '../agendar/index_lectura';
-import PacientesLectura from '../pacientes/index_lectura';
+import PacientesForCosmetologas from '../pacientes/index_cosmetologas';
+import TratamientosCosmetologas from '../agendar_tratamiento/index_cosmetologas';
 
 
 function TabPanel(props) {
@@ -62,7 +57,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export const MenuLecturaContainer = props => {
+export const MenuCosmetologaContainer = props => {
 	const classes = useStyles();
 
 	const {
@@ -84,33 +79,6 @@ export const MenuLecturaContainer = props => {
 
 	return (
 		<div className={classes.root}>
-			{
-				open ?
-					<ModalPassword
-						open={open}
-						onClose={onClose}
-						empleado={empleado}
-						onClickLogout={onClickLogout}
-						onClickCambioPassword={onClickCambioPassword}
-						setMessage={setMessage}
-						setSeverity={setSeverity}
-						setOpenAlert={setOpenAlert} /> : ''
-			}
-			<AppBar className={classes.bar} position="static">
-				<Toolbar>
-					<Typography variant="h6" className={classes.title}>
-						{`Sucuarsal: ${sucursal.nombre} - ${empleado.nombre} ( ${empleado.rol.nombre} )`}
-					</Typography>
-					<Button
-						color="default"
-						variant="contained"
-						onClick={onOpen}>Cambiar Contraseña</Button>
-					<Button
-						color="secondary"
-						variant="contained"
-						onClick={onClickLogout}>Cerrar Sesion</Button>
-				</Toolbar>
-			</AppBar>
 			<AppBar className={classes.bar} position="static">
 				<Tabs value={value} onChange={onChangeTab} aria-label="simple tabs">
 					<Tab label="Pacientes" {...a11yProps(0)} />
@@ -119,11 +87,11 @@ export const MenuLecturaContainer = props => {
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>
-				<PacientesLectura
+				<PacientesForCosmetologas
 					sucursal={sucursal._id} />
 			</TabPanel>
 			<TabPanel value={value} index={1}>
-				<AgendarLectura
+				<TratamientosCosmetologas
 					paciente={pacienteAgendado}
 					setPacienteAgendado={setPacienteAgendado}
 					empleado={empleado}

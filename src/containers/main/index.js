@@ -2,7 +2,7 @@ import React, { useState, Fragment } from "react";
 import { MainContainer } from "./main";
 import { Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
-import { MainLecturaContainer } from "./main_lectura";
+import { MainCosmetologasContainer } from "./main_cosmetologas";
 
 const Alert = (props) => {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -58,46 +58,68 @@ const MenuMain = (props) => {
 		setOpenAlert(false);
 	};
 
+	let fragment;
+
+	if (empleado.rol.nombre === "GERENTE" || empleado.rol.nombre === "MASTER" || empleado.rol.nombre === "RECEPCIONISTA" || empleado.rol.nombre === "ENCARGADO SUCURSAL") {
+		fragment = <Fragment>
+			<MainContainer
+				pacienteAgendado={pacienteAgendado}
+				setPacienteAgendado={setPacienteAgendado}
+				onChangeTab={handleChangeTab}
+				onClickAgendar={handleAgendar}
+				empleado={empleado}
+				sucursal={sucursal}
+				openModalPassword={openModalPassword}
+				onClickLogout={handleLogout}
+				onClickCambioPassword={handleClickCambioPassword}
+				onOpen={handleOpen}
+				onClose={handleClose}
+				value={value}
+				setMessage={setMessage}
+				setSeverity={setSeverity}
+				setOpenAlert={setOpenAlert}
+				history={history} />
+		</Fragment>
+	} else if (empleado.rol.nombre === "ENCARGADO COSMETOLOGAS" || empleado.rol.nombre === "COSMETOLOGA") {
+		fragment = <Fragment>
+			<MainCosmetologasContainer
+				pacienteAgendado={pacienteAgendado}
+				setPacienteAgendado={setPacienteAgendado}
+				onChangeTab={handleChangeTab}
+				onClickAgendar={handleAgendar}
+				empleado={empleado}
+				sucursal={sucursal}
+				openModalPassword={openModalPassword}
+				onClickLogout={handleLogout}
+				onClickCambioPassword={handleClickCambioPassword}
+				onOpen={handleOpen}
+				onClose={handleClose}
+				value={value}
+				setMessage={setMessage}
+				setSeverity={setSeverity}
+				setOpenAlert={setOpenAlert} />
+		</Fragment>
+	} else if (empleado.rol.nombre === "MEDICO") {
+		fragment = <Fragment>
+			<h1>TRABAJANDO EN MEDICOS</h1>
+		</Fragment>
+	} else if (empleado.rol.nombre === "PROMOCION") {
+		fragment = <Fragment>
+			<h1>TRABAJANDO EN PROMOCION</h1>
+		</Fragment>
+	}
+
+
 	return (
 		<Fragment>
+			{fragment}
 			{
-				permisos.includes('ALL') ?
-					<MainContainer
-						pacienteAgendado={pacienteAgendado}
-						setPacienteAgendado={setPacienteAgendado}
-						onChangeTab={handleChangeTab}
-						onClickAgendar={handleAgendar}
-						empleado={empleado}
-						sucursal={sucursal}
-						openModalPassword={openModalPassword}
-						onClickLogout={handleLogout}
-						onClickCambioPassword={handleClickCambioPassword}
-						onOpen={handleOpen}
-						onClose={handleClose}
-						value={value}
-						setMessage={setMessage}
-						setSeverity={setSeverity}
-						setOpenAlert={setOpenAlert}
-						history={history} />
-
+				/*permisos.includes('ALL') ?
+					
+	
 					: (permisos.includes('VER_CITAS')
-					?	<MainLecturaContainer
-							pacienteAgendado={pacienteAgendado}
-							setPacienteAgendado={setPacienteAgendado}
-							onChangeTab={handleChangeTab}
-							onClickAgendar={handleAgendar}
-							empleado={empleado}
-							sucursal={sucursal}
-							openModalPassword={openModalPassword}
-							onClickLogout={handleLogout}
-							onClickCambioPassword={handleClickCambioPassword}
-							onOpen={handleOpen}
-							onClose={handleClose}
-							value={value}
-							setMessage={setMessage}
-							setSeverity={setSeverity}
-							setOpenAlert={setOpenAlert} />
-						: '')
+					?	
+						: '')*/
 			}
 
 			<Snackbar open={openAlert} autoHideDuration={5000} onClose={handleCloseAlert}>

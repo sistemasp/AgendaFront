@@ -29,6 +29,7 @@ import Medicos from '../menu_medicos';
 import Consultorios from '../consultorios';
 import Corte from '../menu_corte';
 import ListaEspera from '../lista_espera';
+import MenuPatientForCosmetologas from '../menu_pacientes/index_cosmetologas';
 
 const TabPanel = (props) => {
 	const { children, value, index, ...other } = props;
@@ -119,7 +120,7 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-export const MainLecturaContainer = props => {
+export const MainCosmetologasContainer = props => {
 
 	const {
 		pacienteAgendado,
@@ -211,25 +212,9 @@ export const MainLecturaContainer = props => {
 				</div>
 				<Divider />
 				<List>
-					<ListItem button key={'Pacientes'} onClick={(e) => onChangeTab(e, 0)}>
+					<ListItem button key={'Pacientes'} onClick={(e) => onChangeTab(e, 0, handleDrawerClose)}>
 						<ListItemIcon> <AccessibilityNewIcon /> </ListItemIcon>
 						<ListItemText primary={'Pacientes'} />
-					</ListItem>
-					<ListItem button key={'Medicos'} onClick={(e) => onChangeTab(e, 1)}>
-						<ListItemIcon> <People /> </ListItemIcon>
-						<ListItemText primary={'Medicos'} />
-					</ListItem>
-					<ListItem button key={'Consultorios'} onClick={(e) => onChangeTab(e, 2)}>
-						<ListItemIcon> <AirlineSeatReclineNormalIcon /> </ListItemIcon>
-						<ListItemText primary={'Consultorios'} />
-					</ListItem>
-					<ListItem button key={'Corte'} onClick={(e) => onChangeTab(e, 3)}>
-						<ListItemIcon> <AttachMoneyIcon /> </ListItemIcon>
-						<ListItemText primary={'Corte'} />
-					</ListItem>
-					<ListItem button key={'Lista de Espera'} onClick={(e) => onChangeTab(e, 4)}>
-						<ListItemIcon> <ListAltIcon /> </ListItemIcon>
-						<ListItemText primary={'Lista de Espera'} />
 					</ListItem>
 				</List>
 			</Drawer>
@@ -241,37 +226,9 @@ export const MainLecturaContainer = props => {
 				<div className={classes.drawerHeader} />
 				<Fragment className={classes.fragment}>
 					<TabPanel value={value} index={0}>
-						<MenuPatient
+						<MenuPatientForCosmetologas
 							empleado={empleado}
 							sucursal={sucursal} />
-					</TabPanel>
-					<TabPanel value={value} index={1}>
-						<Medicos
-							paciente={pacienteAgendado}
-							setPacienteAgendado={setPacienteAgendado}
-							empleado={empleado}
-							sucursal={sucursal._id} />
-					</TabPanel>
-					<TabPanel value={value} index={2}>
-						<Consultorios
-							paciente={pacienteAgendado}
-							setPacienteAgendado={setPacienteAgendado}
-							empleado={empleado}
-							sucursal={sucursal._id} />
-					</TabPanel>
-					<TabPanel value={value} index={3}>
-						<Corte
-							paciente={pacienteAgendado}
-							setPacienteAgendado={setPacienteAgendado}
-							empleado={empleado}
-							sucursal={sucursal._id} />
-					</TabPanel>
-					<TabPanel value={value} index={4}>
-						<ListaEspera
-							paciente={pacienteAgendado}
-							setPacienteAgendado={setPacienteAgendado}
-							empleado={empleado}
-							sucursal={sucursal._id} />
 					</TabPanel>
 				</Fragment>
 			</main>

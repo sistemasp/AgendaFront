@@ -6,7 +6,7 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 import { Paper } from '@material-ui/core';
 import TableComponent from '../../components/table/TableComponent';
 
-export const AgendarLecturaContainer = (props) => {
+export const TratamientosCosmetologasContainer = (props) => {
 
 	const {
 		onChangeFilterDate,

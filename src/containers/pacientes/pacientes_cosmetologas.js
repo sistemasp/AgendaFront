@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 
 import TableComponent from '../../components/table/TableComponent';
 import { makeStyles } from '@material-ui/core';
-import ModalPaciente from '../../components/modales/modal_paciente';
 import MenuHistoricos from '../../components/modales/modal_historico';
 import { ButtonCustom } from '../../components/basic/ButtonCustom';
 import { baseUrl } from '../../services';
@@ -13,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export const PacientesContainer = (props) => {
+export const PacientesCosmetologasContainer = (props) => {
 
   const classes = useStyles();
 
@@ -22,14 +21,9 @@ export const PacientesContainer = (props) => {
     columns,
     paciente,
     actions,
-    components,
     options,
-    open,
     openHistoric,
-    handleOpen,
     handleClose,
-    onClickGuardar,
-    onClickGuardarAgendar
   } = props;
 
   const pacientes = query =>
@@ -49,15 +43,6 @@ export const PacientesContainer = (props) => {
   return (
     <Fragment>
       {
-        open ?
-          <ModalPaciente
-            open={open}
-            onClose={handleClose}
-            paciente={paciente}
-            onClickGuardar={onClickGuardar}
-            onClickGuardarAgendar={onClickGuardarAgendar} /> : ''
-      }
-      {
         openHistoric ?
           <MenuHistoricos
             open={openHistoric}
@@ -65,20 +50,12 @@ export const PacientesContainer = (props) => {
             paciente={paciente} /> : ''
       }
 
-      <ButtonCustom
-        className={classes.button}
-        color="primary"
-        variant="contained"
-        onClick={handleOpen}
-        text='Nuevo Paciente' />
-
       <TableComponent
         titulo={titulo}
         columns={columns}
         data={pacientes}
         actions={actions}
-        options={options}
-        components={components} />
+        options={options} />
     </Fragment>
   );
 }

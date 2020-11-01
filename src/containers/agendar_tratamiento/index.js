@@ -133,15 +133,6 @@ const AgendarTratamiento = (props) => {
 		{ title: 'Hora salida', field: 'hora_salida' },
 	];
 
-	const components = {
-		Pagination: props => {
-			return <TablePagination
-				{...props}
-				rowsPerPageOptions={[5, 10, 20, 30, citas.length]}
-			/>
-		}
-	}
-
 	const options = {
 		rowStyle: rowData => {
 			return {
@@ -587,7 +578,6 @@ const AgendarTratamiento = (props) => {
 								options={options}
 								citas={citas}
 								actions={actions}
-								components={components}
 								cita={cita}
 								openModal={openModal}
 								empleado={empleado}
