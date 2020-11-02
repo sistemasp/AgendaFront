@@ -26,11 +26,20 @@ const MenuPatient = (props) => {
         setValue(newValue);
     };
 
-    const handleAgendarTratamiento = (event, rowData) => {
+    const handleAgendarFaciales = (event, rowData) => {
         setPacienteAgendado(rowData);
-        setValue(Number(process.env.REACT_APP_PAGE_AGENDAR_TRATAMIENTO));
+        setValue(Number(process.env.REACT_APP_PAGE_AGENDAR_FACIALES));
     }
 
+    const handleAgendarLaser = (event, rowData) => {
+        setPacienteAgendado(rowData);
+        setValue(Number(process.env.REACT_APP_PAGE_AGENDAR_LASER));
+    }
+
+    const handleAgendarAparatologia = (event, rowData) => {
+        setPacienteAgendado(rowData);
+        setValue(Number(process.env.REACT_APP_PAGE_AGENDAR_APARATOLOGIA));
+    }
     const handleClickAgendarConsulta = (event, rowData) => {
         setPacienteAgendado(rowData);
         setValue(Number(process.env.REACT_APP_PAGE_AGENDAR_CONSULTA));
@@ -58,12 +67,14 @@ const MenuPatient = (props) => {
 
     return (
         <Fragment>
-            <MenuContainer 
+            <MenuContainer
                 pacienteAgendado={pacienteAgendado}
                 setPacienteAgendado={setPacienteAgendado}
                 onChangeTab={handleChangeTab}
-                onClickAgendarTratamiento={handleAgendarTratamiento}
+                onClickAgendarFaciales={handleAgendarFaciales}
                 onClickAgendarConsulta={handleClickAgendarConsulta}
+                onClickAgendarLaser={handleAgendarLaser}
+                onClickAgendarAparatologia={handleAgendarAparatologia}
                 empleado={empleado}
                 sucursal={sucursal}
                 open={open}
@@ -75,13 +86,13 @@ const MenuPatient = (props) => {
                 setMessage={setMessage}
                 setSeverity={setSeverity}
                 setOpenAlert={setOpenAlert}
-                history={history}/>
+                history={history} />
             <Snackbar open={openAlert} autoHideDuration={5000} onClose={handleCloseAlert}>
                 <Alert onClose={handleCloseAlert} severity={severity}>
                     {message}
                 </Alert>
             </Snackbar>
-        </Fragment>        
+        </Fragment>
     );
 }
 

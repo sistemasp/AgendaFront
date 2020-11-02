@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export const AgendarTratamientoContainer = (props) => {
+export const AgendarFacialContainer = (props) => {
 
 	const classes = useStyles();
 
@@ -143,20 +143,6 @@ export const AgendarTratamientoContainer = (props) => {
 			<Paper>
 				<h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'Selecciona un paciente'}</h1>
 				<Grid container spacing={3}>
-					<Grid item xs={12} sm={2}>
-						<FormControl variant="outlined" className={classes.formControl}>
-							<InputLabel id="simple-select-outlined-servicio">Servicio</InputLabel>
-							<Select
-								labelId="simple-select-outlined-servicio"
-								id="simple-select-outlined-servicio"
-								value={values.servicio}
-								error={Boolean(errors.servicio)}
-								onChange={onChangeServicio}
-								label="Servicio" >
-								{servicios.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
-							</Select>
-						</FormControl>
-					</Grid>
 					{
 						false ?
 							<Grid item xs={12} sm={2}>

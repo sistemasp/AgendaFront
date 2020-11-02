@@ -54,8 +54,10 @@ const Pacientes = (props) => {
 
 	const {
 		onClickAgendar,
-		onClickAgendarTratamiento,
-		onClickAgendarConsulta
+		onClickAgendarConsulta,
+		onClickAgendarFaciales,
+		onClickAgendarLaser,
+		onClickAgendarAparatologia,
 	} = props;
 
 	const columns = [
@@ -178,8 +180,18 @@ const Pacientes = (props) => {
 		},
 		{
 			icon: EventAvailableIcon,
-			tooltip: 'Agendar tratamiento',
-			onClick: onClickAgendarTratamiento
+			tooltip: 'Agendar facial',
+			onClick: onClickAgendarFaciales
+		},
+		{
+			icon: EventAvailableIcon,
+			tooltip: 'Agendar laser',
+			onClick: onClickAgendarLaser
+		},
+		{
+			icon: EventAvailableIcon,
+			tooltip: 'Agendar aparatologia',
+			onClick: onClickAgendarAparatologia
 		},
 		{
 			icon: EditIcon,
@@ -199,8 +211,14 @@ const Pacientes = (props) => {
 			case 'Agendar consulta':
 				onClickAgendarConsulta(e, rowData);
 				break;
-			case 'Agendar tratamiento':
-				onClickAgendarTratamiento(e, rowData);
+			case 'Agendar facial':
+				onClickAgendarFaciales(e, rowData);
+				break;
+			case 'Agendar laser':
+				onClickAgendarLaser(e, rowData);
+				break;
+			case 'Agendar aparatologia':
+				onClickAgendarAparatologia(e, rowData);
 				break;
 			case 'Actualizar registro':
 				handleOnClickEditar(e, rowData);

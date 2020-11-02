@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
-import { AgendarTratamientoContainer as AgendarTratamientoContainer } from "./agendar_tratamiento";
 import {
 	findOfficeById,
 	findTreatmentByServicio,
@@ -9,12 +8,11 @@ import {
 	createDate,
 	findEmployeesByRolId,
 	showAllTipoCitas,
-	createTreatmentPrice,
 	findAreasByTreatmentServicio,
 	createConsecutivo,
 	showAllMedios,
 } from "../../services";
-import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
+import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
 import EditIcon from '@material-ui/icons/Edit';
@@ -22,7 +20,7 @@ import * as Yup from "yup";
 import { toFormatterCurrency, addZero, generateFolio } from "../../utils/utils";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
-import { ContactPhoneSharp } from "@material-ui/icons";
+import { AgendarLaserContainer } from "./agendar_laser";
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -46,7 +44,7 @@ const validationSchema = Yup.object({
 		.required("Los nombres del pacientes son requeridos")
 });
 
-const AgendarTratamiento = (props) => {
+const AgendarLaser = (props) => {
 	const classes = useStyles();
 
 	const {
@@ -554,7 +552,7 @@ const AgendarTratamiento = (props) => {
 						initialValues={values}
 						validationSchema={validationSchema} >
 						{
-							props => <AgendarTratamientoContainer
+							props => <AgendarLaserContainer
 								servicios={servicios}
 								tratamientos={tratamientos}
 								areas={areas}
@@ -618,4 +616,4 @@ const AgendarTratamiento = (props) => {
 	);
 }
 
-export default AgendarTratamiento;
+export default AgendarLaser;

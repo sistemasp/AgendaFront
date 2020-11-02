@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Citas from '../citas/index';
 import PacientesForCosmetologas from '../pacientes/index_cosmetologas';
-import TratamientosCosmetologas from '../agendar_tratamiento/index_cosmetologas';
+import AgendarFacial from '../agendar_facial';
 
 
 function TabPanel(props) {
@@ -91,7 +91,7 @@ export const MenuCosmetologaContainer = props => {
 					sucursal={sucursal._id} />
 			</TabPanel>
 			<TabPanel value={value} index={1}>
-				<TratamientosCosmetologas
+				<AgendarFacial
 					paciente={pacienteAgendado}
 					setPacienteAgendado={setPacienteAgendado}
 					empleado={empleado}

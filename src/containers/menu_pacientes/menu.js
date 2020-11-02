@@ -8,11 +8,11 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Pacientes from '../pacientes/index';
 import Citas from '../citas/index';
-import AgendarTratamiento from '../agendar_tratamiento/index';
 import AgendarConsulta from '../agendar_consulta';
 import Consultas from '../consultas';
-import Cirugias from '../cirugias';
-import AgendarCirugia from '../agendar_cirugia';
+import AgendarFacial from '../agendar_facial';
+import AgendarLaser from '../agendar_laser';
+import AgendarAparatologia from '../agendar_aparatologia';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -68,8 +68,10 @@ export const MenuContainer = props => {
 		setPacienteAgendado,
 		onChangeTab,
 		value,
-		onClickAgendarTratamiento,
+		onClickAgendarFaciales,
 		onClickAgendarConsulta,
+		onClickAgendarLaser,
+		onClickAgendarAparatologia,
 		empleado,
 		sucursal,
 		history,
@@ -77,19 +79,34 @@ export const MenuContainer = props => {
 
 	return (
 		<div className={classes.root}>
-			<AppBar className={classes.bar} position="static">
-				<Tabs value={value} onChange={onChangeTab} aria-label="simple tabs">
+			<AppBar
+				className={classes.bar}
+				position="static"
+			>
+				<Tabs
+					value={value}
+					onChange={onChangeTab}
+					aria-label="simple tabs"
+					variant="scrollable"
+					scrollButtons="on"
+				>
 					<Tab label="Pacientes" {...a11yProps(0)} />
-					<Tab label="Agendar consulta" {...a11yProps(1)} />
-					<Tab label="Agendar tratamiento" {...a11yProps(2)} />
-					<Tab label="Consultas" {...a11yProps(3)} />
-					<Tab label="Tratamientos" {...a11yProps(4)} />
+					<Tab label="AGENDAR CONSULTA" {...a11yProps(1)} />
+					<Tab label="AGENDAR FACIALES" {...a11yProps(2)} />
+					<Tab label="AGENDAR LÁSER" {...a11yProps(3)} />
+					<Tab label="AGENDAR APARATOLOGÍA" {...a11yProps(4)} />
+					<Tab label="CONSULTAS" {...a11yProps(5)} />
+					<Tab label="FACIALES" {...a11yProps(6)} />
+					<Tab label="LÁSER" {...a11yProps(7)} />
+					<Tab label="APARATOLOGÍA" {...a11yProps(8)} />
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>
 				<Pacientes
-					onClickAgendarTratamiento={onClickAgendarTratamiento}
+					onClickAgendarFaciales={onClickAgendarFaciales}
 					onClickAgendarConsulta={onClickAgendarConsulta}
+					onClickAgendarLaser={onClickAgendarLaser}
+					onClickAgendarAparatologia={onClickAgendarAparatologia}
 					onChangeTab={onChangeTab} />
 			</TabPanel>
 			<TabPanel value={value} index={1}>
@@ -101,17 +118,39 @@ export const MenuContainer = props => {
 					history={history} />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
-				<AgendarTratamiento
+				<AgendarFacial
 					paciente={pacienteAgendado}
 					setPacienteAgendado={setPacienteAgendado}
 					empleado={empleado}
 					sucursal={sucursal._id} />
 			</TabPanel>
 			<TabPanel value={value} index={3}>
-				<Consultas
+				<AgendarLaser
+					paciente={pacienteAgendado}
+					setPacienteAgendado={setPacienteAgendado}
+					empleado={empleado}
 					sucursal={sucursal._id} />
 			</TabPanel>
 			<TabPanel value={value} index={4}>
+				<AgendarAparatologia
+					paciente={pacienteAgendado}
+					setPacienteAgendado={setPacienteAgendado}
+					empleado={empleado}
+					sucursal={sucursal._id} />
+			</TabPanel>
+			<TabPanel value={value} index={5}>
+				<Consultas
+					sucursal={sucursal._id} />
+			</TabPanel>
+			<TabPanel value={value} index={6}>
+				<Citas
+					sucursal={sucursal._id} />
+			</TabPanel>
+			<TabPanel value={value} index={7}>
+				<Citas
+					sucursal={sucursal._id} />
+			</TabPanel>
+			<TabPanel value={value} index={8}>
 				<Citas
 					sucursal={sucursal._id} />
 			</TabPanel>

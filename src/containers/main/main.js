@@ -46,7 +46,7 @@ const TabPanel = (props) => {
 			aria-labelledby={`simple-tab-${index}`}
 			{...other}
 		>
-			{value === index && <Box p={3}>{children}</Box>}
+			{value === index && <Box>{children}</Box>}
 		</Typography>
 	);
 }
@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 		display: 'flex',
 	},
 	appBar: {
-		backgroundColor: "#2BA6C6",
+		backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
 		transition: theme.transitions.create(['margin', 'width'], {
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.leavingScreen,
@@ -94,7 +94,6 @@ const useStyles = makeStyles((theme) => ({
 	drawerHeader: {
 		display: 'flex',
 		alignItems: 'center',
-		padding: theme.spacing(0, 1),
 		// necessary for content to be below app bar
 		...theme.mixins.toolbar,
 		justifyContent: 'flex-end',
@@ -107,6 +106,7 @@ const useStyles = makeStyles((theme) => ({
 			duration: theme.transitions.duration.leavingScreen,
 		}),
 		marginLeft: -drawerWidth,
+		padding: '0px',
 	},
 	contentShift: {
 		width: `calc(100% - ${drawerWidth}px)`,
@@ -115,12 +115,14 @@ const useStyles = makeStyles((theme) => ({
 			duration: theme.transitions.duration.enteringScreen,
 		}),
 		marginLeft: 0,
+		padding: '0px',
 	},
 	title: {
 		flexGrow: 1,
 	},
 	fragment: {
 		width: '100%',
+		padding: '0px',
 	}
 }));
 
