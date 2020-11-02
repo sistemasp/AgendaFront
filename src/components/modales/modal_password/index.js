@@ -44,7 +44,6 @@ const ModalPassword = (props) => {
   const handleActualizarPassword = async() => {
     setOpenAlert(true);
     if (empleado.password === values.passwordActual) {
-      console.log("Actualiza password");
       const data = {
         password: values.passwordNuevo
       }

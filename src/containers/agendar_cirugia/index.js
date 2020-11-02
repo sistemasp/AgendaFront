@@ -192,7 +192,7 @@ const AgendarCirugia = (props) => {
 		setIsLoading(true);
 		const hora = (e.target.value).split(':');
 		const date = values.fecha_hora;
-		date.setHours(Number(hora[0]) - 5); // -5 por zona horaria
+		date.setHours(Number(hora[0])); // -5 por zona horaria
 		date.setMinutes(hora[1]);
 		date.setSeconds(0);
 		setValues({ ...values, hora: e.target.value, fecha_hora: date });

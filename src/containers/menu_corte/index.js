@@ -359,7 +359,7 @@ const Corte = (props) => {
 
   const handleGenerateCorte = async () => {
     const create_date = new Date();
-    create_date.setHours(create_date.getHours() - 5);
+    create_date.setHours(create_date.getHours());
     const newCorte = {
       create_date: create_date,
       turno: turno,

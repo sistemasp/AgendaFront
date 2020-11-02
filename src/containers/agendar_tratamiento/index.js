@@ -84,7 +84,7 @@ const AgendarTratamiento = (props) => {
 		areas: [],
 		paciente: `${paciente._id}`,
 		precio: 0,
-		tipo_cita: {},
+		tipo_cita: tipoCitaNoAplicaId,
 		tiempo: '',
 		observaciones: '',
 		medico: { _id: medicoDirectoId},

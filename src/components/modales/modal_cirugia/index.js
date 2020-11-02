@@ -173,31 +173,29 @@ const ModalCirugia = (props) => {
     });
   }
 
-  const handleChangePrecio = e => {
-    let total = 0;
+  const handleChangeTotal = e => {
+    let precio = Number(e.target.value);
     values.materiales.map(item => {
-      total += Number(item.precio);
+      precio -= Number(item.precio);
     });
-    total += Number(values.costo_biopsias);
-    total += Number(e.target.value);
+    precio -= Number(values.costo_biopsias);
     setValues({
       ...values,
-      precio: e.target.value,
-      total: total
+      total: e.target.value,
+      precio: precio,
     });
   };
 
   const handleChangeCostoBiopsias = e => {
-    let total = 0;
+    let precio = Number(values.total);
     values.materiales.map(item => {
-      total += Number(item.precio);
+      precio -= Number(item.precio);
     });
-    total += Number(values.precio);
-    total += Number(e.target.value);
+    precio -= Number(e.target.value);
     setValues({
       ...values,
       costo_biopsias: e.target.value,
-      total: total
+      precio: precio
     });
   }
 
@@ -244,16 +242,15 @@ const ModalCirugia = (props) => {
   const handleChangeItemPrecio = (e, index) => {
     const newMateriales = values.materiales;
     newMateriales[index].precio = e.target.value;
-    let total = 0;
+    let precio = Number(values.total);
     newMateriales.map((item) => {
-      total += Number(item.precio);
+      precio -= Number(item.precio);
     });
-    total += Number(values.costo_biopsias);
-    total += Number(values.precio);
+    precio -= Number(values.costo_biopsias);
     setValues({
       ...values,
       materiales: newMateriales,
-      total: total,
+      precio: precio,
     });
   }
 
@@ -270,7 +267,7 @@ const ModalCirugia = (props) => {
             empleado={empleado}
             onClickCrearCirugia={handleClickCrearCirugia}
             onChange={handleChange}
-            onChangePrecio={handleChangePrecio}
+            onChangeTotal={handleChangeTotal}
             openModalPagos={openModalPagos}
             onCloseModalPagos={handleCloseModalPagos}
             onGuardarModalPagos={handleGuardarModalPagos}

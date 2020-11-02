@@ -86,7 +86,6 @@ export default withFormik({
     },
 
     handleSubmit(values, formikBag) {
-        console.log(values);
         formikBag.setSubmitting(false);
     },
 })(LoginContainer);

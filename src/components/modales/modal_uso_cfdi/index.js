@@ -74,7 +74,6 @@ const ModalUsoCfdi = (props) => {
   const handleChangeUsoCfdi = (event) => {
     factura.uso_cfdi = event.target.value;
   }
-  console.log(factura);
 
   return (
     <Fragment>

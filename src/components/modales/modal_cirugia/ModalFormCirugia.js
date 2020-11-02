@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@material-ui/core';
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid, Divider } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { CheckCustom } from '../../basic/CheckCustom';
@@ -66,7 +66,7 @@ const ModalFormCirugia = (props) => {
     onClose,
     onClickCrearCirugia,
     open,
-    onChangePrecio,
+    onChangeTotal,
     onChangePagado,
     sucursal,
     materiales,
@@ -117,6 +117,21 @@ const ModalFormCirugia = (props) => {
                 <h2 className={classes.label}>Medico: {values.consulta.medico.nombre}</h2>
               </Grid>
 
+              <Grid item xs={12}>
+                <TextField
+                  className={classes.textField}
+                  name="precio"
+                  label="Total de la cirugia"
+                  value={values.total}
+                  type='Number'
+                  onChange={onChangeTotal}
+                  onInput={(e) => {
+                    e.target.value = e.target.value < 0 ? 0 : e.target.value;
+                    e.target.value = Math.max(0, parseFloat(e.target.value)).toString().slice(0, 5)
+                  }}
+                  variant="outlined" />
+              </Grid>
+
               <Grid item xs={12} >
                 <Multiselect
                   options={materiales} // Options to display in the dropdown
@@ -140,22 +155,9 @@ const ModalFormCirugia = (props) => {
                       variant="outlined" />
                   </Grid>)
               }
-
               <Grid item xs={12}>
-                <TextField
-                  className={classes.textField}
-                  name="precio"
-                  label="Precio cirugia"
-                  value={values.precio}
-                  type='Number'
-                  onChange={onChangePrecio}
-                  onInput={(e) => {
-                    e.target.value = e.target.value < 0 ? 0 : e.target.value;
-                    e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 5)
-                  }}
-                  variant="outlined" />
+                <br />
               </Grid>
-
               {
                 values._id ?
                   <Grid item xs={12} sm={2}>
@@ -167,7 +169,7 @@ const ModalFormCirugia = (props) => {
                   </Grid>
                   : ''
               }
-
+              
               {values.hasBiopsia ?
                 <Fragment>
                   <Grid item xs={12} sm={3}>
@@ -230,7 +232,10 @@ const ModalFormCirugia = (props) => {
                   </Grid> : ''
               }
               <Grid item xs={12}>
-                <h1 className={classes.labelItemRight}>Total: {toFormatterCurrency(values.total)}</h1>
+                <h2 className={classes.labelItemRight}>Precio de aplicacion: {toFormatterCurrency(values.precio)}</h2>
+              </Grid>
+              <Grid item xs={12}>
+                <h1 className={classes.labelItemRight}>Total de la cirugia: {toFormatterCurrency(values.total)}</h1>
               </Grid>
 
               <Grid item xs={12} sm={6}>

@@ -102,7 +102,6 @@ const ModalFormImprimirTratamiento = (props) => {
             <br />
             <br />
             <br />
-            {console.log(datos.tratamientos)}
             {
               datos.tratamientos.map(tratamiento => {
                 return <Fragment>

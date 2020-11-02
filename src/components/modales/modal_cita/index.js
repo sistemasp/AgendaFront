@@ -70,7 +70,6 @@ const ModalCita = (props) => {
   } = props;
 
   const [isLoading, setIsLoading] = useState(true);
-  const [tratamientos, setTratamientos] = useState([]);
   const [horarios, setHorarios] = useState([]);
   const [promovendedores, setPromovendedores] = useState([]);
   const [cosmetologas, setCosmetologas] = useState([]);
@@ -98,6 +97,7 @@ const ModalCita = (props) => {
     telefono: cita.paciente.telefono,
     servicio: cita.servicio,
     tratamientos: cita.tratamientos,
+    areas: cita.areas,
     numero_sesion: cita.numero_sesion,
     quien_agenda: cita.quien_agenda,
     tipo_cita: cita.tipo_cita ? cita.tipo_cita._id : '',
@@ -126,12 +126,12 @@ const ModalCita = (props) => {
   const pagoAnticipadoMetodoPagoId = process.env.REACT_APP_PAGO_ANTICIPADO_METODO_PAGO_ID;
 
   useEffect(() => {
-    const loadTratamientos = async () => {
+    /*const loadTratamientos = async () => {
       const response = await findTreatmentByServicio(cita.servicio._id);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setTratamientos(response.data);
       }
-    }
+    }*/
     const loadHorariosByServicio = async () => {
       const date = new Date(cita.fecha_hora);
       const response = await findScheduleByDateAndSucursalAndService(date.getDate(), Number(date.getMonth()), date.getFullYear(), cita.sucursal._id, cita.servicio._id);
@@ -179,7 +179,7 @@ const ModalCita = (props) => {
     }
 
     setIsLoading(true);
-    loadTratamientos();
+    //loadTratamientos();
     loadHorariosByServicio();
     loadPromovendedores();
     loadCosmetologas();
@@ -189,12 +189,12 @@ const ModalCita = (props) => {
     setIsLoading(false);
   }, [cita, promovendedorRolId, cosmetologaRolId, medicoRolId]);
 
-  const loadTratamientos = async (servicio) => {
+  /*const loadTratamientos = async (servicio) => {
     const response = await findTreatmentByServicio(servicio);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setTratamientos(response.data);
     }
-  }
+  }*/
 
   const loadHorarios = async () => {
     const response = await getAllSchedules();
@@ -202,19 +202,6 @@ const ModalCita = (props) => {
       setHorarios(response.data);
     }
   }
-
-  const handleChangeServicio = e => {
-    setValues({
-      ...values,
-      servicio: e.target.value,
-      tratamiento: '',
-      fecha_show: new Date(),
-      fecha: '',
-      hora: '',
-      precio: '',
-    });
-    loadTratamientos(e.target.value);
-  };
 
   const handleChangeTratamientos = (items) => {
     setValues({ ...values, tratamientos: items });
@@ -236,7 +223,7 @@ const ModalCita = (props) => {
     setIsLoading(true);
     const hora = (e.target.value).split(':');
     const date = new Date(values.nueva_fecha_hora);
-    date.setHours(Number(hora[0]) - 5); // -5 por zona horaria
+    date.setHours(Number(hora[0])); // -5 por zona horaria
     date.setMinutes(hora[1]);
     date.setSeconds(0);
     const fechaObservaciones = `${addZero(date.getDate())}/${addZero(Number(date.getMonth()))}/${date.getFullYear()} - ${e.target.value} hrs`;
@@ -309,7 +296,7 @@ const ModalCita = (props) => {
       }
     }
     if (rowData.status._id !== pendienteStatusId) {
-      rowData.quien_confirma = empleado._id;
+      rowData.quien_confirma_asistencia = empleado._id;
       if (rowData.status === asistioStatusId) {
         const dateNow = new Date();
         rowData.hora_llegada = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
@@ -417,8 +404,6 @@ const ModalCita = (props) => {
                 onClickCancel={onClose}
                 cita={cita}
                 onClickActualizarCita={handleOnClickActualizarCita}
-                onChangeServicio={(e) => handleChangeServicio(e)}
-                onChangeTratamientos={(e) => handleChangeTratamientos(e)}
                 onChangeFecha={(e) => handleChangeFecha(e)}
                 onChangeHora={(e) => handleChangeHora(e)}
                 onChangeTipoCita={(e) => handleChangeTipoCita(e)}
@@ -427,7 +412,6 @@ const ModalCita = (props) => {
                 onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
                 onChangeMedico={(e) => handleChangeMedico(e)}
                 onChangeTiempo={(e) => handleChangeTiempo(e)}
-                tratamientos={tratamientos}
                 horarios={horarios}
                 promovendedores={promovendedores}
                 cosmetologas={cosmetologas}

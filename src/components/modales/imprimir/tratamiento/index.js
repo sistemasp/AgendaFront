@@ -30,8 +30,6 @@ const ModalImprimirTratamiento = (props) => {
     setTimeout(() => { setShow(true); }, 15);
   }
 
-  console.log("DATOS", datos);
-
   return (
     <Fragment>
       <ModalFormImprimirTratamiento

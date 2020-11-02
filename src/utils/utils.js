@@ -11,7 +11,6 @@ export const addZero = (value) => {
 }
 
 export const exportTableToExcel = (tableID, filename = '') => {
-    console.log('TableID', tableID);
     var downloadLink;
     var dataType = 'application/vnd.ms-excel';
     var tableSelect = document.getElementById(tableID);

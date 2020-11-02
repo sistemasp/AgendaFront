@@ -130,7 +130,7 @@ const ModalEstetica = (props) => {
 
   const handleClickCrearCirugia = async (event, data) => {
     const fecha_actual = new Date();
-    fecha_actual.setHours(fecha_actual.getHours() - 5);
+    fecha_actual.setHours(fecha_actual.getHours());
     data.fecha_hora = fecha_actual;
     data.servicio = esteticaServicioId;
     if (!data._id) {
@@ -169,19 +169,18 @@ const ModalEstetica = (props) => {
     });
   }
 
-  const handleChangePrecio = e => {
-    let total = 0;
+  const handleChangeTotal = e => {
+    let precio = e.target.value;
     values.toxinas_rellenos.map(item => {
-      total += Number(item.total);
+      precio -= Number(item.total);
     });
     values.materiales.map(item => {
-      total += Number(item.precio);
+      precio -= Number(item.precio);
     });
-    total += Number(e.target.value);
     setValues({
       ...values,
-      precio: e.target.value,
-      total: total
+      precio: precio,
+      total: e.target.value,
     });
   };
 
@@ -208,37 +207,35 @@ const ModalEstetica = (props) => {
     const newToxinasRellenos = values.toxinas_rellenos;
     newToxinasRellenos[index].unidades = e.target.value;
     newToxinasRellenos[index].total = Number(newToxinasRellenos[index].precio) * Number(e.target.value)
-    let total = 0;
+    let precio = values.total;
     newToxinasRellenos.map((item) => {
-      total += Number(item.precio) * Number(item.unidades);
+      precio -= Number(item.precio) * Number(item.unidades);
     });
     values.materiales.map(item => {
-      total += Number(item.precio);
+      precio -= Number(item.precio);
     });
 
-    total += Number(values.precio);
     setValues({
       ...values,
       toxinas_rellenos: newToxinasRellenos,
-      total: total,
+      precio: precio,
     });
   }
 
   const handleChangeItemPrecio = (e, index) => {
     const newMateriales = values.materiales;
     newMateriales[index].precio = e.target.value;
-    let total = 0;
+    let precio = Number(values.total);
     newMateriales.map((item) => {
-      total += Number(item.precio);
+      precio -= Number(item.precio);
     });
     values.toxinas_rellenos.map(item => {
-      total += Number(item.total);
+      precio -= Number(item.total);
     });
-    total += Number(values.precio);
     setValues({
       ...values,
       materiales: newMateriales,
-      total: total,
+      precio: precio,
     });
   }
 
@@ -264,7 +261,7 @@ const ModalEstetica = (props) => {
             empleado={empleado}
             onClickCrearCirugia={handleClickCrearCirugia}
             onChange={handleChange}
-            onChangePrecio={handleChangePrecio}
+            onChangeTotal={handleChangeTotal}
             openModalPagos={openModalPagos}
             onCloseModalPagos={handleCloseModalPagos}
             onGuardarModalPagos={handleGuardarModalPagos}

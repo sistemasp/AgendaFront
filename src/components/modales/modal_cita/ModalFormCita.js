@@ -61,8 +61,6 @@ const ModalFormCita = (props) => {
     values,
     errors,
     handleSubmit,
-    onChangeServicio,
-    onChangeTratamientos,
     onChangeFecha,
     onChangeHora,
     onChangeTiempo,
@@ -75,6 +73,7 @@ const ModalFormCita = (props) => {
     onClickActualizarCita,
     open,
     tratamientos,
+    areas,
     horarios,
     promovendedores,
     cosmetologas,
@@ -135,14 +134,10 @@ const ModalFormCita = (props) => {
                 <h3 className={classes.label}>Servicio: {values.servicio.nombre}</h3>
               </Grid>
               <Grid item xs={12}>
-                <Multiselect
-                  options={tratamientos} // Options to display in the dropdown
-                  displayValue="nombre" // Property name to display in the dropdown options
-                  onSelect={(e) => onChangeTratamientos(e)} // Function will trigger on select event
-                  onRemove={(e) => onChangeTratamientos(e)} // Function will trigger on remove event
-                  placeholder="Selecciona tratamientos"
-                  selectedValues={values.tratamientos} // Preselected value to persist in dropdown
-                />
+                <h3 className={classes.label}>Tratamientos: {values.servicio.nombre}</h3>
+              </Grid>
+              <Grid item xs={12}>
+                <h3 className={classes.label}>Areas: {values.servicio.nombre}</h3>
               </Grid>
               <Grid item xs={12}>
                 {

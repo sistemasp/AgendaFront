@@ -156,8 +156,6 @@ const ModalImprimirPagoMedico = (props) => {
     citas.forEach(cita => {
       let comisionMedico = 0;
       cita.areas.forEach(area => {
-        console.log("FSFSDFSDF", sucursal._id !== manuelAcunaSucursalId, manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
-
         switch (cita.tipo_cita) {
           case revisadoTipoCitaId:
             comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
@@ -207,7 +205,7 @@ const ModalImprimirPagoMedico = (props) => {
       }
 
       const create_date = new Date();
-      create_date.setHours(create_date.getHours() - 5);
+      create_date.setHours(create_date.getHours());
 
       const egreso = {
         create_date: create_date,

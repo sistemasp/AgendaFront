@@ -55,7 +55,6 @@ const TabFaciales = (props) => {
 
   useEffect(() => {
     const loadHistorial = async () => {
-      console.log('SERVICIO CONSULTA', servicio);
       if (servicio) {
         const response = await findHistoricByPacienteAndService(paciente._id, servicio._id);
         if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {

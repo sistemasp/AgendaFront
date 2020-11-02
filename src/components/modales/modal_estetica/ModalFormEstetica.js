@@ -87,8 +87,7 @@ const ModalFormEstetica = (props) => {
     onClose,
     onClickCrearCirugia,
     open,
-    onChangePrecio,
-    onChangePrecioMateriales,
+    onChangeTotal,
     onChangePagado,
     sucursal,
     toxinasRellenos,
@@ -97,12 +96,6 @@ const ModalFormEstetica = (props) => {
     onChangeMateriales,
     onChangeItemUnidades,
     onChangeItemPrecio,
-    dataComplete,
-    onChangeBiopsia,
-    onChangeCantidadBiopsias,
-    onChange,
-    patologos,
-    onChangeCostoBiopsias,
     openModalPagos,
     onCloseModalPagos,
     onGuardarModalPagos,
@@ -140,6 +133,21 @@ const ModalFormEstetica = (props) => {
               </Grid>
               <Grid item xs={12}>
                 <h2 className={classes.label}>Medico: {values.consulta.medico.nombre}</h2>
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  className={classes.textField}
+                  name="total"
+                  label="Precio total"
+                  value={values.total}
+                  type='Number'
+                  onChange={onChangeTotal}
+                  onInput={(e) => {
+                    e.target.value = e.target.value < 0 ? 0 : e.target.value;
+                    e.target.value = Math.max(0, parseFloat(e.target.value)).toString().slice(0, 5)
+                  }}
+                  variant="outlined" />
               </Grid>
 
               <Grid item xs={12} >
@@ -218,21 +226,6 @@ const ModalFormEstetica = (props) => {
                   </Grid>)
               }
 
-              <Grid item xs={12}>
-                <TextField
-                  className={classes.textField}
-                  name="precio"
-                  label="Precio aplicacion"
-                  value={values.precio}
-                  type='Number'
-                  onChange={onChangePrecio}
-                  onInput={(e) => {
-                    e.target.value = e.target.value < 0 ? 0 : e.target.value;
-                    e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 5)
-                  }}
-                  variant="outlined" />
-              </Grid>
-
               {
                 values._id ?
                   <Grid item xs={12}>
@@ -244,6 +237,9 @@ const ModalFormEstetica = (props) => {
                       label="Pagado" />
                   </Grid> : ''
               }
+              <Grid item xs={12}>
+                <h2 className={classes.labelItemRight}>Precio aplicacion: {toFormatterCurrency(values.precio)}</h2>
+              </Grid>
               <Grid item xs={12}>
                 <h1 className={classes.labelItemRight}>Total: {toFormatterCurrency(values.total)}</h1>
               </Grid>

@@ -52,7 +52,7 @@ const ModalNuevoIngreso = (props) => {
 
   const handleAgregarConceto = async () => {
     const create_date = new Date();
-    create_date.setHours(create_date.getHours() - 5);
+    create_date.setHours(create_date.getHours());
     values.create_date = create_date;
     const response = await createIngreso(values);
         if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {

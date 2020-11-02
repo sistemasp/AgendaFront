@@ -395,7 +395,6 @@ const AgendarConsulta = (props) => {
 		const promovendedor = promovendedores.filter(item => {
 			return item._id === promovendedorSinAsignarId;
 		});
-		console.log("VALVALVLALV", frecuencia);
 		setValues({
 			...values,
 			frecuencia: frecuencia,

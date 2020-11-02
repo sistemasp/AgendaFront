@@ -328,7 +328,6 @@ const ListaEspera = (props) => {
 				}
 			}
 		} else { // SI ES TRATAMIENTO 
-			console.log("Tratamiento");
 			const responseCita = await findDateById(rowData.servicio);
 			if (`${responseCita.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				const cita = responseCita.data;
@@ -427,7 +426,6 @@ const ListaEspera = (props) => {
 
 	const componentsConsultorio = {
 		Actions: props => {
-			console.log("POROROOR", props);
 			return <Fragment>
 				<FormControl variant="outlined" className={classes.formControl}>
 					<InputLabel id="simple-select-outlined"></InputLabel>
