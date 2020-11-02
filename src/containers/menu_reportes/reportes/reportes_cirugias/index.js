@@ -47,12 +47,12 @@ const ReportesCirugias = (props) => {
 		{ title: 'Medico', field: 'medico_nombre' },
 		{ title: 'Materiales', field: 'materiales_show' },
 		{ title: 'Biopsias', field: 'biopsias_show' },
-		{ title: 'Costo biopsias', field: 'costo_biopsia_moneda' },
-		{ title: 'Patologo', field: 'patologo_nombre' },		
+		{ title: 'Costo biopsias', field: 'costo_biopsias_moneda' },
+		{ title: 'Patologo', field: 'patologo.nombre' },
 		{ title: 'Estado', field: 'status.nombre' },
 		{ title: 'Precio', field: 'precio_moneda' },
 		{ title: 'Total', field: 'total_moneda' },
-		{ title: 'Sucursal', field: 'sucursal.nombre'},
+		{ title: 'Sucursal', field: 'sucursal.nombre' },
 		{ title: 'Observaciones', field: 'observaciones' },
 
 	];
@@ -78,15 +78,17 @@ const ReportesCirugias = (props) => {
 	useEffect(() => {
 
 		const loadCitas = async () => {
-			const response = await findCirugiasByRangeDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(),
-				date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
+			const response = await findCirugiasByRangeDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(),
+				date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
 
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
 					const fecha = new Date(item.fecha_hora);
 					item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
-					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
+					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
+					item.total_moneda = toFormatterCurrency(item.total);
+					item.costo_biopsias_moneda = toFormatterCurrency(item.costo_biopsias);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
@@ -135,8 +137,10 @@ const ReportesCirugias = (props) => {
 			await response.data.forEach(item => {
 				const fecha = new Date(item.fecha_hora);
 				item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
-				item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
+				item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);
+				item.total_moneda = toFormatterCurrency(item.total);
+				item.costo_biopsias_moneda = toFormatterCurrency(item.costo_biopsias);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';

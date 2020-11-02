@@ -67,7 +67,7 @@ const TabFaciales = (props) => {
             const dia = addZero(date.getDate());
             const mes = addZero(date.getMonth() + 1);
             const anio = date.getFullYear();
-            const hora = Number(date.getHours() + 5);
+            const hora = Number(date.getHours());
             const minutos = date.getMinutes();
             item.fecha_show = `${dia}/${mes}/${anio}`;
             item.hora = `${addZero(hora)}:${addZero(minutos)}`;

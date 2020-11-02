@@ -124,12 +124,12 @@ const AgendarCirugia = (props) => {
 	useEffect(() => {
 
 		const loadConsultas = async () => {
-			const response = await findConsultsByDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
+			const response = await findConsultsByDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
 					const fecha = new Date(item.fecha_hora);
 					item.folio = generateFolio(item);
-					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
+					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
@@ -218,7 +218,7 @@ const AgendarCirugia = (props) => {
 			response.data.forEach(item => {
 				const fecha = new Date(item.fecha_hora);
 				item.folio = generateFolio(item);
-				item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
+				item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';

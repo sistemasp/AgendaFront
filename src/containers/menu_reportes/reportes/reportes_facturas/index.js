@@ -74,13 +74,13 @@ const ReportesFacturas = (props) => {
 	useEffect(() => {
 
 		const loadCitas = async () => {
-			const response = await findFacturasByRangeDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(),
-				date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
+			const response = await findFacturasByRangeDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(),
+				date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
 
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
 					const fecha = new Date(item.fecha_hora);
-					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
+					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 					item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
 					item.cantidad_moneda = toFormatterCurrency(item.cantidad);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
@@ -128,7 +128,7 @@ const ReportesFacturas = (props) => {
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
 				const fecha = new Date(item.fecha_hora);
-				item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
+				item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 				item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
 				item.cantidad_moneda = toFormatterCurrency(item.cantidad);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;

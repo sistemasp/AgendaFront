@@ -80,13 +80,13 @@ const ReportesPagos = (props) => {
 	useEffect(() => {
 
 		const loadCitas = async () => {
-			const response = await findPaysByRangeDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(),
-				date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
+			const response = await findPaysByRangeDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(),
+				date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
 
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
 					const fecha = new Date(item.fecha_pago);
-					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
+					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 					item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
 					item.cantidad_show = toFormatterCurrency(item.cantidad);
 					item.porcentaje_comision_show = item.porcentaje_comision + ' %';
@@ -141,7 +141,7 @@ const ReportesPagos = (props) => {
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			await response.data.forEach(item => {
 				const fecha = new Date(item.fecha_pago);
-				item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
+				item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 				item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
 				item.cantidad_show = toFormatterCurrency(item.cantidad);
 				item.porcentaje_comision_show = item.porcentaje_comision + ' %';

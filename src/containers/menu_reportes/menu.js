@@ -58,7 +58,7 @@ const useStyles = makeStyles(theme => ({
 		flexGrow: 1,
 	},
 	bar: {
-		backgroundColor: "#2BA6C6",
+		backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
 	}
 }));
 
@@ -73,8 +73,17 @@ export const MenuContainer = props => {
 
 	return (
 		<div className={classes.root}>
-			<AppBar className={classes.bar} position="static">
-				<Tabs value={value} onChange={onChangeTab} aria-label="simple tabs">
+			<AppBar
+				className={classes.bar}
+				position="static"
+			>
+				<Tabs
+					value={value}
+					onChange={onChangeTab}
+					aria-label="simple tabs"
+					variant="scrollable"
+					scrollButtons="on"
+				>
 					<Tab label="Consulta" {...a11yProps(0)} />
 					<Tab label="Faciales" {...a11yProps(1)} />
 					<Tab label="Laser" {...a11yProps(2)} />

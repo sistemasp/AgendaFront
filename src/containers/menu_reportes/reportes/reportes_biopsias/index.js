@@ -39,13 +39,11 @@ const ReportesBiopsias = (props) => {
 	});
 
 	const columns = [
-		{ title: 'Consecutivo', field: 'consecutivo' },
 		{ title: 'Fecha', field: 'fecha_show' },
 		{ title: 'Hora', field: 'hora' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
 		{ title: 'Telefono', field: 'paciente.telefono' },
-		{ title: 'Folio consulta', field: 'folio_consulta' },
-		{ title: 'Folio cirugia', field: 'folio_consulta' },
+		{ title: 'Folio consulta', field: 'consulta.consecutivo' },
 		{ title: 'Medico', field: 'medico_nombre' },
 		{ title: 'Patologo', field: 'patologo_nombre' },
 		{ title: 'Costo biopsias', field: 'costo_biopsia_moneda' },
@@ -84,14 +82,14 @@ const ReportesBiopsias = (props) => {
 	useEffect(() => {
 
 		const loadCitas = async () => {
-			const response = await findBiopsiasByRangeDateAndSucursal(date.getDate(), (date.getMonth() + 1), date.getFullYear(),
-				date.getDate(), (date.getMonth() + 1), date.getFullYear(), sucursal);
+			const response = await findBiopsiasByRangeDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(),
+				date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
 
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
-					const fecha = new Date(item.fecha_hora);
+					const fecha = new Date(item.fecha_realizacion);
 					item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
-					item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
+					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
@@ -136,12 +134,12 @@ const ReportesBiopsias = (props) => {
 
 	const loadCitas = async (startDate, endDate) => {
 		const response = await findBiopsiasByRangeDateAndSucursal(startDate.getDate(), startDate.getMonth(), startDate.getFullYear(),
-			endDate.getDate(), (endDate.getMonth() + 1), endDate.getFullYear(), sucursal);
+			endDate.getDate(), endDate.getMonth(), endDate.getFullYear(), sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			await response.data.forEach(item => {
 				const fecha = new Date(item.fecha_hora);
 				item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
-				item.hora = `${addZero(fecha.getHours() + 5)}:${addZero(fecha.getMinutes())}`;
+				item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';

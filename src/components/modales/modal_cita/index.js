@@ -83,7 +83,7 @@ const ModalCita = (props) => {
 
   const fecha_cita = new Date(cita.fecha_hora);
   const fecha = `${addZero(fecha_cita.getDate())}/${addZero(Number(fecha_cita.getMonth()))}/${addZero(fecha_cita.getFullYear())}`;
-  const hora = `${addZero(Number(fecha_cita.getHours()) + 5)}:${addZero(fecha_cita.getMinutes())}`;
+  const hora = `${addZero(Number(fecha_cita.getHours()))}:${addZero(fecha_cita.getMinutes())}`;
 
   const [values, setValues] = useState({
     fecha_hora: cita.fecha_hora,
