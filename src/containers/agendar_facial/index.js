@@ -4,7 +4,6 @@ import {
 	findOfficeById,
 	findTreatmentByServicio,
 	findScheduleByDateAndSucursalAndService,
-	findDatesByDateAndSucursal,
 	createDate,
 	findEmployeesByRolId,
 	showAllTipoCitas,
@@ -13,7 +12,11 @@ import {
 	createConsecutivo,
 	showAllMedios,
 } from "../../services";
-import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
+import { 
+	createFacial,
+	findFacialByDateAndSucursal
+} from "../../services/faciales";
+import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
 import EditIcon from '@material-ui/icons/Edit';
@@ -64,10 +67,10 @@ const AgendarFacial = (props) => {
 	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 	const medicoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
 	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
+	const servicioFacialId = process.env.REACT_APP_FACIAL_SERVICIO_ID;
 
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
-	const [servicios, setServicios] = useState([]);
 	const [tratamientos, setTratamientos] = useState([]);
 	const [horarios, setHorarios] = useState([]);
 	const [medicos, setMedicos] = useState([]);
@@ -78,7 +81,7 @@ const AgendarFacial = (props) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [disableDate, setDisableDate] = useState(true);
 	const [values, setValues] = useState({
-		servicio: '',
+		servicio: servicioFacialId,
 		tratamientos: [],
 		areas: [],
 		paciente: `${paciente._id}`,
@@ -88,7 +91,7 @@ const AgendarFacial = (props) => {
 		observaciones: '',
 		medico: { _id: medicoDirectoId},
 	});
-	const [citas, setCitas] = useState([]);
+	const [faciales, setFaciales] = useState([]);
 	const [areas, setAreas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
 	const [cita, setCita] = useState();
@@ -114,7 +117,6 @@ const AgendarFacial = (props) => {
 		{ title: 'Servicio', field: 'servicio.nombre' },
 		{ title: 'Tratamientos', field: 'show_tratamientos' },
 		{ title: 'Areas', field: 'show_areas' },
-		{ title: 'Numero Sesion', field: 'numero_sesion' },
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
 		{ title: 'Medio', field: 'medio.nombre' },
 		{ title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' },
@@ -148,85 +150,8 @@ const AgendarFacial = (props) => {
 		paging: false,
 	}
 
-	useEffect(() => {
-		const loadServicios = async () => {
-			const response = await findOfficeById(sucursal);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setServicios(response.data.servicios);
-			}
-		}
-
-		const loadCitas = async () => {
-			const response = await findDatesByDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				await response.data.forEach(item => {
-					item.folio = generateFolio(item);
-					const fecha = new Date(item.fecha_hora);
-					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
-					item.precio_moneda = toFormatterCurrency(item.precio);
-					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
-					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-					item.show_tratamientos = item.tratamientos.map(tratamiento => {
-						return `${tratamiento.nombre}, `;
-					});
-					item.show_areas = item.areas.map(area => {
-						return `${area.nombre}, `;
-					});
-				});
-				setCitas(response.data);
-			}
-			setIsLoading(false);
-		}
-
-		const loadPromovendedores = async () => {
-			const response = await findEmployeesByRolId(promovendedorRolId);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setPromovendedores(response.data);
-			}
-		}
-
-		const loadCosmetologas = async () => {
-			const response = await findEmployeesByRolId(cosmetologaRolId);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setCosmetologas(response.data);
-			}
-		}
-
-		const loadMedicos = async () => {
-			const response = await findEmployeesByRolId(medicoRolId);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setMedicos(response.data);
-			}
-		}
-
-		const loadTipoCitas = async () => {
-			const response = await showAllTipoCitas();
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setTipoCitas(response.data);
-			}
-		}
-
-		const loadMedios = async () => {
-			const response = await showAllMedios();
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setMedios(response.data);
-			}
-		}
-
-		setIsLoading(true);
-		loadCitas();
-		loadPromovendedores();
-		loadCosmetologas();
-		loadServicios();
-		loadMedicos();
-		loadTipoCitas();
-		loadMedios();
-	}, [sucursal]);
-
-	const loadTratamientos = async (servicio) => {
-		const response = await findTreatmentByServicio(servicio._id);
+	const loadTratamientos = async () => {
+		const response = await findTreatmentByServicio(servicioFacialId);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setTratamientos(response.data);
 		}
@@ -243,7 +168,7 @@ const AgendarFacial = (props) => {
 		const dia = date ? date.getDate() : values.fecha_hora.getDate();
 		const mes = Number(date ? date.getMonth() : values.fecha_hora.getMonth());
 		const anio = date ? date.getFullYear() : values.fecha_hora.getFullYear();
-		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, values.servicio._id);
+		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, values.servicio);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setHorarios(response.data);
 		}
@@ -258,43 +183,6 @@ const AgendarFacial = (props) => {
 			setHorarios(response.data);
 		}
 	}
-
-	const handleChangeServicio = async (e) => {
-		setIsLoading(true);
-
-		setValues({
-			...values,
-			servicio: e.target.value,
-			fecha_hora: '',
-			precio: 0,
-			tratamientos: []
-		});
-		loadTratamientos(e.target.value);
-		setIsLoading(false);
-	};
-
-	/*
-	const handleChangeTratamientos = async (items) => {
-		items.map(async (item) => {
-			const response = await findAreasByTreatmentServicio(item.servicio, item._id);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setAreas(response.data);
-			}
-		});
-		setIsLoading(true);
-		let precio = 0;
-		items.map((item) => {
-			precio = Number(precio) + Number(item.precio);
-		});
-		setValues({
-			...values,
-			fecha_hora: '',
-			precio: precio,
-			tratamientos: items
-		});
-		setDisableDate(false);
-		setIsLoading(false);
-	} */
 
 	const handleChangeTratamientos = async (e) => {
 		setIsLoading(true);
@@ -363,12 +251,12 @@ const AgendarFacial = (props) => {
 			fecha_show: date,
 			fecha: `${dia}/${mes}/${anio}`
 		});
-		await loadCitas(date);
+		await loadFaciales(date);
 		setIsLoading(false);
 	};
 
-	const loadCitas = async (filterDate) => {
-		const response = await findDatesByDateAndSucursal(filterDate.getDate(), filterDate.getMonth(), filterDate.getFullYear(), sucursal);
+	const loadFaciales = async (filterDate) => {
+		const response = await findFacialByDateAndSucursal(filterDate.getDate(), filterDate.getMonth(), filterDate.getFullYear(), sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
 				item.folio = generateFolio(item);
@@ -386,7 +274,7 @@ const AgendarFacial = (props) => {
 					return `${area.nombre}, `;
 				});
 			});
-			setCitas(response.data);
+			setFaciales(response.data);
 		}
 	}
 
@@ -407,7 +295,6 @@ const AgendarFacial = (props) => {
 		setIsLoading(true);
 		data.quien_agenda = empleado._id;
 		data.sucursal = sucursal;
-		data.numero_sesion = 1;
 		data.status = pendienteStatusId;
 		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';
@@ -415,7 +302,7 @@ const AgendarFacial = (props) => {
 		data.tipo_cita = data.medico._id === medicoDirectoId ? tipoCitaNoAplicaId : data.tipo_cita;
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 
-		const response = await createDate(data);
+		const response = await createFacial(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			const consecutivo = {
 				consecutivo: response.data.consecutivo,
@@ -428,7 +315,7 @@ const AgendarFacial = (props) => {
 			const responseConsecutivo = await createConsecutivo(consecutivo);
 			if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 				setOpenAlert(true);
-				setMessage('La Cita se agendo correctamente');
+				setMessage('EL FACIAL SE AGREGO CORRECTAMENTE');
 				setValues({
 					servicio: '',
 					tratamientos: [],
@@ -443,7 +330,7 @@ const AgendarFacial = (props) => {
 				setAreas([]);
 				setDisableDate(true);
 				setPacienteAgendado({});
-				loadCitas(new Date());
+				loadFaciales(new Date());
 			}
 		}
 
@@ -544,6 +431,76 @@ const AgendarFacial = (props) => {
 			} : ''),
 	];
 
+	useEffect(() => {
+		const loadFaciales = async () => {
+			const response = await findFacialByDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				await response.data.forEach(item => {
+					item.folio = generateFolio(item);
+					const fecha = new Date(item.fecha_hora);
+					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
+					item.precio_moneda = toFormatterCurrency(item.precio);
+					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
+					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
+					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
+					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+					item.show_tratamientos = item.tratamientos.map(tratamiento => {
+						return `${tratamiento.nombre}, `;
+					});
+					item.show_areas = item.areas.map(area => {
+						return `${area.nombre}, `;
+					});
+				});
+				setFaciales(response.data);
+			}
+			setIsLoading(false);
+		}
+
+		const loadPromovendedores = async () => {
+			const response = await findEmployeesByRolId(promovendedorRolId);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setPromovendedores(response.data);
+			}
+		}
+
+		const loadCosmetologas = async () => {
+			const response = await findEmployeesByRolId(cosmetologaRolId);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setCosmetologas(response.data);
+			}
+		}
+
+		const loadMedicos = async () => {
+			const response = await findEmployeesByRolId(medicoRolId);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setMedicos(response.data);
+			}
+		}
+
+		const loadTipoCitas = async () => {
+			const response = await showAllTipoCitas();
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setTipoCitas(response.data);
+			}
+		}
+
+		const loadMedios = async () => {
+			const response = await showAllMedios();
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setMedios(response.data);
+			}
+		}
+
+		setIsLoading(true);
+		loadTratamientos();
+		loadFaciales();
+		loadPromovendedores();
+		loadCosmetologas();
+		loadMedicos();
+		loadTipoCitas();
+		loadMedios();
+	}, [sucursal]);
+
 	return (
 		<Fragment>
 			{
@@ -554,11 +511,9 @@ const AgendarFacial = (props) => {
 						validationSchema={validationSchema} >
 						{
 							props => <AgendarFacialContainer
-								servicios={servicios}
 								tratamientos={tratamientos}
 								areas={areas}
 								horarios={horarios}
-								onChangeServicio={(e) => handleChangeServicio(e)}
 								onChangeTratamientos={(e) => handleChangeTratamientos(e)}
 								onChangeAreas={(e) => handleChangeAreas(e)}
 								onChangeFecha={(e) => handleChangeFecha(e)}
@@ -572,16 +527,16 @@ const AgendarFacial = (props) => {
 								cosmetologas={cosmetologas}
 								onClickAgendar={handleClickAgendar}
 								onChangeTiempo={(e) => handleChangeTiempo(e)}
-								titulo={`CITAS (${filterDate.fecha})`}
+								titulo={`FACIALES (${filterDate.fecha})`}
 								columns={columns}
 								options={options}
-								citas={citas}
+								citas={faciales}
 								actions={actions}
 								cita={cita}
 								openModal={openModal}
 								empleado={empleado}
 								onClickCancel={handleCloseModal}
-								loadCitas={loadCitas}
+								loadFaciales={loadFaciales}
 								medicos={medicos}
 								tipoCitas={tipoCitas}
 								medios={medios}

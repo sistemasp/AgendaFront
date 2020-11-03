@@ -175,32 +175,32 @@ const Pacientes = (props) => {
 	const actions = [
 		{
 			icon: TodayIcon,
-			tooltip: 'Agendar consulta',
+			tooltip: 'AGREGAR CONSULTA',
 			onClick: onClickAgendarConsulta
 		},
 		{
 			icon: EventAvailableIcon,
-			tooltip: 'Agendar facial',
+			tooltip: 'AGREGAR FACIAL',
 			onClick: onClickAgendarFaciales
 		},
 		{
 			icon: EventAvailableIcon,
-			tooltip: 'Agendar laser',
+			tooltip: 'AGREGAR LÁSER',
 			onClick: onClickAgendarLaser
 		},
 		{
 			icon: EventAvailableIcon,
-			tooltip: 'Agendar aparatologia',
+			tooltip: 'AGREGAR APARATOLOGIA',
 			onClick: onClickAgendarAparatologia
 		},
 		{
 			icon: EditIcon,
-			tooltip: 'Actualizar registro',
+			tooltip: 'ACTUALIZAR REGISTRO',
 			onClick: handleOnClickEditar
 		},
 		{
 			icon: HistoryIcon,
-			tooltip: 'Ver Historico',
+			tooltip: 'HISTORICO',
 			onClick: handleClickHistorico
 		}
 	];
@@ -208,22 +208,22 @@ const Pacientes = (props) => {
 	const onChangeActions = (e, rowData) => {
 		const action = e.target.value;
 		switch (action) {
-			case 'Agendar consulta':
+			case 'AGREGAR CONSULTA':
 				onClickAgendarConsulta(e, rowData);
 				break;
-			case 'Agendar facial':
+			case 'AGREGAR FACIAL':
 				onClickAgendarFaciales(e, rowData);
 				break;
-			case 'Agendar laser':
+			case 'AGREGAR LÁSER':
 				onClickAgendarLaser(e, rowData);
 				break;
-			case 'Agendar aparatologia':
+			case 'AGREGAR APARATOLOGIA':
 				onClickAgendarAparatologia(e, rowData);
 				break;
-			case 'Actualizar registro':
+			case 'ACTUALIZAR REGISTRO':
 				handleOnClickEditar(e, rowData);
 				break;
-			case 'Ver Historico':
+			case 'HISTORICO':
 				handleClickHistorico(e, rowData);
 				break;
 		}

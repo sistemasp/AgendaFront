@@ -6,9 +6,11 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Citas from '../citas/index';
 import PacientesForCosmetologas from '../pacientes/index_cosmetologas';
 import AgendarFacial from '../agendar_facial';
+import Faciales from '../calendario/faciales';
+import Laser from '../calendario/laser';
+import Aparatologia from '../calendario/aparatologia';
 
 
 function TabPanel(props) {
@@ -83,7 +85,9 @@ export const MenuCosmetologaContainer = props => {
 				<Tabs value={value} onChange={onChangeTab} aria-label="simple tabs">
 					<Tab label="Pacientes" {...a11yProps(0)} />
 					<Tab label="Buscar citas" {...a11yProps(1)} />
-					<Tab label="Calendario" {...a11yProps(2)} />
+					<Tab label="FACIALES" {...a11yProps(2)} />
+					<Tab label="LÁSER" {...a11yProps(3)} />
+					<Tab label="APARATOLOGÍA" {...a11yProps(4)} />
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>
@@ -98,7 +102,15 @@ export const MenuCosmetologaContainer = props => {
 					sucursal={sucursal._id} />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
-				<Citas
+				<Faciales
+					sucursal={sucursal._id} />
+			</TabPanel>
+			<TabPanel value={value} index={3}>
+				<Laser
+					sucursal={sucursal._id} />
+			</TabPanel>
+			<TabPanel value={value} index={4}>
+				<Aparatologia
 					sucursal={sucursal._id} />
 			</TabPanel>
 		</div>

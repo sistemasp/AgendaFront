@@ -308,11 +308,10 @@ export const AgendarAparatologiaContainer = (props) => {
 							className={classes.button}
 							variant="contained"
 							color="primary"
-							disabled={!isValid || isSubmitting || !paciente.nombres || !values.servicio
-								|| values.tratamientos.length === 0 || !values.fecha_hora || !values.precio
-								|| !values.tiempo}
+							disabled={!isValid || isSubmitting || !paciente.nombres
+								|| values.tratamientos.length === 0 || !values.fecha_hora || !values.precio}
 							onClick={() => onClickAgendar(values)} >
-							Agendar
+							AGREGAR
                         </Button>
 					</Grid>
 					<Grid item xs={12} sm={2}>

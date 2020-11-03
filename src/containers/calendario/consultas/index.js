@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { ConsultasContainer } from "./consultas";
-import { showAllConsultsBySucursalAsistio } from "../../services";
+import { showAllConsultsBySucursalAsistio } from "../../../services";
 import { Backdrop, CircularProgress, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({

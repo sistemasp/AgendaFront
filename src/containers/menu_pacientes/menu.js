@@ -7,12 +7,14 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Pacientes from '../pacientes/index';
-import Citas from '../citas/index';
 import AgendarConsulta from '../agendar_consulta';
-import Consultas from '../consultas';
+import Consultas from '../calendario/consultas';
 import AgendarFacial from '../agendar_facial';
 import AgendarLaser from '../agendar_laser';
 import AgendarAparatologia from '../agendar_aparatologia';
+import Faciales from '../calendario/faciales';
+import Laser from '../calendario/laser';
+import Aparatologia from '../calendario/aparatologia';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -90,7 +92,7 @@ export const MenuContainer = props => {
 					variant="scrollable"
 					scrollButtons="on"
 				>
-					<Tab label="Pacientes" {...a11yProps(0)} />
+					<Tab label="PACIENTES" {...a11yProps(0)} />
 					<Tab label="AGENDAR CONSULTA" {...a11yProps(1)} />
 					<Tab label="AGENDAR FACIALES" {...a11yProps(2)} />
 					<Tab label="AGENDAR LÁSER" {...a11yProps(3)} />
@@ -143,15 +145,15 @@ export const MenuContainer = props => {
 					sucursal={sucursal._id} />
 			</TabPanel>
 			<TabPanel value={value} index={6}>
-				<Citas
+				<Faciales
 					sucursal={sucursal._id} />
 			</TabPanel>
 			<TabPanel value={value} index={7}>
-				<Citas
+				<Laser
 					sucursal={sucursal._id} />
 			</TabPanel>
 			<TabPanel value={value} index={8}>
-				<Citas
+				<Aparatologia
 					sucursal={sucursal._id} />
 			</TabPanel>
 		</div>

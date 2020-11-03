@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Fragment } from "react";
-import { CitasContainer } from "./citas";
-import { showAllDatesBySucursalAsistio } from "../../services";
 import { Backdrop, CircularProgress, makeStyles } from "@material-ui/core";
+import { LaserContainer } from "./laser";
+import { showAllLaserBySucursalAsistio } from "../../../services/laser";
 
 const useStyles = makeStyles(theme => ({
     backdrop: {
@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Citas = (props) => {
+const Laser = (props) => {
 
     const classes = useStyles();
 
@@ -19,28 +19,28 @@ const Citas = (props) => {
 
     const { sucursal } = props;
 
-    const parseToEvents = (citas) => {
-        return citas.map( cita => {
-            const startDate = new Date(cita.fecha_hora);
-            const endDate = new Date(cita.fecha_hora);
-            const minutos = Number(endDate.getMinutes()) + Number(cita.tiempo);
+    const parseToEvents = (lasers) => {
+        return lasers.map( laser => {
+            const startDate = new Date(laser.fecha_hora);
+            const endDate = new Date(laser.fecha_hora);
+            const minutos = Number(endDate.getMinutes()) + Number(laser.tiempo);
             endDate.setMinutes(minutos);
-            const tratamientos = cita.tratamientos.map(tratamiento => {
-                return `${tratamiento.nombre}, `;
+            const areas = laser.areas.map(area => {
+                return `${area.nombre}, `;
             });
             return {
-                id: cita._id,
-                title: tratamientos,
+                id: laser._id,
+                title: areas,
                 start: startDate,
                 end: endDate,
-                servicio: cita.servicio
+                servicio: laser.servicio
             }
         });
     }
     
     useEffect(() => {
         const loadCitas = async() => {
-            const response = await showAllDatesBySucursalAsistio(sucursal);
+            const response = await showAllLaserBySucursalAsistio(sucursal);
             
             if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK ) {
                 setEvents(parseToEvents(response.data));
@@ -58,11 +58,11 @@ const Citas = (props) => {
                 ? <Backdrop className={classes.backdrop} open={isLoading} >
                     <CircularProgress color="inherit" />
                 </Backdrop>
-                : <CitasContainer 
+                : <LaserContainer 
                     events={events} />
             }
         </Fragment>
     );
 }
 
-export default Citas;
+export default Laser;

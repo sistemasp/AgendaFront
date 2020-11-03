@@ -37,7 +37,6 @@ export const AgendarLaserContainer = (props) => {
 		values,
 		errors,
 		servicios,
-		tratamientos,
 		areas,
 		horarios,
 		tipoCitas,
@@ -110,7 +109,6 @@ export const AgendarLaserContainer = (props) => {
 						onChangeMedio={onChangeMedio}
 						onChangeAsistio={onChangeAsistio}
 						servicios={servicios}
-						tratamientos={tratamientos}
 						horarios={horarios}
 						empleado={empleado}
 						loadCitas={loadCitas}
@@ -294,8 +292,7 @@ export const AgendarLaserContainer = (props) => {
 							variant="contained"
 							color="primary"
 							disabled={!isValid || isSubmitting || !paciente.nombres || !values.servicio
-								|| values.tratamientos.length === 0 || !values.fecha_hora || !values.precio
-								|| !values.tiempo}
+								|| !values.fecha_hora || !values.precio || !values.tiempo}
 							onClick={() => onClickAgendar(values)} >
 							Agendar
                         </Button>

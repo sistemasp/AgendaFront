@@ -1,10 +1,8 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import {
-	findOfficeById,
 	findTreatmentByServicio,
 	findScheduleByDateAndSucursalAndService,
-	findDatesByDateAndSucursal,
 	createDate,
 	findEmployeesByRolId,
 	showAllTipoCitas,
@@ -21,6 +19,7 @@ import { toFormatterCurrency, addZero, generateFolio } from "../../utils/utils";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
 import { AgendarAparatologiaContainer } from "./agendar_aparatologia";
+import { createAparatologia, findAparatologiaByDateAndSucursal } from "../../services/aparatolgia";
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -63,6 +62,7 @@ const AgendarAparatologia = (props) => {
 	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 	const medicoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
 	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
+	const servicioAparatologiaId = process.env.REACT_APP_APARATOLOGIA_SERVICIO_ID;
 
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
@@ -77,13 +77,12 @@ const AgendarAparatologia = (props) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [disableDate, setDisableDate] = useState(true);
 	const [values, setValues] = useState({
-		servicio: '',
+		servicio: servicioAparatologiaId,
 		tratamientos: [],
 		areas: [],
 		paciente: `${paciente._id}`,
 		precio: 0,
 		tipo_cita: tipoCitaNoAplicaId,
-		tiempo: '',
 		observaciones: '',
 		medico: { _id: medicoDirectoId},
 	});
@@ -124,7 +123,6 @@ const AgendarAparatologia = (props) => {
 		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
 		{ title: 'Estado', field: 'status.nombre' },
 		{ title: 'Precio', field: 'precio_moneda' },
-		{ title: 'Tiempo (minutos)', field: 'tiempo' },
 		{ title: 'Observaciones', field: 'observaciones' },
 		{ title: 'Hora llegada', field: 'hora_llegada' },
 		{ title: 'Hora atendido', field: 'hora_atencion' },
@@ -147,85 +145,8 @@ const AgendarAparatologia = (props) => {
 		paging: false,
 	}
 
-	useEffect(() => {
-		const loadServicios = async () => {
-			const response = await findOfficeById(sucursal);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setServicios(response.data.servicios);
-			}
-		}
-
-		const loadCitas = async () => {
-			const response = await findDatesByDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				await response.data.forEach(item => {
-					item.folio = generateFolio(item);
-					const fecha = new Date(item.fecha_hora);
-					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
-					item.precio_moneda = toFormatterCurrency(item.precio);
-					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
-					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-					item.show_tratamientos = item.tratamientos.map(tratamiento => {
-						return `${tratamiento.nombre}, `;
-					});
-					item.show_areas = item.areas.map(area => {
-						return `${area.nombre}, `;
-					});
-				});
-				setCitas(response.data);
-			}
-			setIsLoading(false);
-		}
-
-		const loadPromovendedores = async () => {
-			const response = await findEmployeesByRolId(promovendedorRolId);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setPromovendedores(response.data);
-			}
-		}
-
-		const loadCosmetologas = async () => {
-			const response = await findEmployeesByRolId(cosmetologaRolId);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setCosmetologas(response.data);
-			}
-		}
-
-		const loadMedicos = async () => {
-			const response = await findEmployeesByRolId(medicoRolId);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setMedicos(response.data);
-			}
-		}
-
-		const loadTipoCitas = async () => {
-			const response = await showAllTipoCitas();
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setTipoCitas(response.data);
-			}
-		}
-
-		const loadMedios = async () => {
-			const response = await showAllMedios();
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setMedios(response.data);
-			}
-		}
-
-		setIsLoading(true);
-		loadCitas();
-		loadPromovendedores();
-		loadCosmetologas();
-		loadServicios();
-		loadMedicos();
-		loadTipoCitas();
-		loadMedios();
-	}, [sucursal]);
-
-	const loadTratamientos = async (servicio) => {
-		const response = await findTreatmentByServicio(servicio._id);
+	const loadTratamientos = async () => {
+		const response = await findTreatmentByServicio(servicioAparatologiaId);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setTratamientos(response.data);
 		}
@@ -242,7 +163,7 @@ const AgendarAparatologia = (props) => {
 		const dia = date ? date.getDate() : values.fecha_hora.getDate();
 		const mes = Number(date ? date.getMonth() : values.fecha_hora.getMonth());
 		const anio = date ? date.getFullYear() : values.fecha_hora.getFullYear();
-		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, values.servicio._id);
+		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, values.servicio);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setHorarios(response.data);
 		}
@@ -271,29 +192,6 @@ const AgendarAparatologia = (props) => {
 		loadTratamientos(e.target.value);
 		setIsLoading(false);
 	};
-
-	/*
-	const handleChangeTratamientos = async (items) => {
-		items.map(async (item) => {
-			const response = await findAreasByTreatmentServicio(item.servicio, item._id);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setAreas(response.data);
-			}
-		});
-		setIsLoading(true);
-		let precio = 0;
-		items.map((item) => {
-			precio = Number(precio) + Number(item.precio);
-		});
-		setValues({
-			...values,
-			fecha_hora: '',
-			precio: precio,
-			tratamientos: items
-		});
-		setDisableDate(false);
-		setIsLoading(false);
-	} */
 
 	const handleChangeTratamientos = async (e) => {
 		setIsLoading(true);
@@ -362,12 +260,12 @@ const AgendarAparatologia = (props) => {
 			fecha_show: date,
 			fecha: `${dia}/${mes}/${anio}`
 		});
-		await loadCitas(date);
+		await loadAparatologias(date);
 		setIsLoading(false);
 	};
 
-	const loadCitas = async (filterDate) => {
-		const response = await findDatesByDateAndSucursal(filterDate.getDate(), filterDate.getMonth(), filterDate.getFullYear(), sucursal);
+	const loadAparatologias = async (filterDate) => {
+		const response = await findAparatologiaByDateAndSucursal(filterDate.getDate(), filterDate.getMonth(), filterDate.getFullYear(), sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
 				item.folio = generateFolio(item);
@@ -389,19 +287,6 @@ const AgendarAparatologia = (props) => {
 		}
 	}
 
-	const getTimeToTratamiento = (tratamientos) => {
-		tratamientos.sort((a, b) => {
-			if (a.tiempo < b.tiempo) return 1;
-			if (a.tiempo > b.tiempo) return -1;
-			return 0;
-		});
-		let tiempo = 0;
-		tratamientos.forEach((item, index) => {
-			tiempo += Number(index === 0 ? item.tiempo : (item.tiempo - (item.servicio !== 'APARATOLOGÍA' ? 20 : 0)));
-		});
-		return tiempo;
-	}
-
 	const handleClickAgendar = async (data) => {
 		setIsLoading(true);
 		data.quien_agenda = empleado._id;
@@ -412,9 +297,8 @@ const AgendarAparatologia = (props) => {
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
 		data.tipo_cita = data.medico._id === medicoDirectoId ? tipoCitaNoAplicaId : data.tipo_cita;
-		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 
-		const response = await createDate(data);
+		const response = await createAparatologia(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			const consecutivo = {
 				consecutivo: response.data.consecutivo,
@@ -427,7 +311,7 @@ const AgendarAparatologia = (props) => {
 			const responseConsecutivo = await createConsecutivo(consecutivo);
 			if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 				setOpenAlert(true);
-				setMessage('La Cita se agendo correctamente');
+				setMessage('APARATOLOGIA AGREGADA CORRECTAMENTE');
 				setValues({
 					servicio: '',
 					tratamientos: [],
@@ -437,12 +321,13 @@ const AgendarAparatologia = (props) => {
 					paciente: `${paciente._id}`,
 					precio: '',
 					tipo_cita: {},
+					tiempo: '30',
 				});
 				setTratamientos([]);
 				setAreas([]);
 				setDisableDate(true);
 				setPacienteAgendado({});
-				loadCitas(new Date());
+				loadAparatologias(new Date());
 			}
 		}
 
@@ -461,10 +346,6 @@ const AgendarAparatologia = (props) => {
 			tratamientos: newTratamientos,
 			precio: precio,
 		});
-	}
-
-	const handleChangeTiempo = (e) => {
-		setValues({ ...values, tiempo: e.target.value });
 	}
 
 	const handleChangeDoctors = (e) => {
@@ -543,6 +424,77 @@ const AgendarAparatologia = (props) => {
 			} : ''),
 	];
 
+	useEffect(() => {
+
+		const loadAparatologias = async () => {
+			const response = await findAparatologiaByDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				await response.data.forEach(item => {
+					item.folio = generateFolio(item);
+					const fecha = new Date(item.fecha_hora);
+					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
+					item.precio_moneda = toFormatterCurrency(item.precio);
+					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
+					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
+					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
+					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+					item.show_tratamientos = item.tratamientos.map(tratamiento => {
+						return `${tratamiento.nombre}, `;
+					});
+					item.show_areas = item.areas.map(area => {
+						return `${area.nombre}, `;
+					});
+				});
+				setCitas(response.data);
+			}
+			setIsLoading(false);
+		}
+
+		const loadPromovendedores = async () => {
+			const response = await findEmployeesByRolId(promovendedorRolId);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setPromovendedores(response.data);
+			}
+		}
+
+		const loadCosmetologas = async () => {
+			const response = await findEmployeesByRolId(cosmetologaRolId);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setCosmetologas(response.data);
+			}
+		}
+
+		const loadMedicos = async () => {
+			const response = await findEmployeesByRolId(medicoRolId);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setMedicos(response.data);
+			}
+		}
+
+		const loadTipoCitas = async () => {
+			const response = await showAllTipoCitas();
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setTipoCitas(response.data);
+			}
+		}
+
+		const loadMedios = async () => {
+			const response = await showAllMedios();
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setMedios(response.data);
+			}
+		}
+
+		setIsLoading(true);
+		loadTratamientos();
+		loadAparatologias();
+		loadPromovendedores();
+		loadCosmetologas();
+		loadMedicos();
+		loadTipoCitas();
+		loadMedios();
+	}, [sucursal]);
+
 	return (
 		<Fragment>
 			{
@@ -553,11 +505,9 @@ const AgendarAparatologia = (props) => {
 						validationSchema={validationSchema} >
 						{
 							props => <AgendarAparatologiaContainer
-								servicios={servicios}
 								tratamientos={tratamientos}
 								areas={areas}
 								horarios={horarios}
-								onChangeServicio={(e) => handleChangeServicio(e)}
 								onChangeTratamientos={(e) => handleChangeTratamientos(e)}
 								onChangeAreas={(e) => handleChangeAreas(e)}
 								onChangeFecha={(e) => handleChangeFecha(e)}
@@ -570,8 +520,7 @@ const AgendarAparatologia = (props) => {
 								promovendedores={promovendedores}
 								cosmetologas={cosmetologas}
 								onClickAgendar={handleClickAgendar}
-								onChangeTiempo={(e) => handleChangeTiempo(e)}
-								titulo={`CITAS (${filterDate.fecha})`}
+								titulo={`APARATOLOGIAS (${filterDate.fecha})`}
 								columns={columns}
 								options={options}
 								citas={citas}
@@ -580,7 +529,7 @@ const AgendarAparatologia = (props) => {
 								openModal={openModal}
 								empleado={empleado}
 								onClickCancel={handleCloseModal}
-								loadCitas={loadCitas}
+								loadAparatologias={loadAparatologias}
 								medicos={medicos}
 								tipoCitas={tipoCitas}
 								medios={medios}
