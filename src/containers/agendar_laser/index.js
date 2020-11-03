@@ -167,7 +167,7 @@ const AgendarLaser = (props) => {
 		const dia = date ? date.getDate() : values.fecha_hora.getDate();
 		const mes = Number(date ? date.getMonth() : values.fecha_hora.getMonth());
 		const anio = date ? date.getFullYear() : values.fecha_hora.getFullYear();
-		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, servicio);
+		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, values.servicio);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setHorarios(response.data);
 		}

@@ -85,8 +85,9 @@ const AgendarAparatologia = (props) => {
 		tipo_cita: tipoCitaNoAplicaId,
 		observaciones: '',
 		medico: { _id: medicoDirectoId},
+		tiempo: '30',
 	});
-	const [citas, setCitas] = useState([]);
+	const [aparatologias, setAparatologia] = useState([]);
 	const [areas, setAreas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
 	const [cita, setCita] = useState();
@@ -283,7 +284,7 @@ const AgendarAparatologia = (props) => {
 					return `${area.nombre}, `;
 				});
 			});
-			setCitas(response.data);
+			setAparatologia(response.data);
 		}
 	}
 
@@ -445,7 +446,7 @@ const AgendarAparatologia = (props) => {
 						return `${area.nombre}, `;
 					});
 				});
-				setCitas(response.data);
+				setAparatologia(response.data);
 			}
 			setIsLoading(false);
 		}
@@ -523,7 +524,7 @@ const AgendarAparatologia = (props) => {
 								titulo={`APARATOLOGIAS (${filterDate.fecha})`}
 								columns={columns}
 								options={options}
-								citas={citas}
+								aparatologias={aparatologias}
 								actions={actions}
 								cita={cita}
 								openModal={openModal}

@@ -79,7 +79,7 @@ export const AgendarFacialContainer = (props) => {
 		onClickActualizarCita,
 		onClickCancel,
 		onChangeAsistio,
-		loadCitas,
+		loadFaciales,
 		setFilterDate,
 		// MODAL PAGOS
 		onCloseVerPagos,
@@ -113,7 +113,7 @@ export const AgendarFacialContainer = (props) => {
 						tratamientos={tratamientos}
 						horarios={horarios}
 						empleado={empleado}
-						loadCitas={loadCitas}
+						loadFaciales={loadFaciales}
 						sucursal={sucursal}
 						setOpenAlert={setOpenAlert}
 						setMessage={setMessage}

@@ -20,6 +20,9 @@ import ModalFormCita from './ModalFormCita';
 import { Formik } from 'formik';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import { addZero } from '../../../utils/utils';
+import { updateAparatologia } from '../../../services/aparatolgia';
+import { updateFacial } from '../../../services/faciales';
+import { updateLaser } from '../../../services/laser';
 
 const validationSchema = Yup.object({
   fecha: Yup.string("Ingresa los nombres")
@@ -63,11 +66,27 @@ const ModalCita = (props) => {
     cita,
     empleado,
     loadCitas,
+    loadAparatologias,
+    loadFaciales,
+    loadLaser,
     sucursal,
     setOpenAlert,
     setMessage,
     setFilterDate,
   } = props;
+
+  const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
+  const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
+  const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
+  const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
+  const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
+  const reagendoStatusId = process.env.REACT_APP_REAGENDO_STATUS_ID;
+  const canceloCPServicioId = process.env.REACT_APP_CANCELO_CP_STATUS_ID;
+  const canceloSPServicioId = process.env.REACT_APP_CANCELO_SP_STATUS_ID;
+  const pagoAnticipadoMetodoPagoId = process.env.REACT_APP_PAGO_ANTICIPADO_METODO_PAGO_ID;
+  const servicioAparatologiaId = process.env.REACT_APP_APARATOLOGIA_SERVICIO_ID;
+  const servicioFacialId = process.env.REACT_APP_FACIAL_SERVICIO_ID;
+  const servicioLaserId = process.env.REACT_APP_LASER_SERVICIO_ID;
 
   const [isLoading, setIsLoading] = useState(true);
   const [horarios, setHorarios] = useState([]);
@@ -115,96 +134,11 @@ const ModalCita = (props) => {
     pagos: cita.pagos,
   });
 
-  const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
-  const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
-  const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
-  const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
-  const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
-  const reagendoStatusId = process.env.REACT_APP_REAGENDO_STATUS_ID;
-  const canceloCPServicioId = process.env.REACT_APP_CANCELO_CP_STATUS_ID;
-  const canceloSPServicioId = process.env.REACT_APP_CANCELO_SP_STATUS_ID;
-  const pagoAnticipadoMetodoPagoId = process.env.REACT_APP_PAGO_ANTICIPADO_METODO_PAGO_ID;
-
-  useEffect(() => {
-    /*const loadTratamientos = async () => {
-      const response = await findTreatmentByServicio(cita.servicio._id);
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setTratamientos(response.data);
-      }
-    }*/
-    const loadHorariosByServicio = async () => {
-      const date = new Date(cita.fecha_hora);
-      const response = await findScheduleByDateAndSucursalAndService(date.getDate(), Number(date.getMonth()), date.getFullYear(), cita.sucursal._id, cita.servicio._id);
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        response.data.push({ hora: values.hora });
-        setHorarios(response.data);
-      }
-    }
-
-    const loadPromovendedores = async () => {
-      const response = await findEmployeesByRolId(promovendedorRolId);
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setPromovendedores(response.data);
-      }
-    }
-
-    const loadCosmetologas = async () => {
-      const response = await findEmployeesByRolId(cosmetologaRolId);
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setCosmetologas(response.data);
-      }
-    }
-
-    const loadDoctores = async () => {
-      const response = await findEmployeesByRolId(medicoRolId);
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setDoctores(response.data);
-      }
-    }
-
-    const loadTipoCitas = async () => {
-      const response = await showAllTipoCitas();
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setTipoCitas(response.data);
-      }
-      setIsLoading(false);
-    }
-
-    const loadStaus = async () => {
-      const response = await showAllStatus();
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setStatements(response.data);
-      }
-      setIsLoading(false);
-    }
-
-    setIsLoading(true);
-    //loadTratamientos();
-    loadHorariosByServicio();
-    loadPromovendedores();
-    loadCosmetologas();
-    loadDoctores();
-    loadTipoCitas();
-    loadStaus();
-    setIsLoading(false);
-  }, [cita, promovendedorRolId, cosmetologaRolId, medicoRolId]);
-
-  /*const loadTratamientos = async (servicio) => {
-    const response = await findTreatmentByServicio(servicio);
-    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-      setTratamientos(response.data);
-    }
-  }*/
-
   const loadHorarios = async () => {
     const response = await getAllSchedules();
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setHorarios(response.data);
     }
-  }
-
-  const handleChangeTratamientos = (items) => {
-    setValues({ ...values, tratamientos: items });
   }
 
   const handleChangeFecha = async (date) => {
@@ -335,8 +269,20 @@ const ModalCita = (props) => {
         fecha_show: rowData.fecha_show,
         fecha: `${dia}/${mes}/${anio}`
       });
-      await updateDate(cita._id, rowData);
-      await loadCitas(rowData.fecha_show);
+      switch (cita.servicio._id) {
+        case servicioAparatologiaId:
+          await updateAparatologia(cita._id, rowData);
+          await loadAparatologias(rowData.fecha_show);
+          break;
+        case servicioFacialId:
+          await updateFacial(cita._id, rowData);
+          await loadFaciales(rowData.fecha_show);
+          break;
+        case servicioLaserId:
+          await updateLaser(cita._id, rowData);
+          await loadLaser(rowData.fecha_show);
+          break;
+      }
     }
     onClose();
   }
@@ -387,6 +333,63 @@ const ModalCita = (props) => {
     });
     setOpenModalPagos(false);
   }
+
+  useEffect(() => {
+    const loadHorariosByServicio = async () => {
+      const date = new Date(cita.fecha_hora);
+      const response = await findScheduleByDateAndSucursalAndService(date.getDate(), Number(date.getMonth()), date.getFullYear(), cita.sucursal._id, cita.servicio._id);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        response.data.push({ hora: values.hora });
+        setHorarios(response.data);
+      }
+    }
+
+    const loadPromovendedores = async () => {
+      const response = await findEmployeesByRolId(promovendedorRolId);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setPromovendedores(response.data);
+      }
+    }
+
+    const loadCosmetologas = async () => {
+      const response = await findEmployeesByRolId(cosmetologaRolId);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setCosmetologas(response.data);
+      }
+    }
+
+    const loadDoctores = async () => {
+      const response = await findEmployeesByRolId(medicoRolId);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setDoctores(response.data);
+      }
+    }
+
+    const loadTipoCitas = async () => {
+      const response = await showAllTipoCitas();
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setTipoCitas(response.data);
+      }
+      setIsLoading(false);
+    }
+
+    const loadStaus = async () => {
+      const response = await showAllStatus();
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setStatements(response.data);
+      }
+      setIsLoading(false);
+    }
+
+    setIsLoading(true);
+    loadHorariosByServicio();
+    loadPromovendedores();
+    loadCosmetologas();
+    loadDoctores();
+    loadTipoCitas();
+    loadStaus();
+    setIsLoading(false);
+  }, [cita, promovendedorRolId, cosmetologaRolId, medicoRolId]);
 
   return (
     <Fragment>

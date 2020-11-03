@@ -140,6 +140,20 @@ const ModalFormCita = (props) => {
                 <h3 className={classes.label}>Areas: {values.servicio.nombre}</h3>
               </Grid>
               <Grid item xs={12}>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="simple-select-outlined-statements">Estado</InputLabel>
+                  <Select
+                    labelId="simple-select-outlined-statements"
+                    id="simple-select-outlined-statements"
+                    value={values.status}
+                    error={Boolean(errors.statements)}
+                    onChange={onChangeStatus}
+                    label="Estado" >
+                    {statements.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
                 {
                   /* values.medico*/ false ?
                     <h3 className={classes.label}>Medico : {values.medico.nombre}</h3> :
@@ -231,21 +245,6 @@ const ModalFormCita = (props) => {
                 }
               </Grid>
 
-              <Grid item xs={12}>
-                <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-statements">Estado</InputLabel>
-                  <Select
-                    labelId="simple-select-outlined-statements"
-                    id="simple-select-outlined-statements"
-                    value={values.status}
-                    error={Boolean(errors.statements)}
-                    onChange={onChangeStatus}
-                    label="Estado" >
-                    {statements.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
-                  </Select>
-                </FormControl>
-              </Grid>
-
               {
                 values.status === reagendoStatusId ?
                   <Fragment>
@@ -301,32 +300,6 @@ const ModalFormCita = (props) => {
                       variant="outlined" />
                   </Grid> : ''
               }
-
-              <Grid item xs={12}>
-                <TextField
-                  className={classes.textField}
-                  name="precio"
-                  //helperText={touched.precio ? errors.precio : ""}
-                  error={Boolean(errors.precio)}
-                  label="Precio"
-                  value={values.precio}
-                  type='Number'
-                  onChange={onChangePrecio}
-                  variant="outlined" />
-              </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  className={classes.textField}
-                  name="numero_sesion"
-                  //helperText={touched.numero_sesion ? errors.numero_sesion : ""}
-                  error={Boolean(errors.numero_sesion)}
-                  label="Numero sesion"
-                  value={values.numero_sesion}
-                  type='Number'
-                  onChange={onChangeSesion}
-                  variant="outlined" />
-              </Grid>
 
               <Grid item xs={12}>
                 <TextField

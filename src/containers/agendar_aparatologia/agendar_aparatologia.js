@@ -69,7 +69,7 @@ export const AgendarAparatologiaContainer = (props) => {
 		// TABLE DATES PROPERTIES
 		titulo,
 		columns,
-		citas,
+		aparatologias,
 		actions,
 		options,
 		components,
@@ -79,7 +79,7 @@ export const AgendarAparatologiaContainer = (props) => {
 		onClickActualizarCita,
 		onClickCancel,
 		onChangeAsistio,
-		loadCitas,
+		loadAparatologias,
 		setFilterDate,
 		// MODAL PAGOS
 		onCloseVerPagos,
@@ -113,7 +113,7 @@ export const AgendarAparatologiaContainer = (props) => {
 						tratamientos={tratamientos}
 						horarios={horarios}
 						empleado={empleado}
-						loadCitas={loadCitas}
+						loadAparatologias={loadAparatologias}
 						sucursal={sucursal}
 						setOpenAlert={setOpenAlert}
 						setMessage={setMessage}
@@ -344,7 +344,7 @@ export const AgendarAparatologiaContainer = (props) => {
 			<TableComponent
 				titulo={titulo}
 				columns={columns}
-				data={citas}
+				data={aparatologias}
 				actions={actions}
 				options={options}
 				components={components} />

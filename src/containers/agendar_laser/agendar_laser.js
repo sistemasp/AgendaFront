@@ -78,7 +78,7 @@ export const AgendarLaserContainer = (props) => {
 		onClickActualizarCita,
 		onClickCancel,
 		onChangeAsistio,
-		loadCitas,
+		loadLaser,
 		setFilterDate,
 		// MODAL PAGOS
 		onCloseVerPagos,
@@ -111,7 +111,7 @@ export const AgendarLaserContainer = (props) => {
 						servicios={servicios}
 						horarios={horarios}
 						empleado={empleado}
-						loadCitas={loadCitas}
+						loadLaser={loadLaser}
 						sucursal={sucursal}
 						setOpenAlert={setOpenAlert}
 						setMessage={setMessage}
