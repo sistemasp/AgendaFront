@@ -145,7 +145,7 @@ const ModalFormEstetica = (props) => {
                   onChange={onChangeTotal}
                   onInput={(e) => {
                     e.target.value = e.target.value < 0 ? 0 : e.target.value;
-                    e.target.value = Math.max(0, parseFloat(e.target.value)).toString().slice(0, 5)
+                    e.target.value = Math.max(0, parseFloat(e.target.value)).toString().slice(0, 6)
                   }}
                   variant="outlined" />
               </Grid>

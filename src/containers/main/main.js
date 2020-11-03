@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -33,6 +33,10 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import MenuReports from '../menu_reportes';
 import Description from '@material-ui/icons/Description';
 import MenuRazonSocial from '../menu_razon_social';
+import { 
+	createCorte,
+	showCorteTodayBySucursalAndTurno
+} from '../../services/corte';
 
 const TabPanel = (props) => {
 	const { children, value, index, ...other } = props;
@@ -156,6 +160,36 @@ export const MainContainer = props => {
 	const handleDrawerClose = () => {
 		setOpenDrawer(false);
 	};
+
+	const generateCorteMatutino = async () => {
+		const create_date = new Date();
+		create_date.setHours(create_date.getHours());
+		const newCorte = {
+		  create_date: create_date,
+		  hora_apertura: create_date,
+		  turno: 'm',
+		  sucursal: sucursal,
+		}
+		const response = await createCorte(newCorte);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+		  setMessage("CORTE MATUTINO ABIERTO.");
+		  setOpenAlert(true);
+		}
+	  }
+
+	useEffect(() => {
+		const findCorte = async () => {
+			const response = await showCorteTodayBySucursalAndTurno(sucursal._id, 'm');
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				const corte = response.data;
+				if (!corte) {
+					generateCorteMatutino();
+				}
+			}
+		}
+
+		findCorte();
+	}, []);
 
 	return (
 		<div className={classes.root}>

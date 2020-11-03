@@ -343,7 +343,7 @@ export const AgendarFacialContainer = (props) => {
 							format="dd/MM/yyyy"
 							margin="normal"
 							id="date-picker-inline-filter"
-							label="Filtrado Citas"
+							label="FILTRADO FACIALES"
 							value={filterDate}
 							onChange={onChangeFilterDate}
 							KeyboardButtonProps={{

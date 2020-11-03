@@ -314,7 +314,7 @@ export const AgendarLaserContainer = (props) => {
 							format="dd/MM/yyyy"
 							margin="normal"
 							id="date-picker-inline-filter"
-							label="Filtrado Citas"
+							label="FILTRADO LÁSER"
 							value={filterDate}
 							onChange={onChangeFilterDate}
 							KeyboardButtonProps={{

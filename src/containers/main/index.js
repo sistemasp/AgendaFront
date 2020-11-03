@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { MainContainer } from "./main";
 import { Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
@@ -109,19 +109,9 @@ const MenuMain = (props) => {
 		</Fragment>
 	}
 
-
 	return (
 		<Fragment>
 			{fragment}
-			{
-				/*permisos.includes('ALL') ?
-					
-	
-					: (permisos.includes('VER_CITAS')
-					?	
-						: '')*/
-			}
-
 			<Snackbar open={openAlert} autoHideDuration={5000} onClose={handleCloseAlert}>
 				<Alert onClose={handleCloseAlert} severity={severity}>
 					{message}

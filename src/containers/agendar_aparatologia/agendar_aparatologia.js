@@ -331,7 +331,7 @@ export const AgendarAparatologiaContainer = (props) => {
 							format="dd/MM/yyyy"
 							margin="normal"
 							id="date-picker-inline-filter"
-							label="Filtrado Citas"
+							label="FILTRADO APARATOLOGIA"
 							value={filterDate}
 							onChange={onChangeFilterDate}
 							KeyboardButtonProps={{

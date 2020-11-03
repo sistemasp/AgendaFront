@@ -144,20 +144,20 @@ export const CorteContainer = (props) => {
         </Grid>
         <Grid item xs={4} className={classes.label}>
           {
-            corte._id ?
+            corte.hora_cierre ?
               <ButtonCustom
                 className={classes.button}
                 color="primary"
                 variant="contained"
                 onClick={handleOpenImprimir}
-                text='Imprimir' />
+                text='IMPRIMIR' />
               :
               <ButtonCustom
                 className={classes.button}
                 color="primary"
                 variant="contained"
                 onClick={handleGenerateCorte}
-                text='Generar corte' />
+                text='CERRAR CORTE' />
           }
         </Grid>
         <Grid item xs={12} sm={8}>

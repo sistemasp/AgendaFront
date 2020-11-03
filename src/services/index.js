@@ -1751,30 +1751,3 @@ export const findTipoEgresoById = async (tipoEgresoId) => {
         console.log('findTipoEgresoById', error);
     }
 }
-
-// CORTE 
-
-export const createCorte = async (corte) => {
-    try {
-        const response = await axios({
-            url: `${baseUrl}/corte`,
-            method: 'POST',
-            data: corte
-        });
-        return response;
-    } catch (error) {
-        console.log('createCorte', error);
-    }
-}
-
-export const showCorteTodayBySucursalAndTurno = async (sucursalId, turno) => {
-    try {
-        const response = await axios({
-            url: `${baseUrl}/corte/sucursal/${sucursalId}/today/turno/${turno}`,
-            method: 'GET'
-        });
-        return response;
-    } catch (error) {
-        console.log('showCorteTodayBySucursalAndTurno', error);
-    }
-}

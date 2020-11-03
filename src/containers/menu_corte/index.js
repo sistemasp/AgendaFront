@@ -4,20 +4,19 @@ import { Backdrop, CircularProgress } from '@material-ui/core';
 import { CorteContainer } from './corte';
 import TableComponent from '../../components/table/TableComponent';
 import {
-  findEmployeesByRolId,
-  showCorteTodayBySucursalAndTurno,
-  createCorte,
   showIngresosTodayBySucursalAndTurno,
   showEgresosTodayBySucursalAndTurno,
   showAllMetodoPago,
   showAllTipoEgresos,
   showAllTipoIngresos,
 } from '../../services';
-import HistoryIcon from '@material-ui/icons/History';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import Edit from '@material-ui/icons/Edit';
 import { addZero, toFormatterCurrency } from "../../utils/utils";
+import { 
+  createCorte,
+  showCorteTodayBySucursalAndTurno,
+} from "../../services/corte";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
