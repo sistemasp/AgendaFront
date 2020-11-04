@@ -67,6 +67,7 @@ const ModalFormImprimirPagoMedico = (props) => {
 
   const {
     sucursal,
+    corte,
     consultasPrimeraVez,
     consultasReconsultas,
     cirugias,
@@ -132,7 +133,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                           Imprimir
                         </Button>
                       </Grid>
-                      : 
+                      :
                       <Grid item xs={12}>
                         <Button
                           className={classes.button}
@@ -141,29 +142,36 @@ const ModalFormImprimirPagoMedico = (props) => {
                           onClick={onClickPagar} >
                           Pagar
                        </Button>
-                      </Grid> 
+                      </Grid>
+                  }
+                  {
+                    corte.hora_cierre ?
+                      <Fragment>
+
+                        <br />
+                        <Grid item xs={12} sm={6}>
+                          <Button
+                            className={classes.button}
+                            color="primary"
+                            variant="contained"
+                            onClick={() => onCambioTurno()} >
+                            Cambio turno
+                </Button>
+                        </Grid>
+
+                        <Grid item xs={12} sm={6}>
+                          <Button
+                            className={classes.button}
+                            color="primary"
+                            variant="contained"
+                            onClick={() => onObtenerInformacion()} >
+                            Traer información
+                </Button>
+                        </Grid>
+                      </Fragment>
+                      : ''
                   }
 
-                  <br />
-                  <Grid item xs={12} sm={6}>
-                    <Button
-                      className={classes.button}
-                      color="primary"
-                      variant="contained"
-                      onClick={() => onCambioTurno()} >
-                      Cambio turno
-                </Button>
-                  </Grid>
-
-                  <Grid item xs={12} sm={6}>
-                    <Button
-                      className={classes.button}
-                      color="primary"
-                      variant="contained"
-                      onClick={() => onObtenerInformacion()} >
-                      Traer información
-                </Button>
-                  </Grid>
                   <br />
                   <Grid item xs={12}>
                     <Button

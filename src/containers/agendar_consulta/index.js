@@ -3,8 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { AgendarConsultaContainer } from "./agendar_consulta";
 import {
 	findScheduleInConsultByDateAndSucursal,
-	findConsultsByDateAndSucursal,
-	createConsult,
 	findEmployeesByRolId,
 	showAllTipoCitas,
 	showAllMedios,
@@ -13,6 +11,10 @@ import {
 	createConsecutivo,
 	findEsteticaByConsultaId,
 } from "../../services";
+import { 
+	createConsult,
+	findConsultsByDateAndSucursal
+} from "../../services/consultas";
 import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import EditIcon from '@material-ui/icons/Edit';

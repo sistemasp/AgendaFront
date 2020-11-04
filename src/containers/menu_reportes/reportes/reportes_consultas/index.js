@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { ReportesConsultasContainer } from "./reportes_consultas";
-import { findConsultsByRangeDateAndSucursal } from "../../../../services";
+import { findConsultsByRangeDateAndSucursal } from "../../../../services/consultas";
 import { Backdrop, CircularProgress } from "@material-ui/core";
 import { toFormatterCurrency, addZero } from "../../../../utils/utils";
 

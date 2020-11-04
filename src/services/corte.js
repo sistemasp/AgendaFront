@@ -40,3 +40,16 @@ export const showCorteTodayBySucursalAndSchedule = async (sucursalId, hora_apert
         console.log('showCorteTodayBySucursalAndSchedule', error);
     }
 }
+
+export const updateCorte = async (corteId, corte) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/corte/${corteId}`,
+            method: 'PUT',
+            data: corte
+        });
+        return response;
+    } catch (error) {
+        console.log('updateCorte', error);
+    }
+}

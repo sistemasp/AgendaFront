@@ -16,6 +16,7 @@ import { addZero, toFormatterCurrency } from "../../utils/utils";
 import { 
   createCorte,
   showCorteTodayBySucursalAndTurno,
+  updateCorte,
 } from "../../services/corte";
 
 function Alert(props) {
@@ -356,7 +357,7 @@ const Corte = (props) => {
     handleObtenerInformacion();
   }, []);
 
-  const handleGenerateCorte = async () => {
+  const handleGuardarCorte = async () => {
     const create_date = new Date();
     create_date.setHours(create_date.getHours());
     const newCorte = {
@@ -369,7 +370,17 @@ const Corte = (props) => {
     }
     const response = await createCorte(newCorte);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-      setMessage("Corte generado correctamente.");
+      setMessage("CORTE GARDAR CORRECTAMENTE.");
+      setOpenAlert(true);
+      handleObtenerInformacion();
+    }
+  }
+
+  const handleCerrarCorte = async () => {
+    corte.hora_cierre = new Date();
+    const response = await updateCorte(corte._id, corte);
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setMessage("CORTE CERRADO.");
       setOpenAlert(true);
       handleObtenerInformacion();
     }
@@ -404,7 +415,8 @@ const Corte = (props) => {
             setSeverity={setSeverity}
             detailPanelIngreso={detailPanelIngreso}
             detailPanelEgreso={detailPanelEgreso}
-            handleGenerateCorte={() => handleGenerateCorte()}
+            handleGuardarCorte={() => handleGuardarCorte()}
+            handleCerrarCorte={() => handleCerrarCorte()}
             corte={corte}
           /> :
           <Backdrop className={classes.backdrop} open={isLoading} >

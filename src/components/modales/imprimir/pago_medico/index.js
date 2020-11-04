@@ -3,16 +3,18 @@ import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import { addZero, generateFolio } from '../../../../utils/utils';
 import ModalFormImprimirPagoMedico from './ModalFormImprimirPagoMedico';
 import {
-  findConsultsByPayOfDoctorTurno,
   findCirugiasByPayOfDoctorTurno,
   findDatesByPayOfDoctorTurno,
   findEsteticasByPayOfDoctorTurno,
-  findConsultsByPayOfDoctorTurnoFrecuencia,
   createPagoMedico,
   showTodayPagoMedicoBySucursalTurno,
   createEgreso,
-  findTipoEgresoById,
 } from '../../../../services';
+import {
+  findConsultsByPayOfDoctorHoraAplicacion,
+  findConsultsByPayOfDoctorHoraAplicacionFrecuencia,
+} from '../../../../services/consultas';
+import { showCorteTodayBySucursalAndTurno } from '../../../../services/corte';
 
 const useStyles = makeStyles(theme => ({
   backdrop: {
@@ -45,6 +47,7 @@ const ModalImprimirPagoMedico = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [turno, setTurno] = useState('m');
   const [pagoMedico, setPagoMedico] = useState();
+  const [corte, setCorte] = useState();
 
   const atendidoId = process.env.REACT_APP_ATENDIDO_STATUS_ID;
   const primeraVezFrecuenciaId = process.env.REACT_APP_FRECUENCIA_PRIMERA_VEZ_ID;
@@ -57,31 +60,30 @@ const ModalImprimirPagoMedico = (props) => {
   const efectivoMetodoPagoId = process.env.REACT_APP_METODO_PAGO_EFECTIVO;
   const manuelAcunaSucursalId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
 
-  const loadConsultas = async () => {
-    const date = new Date();
-    const response = await findConsultsByPayOfDoctorTurno(date.getDate(), date.getMonth(), date.getFullYear(), sucursal._id, medico._id, atendidoId, turno);
+  const loadConsultas = async (hora_apertura, hora_cierre) => {
+    const response = await findConsultsByPayOfDoctorHoraAplicacion(sucursal._id, medico._id, atendidoId, hora_apertura, hora_cierre ? hora_cierre : new Date());
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setConsultas(response.data);
     }
   }
 
-  const loadConsultasPrimeraVez = async () => {
+  const loadConsultasPrimeraVez = async (hora_apertura, hora_cierre) => {
     const date = new Date();
-    const response = await findConsultsByPayOfDoctorTurnoFrecuencia(date.getDate(), date.getMonth(), date.getFullYear(), sucursal._id, medico._id, atendidoId, turno, primeraVezFrecuenciaId);
+    const response = await findConsultsByPayOfDoctorHoraAplicacionFrecuencia(sucursal._id, medico._id, atendidoId, hora_apertura, hora_cierre ? hora_cierre : new Date(), primeraVezFrecuenciaId);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setConsultasPrimeraVez(response.data);
     }
   }
 
-  const loadConsultasReconsulta = async () => {
+  const loadConsultasReconsulta = async (hora_apertura, hora_cierre) => {
     const date = new Date();
-    const response = await findConsultsByPayOfDoctorTurnoFrecuencia(date.getDate(), date.getMonth(), date.getFullYear(), sucursal._id, medico._id, atendidoId, turno, reconsultaFrecuenciaId);
+    const response = await findConsultsByPayOfDoctorHoraAplicacionFrecuencia(sucursal._id, medico._id, atendidoId, hora_apertura, hora_cierre ? hora_cierre : new Date(), reconsultaFrecuenciaId);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setConsultasReconsultas(response.data);
     }
   }
 
-  const loadCirugias = async () => {
+  const loadCirugias = async (hora_apertura, hora_cierre) => {
     const date = new Date();
     const response = await findCirugiasByPayOfDoctorTurno(date.getDate(), date.getMonth(), date.getFullYear(), sucursal._id, medico._id, turno);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -89,7 +91,7 @@ const ModalImprimirPagoMedico = (props) => {
     }
   }
 
-  const loadCitas = async () => {
+  const loadCitas = async (hora_apertura, hora_cierre) => {
     const date = new Date();
     const response = await findDatesByPayOfDoctorTurno(date.getDate(), date.getMonth(), date.getFullYear(), sucursal._id, medico._id, atendidoId, turno);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -97,7 +99,7 @@ const ModalImprimirPagoMedico = (props) => {
     }
   }
 
-  const loadEsteticas = async () => {
+  const loadEsteticas = async (hora_apertura, hora_cierre) => {
     const date = new Date();
     const response = await findEsteticasByPayOfDoctorTurno(date.getDate(), date.getMonth(), date.getFullYear(), sucursal._id, medico._id, turno);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -105,7 +107,7 @@ const ModalImprimirPagoMedico = (props) => {
     }
   }
 
-  const findPagoToday = async () => {
+  const findPagoToday = async (hora_apertura, hora_cierre) => {
     const response = await showTodayPagoMedicoBySucursalTurno(medico._id, sucursal._id, turno);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       const pagoMedico = response.data;
@@ -113,13 +115,13 @@ const ModalImprimirPagoMedico = (props) => {
       if (pagoMedico) {
         setConsultas(pagoMedico.consultas);
       } else {
-        await loadConsultas();
+        await loadConsultas(hora_apertura, hora_cierre);
       }
-      await loadCirugias();
-      await loadCitas();
-      await loadEsteticas();
-      await loadConsultasPrimeraVez();
-      await loadConsultasReconsulta();
+      await loadCirugias(hora_apertura, hora_cierre);
+      await loadCitas(hora_apertura, hora_cierre);
+      await loadEsteticas(hora_apertura, hora_cierre);
+      await loadConsultasPrimeraVez(hora_apertura, hora_cierre);
+      await loadConsultasReconsulta(hora_apertura, hora_cierre);
       setIsLoading(false);
     }
   }
@@ -225,18 +227,26 @@ const ModalImprimirPagoMedico = (props) => {
     handleObtenerInformacion();
   };
 
-  const handleObtenerInformacion = async () => {
-    await findPagoToday();
+  const handleObtenerInformacion = async (corte) => {
+    await findPagoToday(corte.hora_apertura, corte.hora_cierre);
   };
 
   const handleCambioTurno = () => {
     setTurno(turno === 'm' ? 'v' : 'm');
   };
 
+  const findCorte = async () => {
+    const response = await showCorteTodayBySucursalAndTurno(sucursal._id, turno);
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setCorte(response.data);
+      handleObtenerInformacion(response.data);
+    }
+  }
+
   useEffect(() => {
     setIsLoading(true);
-    handleObtenerInformacion();
-  }, []);
+    findCorte();
+  }, []);  
 
   return (
     <Fragment>
@@ -249,7 +259,7 @@ const ModalImprimirPagoMedico = (props) => {
             onClose={onClose}
             medico={medico}
             sucursal={sucursal}
-            //consultas={consultas}
+            corte={corte}
             consultasPrimeraVez={consultasPrimeraVez}
             consultasReconsultas={consultasReconsultas}
             cirugias={cirugias}

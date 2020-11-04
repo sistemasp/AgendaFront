@@ -1,16 +1,13 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import {
-  findScheduleInConsultByDateAndSucursal,
-  updateConsult,
   findEmployeesByRolId,
-  showAllTipoCitas,
-  showAllStatus,
   createCirugia,
   showAllMaterials,
   updateCirugia,
   createConsecutivo,
   createBiopsia,
 } from "../../../services";
+import { updateConsult } from '../../../services/consultas';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import { addZero } from '../../../utils/utils';
 import ModalFormCirugia from './ModalFormCirugia';

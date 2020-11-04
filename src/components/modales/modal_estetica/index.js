@@ -1,19 +1,13 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import {
-  findScheduleInConsultByDateAndSucursal,
-  updateConsult,
-  findEmployeesByRolId,
-  showAllTipoCitas,
-  showAllStatus,
-  createCirugia,
   showAllMaterialEsteticas,
-  updateCirugia,
   createConsecutivo,
-  createBiopsia,
   updateEstetica,
   createEstetica,
   showAllMaterials,
 } from "../../../services";
+import { updateConsult } from '../../../services/consultas';
+
 import * as Yup from "yup";
 import { Formik } from 'formik';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';

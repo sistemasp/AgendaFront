@@ -3,13 +3,13 @@ import * as Yup from "yup";
 import { Formik } from 'formik';
 import ModalFormConsultorioAgregarPaciente from './ModalFormConsultorioAgregarPaciente';
 import {
-  findConsultById,
-  findEmployeesByRolId,
   updateSurgery,
   findSurgeryBySucursalIdAndFree,
-  updateConsult,
-  findDateById,
 } from '../../../services';
+import {
+  findConsultById,
+  updateConsult,
+} from '../../../services/consultas';
 import { addZero } from '../../../utils/utils';
 
 const validationSchema = Yup.object({

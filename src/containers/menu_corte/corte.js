@@ -58,7 +58,8 @@ export const CorteContainer = (props) => {
     setSeverity,
     detailPanelIngreso,
     detailPanelEgreso,
-    handleGenerateCorte,
+    handleGuardarCorte,
+    handleCerrarCorte,
     corte,
   } = props;
 
@@ -107,7 +108,7 @@ export const CorteContainer = (props) => {
             setSeverity={setSeverity} /> : ''
       }
 
-{
+      {
         openModalImprimir ?
           <ModalImprimirCorte
             open={openModalImprimir}
@@ -156,7 +157,7 @@ export const CorteContainer = (props) => {
                 className={classes.button}
                 color="primary"
                 variant="contained"
-                onClick={handleGenerateCorte}
+                onClick={handleCerrarCorte}
                 text='CERRAR CORTE' />
           }
         </Grid>

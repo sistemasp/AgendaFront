@@ -4,13 +4,10 @@ import { Backdrop, CircularProgress, FormControl, InputLabel, Select, MenuItem }
 import { ListaEsperaContainer } from './lista_espera';
 import {
 	findSurgeryBySucursalIdWaitingList,
-	waitingListConsulta,
 	waitingListTratamiento,
 	waitingListEstetica,
 	updateSurgery,
-	updateConsult,
 	breakFreeSurgeryByIdPaciente,
-	findConsultById,
 	findCabinaBySucursalId,
 	findDateById,
 	updateDate,
@@ -25,6 +22,11 @@ import {
 	findEsteticaById,
 	updateEstetica,
 } from '../../services';
+import {
+	waitingListConsulta,
+	updateConsult,
+	findConsultById
+} from '../../services/consultas';
 import InputIcon from '@material-ui/icons/Input';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';

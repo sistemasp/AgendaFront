@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { findHistoricConsultByPaciente } from "../../../../services";
+import { findHistoricConsultByPaciente } from "../../../../services/consultas";
 import Consultas from './Consultas';
 import { toFormatterCurrency, addZero } from '../../../../utils/utils';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
