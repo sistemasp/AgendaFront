@@ -6,22 +6,16 @@ import bannerMePiel from './../../../../bannerMePiel.PNG';
 import { toFormatterCurrency } from '../../../../utils/utils';
 
 function getModalStyle() {
-  const top = 50;
-  const left = 50;
-
   return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
     overflow: 'scroll',
-    height: '90%',
+    height: '100%',
   };
 }
 
 const useStyles = makeStyles(theme => ({
   paper: {
     position: 'absolute',
-    width: 800,
+    width: '100%',
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -202,7 +196,7 @@ const ModalFormImprimirPagoMedico = (props) => {
               <h3 className={classes.labelItemRight}> {`Cantidad a pagar`} </h3>
             </Grid>
             <Grid item xs={12} className={classes.label}>
-              <h5 className={classes.labelItemCenter}>__________________________________________________________________________________________________________________________________________</h5>
+              <hr />
             </Grid>
             {
               consultasPrimeraVez ?
@@ -245,7 +239,7 @@ const ModalFormImprimirPagoMedico = (props) => {
               <h3 className={classes.labelItemRight}> {`Cantidad a pagar`} </h3>
             </Grid>
             <Grid item xs={12} className={classes.label}>
-              <h5 className={classes.labelItemCenter}>__________________________________________________________________________________________________________________________________________</h5>
+              <hr />
             </Grid>
             {
               consultasReconsultas ?
@@ -287,7 +281,7 @@ const ModalFormImprimirPagoMedico = (props) => {
               <h3 className={classes.labelItemRight}> {`Cantidad a pagar`} </h3>
             </Grid>
             <Grid item xs={12} className={classes.label}>
-              <h5 className={classes.labelItemCenter}>__________________________________________________________________________________________________________________________________________</h5>
+              <hr />
             </Grid>
             {
               cirugias ?
@@ -324,7 +318,7 @@ const ModalFormImprimirPagoMedico = (props) => {
               <h3 className={classes.labelItemRight}> {`Cantidad a pagar`} </h3>
             </Grid>
             <Grid item xs={12} className={classes.label}>
-              <h5 className={classes.labelItemCenter}>__________________________________________________________________________________________________________________________________________</h5>
+              <hr />
             </Grid>
             {
               citas ?
@@ -378,7 +372,7 @@ const ModalFormImprimirPagoMedico = (props) => {
               <h3 className={classes.labelItemRight}> {`Cantidad a pagar`} </h3>
             </Grid>
             <Grid item xs={12} className={classes.label}>
-              <h5 className={classes.labelItemCenter}>__________________________________________________________________________________________________________________________________________</h5>
+              <hr />
             </Grid>
             {
               esteticas ?

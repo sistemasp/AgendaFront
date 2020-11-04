@@ -13,7 +13,7 @@ import {
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { addZero, toFormatterCurrency } from "../../utils/utils";
-import { 
+import {
   createCorte,
   showCorteTodayBySucursalAndTurno,
   updateCorte,
@@ -377,12 +377,22 @@ const Corte = (props) => {
   }
 
   const handleCerrarCorte = async () => {
-    corte.hora_cierre = new Date();
+    const date = new Date();
+    corte.hora_cierre = date;
     const response = await updateCorte(corte._id, corte);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-      setMessage("CORTE CERRADO.");
-      setOpenAlert(true);
-      handleObtenerInformacion();
+      const newCorte = {
+        create_date: date,
+        hora_apertura: date,
+        turno: 'v',
+        sucursal: sucursal,
+      }
+      const respo = await createCorte(newCorte);
+      if (`${respo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+        setMessage("CORTE CERRADO.");
+        setOpenAlert(true);
+        handleObtenerInformacion();
+      }
     }
   }
 

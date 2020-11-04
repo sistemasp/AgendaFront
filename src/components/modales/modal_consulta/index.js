@@ -101,7 +101,7 @@ const ModalConsulta = (props) => {
     hora_llegada: consulta.hora_llegada,
     servicio: consulta.servicio,
     pagos: consulta.pagos,
-    hora_aplicacion : consulta.hora_aplicacion,
+    hora_aplicacion: consulta.hora_aplicacion,
   });
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
@@ -213,6 +213,11 @@ const ModalConsulta = (props) => {
   }
 
   const handleChangeStatus = e => {
+    console.log(e.target.value === asistioStatusId);
+    if (e.target.value === asistioStatusId) {
+      const hora_aplicacion = values.hora_aplicacion ? values.hora_aplicacion : new Date();
+      setValues({ ...values, hora_aplicacion: hora_aplicacion });
+    }
     setValues({ ...values, status: e.target.value });
   }
 
@@ -248,7 +253,7 @@ const ModalConsulta = (props) => {
     }
 
     if (rowData.status._id !== pendienteStatusId && rowData.status === asistioStatusId) {
-      rowData.quien_confirma = empleado._id;
+      rowData.quien_confirma_asistencia = empleado._id;
       const dateNow = new Date();
       rowData.hora_aplicacion = rowData.hora_aplicacion ? rowData.hora_aplicacion : dateNow;
       rowData.hora_llegada = (rowData.hora_llegada && rowData.hora_llegada !== '--:--') ? rowData.hora_llegada : `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;

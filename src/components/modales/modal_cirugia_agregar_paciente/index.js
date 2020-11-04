@@ -2,19 +2,17 @@ import React, { useState, useEffect } from 'react';
 import * as Yup from "yup";
 import { Formik } from 'formik';
 import {
-  findEsteticaById,
-  findEmployeesByRolId,
-  updateSurgery,
-  findCabinaBySucursalIdAndFree,
-  updateConsult,
-  findDateById,
-  updateDate,
   updateSalaCirugia,
   findSalaCirugiaBySucursalIdAndFree,
+} from '../../../services';
+import {
   findCirugiaById,
   updateCirugia,
+} from '../../../services/cirugias';
+import {
+  findEsteticaById,
   updateEstetica,
-} from '../../../services';
+} from '../../../services/estetica';
 import { addZero } from '../../../utils/utils';
 import ModalFormCirugiaAgregarPaciente from './ModalFormCirugiaAgregarPaciente';
 

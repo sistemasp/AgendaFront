@@ -36,8 +36,6 @@ const ModalPago = (props) => {
     tipoServicioId,
   } = props;
 
-  console.log("SERSFFISFS", servicio);
-
   const porcetanjeComision = process.env.REACT_APP_COMISION_PAGO_TARJETA;
   const enConsultorioStatusId = process.env.REACT_APP_EN_CONSULTORIO_STATUS_ID;
 

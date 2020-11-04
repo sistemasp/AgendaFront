@@ -7,14 +7,18 @@ import {
 	showAllTipoCitas,
 	showAllMedios,
 	showAllFrecuencias,
-	findCirugiaByConsultaId,
 	createConsecutivo,
-	findEsteticaByConsultaId,
 } from "../../services";
 import { 
 	createConsult,
 	findConsultsByDateAndSucursal
 } from "../../services/consultas";
+import {
+	findCirugiaByConsultaId,
+} from "../../services/cirugias";
+import {
+	findEsteticaByConsultaId,
+} from "../../services/estetica";
 import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import EditIcon from '@material-ui/icons/Edit';

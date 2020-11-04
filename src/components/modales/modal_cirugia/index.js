@@ -1,12 +1,14 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import {
   findEmployeesByRolId,
-  createCirugia,
   showAllMaterials,
-  updateCirugia,
   createConsecutivo,
   createBiopsia,
 } from "../../../services";
+import {
+  createCirugia,
+  updateCirugia,
+} from "../../../services/cirugias";
 import { updateConsult } from '../../../services/consultas';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import { addZero } from '../../../utils/utils';

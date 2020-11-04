@@ -5,7 +5,6 @@ import { ListaEsperaContainer } from './lista_espera';
 import {
 	findSurgeryBySucursalIdWaitingList,
 	waitingListTratamiento,
-	waitingListEstetica,
 	updateSurgery,
 	breakFreeSurgeryByIdPaciente,
 	findCabinaBySucursalId,
@@ -13,20 +12,25 @@ import {
 	updateDate,
 	updateCabina,
 	breakFreeCabinaByIdPaciente,
-	waitingListCirugia,
 	findSalaCirugiaBySucursalId,
-	findCirugiaById,
-	updateCirugia,
 	updateSalaCirugia,
 	breakFreeSalaCirugiaByIdPaciente,
-	findEsteticaById,
-	updateEstetica,
 } from '../../services';
 import {
 	waitingListConsulta,
 	updateConsult,
 	findConsultById
 } from '../../services/consultas';
+import {
+	waitingListCirugia,
+	findCirugiaById,
+	updateCirugia,
+} from '../../services/cirugias';
+import {
+	waitingListEstetica,
+	findEsteticaById,
+	updateEstetica,
+} from '../../services/estetica';
 import InputIcon from '@material-ui/icons/Input';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';

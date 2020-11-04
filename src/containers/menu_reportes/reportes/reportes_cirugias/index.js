@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { ReportesCirugiasContainer } from "./reportes_consultas";
-import { findCirugiasByRangeDateAndSucursal } from "../../../../services";
+import { findCirugiasByRangeDateAndSucursal } from "../../../../services/cirugias";
 import { Backdrop, CircularProgress } from "@material-ui/core";
 import { toFormatterCurrency, addZero } from "../../../../utils/utils";
 

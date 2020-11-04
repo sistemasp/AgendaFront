@@ -2,12 +2,13 @@ import React, { useState, useEffect, Fragment } from 'react';
 import {
   showAllMaterialEsteticas,
   createConsecutivo,
-  updateEstetica,
-  createEstetica,
   showAllMaterials,
 } from "../../../services";
 import { updateConsult } from '../../../services/consultas';
-
+import {
+  updateEstetica,
+  createEstetica,
+} from "../../../services/estetica";
 import * as Yup from "yup";
 import { Formik } from 'formik';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
