@@ -320,8 +320,6 @@ const AgendarConsulta = (props) => {
 		data.hora_salida = '--:--';
 		data.servicio = consultaServicioId;
 		data.tipo_cita = data.frecuencia === frecuenciaPrimeraVezId ? tipoCitaRevisionId : tipoCitaDerivadaId;
-		//data.fecha_hora = new Date(values.fecha_hora.toGTMString());
-		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 		if (sucursal._id !== sucursalManuelAcunaId) {
 			const dateNow = new Date();
 			data.hora_llegada = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
@@ -330,6 +328,7 @@ const AgendarConsulta = (props) => {
 			data.fecha_hora = dateNow;
 			data.medio = medioSinCitaId;
 			data.status = asistioStatusId;
+			data.hora_aplicacion = new Date();
 			// data.quien_confirma_asistencia = empleado._id;
 		}
 

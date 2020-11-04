@@ -81,6 +81,7 @@ const ModalEstetica = (props) => {
     pagado: estetica.pagado,
     paciente: consulta.paciente,
     medico: consulta.medico,
+    hora_aplicacion: consulta.hora_aplicacion,
   });
   const [materiales, setMateriales] = useState([]);
 
@@ -142,7 +143,7 @@ const ModalEstetica = (props) => {
       || `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
       if (data._id) {
         setOpenAlert(true);
-        setMessage('La Estetica se actualizo correctamente');
+        setMessage('ESTETICA ACTUALIZADA CORRECTAMENTE.');
       } else {
         const consecutivo = {
           consecutivo: response.data.consecutivo,
@@ -155,7 +156,7 @@ const ModalEstetica = (props) => {
         const responseConsecutivo = await createConsecutivo(consecutivo);
         if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
           setOpenAlert(true);
-          setMessage('La Estetica se guardo correctamente');
+          setMessage('ESTETICA GUARDADA CORRECTAMENTE.');
         }
       }
     }

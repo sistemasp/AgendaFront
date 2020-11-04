@@ -79,7 +79,7 @@ const ModalConsultorioAgregarPaciente = (props) => {
       const response = await updateSurgery(consul._id, consul);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setOpenAlert(true);
-        setMessage('El paciente se agrego al consultorio correctamente');
+        setMessage('EL PACIENTE ENTRO AL CONSULTORIO');
       }
     }
 

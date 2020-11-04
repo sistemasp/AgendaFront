@@ -99,6 +99,7 @@ const ModalConsulta = (props) => {
     hora_llegada: consulta.hora_llegada,
     servicio: consulta.servicio,
     pagos: consulta.pagos,
+    hora_aplicacion : consulta.hora_aplicacion,
   });
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
@@ -247,7 +248,8 @@ const ModalConsulta = (props) => {
     if (rowData.status._id !== pendienteStatusId && rowData.status === asistioStatusId) {
       rowData.quien_confirma = empleado._id;
       const dateNow = new Date();
-      rowData.hora_llegada = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
+      rowData.hora_aplicacion = rowData.hora_aplicacion ? rowData.hora_aplicacion : dateNow;
+      rowData.hora_llegada = (rowData.hora_llegada && rowData.hora_llegada !== '--:--') ? rowData.hora_llegada : `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
     }
 
     if (rowData.status === reagendoStatusId) {

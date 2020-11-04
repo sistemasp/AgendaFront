@@ -88,12 +88,12 @@ const ModalCirugiaAgregarPaciente = (props) => {
       const response = await updateSalaCirugia(salaCirugia._id, salaCirugia);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setOpenAlert(true);
-        setMessage('El paciente se agrego a la sala de cirugia correctamente');
+        setMessage('EL PACIENTE ENTRO A LA SALA DE CIRUGIA');
       }
     }
 
-    await loadAll();
     onClose();
+    await loadAll();
     setIsLoading(false);
   }
 

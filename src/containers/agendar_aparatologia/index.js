@@ -292,7 +292,6 @@ const AgendarAparatologia = (props) => {
 		setIsLoading(true);
 		data.quien_agenda = empleado._id;
 		data.sucursal = sucursal;
-		data.numero_sesion = 1;
 		data.status = pendienteStatusId;
 		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';

@@ -36,6 +36,8 @@ const ModalPago = (props) => {
     tipoServicioId,
   } = props;
 
+  console.log("SERSFFISFS", servicio);
+
   const porcetanjeComision = process.env.REACT_APP_COMISION_PAGO_TARJETA;
   const enConsultorioStatusId = process.env.REACT_APP_EN_CONSULTORIO_STATUS_ID;
 
@@ -183,6 +185,7 @@ const ModalPago = (props) => {
     rowData.servicio = servicio._id;
     rowData.tipo_servicio = tipoServicioId;
     rowData.porcentaje_descuento = `${rowData.porcentaje_descuento} %`;
+    rowData.hora_aplicacion = servicio.hora_aplicacion;
 
     let tipoIngreso = '';
 
@@ -218,6 +221,7 @@ const ModalPago = (props) => {
 
     const ingreso = {
       create_date: create_date,
+      hora_aplicacion: servicio.hora_aplicacion,
       recepcionista: empleado._id,
       concepto: `Folio: ${generateFolio(servicio)}`,
       cantidad: rowData.total,

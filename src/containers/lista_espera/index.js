@@ -323,7 +323,7 @@ const ListaEspera = (props) => {
 				const response = await breakFreeSurgeryByIdPaciente(rowData._id);
 				if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 					setOpenAlert(true);
-					setMessage('Salio el paciente');
+					setMessage('SALIO EL PACIENTE');
 					await loadAll();
 				}
 			}
@@ -340,7 +340,7 @@ const ListaEspera = (props) => {
 				const response = await breakFreeCabinaByIdPaciente(rowData._id);
 				if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 					setOpenAlert(true);
-					setMessage('Salio el paciente');
+					setMessage('SALIO EL PACIENTE');
 					await loadAll();
 				}
 			}
@@ -363,7 +363,7 @@ const ListaEspera = (props) => {
 			const response = await breakFreeSalaCirugiaByIdPaciente(rowData._id);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				setOpenAlert(true);
-				setMessage('Salio el paciente');
+				setMessage('SALIO EL PACIENTE');
 				await loadAll();
 			}
 		}
@@ -516,103 +516,9 @@ const ListaEspera = (props) => {
 	}
 
 	useEffect(() => {
-		/*
-		const loadConsultorios = async () => {
-			const response = await findSurgeryBySucursalIdWaitingList(sucursal);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				response.data.forEach(item => {
-					item.folio = generateFolio(item);
-					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'LIBRE';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'SIN MEDICO';
-				});
-				setConsultorios(response.data);
-			}
-		}
-
-		const loadListaEsperaConsultas = async () => {
-			const response = await waitingListConsulta(sucursal, asistioStatusId);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				response.data.forEach(item => {
-					item.folio = generateFolio(item);
-					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-				});
-				setListaEsperaConsultas(response.data);
-			}
-		}
-
-		const loadListaEsperaTratamientos = async () => {
-			const response = await waitingListTratamiento(sucursal, asistioStatusId);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				response.data.forEach(item => {
-					item.folio = generateFolio(item);
-					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
-					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-				});
-				setListaEsperaTratamientos(response.data);
-			}
-		}
-
-		const loadCabinas = async () => {
-			const response = await findCabinaBySucursalId(sucursal);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				response.data.forEach(item => {
-					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
-					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-				});
-				setCabinas(response.data);
-			}
-		}
-
-		const loadSalaCirugias = async () => {
-			const response = await findSalaCirugiaBySucursalId(sucursal);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				response.data.forEach(item => {
-					item.folio = generateFolio(item);
-					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'LIBRE';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'SIN MEDICO';
-				});
-				setSalaCirugias(response.data);
-			}
-		}
-
-		const loadListaEsperaCirugias = async () => {
-			const response = await waitingListCirugia(sucursal, asistioStatusId);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				response.data.forEach(item => {
-					item.folio = generateFolio(item);
-					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'LIBRE';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'SIN MEDICO';
-				});
-				setListaEsperaCirugias(response.data);
-			}
-		}
-
-		const loadListaEsperaEstetica = async () => {
-			const response = await waitingListEstetica(sucursal, asistioStatusId);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				response.data.forEach(item => {
-					item.folio = generateFolio(item);
-					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
-				});
-				setListaEsperaEstetica(response.data);
-				setIsLoading(false);
-			}
-		}
-
-		loadConsultorios();
-		loadListaEsperaConsultas();
-		loadListaEsperaTratamientos();
-		loadCabinas();
-		loadSalaCirugias();
-		loadListaEsperaEstetica();
-		loadListaEsperaCirugias();
-		*/
 		loadAll();
 
-	}, [sucursal, asistioStatusId]);
+	}, []);
 
 
 

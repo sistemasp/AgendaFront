@@ -132,6 +132,7 @@ const ModalCita = (props) => {
     tiempo: cita.tiempo,
     pagado: cita.pagado,
     pagos: cita.pagos,
+    hora_aplicacion: cita.hora_aplicacion,
   });
 
   const loadHorarios = async () => {
@@ -233,7 +234,8 @@ const ModalCita = (props) => {
       rowData.quien_confirma_asistencia = empleado._id;
       if (rowData.status === asistioStatusId) {
         const dateNow = new Date();
-        rowData.hora_llegada = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
+        rowData.hora_aplicacion = rowData.hora_aplicacion ? rowData.hora_aplicacion : dateNow;
+        rowData.hora_llegada = (rowData.hora_llegada && rowData.hora_llegada !== '--:--') ? rowData.hora_llegada : `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
       }
     }
 

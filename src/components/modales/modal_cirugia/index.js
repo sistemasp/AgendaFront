@@ -62,6 +62,7 @@ const ModalCirugia = (props) => {
     cantidad_biopsias: cirugia.biopsias ? cirugia.biopsias.length : 0,
     costo_biopsias: cirugia.costo_biopsias ? cirugia.costo_biopsias : 0,
     patologo: cirugia.patologo ? cirugia.patologo._id : undefined,
+    hora_aplicacion: consulta.hora_aplicacion,
   });
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
@@ -127,6 +128,7 @@ const ModalCirugia = (props) => {
           sucursal: data.sucursal,
           patologo: data.patologo,
           tipo_servicio: biopsiaServicioId,
+          hora_aplicacion: data.hora_aplicacion,
         };
         biopsias.push(biopsia);
       }
@@ -146,7 +148,7 @@ const ModalCirugia = (props) => {
       //loadConsultas(new Date(consulta.fecha_hora));
       if (data._id) {
         setOpenAlert(true);
-        setMessage('La Cirugia se actualizo correctamente');
+        setMessage('CIRUGIA ACTUALIZADA CORRECTAMENTE');
       } else {
         const consecutivo = {
           consecutivo: response.data.consecutivo,
@@ -159,7 +161,7 @@ const ModalCirugia = (props) => {
         const responseConsecutivo = await createConsecutivo(consecutivo);
         if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
           setOpenAlert(true);
-          setMessage('La Cirugia se guardo correctamente');
+          setMessage('CIRUGIA AGREGADA CORRECTAMENTE');
         }
       }
     }
