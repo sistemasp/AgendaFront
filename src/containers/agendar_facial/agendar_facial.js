@@ -87,6 +87,7 @@ export const AgendarFacialContainer = (props) => {
 		sucursal,
 		setMessage,
 		setOpenAlert,
+		onGuardarModalPagos,
 		// MODAL IMPRIMIR
 		openModalImprimirCita,
 		datosImpresion,
@@ -129,6 +130,7 @@ export const AgendarFacialContainer = (props) => {
 						sucursal={sucursal}
 						setMessage={setMessage}
 						setOpenAlert={setOpenAlert}
+						onGuardarModalPagos={onGuardarModalPagos}
 						tipoServicioId={cita.servicio._id} />
 					: ''
 			}

@@ -85,7 +85,6 @@ const ModalFormCita = (props) => {
     onChangeMotivos,
     onChangeObservaciones,
     onChangeMedico,
-    onChangePagado,
     openModalPagos,
     onCloseModalPagos,
     onGuardarModalPagos,
@@ -105,18 +104,6 @@ const ModalFormCita = (props) => {
         open={open} >
         <div style={modalStyle} className={classes.paper}>
           <form onSubmit={handleSubmit}>
-            {
-              openModalPagos ?
-                <ModalPagos
-                  open={openModalPagos}
-                  onClose={onCloseModalPagos}
-                  onGuardarModalPagos={onGuardarModalPagos}
-                  servicio={cita}
-                  empleado={empleado}
-                  sucursal={sucursal}
-                  tipoServicioId={cita.servicio._id} />
-                : ''
-            }
             {
               openModalConfirmacion ?
                 <ModalConfirmacion
@@ -311,16 +298,6 @@ const ModalFormCita = (props) => {
                   value={values.observaciones}
                   onChange={onChangeObservaciones}
                   variant="outlined" />
-              </Grid>
-
-              <Grid item xs={12}>
-                <CheckCustom
-                  checked={values.pagado}
-                  onChange={onChangePagado}
-                  disabled={values.pagado}
-                  name="checkedG"
-                  label="Pagado"
-                />
               </Grid>
 
               <Grid item xs={12} sm={6}>

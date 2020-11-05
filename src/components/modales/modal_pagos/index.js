@@ -12,6 +12,7 @@ const ModalPagos = (props) => {
     sucursal,
     handleClickGuardarPago,
     servicio,
+    setServicio,
     empleado,
     onGuardarModalPagos,
     tipoServicioId,
@@ -79,36 +80,6 @@ const ModalPagos = (props) => {
 
   const efectivoMetodoPagoId = process.env.REACT_APP_METODO_PAGO_EFECTIVO;
 
-  useEffect(() => {
-    const loadPagos = async () => {
-      const response = await findPagosByTipoServicioAndServicio(tipoServicioId, servicio._id);
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        let acomulado = 0;
-        response.data.forEach(item => {
-          const fecha = new Date(item.fecha_pago);
-          item.fecha = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth())}/${addZero(fecha.getFullYear())}`
-          item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
-          item.cantidad_moneda = toFormatterCurrency(item.cantidad);
-          item.descuento_moneda = toFormatterCurrency(item.descuento);
-          item.subtotal_moneda = toFormatterCurrency((Number(item.cantidad) - Number(item.descuento)));
-          item.comision_moneda = toFormatterCurrency(item.comision);
-          item.total_moneda = toFormatterCurrency(item.total);
-          item.banco_nombre = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.banco.nombre;
-          item.tipo_tarjeta_nombre = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.tipo_tarjeta.nombre;
-          item.digitos_show = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.metodo_pago.nombre;
-          acomulado = Number(acomulado) + Number(item.cantidad);
-        });
-        setRestante(Number(servicio.total ? servicio.total : servicio.precio) - Number(acomulado));
-        setPagos(response.data);
-      }
-    }
-    setIsLoading(true);
-    loadPagos();
-
-    setIsLoading(false);
-
-  }, [tipoServicioId, servicio]);
-
   const loadPagos = async () => {
     const response = await findPagosByTipoServicioAndServicio(tipoServicioId, servicio._id);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -128,6 +99,7 @@ const ModalPagos = (props) => {
         acomulado = Number(acomulado) + Number(item.cantidad);
       });
       setRestante(Number(servicio.total ? servicio.total : servicio.precio) - Number(acomulado));
+      servicio.pagos = response.data;
       setPagos(response.data);
     }
   }
@@ -150,6 +122,12 @@ const ModalPagos = (props) => {
   const handleCloseBuscarRazonSocial = () => {
     setOpenModalFactura(false);
   }
+
+  useEffect(() => {
+    setIsLoading(true);
+    loadPagos();
+    setIsLoading(false);
+  }, []);
 
   return (
     <Fragment>

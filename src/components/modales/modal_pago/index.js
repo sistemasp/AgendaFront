@@ -74,33 +74,7 @@ const ModalPago = (props) => {
   const consultaTratamientoId = process.env.REACT_APP_CONSULTA_TRATAMIENTO_ID;
   const pagoAnticipadoMetodoPagoId = process.env.REACT_APP_PAGO_ANTICIPADO_METODO_PAGO_ID;
 
-  useEffect(() => {
-    const loadBancos = async () => {
-      const response = await showAllBanco();
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setBancos(response.data);
-      }
-    }
 
-    const loadMetodosPago = async () => {
-      const response = await showAllMetodoPago();
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setMetodosPago(response.data);
-      }
-    }
-
-    const loadTipoTarjeta = async () => {
-      const response = await showAllTipoTarjeta();
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setTiposTarjeta(response.data);
-      }
-    }
-    loadBancos();
-    loadMetodosPago();
-    loadTipoTarjeta();
-    setIsLoading(false);
-
-  }, [sucursal]);
 
   const handleChangePaymentMethod = (event) => {
     const datos = {
@@ -237,9 +211,35 @@ const ModalPago = (props) => {
         loadPagos();
       }
     }
-
-
   }
+
+  useEffect(() => {
+    const loadBancos = async () => {
+      const response = await showAllBanco();
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setBancos(response.data);
+      }
+    }
+
+    const loadMetodosPago = async () => {
+      const response = await showAllMetodoPago();
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setMetodosPago(response.data);
+      }
+    }
+
+    const loadTipoTarjeta = async () => {
+      const response = await showAllTipoTarjeta();
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setTiposTarjeta(response.data);
+      }
+    }
+    loadBancos();
+    loadMetodosPago();
+    loadTipoTarjeta();
+    setIsLoading(false);
+
+  }, [sucursal]);
 
   return (
     <Formik

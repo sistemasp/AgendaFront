@@ -149,7 +149,7 @@ const ModalFormPagos = (props) => {
                     className={classes.button}
                     color="primary"
                     variant="contained"
-                    onClick={() => onGuardarModalPagos(pagos)}
+                    onClick={() => onGuardarModalPagos(servicio)}
                     disabled={pagos == ![]}
                     text='Guardar' />
                 </Grid> : ''

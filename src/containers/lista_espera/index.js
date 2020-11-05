@@ -404,12 +404,13 @@ const ListaEspera = (props) => {
 
 	const actionsConsultorio = [
 		//new Date(anio, mes - 1, dia) < filterDate.fecha_show  ? 
-		rowData => (
-			(!rowData.disponible && rowData.consulta.status !== enProcedimientoStatusId) ? {
+		rowData => {
+			console.log("RSORWEROEHWr", rowData);
+			return (!rowData.disponible && rowData.consulta.status !== enProcedimientoStatusId) ? {
 				icon: DirectionsWalkIcon,
 				tooltip: 'Salida paciente',
 				onClick: handleOnClickLiberar
-			} : ''),
+			} : ''},
 		rowData => (
 			(!rowData.disponible && rowData.consulta.status !== enProcedimientoStatusId) ? {
 				icon: InputIcon,

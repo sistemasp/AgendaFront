@@ -12,9 +12,10 @@ import {
 	createConsecutivo,
 	showAllMedios,
 } from "../../services";
-import { 
+import {
 	createFacial,
-	findFacialByDateAndSucursal
+	findFacialByDateAndSucursal,
+	updateFacial
 } from "../../services/faciales";
 import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
@@ -89,7 +90,7 @@ const AgendarFacial = (props) => {
 		tipo_cita: tipoCitaNoAplicaId,
 		tiempo: '',
 		observaciones: '',
-		medico: { _id: medicoDirectoId},
+		medico: { _id: medicoDirectoId },
 	});
 	const [faciales, setFaciales] = useState([]);
 	const [areas, setAreas] = useState([]);
@@ -424,12 +425,21 @@ const AgendarFacial = (props) => {
 			onClick: handleOnClickEditarCita
 		}, //: ''
 		rowData => (
-			rowData.pagado ? {
+			rowData.status._id !== pendienteStatusId ? {
 				icon: AttachMoneyIcon,
-				tooltip: 'Ver pago',
+				tooltip: rowData.pagado ? 'VER PAGO' : 'PAGAR',
 				onClick: handleClickVerPagos
-			} : ''),
+			} : ''
+		),
 	];
+
+	const handleGuardarModalPagos = async(servicio) => {
+		servicio.pagado = servicio.pagos.length > 0;
+		console.log("SERSRSEARS", servicio);
+		await updateFacial(servicio._id, servicio);
+        await loadFaciales(new Date(servicio.fecha_hora));
+		setOpenModalPagos(false);
+	  }
 
 	useEffect(() => {
 		const loadFaciales = async () => {
@@ -556,6 +566,7 @@ const AgendarFacial = (props) => {
 								setMessage={setMessage}
 								setFilterDate={setFilterDate}
 								medicoDirectoId={medicoDirectoId}
+								onGuardarModalPagos={handleGuardarModalPagos}
 								{...props} />
 						}
 					</Formik> :
