@@ -87,3 +87,15 @@ export const findCirugiasHistoricByPaciente = async (pacienteId) => {
         console.log('findCirugiasHistoricByPaciente', error);
     }
 }
+
+export const findCirugiasByPayOfDoctorHoraAplicacion = async (sucursalId, medicoId, atendidoId, hora_apertura, hora_cierre) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cirugia/sucursal/${sucursalId}/medico/${medicoId}/atendido/${atendidoId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findCirugiasByPayOfDoctorHoraAplicacion', error);
+    }
+}

@@ -15,6 +15,11 @@ import {
   findConsultsByPayOfDoctorHoraAplicacionFrecuencia,
 } from '../../../../services/consultas';
 import { showCorteTodayBySucursalAndTurno } from '../../../../services/corte';
+import { findFacialesByPayOfDoctorHoraAplicacion } from '../../../../services/faciales';
+import { findLasersByPayOfDoctorHoraAplicacion } from '../../../../services/laser';
+import { findAparatologiasByPayOfDoctorHoraAplicacion } from '../../../../services/aparatolgia';
+import { findCirugiasByPayOfDoctorHoraAplicacion } from '../../../../services/cirugias';
+import { findEsteticasByPayOfDoctorHoraAplicacion } from '../../../../services/estetica';
 
 const useStyles = makeStyles(theme => ({
   backdrop: {
@@ -42,7 +47,9 @@ const ModalImprimirPagoMedico = (props) => {
   const [consultasPrimeraVez, setConsultasPrimeraVez] = useState([]);
   const [consultasReconsultas, setConsultasReconsultas] = useState([]);
   const [cirugias, setCirugias] = useState([]);
-  const [citas, setCitas] = useState([]);
+  const [faciales, setFaciales] = useState([]);
+  const [lasers, setLasers] = useState([]);
+  const [aparatologias, setAparatologias] = useState([]);
   const [esteticas, setEsteticas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [turno, setTurno] = useState('m');
@@ -68,7 +75,6 @@ const ModalImprimirPagoMedico = (props) => {
   }
 
   const loadConsultasPrimeraVez = async (hora_apertura, hora_cierre) => {
-    const date = new Date();
     const response = await findConsultsByPayOfDoctorHoraAplicacionFrecuencia(sucursal._id, medico._id, atendidoId, hora_apertura, hora_cierre ? hora_cierre : new Date(), primeraVezFrecuenciaId);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setConsultasPrimeraVez(response.data);
@@ -84,24 +90,35 @@ const ModalImprimirPagoMedico = (props) => {
   }
 
   const loadCirugias = async (hora_apertura, hora_cierre) => {
-    const date = new Date();
-    const response = await findCirugiasByPayOfDoctorTurno(date.getDate(), date.getMonth(), date.getFullYear(), sucursal._id, medico._id, turno);
+    const response = await findCirugiasByPayOfDoctorHoraAplicacion(sucursal._id, medico._id, atendidoId, hora_apertura, hora_cierre ? hora_cierre : new Date());
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setCirugias(response.data);
     }
   }
 
-  const loadCitas = async (hora_apertura, hora_cierre) => {
-    const date = new Date();
-    const response = await findDatesByPayOfDoctorTurno(date.getDate(), date.getMonth(), date.getFullYear(), sucursal._id, medico._id, atendidoId, turno);
+  const loadFaciales = async (hora_apertura, hora_cierre) => {
+    const response = await findFacialesByPayOfDoctorHoraAplicacion(sucursal._id, medico._id, atendidoId, hora_apertura, hora_cierre ? hora_cierre : new Date());
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-      setCitas(response.data);
+      setFaciales(response.data);
+    }
+  }
+
+  const loadLasers = async (hora_apertura, hora_cierre) => {
+    const response = await findLasersByPayOfDoctorHoraAplicacion(sucursal._id, medico._id, atendidoId, hora_apertura, hora_cierre ? hora_cierre : new Date());
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setLasers(response.data);
+    }
+  }
+
+  const loadAparatologias = async (hora_apertura, hora_cierre) => {
+    const response = await findAparatologiasByPayOfDoctorHoraAplicacion(sucursal._id, medico._id, atendidoId, hora_apertura, hora_cierre ? hora_cierre : new Date());
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setAparatologias(response.data);
     }
   }
 
   const loadEsteticas = async (hora_apertura, hora_cierre) => {
-    const date = new Date();
-    const response = await findEsteticasByPayOfDoctorTurno(date.getDate(), date.getMonth(), date.getFullYear(), sucursal._id, medico._id, turno);
+    const response = await findEsteticasByPayOfDoctorHoraAplicacion(sucursal._id, medico._id, atendidoId, hora_apertura, hora_cierre ? hora_cierre : new Date());
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setEsteticas(response.data);
     }
@@ -118,7 +135,9 @@ const ModalImprimirPagoMedico = (props) => {
         await loadConsultas(hora_apertura, hora_cierre);
       }
       await loadCirugias(hora_apertura, hora_cierre);
-      await loadCitas(hora_apertura, hora_cierre);
+      await loadFaciales(hora_apertura, hora_cierre);
+      await loadLasers(hora_apertura, hora_cierre);
+      await loadAparatologias(hora_apertura, hora_cierre);
       await loadEsteticas(hora_apertura, hora_cierre);
       await loadConsultasPrimeraVez(hora_apertura, hora_cierre);
       await loadConsultasReconsulta(hora_apertura, hora_cierre);
@@ -155,10 +174,79 @@ const ModalImprimirPagoMedico = (props) => {
     });
 
     // TOTAL DE LOS TRATAMIENTOS
-    citas.forEach(cita => {
+    /*citas.forEach(cita => {
       let comisionMedico = 0;
       cita.areas.forEach(area => {
         switch (cita.tipo_cita) {
+          case revisadoTipoCitaId:
+            comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
+            break;
+          case derivadoTipoCitaId:
+            comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
+            break;
+          case realizadoTipoCitaId:
+            comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
+            break;
+          case noAplicaTipoCitaId:
+            comisionMedico += Number(0);
+            break;
+        }
+      });
+      const pagoMedico = comisionMedico;
+      total += Number(pagoMedico);
+    });*/
+
+    // TOTAL DE LOS FACIALES
+    faciales.forEach(facial => {
+      let comisionMedico = 0;
+      facial.areas.forEach(area => {
+        switch (facial.tipo_cita._id) {
+          case revisadoTipoCitaId:
+            comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
+            break;
+          case derivadoTipoCitaId:
+            comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
+            break;
+          case realizadoTipoCitaId:
+            comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
+            break;
+          case noAplicaTipoCitaId:
+            comisionMedico += Number(0);
+            break;
+        }
+      });
+      const pagoMedico = comisionMedico;
+      total += Number(pagoMedico);
+    });
+
+    // TOTAL DE LOS LASERS
+    lasers.forEach(laser => {
+      let comisionMedico = 0;
+      laser.areas.forEach(area => {
+        switch (laser.tipo_cita._id) {
+          case revisadoTipoCitaId:
+            comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
+            break;
+          case derivadoTipoCitaId:
+            comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
+            break;
+          case realizadoTipoCitaId:
+            comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
+            break;
+          case noAplicaTipoCitaId:
+            comisionMedico += Number(0);
+            break;
+        }
+      });
+      const pagoMedico = comisionMedico;
+      total += Number(pagoMedico);
+    });
+
+    // TOTAL DE LAS APARATOLOGIAS
+    aparatologias.forEach(aparatologia => {
+      let comisionMedico = 0;
+      aparatologia.areas.forEach(area => {
+        switch (aparatologia.tipo_cita._id) {
           case revisadoTipoCitaId:
             comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
             break;
@@ -183,13 +271,14 @@ const ModalImprimirPagoMedico = (props) => {
       total += Number(pagoMedico);
     });
 
-    const date = new Date();
     const pagoMedico = {
-      fecha_pago: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+      fecha_pago: new Date(),
       medico: medico,
       consultas: consultas,
       cirugias: cirugias,
-      tratamientos: citas,
+      faciales: faciales,
+      lasers: lasers,
+      aparatologias: aparatologias,
       esteticas: esteticas,
       sucursal: sucursal._id,
       turno: turno,
@@ -197,6 +286,7 @@ const ModalImprimirPagoMedico = (props) => {
       total: total,
       pagado: true,
     }
+
     const response = await createPagoMedico(pagoMedico);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
       || `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
@@ -206,11 +296,9 @@ const ModalImprimirPagoMedico = (props) => {
         //setMessage('El pago se genero correctamente');
       }
 
-      const create_date = new Date();
-      create_date.setHours(create_date.getHours());
-
       const egreso = {
-        create_date: create_date,
+        create_date: new Date(),
+        hora_aplicacion: new Date(),
         tipo_egreso: pagoMedicoTipoEgresoId,
         recepcionista: empleado,
         concepto: medico.nombre,
@@ -224,7 +312,7 @@ const ModalImprimirPagoMedico = (props) => {
         setIsLoading(false);
       }
     }
-    handleObtenerInformacion();
+    findCorte();
   };
 
   const handleObtenerInformacion = async (corte) => {
@@ -246,7 +334,7 @@ const ModalImprimirPagoMedico = (props) => {
   useEffect(() => {
     setIsLoading(true);
     findCorte();
-  }, []);  
+  }, []);
 
   return (
     <Fragment>
@@ -263,15 +351,19 @@ const ModalImprimirPagoMedico = (props) => {
             consultasPrimeraVez={consultasPrimeraVez}
             consultasReconsultas={consultasReconsultas}
             cirugias={cirugias}
-            citas={citas}
+            faciales={faciales}
+            lasers={lasers}
+            aparatologias={aparatologias}
             esteticas={esteticas}
             turno={turno}
             pagoMedico={pagoMedico}
             onClickImprimir={handleClickImprimir}
             onCambioTurno={() => handleCambioTurno()}
             onObtenerInformacion={() => handleObtenerInformacion()}
+            findCorte={findCorte}
             onClickPagar={() => handleClickPagar()}
-            show={show} /> :
+            show={show}
+            empleado={empleado} /> :
           <Backdrop className={classes.backdrop} open={isLoading} >
             <CircularProgress color="inherit" />
           </Backdrop>

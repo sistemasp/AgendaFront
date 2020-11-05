@@ -171,3 +171,15 @@ export const findAparatologiaByPayOfDoctorTurno = async (dia, mes, anio, sucursa
         console.log('findAparatologiaByPayOfDoctorTurno', error);
     }
 }
+
+export const findAparatologiasByPayOfDoctorHoraAplicacion = async (sucursalId, medicoId, atendidoId, hora_apertura, hora_cierre) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/aparatologia/sucursal/${sucursalId}/medico/${medicoId}/atendido/${atendidoId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findAparatologiasByPayOfDoctorHoraAplicacion', error);
+    }
+}

@@ -171,3 +171,15 @@ export const findLaserByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, me
         console.log('findLaserByPayOfDoctorTurno', error);
     }
 }
+
+export const findLasersByPayOfDoctorHoraAplicacion = async (sucursalId, medicoId, atendidoId, hora_apertura, hora_cierre) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/laser/sucursal/${sucursalId}/medico/${medicoId}/atendido/${atendidoId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findLasersByPayOfDoctorHoraAplicacion', error);
+    }
+}

@@ -89,3 +89,15 @@ export const findEsteticasHistoricByPaciente = async (pacienteId) => {
         console.log('findEsteticasHistoricByPaciente', error);
     }
 }
+
+export const findEsteticasByPayOfDoctorHoraAplicacion = async (sucursalId, medicoId, atendidoId, hora_apertura, hora_cierre) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/estetica/sucursal/${sucursalId}/medico/${medicoId}/atendido/${atendidoId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findEsteticasByPayOfDoctorHoraAplicacion', error);
+    }
+}

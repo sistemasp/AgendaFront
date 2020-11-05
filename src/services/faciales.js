@@ -171,3 +171,15 @@ export const findFacialByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, m
         console.log('findFacialByPayOfDoctorTurno', error);
     }
 }
+
+export const findFacialesByPayOfDoctorHoraAplicacion = async (sucursalId, medicoId, atendidoId, hora_apertura, hora_cierre) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/facial/sucursal/${sucursalId}/medico/${medicoId}/atendido/${atendidoId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findFacialesByPayOfDoctorHoraAplicacion', error);
+    }
+}
