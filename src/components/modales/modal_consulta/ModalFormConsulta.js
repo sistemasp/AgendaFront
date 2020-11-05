@@ -57,8 +57,6 @@ const ModalFormConsulta = (props) => {
 
   const {
     values,
-    consulta,
-    empleado,
     handleSubmit,
     onChangeFecha,
     onChangeHora,
@@ -66,7 +64,6 @@ const ModalFormConsulta = (props) => {
     onChangeStatus,
     onChangePromovendedor,
     onClose,
-    onCloseModalPagos,
     onClickActualizarCita,
     open,
     horarios,
@@ -78,11 +75,6 @@ const ModalFormConsulta = (props) => {
     onChangeMotivos,
     onChangeObservaciones,
     onChangeMedico,
-    onChangePagado,
-    openModalPagos,
-    sucursal,
-    onGuardarModalPagos,
-    tipoServicioId,
   } = props;
   
   return (
@@ -93,18 +85,6 @@ const ModalFormConsulta = (props) => {
         open={open} >
         <div style={modalStyle} className={classes.paper}>
           <form onSubmit={handleSubmit}>
-            {
-              openModalPagos ?
-                <ModalPagos
-                  open={openModalPagos}
-                  onClose={onCloseModalPagos}
-                  onGuardarModalPagos={onGuardarModalPagos}
-                  servicio={consulta}
-                  empleado={empleado}
-                  sucursal={sucursal}
-                  tipoServicioId={tipoServicioId} />
-                : ''
-            }
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <h2 className={classes.label}>{values.paciente_nombre} ({values.telefono})</h2>
@@ -255,16 +235,6 @@ const ModalFormConsulta = (props) => {
                   value={values.observaciones}
                   onChange={onChangeObservaciones}
                   variant="outlined" />
-              </Grid>
-
-              <Grid item xs={12}>
-                <CheckCustom
-                  checked={values.pagado}
-                  onChange={onChangePagado}
-                  disabled={values.pagado}
-                  name="checkedG"
-                  label="Pagado"
-                />
               </Grid>
 
               <Grid item xs={12} sm={6}>

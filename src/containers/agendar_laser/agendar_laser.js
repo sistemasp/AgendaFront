@@ -86,6 +86,7 @@ export const AgendarLaserContainer = (props) => {
 		sucursal,
 		setMessage,
 		setOpenAlert,
+		onGuardarModalPagos,
 		// MODAL IMPRIMIR
 		openModalImprimirCita,
 		datosImpresion,
@@ -127,6 +128,7 @@ export const AgendarLaserContainer = (props) => {
 						sucursal={sucursal}
 						setMessage={setMessage}
 						setOpenAlert={setOpenAlert}
+						onGuardarModalPagos={onGuardarModalPagos}
 						tipoServicioId={cita.servicio._id} />
 					: ''
 			}

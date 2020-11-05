@@ -21,7 +21,7 @@ import { toFormatterCurrency, addZero, generateFolio } from "../../utils/utils";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
 import { AgendarLaserContainer } from "./agendar_laser";
-import { createLaser, findLaserByDateAndSucursal } from "../../services/laser";
+import { createLaser, findLaserByDateAndSucursal, updateLaser } from "../../services/laser";
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -383,12 +383,20 @@ const AgendarLaser = (props) => {
 			onClick: handleOnClickEditarCita
 		}, //: ''
 		rowData => (
-			rowData.pagado ? {
+			rowData.status._id !== pendienteStatusId ? {
 				icon: AttachMoneyIcon,
-				tooltip: 'Ver pago',
+				tooltip: rowData.pagado ? 'VER PAGO' : 'PAGAR',
 				onClick: handleClickVerPagos
-			} : ''),
+			} : ''
+		)
 	];
+
+	const handleGuardarModalPagos = async (servicio) => {
+		servicio.pagado = servicio.pagos.length > 0;
+		await updateLaser(servicio._id, servicio);
+		await loadLaser(new Date(servicio.fecha_hora));
+		setOpenModalPagos(false);
+	}
 
 	useEffect(() => {
 
@@ -512,6 +520,7 @@ const AgendarLaser = (props) => {
 								setMessage={setMessage}
 								setFilterDate={setFilterDate}
 								medicoDirectoId={medicoDirectoId}
+								onGuardarModalPagos={handleGuardarModalPagos}
 								{...props} />
 						}
 					</Formik> :

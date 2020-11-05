@@ -103,7 +103,7 @@ export const AgendarConsultaContainer = (props) => {
     tipoServicioId,
     openModalEstetica,
     onCloseEstetica,
-
+    onGuardarModalPagos,
   } = props;
 
   return (
@@ -143,7 +143,8 @@ export const AgendarConsultaContainer = (props) => {
             sucursal={sucursal._id}
             setMessage={setMessage}
             setOpenAlert={setOpenAlert}
-            tipoServicioId={tipoServicioId} />
+            tipoServicioId={tipoServicioId}
+						onGuardarModalPagos={onGuardarModalPagos} />
           : ''
       }
       {

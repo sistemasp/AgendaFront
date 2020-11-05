@@ -11,7 +11,8 @@ import {
 } from "../../services";
 import { 
 	createConsult,
-	findConsultsByDateAndSucursal
+	findConsultsByDateAndSucursal,
+	updateConsult
 } from "../../services/consultas";
 import {
 	findCirugiaByConsultaId,
@@ -492,10 +493,10 @@ const AgendarConsulta = (props) => {
 			onClick: handleOnClickEditarConsulta
 		}, //: ''
 		rowData => (
-			rowData.pagado ? {
+			rowData.status._id !== pendienteStatusId ? {
 				icon: AttachMoneyIcon,
-				tooltip: 'Ver pago',
-				onClick: handleClickVerPagos,
+				tooltip: rowData.pagado ? 'VER PAGO' : 'PAGAR',
+				onClick: handleClickVerPagos
 			} : ''
 		),
 		rowData => {
@@ -517,6 +518,13 @@ const AgendarConsulta = (props) => {
 				} : ''
 		},
 	];
+
+	const handleGuardarModalPagos = async (servicio) => {
+		servicio.pagado = servicio.pagos.length > 0;
+		await updateConsult(servicio._id, servicio);
+		await loadConsultas(new Date(servicio.fecha_hora));
+		setOpenModalPagos(false);
+	}
 
 	return (
 		<Fragment>
@@ -574,7 +582,8 @@ const AgendarConsulta = (props) => {
 						estetica={estetica}
 						tipoServicioId={consultaServicioId}
 						frecuenciaPrimeraVezId={frecuenciaPrimeraVezId}
-						fercuenciaReconsultaId={fercuenciaReconsultaId} /> :
+						fercuenciaReconsultaId={fercuenciaReconsultaId} 
+						onGuardarModalPagos={handleGuardarModalPagos} /> :
 					<Backdrop className={classes.backdrop} open={isLoading} >
 						<CircularProgress color="inherit" />
 					</Backdrop>

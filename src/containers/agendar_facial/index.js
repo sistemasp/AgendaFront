@@ -433,13 +433,12 @@ const AgendarFacial = (props) => {
 		),
 	];
 
-	const handleGuardarModalPagos = async(servicio) => {
+	const handleGuardarModalPagos = async (servicio) => {
 		servicio.pagado = servicio.pagos.length > 0;
-		console.log("SERSRSEARS", servicio);
 		await updateFacial(servicio._id, servicio);
-        await loadFaciales(new Date(servicio.fecha_hora));
+		await loadFaciales(new Date(servicio.fecha_hora));
 		setOpenModalPagos(false);
-	  }
+	}
 
 	useEffect(() => {
 		const loadFaciales = async () => {

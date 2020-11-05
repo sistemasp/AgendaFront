@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import * as Yup from "yup";
 import { Formik } from 'formik';
 import {
-  findConsultById,
-  findEmployeesByRolId,
-  updateSurgery,
   findCabinaBySucursalIdAndFree,
-  updateConsult,
   findDateById,
   updateDate,
   updateCabina,
 } from '../../../services';
+import { findFacialById, updateFacial } from '../../../services/faciales';
+import { findLaserById, updateLaser } from '../../../services/laser';
+import { findAparatologiaById, updateAparatologia } from '../../../services/aparatolgia';
 import { addZero } from '../../../utils/utils';
 import ModalFormCabinaAgregarPaciente from './ModalFormCabinaAgregarPaciente';
 
@@ -42,7 +41,9 @@ const ModalCabinaAgregarPaciente = (props) => {
   });
 
   const enCabinaStatusId = process.env.REACT_APP_EN_CABINA_STATUS_ID;
-  const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
+  const facialServicioId = process.env.REACT_APP_FACIAL_SERVICIO_ID;
+  const laserServicioId = process.env.REACT_APP_LASER_SERVICIO_ID;
+  const aparatologiaServicioId = process.env.REACT_APP_APARATOLOGIA_SERVICIO_ID;
 
   useEffect(() => {
     const loadCabinasDisponibles = async () => {
@@ -59,9 +60,19 @@ const ModalCabinaAgregarPaciente = (props) => {
 
   const handleClickGuardar = async (event, rowData) => {
     setIsLoading(true);
+    let responseCita;
+    switch (tipo_servicio) {
+      case facialServicioId:
+        responseCita = await findFacialById(servicio);
+        break;
+      case laserServicioId:
+        responseCita = await findLaserById(servicio);
+        break;
+      case aparatologiaServicioId:
+        responseCita = await findAparatologiaById(servicio);
+        break;
+    }
 
-
-    const responseCita = await findDateById(servicio);
     if (`${responseCita.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       const cita = responseCita.data;
       if (!cambio) {
@@ -70,7 +81,17 @@ const ModalCabinaAgregarPaciente = (props) => {
         updateCita.status = enCabinaStatusId;
         updateCita.hora_atencion = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
         updateCita.cosmetologa = values.cabina.cosmetologa;
-        await updateDate(cita._id, updateCita);
+        switch (tipo_servicio) {
+          case facialServicioId:
+            responseCita = await updateFacial(cita._id, updateCita);
+            break;
+          case laserServicioId:
+            responseCita = await updateLaser(cita._id, updateCita);
+            break;
+          case aparatologiaServicioId:
+            responseCita = await updateAparatologia(cita._id, updateCita);
+            break;
+        }
       }
 
       setValues({ cabina: { paciente: cita.paciente._id } });
@@ -86,7 +107,7 @@ const ModalCabinaAgregarPaciente = (props) => {
       const response = await updateCabina(cabina._id, cabina);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setOpenAlert(true);
-        setMessage('El paciente se agrego a la cabina correctamente');
+        setMessage('EL PACIENTE INGRESO.');
       }
     }
 

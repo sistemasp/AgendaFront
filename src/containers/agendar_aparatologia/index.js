@@ -19,7 +19,7 @@ import { toFormatterCurrency, addZero, generateFolio } from "../../utils/utils";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
 import { AgendarAparatologiaContainer } from "./agendar_aparatologia";
-import { createAparatologia, findAparatologiaByDateAndSucursal } from "../../services/aparatolgia";
+import { createAparatologia, findAparatologiaByDateAndSucursal, updateAparatologia } from "../../services/aparatolgia";
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -113,7 +113,6 @@ const AgendarAparatologia = (props) => {
 		{ title: 'Servicio', field: 'servicio.nombre' },
 		{ title: 'Tratamientos', field: 'show_tratamientos' },
 		{ title: 'Areas', field: 'show_areas' },
-		{ title: 'Numero Sesion', field: 'numero_sesion' },
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
 		{ title: 'Medio', field: 'medio.nombre' },
 		{ title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' },
@@ -417,12 +416,20 @@ const AgendarAparatologia = (props) => {
 			onClick: handleOnClickEditarCita
 		}, //: ''
 		rowData => (
-			rowData.pagado ? {
+			rowData.status._id !== pendienteStatusId ? {
 				icon: AttachMoneyIcon,
-				tooltip: 'Ver pago',
+				tooltip: rowData.pagado ? 'VER PAGO' : 'PAGAR',
 				onClick: handleClickVerPagos
-			} : ''),
+			} : ''
+		),
 	];
+
+	const handleGuardarModalPagos = async (servicio) => {
+		servicio.pagado = servicio.pagos.length > 0;
+		await updateAparatologia(servicio._id, servicio);
+		await loadAparatologias(new Date(servicio.fecha_hora));
+		setOpenModalPagos(false);
+	}
 
 	useEffect(() => {
 
@@ -549,6 +556,7 @@ const AgendarAparatologia = (props) => {
 								setMessage={setMessage}
 								setFilterDate={setFilterDate}
 								medicoDirectoId={medicoDirectoId}
+								onGuardarModalPagos={handleGuardarModalPagos}
 								{...props} />
 						}
 					</Formik> :
