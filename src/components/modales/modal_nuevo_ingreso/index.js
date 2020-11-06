@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ModalFormNuevoIngreso from './ModalFormNuevoIngreso';
 import {
-  updateEmployee,
   showAllTipoIngresos,
   showAllMetodoPago,
-  createIngreso,
 } from "../../../services";
+import {
+  createIngreso,
+} from "../../../services/ingresos";
 
 const ModalNuevoIngreso = (props) => {
   const {
@@ -17,6 +18,7 @@ const ModalNuevoIngreso = (props) => {
     setSeverity,
     setOpenAlert,
     onObtenerInformacion,
+    corte,
   } = props;
 
   const [values, setValues] = useState({
@@ -54,9 +56,10 @@ const ModalNuevoIngreso = (props) => {
     const create_date = new Date();
     create_date.setHours(create_date.getHours());
     values.create_date = create_date;
+    values.hora_aplicacion = corte.hora_apertura;
     const response = await createIngreso(values);
         if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-          setMessage("Ingreso agregado correctamente");
+          setMessage("INGRESO AGREGADO CORRECTAMENTE");
           setOpenAlert(true);
           onClose();
           onObtenerInformacion();

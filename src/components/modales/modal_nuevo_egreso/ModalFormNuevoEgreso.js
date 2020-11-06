@@ -53,8 +53,6 @@ const ModalFormNuevoEgreso = (props) => {
     dataComplete,
     onChangeTipoEgreso,
     tipoEgresos,
-    onChangeMetodoPago,
-    metodoPagos,
     onChange,
     onAgregarConceto,
   } = props;
@@ -101,19 +99,6 @@ const ModalFormNuevoEgreso = (props) => {
                 onChange={onChangeTipoEgreso}
                 label="Tipo egreso" >
                 {tipoEgresos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel id="simple-select-outlined-metodo-pago">Metodo pago</InputLabel>
-              <Select
-                labelId="simple-select-outlined-metodo-pago"
-                id="simple-select-outlined-metodo-pago"
-                value={values.metodo_pago}
-                onChange={onChangeMetodoPago}
-                label="Metodo pago" >
-                {metodoPagos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
               </Select>
             </FormControl>
           </Grid>

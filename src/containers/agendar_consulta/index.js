@@ -23,7 +23,7 @@ import {
 import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import EditIcon from '@material-ui/icons/Edit';
-import { toFormatterCurrency, addZero, generateFolio } from "../../utils/utils";
+import { toFormatterCurrency, addZero, generateFolio, dateToString } from "../../utils/utils";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
@@ -543,7 +543,7 @@ const AgendarConsulta = (props) => {
 						onChangePrecio={(e) => handleChangePrecio(e)}
 						onChangeTiempo={(e) => handleChangeTiempo(e)}
 						onChangeObservaciones={(e) => handleChangeObservaciones(e)}
-						titulo={`CONSULTAS (${filterDate.fecha})`}
+						titulo={`CONSULTAS (${dateToString(filterDate.fecha_show)})`}
 						columns={columns}
 						options={options}
 						citas={citas}

@@ -45,6 +45,7 @@ export const CorteContainer = (props) => {
     turno,
     onCambioTurno,
     onObtenerInformacion,
+    onGenerarCorte,
     openModalNuevoIngreso,
     openModalNuevoEgreso,
     openModalImprimir,
@@ -58,7 +59,6 @@ export const CorteContainer = (props) => {
     setSeverity,
     detailPanelIngreso,
     detailPanelEgreso,
-    handleGuardarCorte,
     handleCerrarCorte,
     corte,
   } = props;
@@ -88,6 +88,7 @@ export const CorteContainer = (props) => {
             handleClickGuardar={handleClickGuardar}
             sucursal={sucursal}
             empleado={empleado}
+            corte={corte}
             onObtenerInformacion={onObtenerInformacion}
             setOpenAlert={setOpenAlert}
             setMessage={setMessage}
@@ -102,6 +103,7 @@ export const CorteContainer = (props) => {
             handleClickGuardar={handleClickGuardar}
             sucursal={sucursal}
             empleado={empleado}
+            corte={corte}
             onObtenerInformacion={onObtenerInformacion}
             setOpenAlert={setOpenAlert}
             setMessage={setMessage}
@@ -133,7 +135,7 @@ export const CorteContainer = (props) => {
             color="primary"
             variant="contained"
             onClick={onCambioTurno}
-            text='Cambio turno' />
+            text='CAMBIO TURNO' />
         </Grid>
         <Grid item xs={4} className={classes.label}>
           <ButtonCustom
@@ -141,17 +143,25 @@ export const CorteContainer = (props) => {
             color="primary"
             variant="contained"
             onClick={onObtenerInformacion}
-            text='Traer información' />
+            text='TRAER INFORMACIÓN' />
         </Grid>
         <Grid item xs={4} className={classes.label}>
           {
             corte.hora_cierre ?
-              <ButtonCustom
-                className={classes.button}
-                color="primary"
-                variant="contained"
-                onClick={handleOpenImprimir}
-                text='IMPRIMIR' />
+              corte.generado ?
+                <ButtonCustom
+                  className={classes.button}
+                  color="primary"
+                  variant="contained"
+                  onClick={handleOpenImprimir}
+                  text='IMPRIMIR' />
+                :
+                <ButtonCustom
+                  className={classes.button}
+                  color="primary"
+                  variant="contained"
+                  onClick={onGenerarCorte}
+                  text='GENERAR' />
               :
               <ButtonCustom
                 className={classes.button}
@@ -171,7 +181,7 @@ export const CorteContainer = (props) => {
         </Grid>
         <Grid container xs={4} className={classes.label} spacing={2}>
           {
-            !corte._id ?
+            !corte.generado ?
               <Grid item xs={12} sm={12}>
                 <ButtonCustom
                   className={classes.button}
@@ -199,7 +209,7 @@ export const CorteContainer = (props) => {
         </Grid>
         <Grid container xs={4} className={classes.label} spacing={2}>
           {
-            !corte._id ?
+            !corte.generado ?
               <Grid item xs={12} sm={12}>
                 <ButtonCustom
                   className={classes.button}

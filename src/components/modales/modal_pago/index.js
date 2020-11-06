@@ -2,17 +2,15 @@ import React, { useState, useEffect } from 'react';
 import * as Yup from "yup";
 import { Formik } from 'formik';
 import {
-  updateSurgery,
-  findSurgeryBySucursalIdAndFree,
-  updateConsult,
   showAllBanco,
   showAllMetodoPago,
   showAllTipoTarjeta,
   createPago,
   updatePago,
-  createIngreso,
-  findTipoIngresoById,
 } from '../../../services';
+import {
+  createIngreso,
+} from '../../../services/ingresos';
 import { addZero, generateFolio } from '../../../utils/utils';
 import ModalFormPago from './ModalFormPago';
 

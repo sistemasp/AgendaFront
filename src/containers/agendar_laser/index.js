@@ -17,7 +17,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
 import EditIcon from '@material-ui/icons/Edit';
 import * as Yup from "yup";
-import { toFormatterCurrency, addZero, generateFolio } from "../../utils/utils";
+import { toFormatterCurrency, addZero, generateFolio, dateToString } from "../../utils/utils";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
 import { AgendarLaserContainer } from "./agendar_laser";
@@ -167,7 +167,7 @@ const AgendarLaser = (props) => {
 		const dia = date ? date.getDate() : values.fecha_hora.getDate();
 		const mes = Number(date ? date.getMonth() : values.fecha_hora.getMonth());
 		const anio = date ? date.getFullYear() : values.fecha_hora.getFullYear();
-		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, values.servicio);
+		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, servicio._id);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setHorarios(response.data);
 		}
@@ -491,7 +491,7 @@ const AgendarLaser = (props) => {
 								cosmetologas={cosmetologas}
 								onClickAgendar={handleClickAgendar}
 								onChangeTiempo={(e) => handleChangeTiempo(e)}
-								titulo={`LÁSER (${filterDate.fecha})`}
+								titulo={`LÁSER (${dateToString(filterDate.fecha_show)})`}
 								columns={columns}
 								options={options}
 								citas={citas}

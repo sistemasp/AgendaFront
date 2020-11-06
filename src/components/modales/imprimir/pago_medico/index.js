@@ -1,19 +1,17 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
-import { addZero, generateFolio } from '../../../../utils/utils';
 import ModalFormImprimirPagoMedico from './ModalFormImprimirPagoMedico';
 import {
-  findCirugiasByPayOfDoctorTurno,
-  findDatesByPayOfDoctorTurno,
-  findEsteticasByPayOfDoctorTurno,
   createPagoMedico,
   showTodayPagoMedicoBySucursalTurno,
-  createEgreso,
 } from '../../../../services';
 import {
   findConsultsByPayOfDoctorHoraAplicacion,
   findConsultsByPayOfDoctorHoraAplicacionFrecuencia,
 } from '../../../../services/consultas';
+import {
+  createEgreso,
+} from '../../../../services/egresos';
 import { showCorteTodayBySucursalAndTurno } from '../../../../services/corte';
 import { findFacialesByPayOfDoctorHoraAplicacion } from '../../../../services/faciales';
 import { findLasersByPayOfDoctorHoraAplicacion } from '../../../../services/laser';
@@ -153,6 +151,8 @@ const ModalImprimirPagoMedico = (props) => {
     setTimeout(() => { setShow(true); }, 15);
   }
 
+  console.log("CORTEfdgdfg", corte);
+
   const handleClickPagar = async () => {
     setIsLoading(true);
     let total = 0;
@@ -172,29 +172,6 @@ const ModalImprimirPagoMedico = (props) => {
       const pagoMedico = Number(cirugia.precio) * Number(medico.porcentaje) / 100;
       total += Number(pagoMedico);
     });
-
-    // TOTAL DE LOS TRATAMIENTOS
-    /*citas.forEach(cita => {
-      let comisionMedico = 0;
-      cita.areas.forEach(area => {
-        switch (cita.tipo_cita) {
-          case revisadoTipoCitaId:
-            comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
-            break;
-          case derivadoTipoCitaId:
-            comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
-            break;
-          case realizadoTipoCitaId:
-            comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
-            break;
-          case noAplicaTipoCitaId:
-            comisionMedico += Number(0);
-            break;
-        }
-      });
-      const pagoMedico = comisionMedico;
-      total += Number(pagoMedico);
-    });*/
 
     // TOTAL DE LOS FACIALES
     faciales.forEach(facial => {
@@ -298,7 +275,7 @@ const ModalImprimirPagoMedico = (props) => {
 
       const egreso = {
         create_date: new Date(),
-        hora_aplicacion: new Date(),
+        hora_aplicacion: corte.create_date,
         tipo_egreso: pagoMedicoTipoEgresoId,
         recepcionista: empleado,
         concepto: medico.nombre,

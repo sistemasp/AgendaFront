@@ -15,7 +15,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
 import EditIcon from '@material-ui/icons/Edit';
 import * as Yup from "yup";
-import { toFormatterCurrency, addZero, generateFolio } from "../../utils/utils";
+import { toFormatterCurrency, addZero, generateFolio, dateToString } from "../../utils/utils";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
 import { AgendarAparatologiaContainer } from "./agendar_aparatologia";
@@ -527,7 +527,7 @@ const AgendarAparatologia = (props) => {
 								promovendedores={promovendedores}
 								cosmetologas={cosmetologas}
 								onClickAgendar={handleClickAgendar}
-								titulo={`APARATOLOGIAS (${filterDate.fecha})`}
+								titulo={`APARATOLOGIAS (${dateToString(filterDate.fecha_show)})`}
 								columns={columns}
 								options={options}
 								aparatologias={aparatologias}

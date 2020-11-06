@@ -4,7 +4,7 @@ import Modal from '@material-ui/core/Modal';
 import { Button, Grid } from '@material-ui/core';
 import { ButtonCustom } from '../../../basic/ButtonCustom';
 import bannerMePiel from './../../../../bannerMePiel.PNG';
-import { dateToString, toFormatterCurrency } from '../../../../utils/utils';
+import { addZero, dateToString, toFormatterCurrency } from '../../../../utils/utils';
 
 function getModalStyle() {
   return {
@@ -39,6 +39,11 @@ const useStyles = makeStyles(theme => ({
     marginTop: '0px',
     marginBottom: '0px',
   },
+  label_left: {
+    marginTop: '0px',
+    marginBottom: '0px',
+    marginLeft: '10px',
+  },
   label_line: {
     marginTop: '40px',
     marginBottom: '0px',
@@ -51,15 +56,15 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'right',
   },
   label_title: {
-    backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
-    color: '#FFFFFF',
+    //backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
+    color: '#000000',
     textAlign: 'center',
     padding: 10,
     margin: 0,
   },
   label_title_descripcion: {
-    backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
-    color: '#FFFFFF',
+    //backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
+    color: '#000000',
     fontWeight: 'bold',
     textAlign: 'center',
     fontSize: '15px',
@@ -73,13 +78,13 @@ const useStyles = makeStyles(theme => ({
     fontSize: '38px',
   },
   label_title_ingresos: {
-    backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
+    //backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: '12px',
     paddingTop: 1,
     paddingBottom: 1,
-    color: '#FFFFFF',
+    color: '#000000',
   },
   label_cells: {
     textAlign: 'center',
@@ -123,6 +128,9 @@ const useStyles = makeStyles(theme => ({
   container: {
     marginTop: 18,
     border: '2px solid #000',
+  },
+  container_buttom: {
+    marginTop: 35,
   },
   hr: {
     borderTop: '1px solid #000',
@@ -183,17 +191,17 @@ const ModalFormImprimirPagoMedico = (props) => {
                 height='100%' />
             </Grid>
             <Grid container xs={9}>
-              <Grid item xs={12} className={classes.label}>
+              <Grid item xs={12}>
                 <h2 className={classes.label_title}>CENTRO DERMATOLÓGICO M. E. PIEL S. C.</h2>
               </Grid>
               <Grid item xs={8}>
-                <h3 className={classes.label}>MÉDICO: {medico.nombre}</h3>
+                <h3 className={classes.label_left}>MÉDICO: {medico.nombre}</h3>
               </Grid>
               <Grid item xs={4} >
                 <h3 className={classes.label}>FECHA: {dateToString(corte.create_date)} </h3>
               </Grid>
               <Grid item xs={8} >
-                <h3 className={classes.label}>SUCURSAL: {corte.sucursal.nombre}</h3>
+                <h3 className={classes.label_left}>SUCURSAL: {corte.sucursal.nombre}</h3>
               </Grid>
               <Grid item xs={4} >
                 <h3 className={classes.label}>TURNO: {turno === 'm' ? 'MATUTINO' : 'VESPERTINO'} </h3>
@@ -267,7 +275,7 @@ const ModalFormImprimirPagoMedico = (props) => {
             {
               consultasPrimeraVez.length > 0 ?
                 <Grid container className={classes.container}>
-                  <Grid item xs={12} className={classes.label}>
+                  <Grid item xs={12}>
                     <p className={classes.label_title_descripcion}> {`${consultasPrimeraVez.length} CONSULTAS DE PRIMERA VEZ`}</p>
                   </Grid>
                   <Grid item xs={true} className={classes.label}>
@@ -296,7 +304,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                         const pagoMedico = Number(totalPagos) * Number(medico.porcentaje) / 100;
                         pagoTotal += Number(pagoMedico);
 
-                        return <Fragment>
+                        return <Grid container>
                           <Grid item xs={true} className={classes.label}>
                             <p className={classes.label_cells}>{consulta.hora_llegada}</p>
                           </Grid>
@@ -309,7 +317,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                           <Grid item xs={true} className={classes.label}>
                             <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
                           </Grid>
-                        </Fragment>
+                        </Grid>
                       })
                       : ''
                   }
@@ -320,7 +328,7 @@ const ModalFormImprimirPagoMedico = (props) => {
             {
               consultasReconsultas.length > 0 ?
                 <Grid container className={classes.container}>
-                  <Grid item xs={12} className={classes.label}>
+                  <Grid item xs={12}>
                     <p className={classes.label_title_descripcion}> {`${consultasReconsultas.length} RECONSULTAS`}</p>
                   </Grid>
                   <Grid item xs={true} className={classes.label}>
@@ -347,7 +355,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                         });
                         const pagoMedico = Number(totalPagos) * Number(medico.porcentaje) / 100;
                         pagoTotal += Number(pagoMedico);
-                        return <Fragment>
+                        return <Grid container>
                           <Grid item xs={true} className={classes.label}>
                             <p className={classes.label_cells}>{consulta.hora_llegada}</p>
                           </Grid>
@@ -360,7 +368,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                           <Grid item xs={true} className={classes.label}>
                             <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
                           </Grid>
-                        </Fragment>
+                        </Grid>
                       })
                       : ''
                   }
@@ -372,7 +380,7 @@ const ModalFormImprimirPagoMedico = (props) => {
               cirugias.length > 0 ?
                 <Fragment>
                   <Grid container className={classes.container}>
-                    <Grid item xs={12} className={classes.label}>
+                    <Grid item xs={12}>
                       <p className={classes.label_title_descripcion}> {`${cirugias.length} CIRUGIAS`}</p>
                     </Grid>
                     <Grid item xs={true} className={classes.label}>
@@ -395,9 +403,10 @@ const ModalFormImprimirPagoMedico = (props) => {
                         cirugias.map(cirugia => {
                           const pagoMedico = Number(cirugia.precio) * Number(medico.porcentaje) / 100;
                           pagoTotal += Number(pagoMedico);
-                          return <Fragment>
+                          const date = new Date(cirugia.hora_aplicacion);
+                          return <Grid container>
                             <Grid item xs={true} className={classes.label}>
-                              <p className={classes.label_cells}>{cirugia.hora_llegada}</p>
+                              <p className={classes.label_cells}>{`${addZero(date.getHours())}:${addZero(date.getMinutes())}`}</p>
                             </Grid>
                             <Grid item xs={true} className={classes.label}>
                               <p className={classes.label_cells}>{`${cirugia.paciente.nombres} ${cirugia.paciente.apellidos}`}</p>
@@ -408,7 +417,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                             <Grid item xs={true} className={classes.label}>
                               <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
                             </Grid>
-                          </Fragment>
+                          </Grid>
                         })
                         : ''
                     }
@@ -421,7 +430,7 @@ const ModalFormImprimirPagoMedico = (props) => {
               esteticas.length > 0 ?
                 <Fragment>
                   <Grid container className={classes.container}>
-                    <Grid item xs={12} className={classes.label}>
+                    <Grid item xs={12}>
                       <p className={classes.label_title_descripcion}> {`${esteticas.length} TOXINAS Y RELLENOS`}</p>
                     </Grid>
                     <Grid item xs={true} className={classes.label}>
@@ -444,17 +453,21 @@ const ModalFormImprimirPagoMedico = (props) => {
                         esteticas.map(estetica => {
                           const pagoMedico = Number(estetica.precio) * Number(medico.porcentaje_estetica) / 100;
                           pagoTotal += Number(pagoMedico);
-                          return <Fragment>
-                            <Grid item xs={4} >
-                              <p className={classes.labelItemLeft}>{`${estetica.paciente.nombres} ${estetica.paciente.apellidos}`}</p>
+                          const date = new Date(estetica.hora_aplicacion);
+                          return <Grid container>
+                            <Grid item xs={true} className={classes.label}>
+                              <p className={classes.label_cells}>{`${addZero(date.getHours())}:${addZero(date.getMinutes())}`}</p>
                             </Grid>
-                            <Grid item xs={4} >
-                              <p className={classes.labelItemCenter}>{`${estetica.consecutivo}`}</p>
+                            <Grid item xs={true} className={classes.label}>
+                              <p className={classes.label_cells}>{`${estetica.paciente.nombres} ${estetica.paciente.apellidos}`}</p>
                             </Grid>
-                            <Grid item xs={4} >
-                              <p className={classes.labelItemRight}> {`${toFormatterCurrency(pagoMedico)}`} </p>
+                            <Grid item xs={true} className={classes.label}>
+                              <p className={classes.label_cells}>{`${estetica.consecutivo}`}</p>
                             </Grid>
-                          </Fragment>
+                            <Grid item xs={true} className={classes.label}>
+                              <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
+                            </Grid>
+                          </Grid>
                         })
                         : ''
                     }
@@ -467,7 +480,7 @@ const ModalFormImprimirPagoMedico = (props) => {
               faciales.length > 0 ?
                 <Fragment>
                   <Grid container className={classes.container}>
-                    <Grid item xs={12} className={classes.label}>
+                    <Grid item xs={12}>
                       <p className={classes.label_title_descripcion}> {`${faciales.length} FACIALES`}</p>
                     </Grid>
                     <Grid item xs={true} className={classes.label}>
@@ -510,7 +523,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                           });
                           const pagoMedico = comisionMedico;
                           pagoTotal += Number(pagoMedico);
-                          return <Fragment>
+                          return <Grid container>
                             <Grid item xs={true} className={classes.label}>
                               <p className={classes.label_cells}>{facial.hora_llegada}</p>
                             </Grid>
@@ -526,7 +539,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                             <Grid item xs={true} >
                               <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
                             </Grid>
-                          </Fragment>
+                          </Grid>
                         })
                         : ''
                     }
@@ -539,7 +552,7 @@ const ModalFormImprimirPagoMedico = (props) => {
               lasers.length > 0 ?
                 <Fragment>
                   <Grid container className={classes.container}>
-                    <Grid item xs={12} className={classes.label}>
+                    <Grid item xs={12} >
                       <p className={classes.label_title_descripcion}> {`${lasers.length} LASER`}</p>
                     </Grid>
                     <Grid item xs={true} className={classes.label}>
@@ -582,7 +595,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                           });
                           const pagoMedico = comisionMedico;
                           pagoTotal += Number(pagoMedico);
-                          return <Fragment>
+                          return <Grid container>
                             <Grid item xs={true} className={classes.label}>
                               <p className={classes.label_cells}>{laser.hora_llegada}</p>
                             </Grid>
@@ -598,7 +611,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                             <Grid item xs={true} >
                               <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
                             </Grid>
-                          </Fragment>
+                          </Grid>
                         })
                         : ''
                     }
@@ -611,7 +624,7 @@ const ModalFormImprimirPagoMedico = (props) => {
               aparatologias.length > 0 ?
                 <Fragment>
                   <Grid container className={classes.container}>
-                    <Grid item xs={12} className={classes.label}>
+                    <Grid item xs={12} >
                       <p className={classes.label_title_descripcion}> {`${aparatologias.length} APARATOLOGIA`}</p>
                     </Grid>
                     <Grid item xs={true} className={classes.label}>
@@ -654,7 +667,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                           });
                           const pagoMedico = comisionMedico;
                           pagoTotal += Number(pagoMedico);
-                          return <Fragment>
+                          return <Grid container>
                             <Grid item xs={true} className={classes.label}>
                               <p className={classes.label_cells}>{aparatologia.hora_llegada}</p>
                             </Grid>
@@ -670,7 +683,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                             <Grid item xs={true} >
                               <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
                             </Grid>
-                          </Fragment>
+                          </Grid>
                         })
                         : ''
                     }
@@ -679,7 +692,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                 : ''
             }
 
-            <Grid container xs={6}>
+            <Grid container xs={6} className={classes.container_buttom}>
               <Grid container xs={6}>
                 <Grid item xs={12} className={classes.label_line}>
                   <hr className={classes.hr} />
@@ -699,7 +712,7 @@ const ModalFormImprimirPagoMedico = (props) => {
               </Grid>
             </Grid>
 
-            <Grid container xs={6}>
+            <Grid container xs={6} className={classes.container_buttom}>
               <Grid item xs={12} className={classes.labelItemRight}>
                 <h2 className={classes.labelItemRight}>TOTAL: {toFormatterCurrency(pagoTotal)}</h2>
                 <h1 className={classes.labelItemRight}>RETENCIÓN: {toFormatterCurrency(pagoTotal / 2)}</h1>

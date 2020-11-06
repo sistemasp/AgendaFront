@@ -4,12 +4,16 @@ import { Backdrop, CircularProgress } from '@material-ui/core';
 import { CorteContainer } from './corte';
 import TableComponent from '../../components/table/TableComponent';
 import {
-  showIngresosTodayBySucursalAndTurno,
-  showEgresosTodayBySucursalAndTurno,
   showAllMetodoPago,
   showAllTipoEgresos,
   showAllTipoIngresos,
 } from '../../services';
+import {
+  showIngresosTodayBySucursalAndHoraAplicacion,
+} from '../../services/ingresos';
+import {
+  showEgresosTodayBySucursalAndHoraAplicacion,
+} from '../../services/egresos';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { addZero, toFormatterCurrency } from "../../utils/utils";
@@ -68,33 +72,33 @@ const Corte = (props) => {
   } = props;
 
   const columnsIngreso = [
-    { title: 'Metodo de pago', field: 'metodo_pago' },
-    { title: 'Total', field: 'total_moneda' },
+    { title: 'METODO DE PAGO', field: 'metodo_pago' },
+    { title: 'TOTAL', field: 'total_moneda' },
   ];
 
   const columnsIngresoTipo = [
-    { title: 'Tipo de Ingreso', field: 'tipo_ingreso' },
-    { title: 'Cantidad', field: 'cantidad_ingresos' },
-    { title: 'Total', field: 'total_moneda' },
+    { title: 'TIPO DE INGRESO', field: 'tipo_ingreso' },
+    { title: 'CANTIDAD', field: 'cantidad_ingresos' },
+    { title: 'TOTAL', field: 'total_moneda' },
   ];
 
   const columnsIngresoDetalles = [
-    { title: 'Concepto', field: 'concepto' },
-    { title: 'Hora', field: 'hora' },
-    { title: 'Recepcionista', field: 'recepcionista.nombre' },
-    { title: 'Cantidad', field: 'cantidad_moneda' },
+    { title: 'CONCEPTO', field: 'concepto' },
+    { title: 'HORA', field: 'hora' },
+    { title: 'RECEPCIONISTA', field: 'recepcionista.nombre' },
+    { title: 'CANTIDAD', field: 'cantidad_moneda' },
   ];
 
   const columnsEgreso = [
-    { title: 'Tipo Egreso', field: 'tipo_egreso' },
-    { title: 'Cantidad', field: 'cantidad_egresos' },
-    { title: 'Total', field: 'total_moneda' },
+    { title: 'TIPO EGRESO', field: 'tipo_egreso' },
+    { title: 'CANTIDAD', field: 'cantidad_egresos' },
+    { title: 'TOTAL', field: 'total_moneda' },
   ];
 
   const columnsEgresoDetalles = [
-    { title: 'Concepto', field: 'concepto' },
-    { title: 'Recepcionista', field: 'recepcionista.nombre' },
-    { title: 'Cantidad', field: 'cantidad_moneda' },
+    { title: 'CONCEPTO', field: 'concepto' },
+    { title: 'RECEPCIONISTA', field: 'recepcionista.nombre' },
+    { title: 'CANTIDAD', field: 'cantidad_moneda' },
 
   ];
 
@@ -266,8 +270,8 @@ const Corte = (props) => {
     setDataEgresos(dataEgresosTemp);
   }
 
-  const loadIngresos = async (tipoIngresos, metodoPagos) => {
-    const response = await showIngresosTodayBySucursalAndTurno(sucursal, turno);
+  const loadIngresos = async (tipoIngresos, metodoPagos, hora_apertura, hora_cierre) => {
+    const response = await showIngresosTodayBySucursalAndHoraAplicacion(sucursal, hora_apertura, hora_cierre ? hora_cierre : new Date());
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       const data = response.data;
       data.map((item) => {
@@ -279,8 +283,8 @@ const Corte = (props) => {
     }
   }
 
-  const loadEgresos = async (tipoEgresos) => {
-    const response = await showEgresosTodayBySucursalAndTurno(sucursal, turno);
+  const loadEgresos = async (tipoEgresos, hora_apertura, hora_cierre) => {
+    const response = await showEgresosTodayBySucursalAndHoraAplicacion(sucursal, hora_apertura, hora_cierre ? hora_cierre : new Date());
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       const data = response.data;
       data.map((item) => {
@@ -292,27 +296,27 @@ const Corte = (props) => {
     }
   }
 
-  const loadMetodoPagos = async (tipoIngresos) => {
+  const loadMetodoPagos = async (tipoIngresos, hora_apertura, hora_cierre) => {
     const response = await showAllMetodoPago();
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       const metodoPagos = response.data;
-      await loadIngresos(tipoIngresos, metodoPagos);
+      await loadIngresos(tipoIngresos, metodoPagos, hora_apertura, hora_cierre);
     }
   }
 
-  const loadTipoIngresos = async () => {
+  const loadTipoIngresos = async (corte) => {
     const response = await showAllTipoIngresos();
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       const tipoIngresos = response.data;
-      await loadMetodoPagos(tipoIngresos);
+      await loadMetodoPagos(tipoIngresos, corte.hora_apertura, corte.hora_cierre);
     }
   }
 
-  const loadTipoEgresos = async () => {
+  const loadTipoEgresos = async (corte) => {
     const response = await showAllTipoEgresos();
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       const tipoEgresos = response.data;
-      await loadEgresos(tipoEgresos);
+      await loadEgresos(tipoEgresos, corte.hora_apertura, corte.hora_cierre);
     }
   }
 
@@ -342,8 +346,8 @@ const Corte = (props) => {
     const response = await showCorteTodayBySucursalAndTurno(sucursal, turno);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setCorte(response.data);
-      await loadTipoIngresos();
-      await loadTipoEgresos();
+      await loadTipoIngresos(response.data);
+      await loadTipoEgresos(response.data);
     }
     setIsLoading(false);
 
@@ -376,22 +380,34 @@ const Corte = (props) => {
     }
   }
 
+  const handleGenerarCorte = async () => {
+    corte.egresos = egresos;
+    corte.ingresos = ingresos;
+    corte.generado = true;
+    const response = await updateCorte(corte._id, corte);
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setMessage("EL CORTE SE GENERO.");
+      setOpenAlert(true);
+      handleObtenerInformacion();
+    }
+  }
+
   const handleCerrarCorte = async () => {
     const date = new Date();
     corte.hora_cierre = date;
     const response = await updateCorte(corte._id, corte);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-      const newCorte = {
-        create_date: date,
-        hora_apertura: date,
-        turno: 'v',
-        sucursal: sucursal,
-      }
-      const respo = await createCorte(newCorte);
-      if (`${respo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-        setMessage("CORTE CERRADO.");
-        setOpenAlert(true);
-        handleObtenerInformacion();
+      setMessage("CORTE CERRADO.");
+      setOpenAlert(true);
+      handleObtenerInformacion();
+      if (corte.turno === 'm') {
+        const newCorte = {
+          create_date: date,
+          hora_apertura: date,
+          turno: 'v',
+          sucursal: sucursal,
+        }
+        await createCorte(newCorte);
       }
     }
   }
@@ -427,6 +443,7 @@ const Corte = (props) => {
             detailPanelEgreso={detailPanelEgreso}
             handleGuardarCorte={() => handleGuardarCorte()}
             handleCerrarCorte={() => handleCerrarCorte()}
+            onGenerarCorte={() => handleGenerarCorte()}
             corte={corte}
           /> :
           <Backdrop className={classes.backdrop} open={isLoading} >

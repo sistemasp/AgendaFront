@@ -1,7 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import {
-  getAllServices,
-  findTreatmentByServicio,
   getAllSchedules,
   findScheduleByDateAndSucursalAndService,
   updateDate,
@@ -9,12 +7,14 @@ import {
   showAllTipoCitas,
   showAllStatus,
   createDate,
-  updateIngreso,
   updatePago,
-  deleteIngreso,
   deletePago,
-  findIngresoById,
 } from "../../../services";
+import {
+  updateIngreso,
+  deleteIngreso,
+  findIngresoById,
+} from "../../../services/ingresos";
 import * as Yup from "yup";
 import ModalFormCita from './ModalFormCita';
 import { Formik } from 'formik';
@@ -101,7 +101,7 @@ const ModalCita = (props) => {
   const [openModalConfirmacion, setOpenModalConfirmacion] = useState(false);
 
   const fecha_cita = new Date(cita.fecha_hora);
-  const fecha = `${addZero(fecha_cita.getDate())}/${addZero(Number(fecha_cita.getMonth()))}/${addZero(fecha_cita.getFullYear())}`;
+  const fecha = `${addZero(fecha_cita.getDate())}/${addZero(Number(fecha_cita.getMonth())+1)}/${addZero(fecha_cita.getFullYear())}`;
   const hora = `${addZero(Number(fecha_cita.getHours()))}:${addZero(fecha_cita.getMinutes())}`;
 
   const [values, setValues] = useState({

@@ -22,7 +22,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
 import EditIcon from '@material-ui/icons/Edit';
 import * as Yup from "yup";
-import { toFormatterCurrency, addZero, generateFolio } from "../../utils/utils";
+import { toFormatterCurrency, addZero, generateFolio, dateToString } from "../../utils/utils";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
 import { AgendarFacialContainer } from "./agendar_facial";
@@ -536,7 +536,7 @@ const AgendarFacial = (props) => {
 								cosmetologas={cosmetologas}
 								onClickAgendar={handleClickAgendar}
 								onChangeTiempo={(e) => handleChangeTiempo(e)}
-								titulo={`FACIALES (${filterDate.fecha})`}
+								titulo={`FACIALES (${dateToString(filterDate.fecha_show)})`}
 								columns={columns}
 								options={options}
 								citas={faciales}

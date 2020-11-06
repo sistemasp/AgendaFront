@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ModalFormNuevoEgreso from './ModalFormNuevoEgreso';
 import {
-  updateEmployee,
   showAllTipoEgresos,
   showAllMetodoPago,
-  createEgreso,
 } from "../../../services";
+import {
+  createEgreso,
+} from "../../../services/egresos";
 
 const ModalNuevoEgreso = (props) => {
   const {
@@ -17,15 +18,18 @@ const ModalNuevoEgreso = (props) => {
     setSeverity,
     setOpenAlert,
     onObtenerInformacion,
+    corte,
   } = props;
+
+	const efectivoMetodoPagoId = process.env.REACT_APP_METODO_PAGO_EFECTIVO;
 
   const [values, setValues] = useState({
     recepcionista: empleado._id,
     sucursal: sucursal,
+    metodo_pago: efectivoMetodoPagoId,
   });
 
   const [tipoEgresos, setTipoEgresos] = useState([]);
-  const [metodoPagos, setMetodoPagos] = useState([]);
 
   const dataComplete = !values.concepto || !values.cantidad || !values.tipo_egreso || !values.metodo_pago;
 
@@ -43,20 +47,14 @@ const ModalNuevoEgreso = (props) => {
     });
   }
 
-  const handleChangeMetodoPago = (e) => {
-    setValues({
-      ...values,
-      metodo_pago: e.target.value
-    });
-  }
-
   const handleAgregarConceto = async () => {
     const create_date = new Date();
     create_date.setHours(create_date.getHours());
     values.create_date = create_date;
+    values.hora_aplicacion = corte.hora_apertura;
     const response = await createEgreso(values);
         if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-          setMessage("Egreso agregado correctamente");
+          setMessage("EGRESO AGREGADO CORRECTAMENTE");
           setOpenAlert(true);
           onClose();
           onObtenerInformacion();
@@ -72,15 +70,7 @@ const ModalNuevoEgreso = (props) => {
       }
     }
 
-    const loadMetodoPago = async () => {
-      const response = await showAllMetodoPago();
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setMetodoPagos(response.data);
-      }
-    }
-
     loadTipoEgreso();
-    loadMetodoPago();
   }, []);
 
   return (
@@ -92,11 +82,9 @@ const ModalNuevoEgreso = (props) => {
       dataComplete={dataComplete}
       values={values}
       tipoEgresos={tipoEgresos}
-      metodoPagos={metodoPagos}
       onAgregarConceto={handleAgregarConceto}
       onChange={handleChange}
       onChangeTipoEgreso={(e) => handleChangeTipoEgreso(e)}
-      onChangeMetodoPago={(e) => handleChangeMetodoPago(e)}
       {...props} />
   );
 }

@@ -44,8 +44,8 @@ const useStyles = makeStyles(theme => ({
     marginBottom: '0px',
   },
   label_title: {
-    backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
-    color: '#FFFFFF',
+    //backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
+    color: '#000000',
     textAlign: 'center',
   },
   label_title_descripcion: {
@@ -60,13 +60,13 @@ const useStyles = makeStyles(theme => ({
     fontSize: '38px',
   },
   label_title_ingresos: {
-    backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
+    //backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: '13px',
     paddingTop: 1,
     paddingBottom: 1,
-    color: '#FFFFFF',
+    color: '#000000',
   },
   label_cells: {
     textAlign: 'center',
@@ -126,6 +126,7 @@ const ModalFormImprimirCorte = (props) => {
     metodoPagos,
     dataIngresos,
     dataEgresos,
+    empleado,
   } = props;
 
   let totalIngresos = 0;
@@ -153,7 +154,7 @@ const ModalFormImprimirCorte = (props) => {
                 <h2 className={classes.label_title}>CENTRO DERMATOLÓGICO M. E. PIEL S. C.</h2>
               </Grid>
               <Grid item xs={8}>
-                <h3 className={classes.label}>RECEPCIONISTA: {corte.recepcionista.nombre}</h3>
+                <h3 className={classes.label}>RECEPCIONISTA: {empleado.nombre}</h3>
               </Grid>
               <Grid item xs={4} >
                 <h3 className={classes.label}>FECHA: {dateToString(corte.create_date)} </h3>
