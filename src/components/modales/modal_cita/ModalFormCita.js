@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@material-ui/core';
+import { TextField, FormControl, InputLabel, Select, MenuItem, Grid } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { Multiselect } from 'multiselect-react-dropdown';
-import { CheckCustom } from '../../basic/CheckCustom';
-import ModalPagos from '../modal_pagos';
 import ModalConfirmacion from '../modal_confirmacion';
+import { ButtonCustom } from '../../basic/ButtonCustom';
+import { toFormatterCurrency } from '../../../utils/utils';
 
 function getModalStyle() {
   const top = 50;
@@ -25,7 +25,7 @@ function getModalStyle() {
 const useStyles = makeStyles(theme => ({
   paper: {
     position: 'absolute',
-    width: 400,
+    width: 500,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -40,6 +40,7 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     width: '100%',
+    color: '#FFFFFF',
   },
   label: {
     marginTop: '0px',
@@ -61,6 +62,8 @@ const ModalFormCita = (props) => {
     values,
     errors,
     handleSubmit,
+    onChangeTratamientos,
+    onChangeAreas,
     onChangeFecha,
     onChangeHora,
     onChangeTiempo,
@@ -121,10 +124,20 @@ const ModalFormCita = (props) => {
                 <h3 className={classes.label}>Servicio: {values.servicio.nombre}</h3>
               </Grid>
               <Grid item xs={12}>
-                <h3 className={classes.label}>Tratamientos: {values.servicio.nombre}</h3>
+                <h3 className={classes.label}>Tratamientos: {values.tratamientos[0].nombre}</h3>
               </Grid>
               <Grid item xs={12}>
-                <h3 className={classes.label}>Areas: {values.servicio.nombre}</h3>
+                <Multiselect
+                  options={areas} // Options to display in the dropdown
+                  displayValue="nombre" // Property name to display in the dropdown options
+                  onSelect={(e) => onChangeAreas(e)} // Function will trigger on select event
+                  onRemove={(e) => onChangeAreas(e)} // Function will trigger on remove event
+                  placeholder={`Areas`}
+                  selectedValues={values.areas} // Preselected value to persist in dropdown
+                />
+              </Grid>
+              <Grid item xs={12} className={classes.label}>
+                <h1 className={classes.label}>Total: {toFormatterCurrency(values.precio)}</h1>
               </Grid>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
@@ -143,16 +156,16 @@ const ModalFormCita = (props) => {
               <Grid item xs={12}>
                 {
                   /* values.medico*/ false ?
-                    <h3 className={classes.label}>Medico : {values.medico.nombre}</h3> :
+                    <h3 className={classes.label}>MÉDICO: {values.medico.nombre}</h3> :
                     <FormControl variant="outlined" className={classes.formControl}>
-                      <InputLabel id="simple-select-outlined-hora">Medico</InputLabel>
+                      <InputLabel id="simple-select-outlined-hora">MÉDICO</InputLabel>
                       <Select
                         labelId="simple-select-outlined-medico"
                         id="simple-select-outlined-medico"
                         value={values.medico}
                         error={Boolean(errors.medico)}
                         onChange={onChangeMedico}
-                        label="Medico" >
+                        label="MÉDICO" >
                         {doctores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                       </Select>
                     </FormControl>
@@ -301,23 +314,22 @@ const ModalFormCita = (props) => {
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Button
+                <ButtonCustom
                   className={classes.button}
                   color="primary"
                   variant="contained"
+                  disabled={!isValid}
                   onClick={(e) => onClickActualizarCita(e, values)}
-                  disabled={!isValid} >
-                  Guardar
-                </Button>
+                  text='GUARDAR' />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Button
+                <ButtonCustom
                   className={classes.button}
                   color="secondary"
                   variant="contained"
-                  onClick={onClickCancel} >
-                  Cancelar
-              </Button>
+                  disabled={!isValid}
+                  onClick={onClickCancel}
+                  text='CANCELAR' />
               </Grid>
             </Grid>
           </form>

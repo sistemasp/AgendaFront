@@ -8,13 +8,14 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { Paper, Button, TextField } from '@material-ui/core';
+import { Paper, TextField } from '@material-ui/core';
 import TableComponent from '../../components/table/TableComponent';
 import ModalCita from '../../components/modales/modal_cita';
 import { Multiselect } from 'multiselect-react-dropdown';
 import ModalPagos from '../../components/modales/modal_pagos';
 import { toFormatterCurrency } from '../../utils/utils';
 import ModalImprimirTratamiento from '../../components/modales/imprimir/tratamiento';
+import { ButtonCustom } from '../../components/basic/ButtonCustom';
 
 const useStyles = makeStyles(theme => ({
 	formControl: {
@@ -26,6 +27,7 @@ const useStyles = makeStyles(theme => ({
 	},
 	button: {
 		width: '100%',
+		color: '#FFFFFF',
 	}
 }));
 
@@ -289,15 +291,14 @@ export const AgendarLaserContainer = (props) => {
 							variant="outlined" />
 					</Grid>
 					<Grid item xs={12} sm={2}>
-						<Button
+						<ButtonCustom
 							className={classes.button}
-							variant="contained"
 							color="primary"
+							variant="contained"
 							disabled={!isValid || isSubmitting || !paciente.nombres || !values.servicio
 								|| !values.fecha_hora || !values.precio || !values.tiempo}
-							onClick={() => onClickAgendar(values)} >
-							Agendar
-                        </Button>
+							onClick={() => onClickAgendar(values)}
+							text='AGENDAR' />
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<h1>Total: {toFormatterCurrency(values.precio)}</h1>

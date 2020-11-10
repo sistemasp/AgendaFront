@@ -15,6 +15,7 @@ import { Multiselect } from 'multiselect-react-dropdown';
 import ModalPagos from '../../components/modales/modal_pagos';
 import { toFormatterCurrency } from '../../utils/utils';
 import ModalImprimirTratamiento from '../../components/modales/imprimir/tratamiento';
+import { ButtonCustom } from '../../components/basic/ButtonCustom';
 
 const useStyles = makeStyles(theme => ({
 	formControl: {
@@ -26,6 +27,7 @@ const useStyles = makeStyles(theme => ({
 	},
 	button: {
 		width: '100%',
+		color: '#FFFFFF',
 	}
 }));
 
@@ -306,15 +308,14 @@ export const AgendarAparatologiaContainer = (props) => {
 							variant="outlined" />
 					</Grid>
 					<Grid item xs={12} sm={2}>
-						<Button
+						<ButtonCustom
 							className={classes.button}
-							variant="contained"
 							color="primary"
+							variant="contained"
 							disabled={!isValid || isSubmitting || !paciente.nombres
 								|| values.tratamientos.length === 0 || !values.fecha_hora || !values.precio}
-							onClick={() => onClickAgendar(values)} >
-							AGREGAR
-                        </Button>
+							onClick={() => onClickAgendar(values)}
+							text='AGENDAR' />
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<h1>Total: {toFormatterCurrency(values.precio)}</h1>

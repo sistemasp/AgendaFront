@@ -2,7 +2,6 @@ import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import {
 	findOfficeById,
-	findTreatmentByServicio,
 	findScheduleByDateAndSucursalAndService,
 	findDatesByDateAndSucursal,
 	createDate,
@@ -12,6 +11,9 @@ import {
 	createConsecutivo,
 	showAllMedios,
 } from "../../services";
+import {
+	findTreatmentByServicio,
+} from "../../services/tratamientos";
 import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
@@ -65,7 +67,6 @@ const AgendarLaser = (props) => {
 	const medicoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
 	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
 	const servicioLaserId = process.env.REACT_APP_LASER_SERVICIO_ID;
-	const tratamientoLaserId = process.env.REACT_APP_LASER_TRATAMIENTO_ID; 
 
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
@@ -86,7 +87,7 @@ const AgendarLaser = (props) => {
 		tipo_cita: tipoCitaNoAplicaId,
 		tiempo: '',
 		observaciones: '',
-		medico: { _id: medicoDirectoId},
+		medico: { _id: medicoDirectoId },
 	});
 	const [citas, setCitas] = useState([]);
 	const [areas, setAreas] = useState([]);
@@ -147,10 +148,16 @@ const AgendarLaser = (props) => {
 	}
 
 	const loadAreas = async () => {
-		const response = await findAreasByTreatmentServicio(servicioLaserId, tratamientoLaserId);
-		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-			setAreas(response.data);
+		const laserResponse = await findTreatmentByServicio(servicioLaserId);
+		if (`${laserResponse.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			const laser = laserResponse.data[0];
+			values.tratamientos = [laser];
+			const response = await findAreasByTreatmentServicio(laser.servicio, laser._id);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setAreas(response.data);
+			}
 		}
+
 	}
 
 	const loadHorarios = async (date) => {
@@ -286,11 +293,14 @@ const AgendarLaser = (props) => {
 					precio: '',
 					tipo_cita: {},
 				});
-				setTratamientos([]);
 				setAreas([]);
 				setDisableDate(true);
 				setPacienteAgendado({});
-				loadLaser(new Date());
+				loadLaser(data.fecha_hora);
+				setFilterDate({
+					fecha_show: data.fecha_hora,
+					fecha: dateToString(data.fecha_hora),
+				});
 			}
 		}
 

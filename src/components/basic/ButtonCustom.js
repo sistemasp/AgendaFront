@@ -9,7 +9,15 @@ const theme = createMuiTheme({
 
 export const ButtonCustom = (props) => {
 
-    const {className, type, color, variant, onClick, disabled, text} = props;
+    const {
+        className,
+        type,
+        color,
+        variant,
+        onClick,
+        disabled,
+        text
+    } = props;
 
     return (
         <ThemeProvider theme={theme}>

@@ -9,6 +9,7 @@ import {
   createDate,
   updatePago,
   deletePago,
+  findAreasByTreatmentServicio,
 } from "../../../services";
 import {
   updateIngreso,
@@ -87,8 +88,13 @@ const ModalCita = (props) => {
   const servicioAparatologiaId = process.env.REACT_APP_APARATOLOGIA_SERVICIO_ID;
   const servicioFacialId = process.env.REACT_APP_FACIAL_SERVICIO_ID;
   const servicioLaserId = process.env.REACT_APP_LASER_SERVICIO_ID;
+  const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
+	const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
+	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 
   const [isLoading, setIsLoading] = useState(true);
+  const [tratamientos, setTratamientos] = useState([]);
+  const [areas, setAreas] = useState([]);
   const [horarios, setHorarios] = useState([]);
   const [promovendedores, setPromovendedores] = useState([]);
   const [cosmetologas, setCosmetologas] = useState([]);
@@ -101,7 +107,7 @@ const ModalCita = (props) => {
   const [openModalConfirmacion, setOpenModalConfirmacion] = useState(false);
 
   const fecha_cita = new Date(cita.fecha_hora);
-  const fecha = `${addZero(fecha_cita.getDate())}/${addZero(Number(fecha_cita.getMonth())+1)}/${addZero(fecha_cita.getFullYear())}`;
+  const fecha = `${addZero(fecha_cita.getDate())}/${addZero(Number(fecha_cita.getMonth()) + 1)}/${addZero(fecha_cita.getFullYear())}`;
   const hora = `${addZero(Number(fecha_cita.getHours()))}:${addZero(fecha_cita.getMinutes())}`;
 
   const [values, setValues] = useState({
@@ -132,7 +138,10 @@ const ModalCita = (props) => {
     tiempo: cita.tiempo,
     pagado: cita.pagado,
     pagos: cita.pagos,
+    hora_llegada: cita.hora_llegada,
     hora_aplicacion: cita.hora_aplicacion,
+    tratamientos: cita.tratamientos,
+    areas: cita.areas,
   });
 
   const loadHorarios = async () => {
@@ -141,6 +150,24 @@ const ModalCita = (props) => {
       setHorarios(response.data);
     }
   }
+
+  const loadAreas = async (tratamiento) => {
+    const response = await findAreasByTreatmentServicio(tratamiento.servicio, tratamiento._id);
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setAreas(response.data);
+    }
+  }
+
+  const handleChangeTratamientos = async (e) => {
+		setIsLoading(true);
+		setValues({
+			...values,
+      tratamientos: [e.target.value],
+      areas: [],
+    });
+		await loadAreas(e.target.value);
+		setIsLoading(false);
+	};
 
   const handleChangeFecha = async (date) => {
     setIsLoading(true);
@@ -248,12 +275,12 @@ const ModalCita = (props) => {
       rowData.hora_llegada = '--:--';
       rowData.hora_atencion = '--:--';
       rowData.hora_salida = '--:--';
-      rowData.observaciones = `Tratamiento reagendado ${values.fecha_actual} - ${values.hora_actual} hrs`;
+      rowData.observaciones = `TRATAMIENTO REAGENDADO ${values.fecha_actual} - ${values.hora_actual} HRS`;
       rowData.fecha_hora = rowData.nueva_fecha_hora;
       const response = await createDate(rowData);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
         setOpenAlert(true);
-        setMessage('El Tratamiento se reagendo correctamente');
+        setMessage('TRATAMIENTO REAGENDADO CORRECTAMENTE');
       }
       const dia = addZero(rowData.fecha_hora.getDate());
       const mes = addZero(rowData.fecha_hora.getMonth());
@@ -336,6 +363,25 @@ const ModalCita = (props) => {
     setOpenModalPagos(false);
   }
 
+  const handleChangeAreas = async (items) => {
+		setIsLoading(true);
+		let precio = 0;
+		items.map((item) => {
+			const itemPrecio =
+				sucursal === sucursalManuelAcunaId ? item.precio_ma // Precio Manuel Acuña
+					: (sucursal === sucursalOcciId ? item.precio_oc // Precio Occidental
+						: (sucursal === sucursalFedeId ? item.precio_fe // Precio Federalismo
+							: 0)); // Error
+			precio = Number(precio) + Number(itemPrecio);
+		});
+		setValues({
+			...values,
+			precio: precio,
+			areas: items
+		});
+		setIsLoading(false);
+  }
+  
   useEffect(() => {
     const loadHorariosByServicio = async () => {
       const date = new Date(cita.fecha_hora);
@@ -384,6 +430,7 @@ const ModalCita = (props) => {
     }
 
     setIsLoading(true);
+    loadAreas(cita.tratamientos[0]);
     loadHorariosByServicio();
     loadPromovendedores();
     loadCosmetologas();
@@ -409,6 +456,8 @@ const ModalCita = (props) => {
                 onClickCancel={onClose}
                 cita={cita}
                 onClickActualizarCita={handleOnClickActualizarCita}
+                onChangeTratamientos={(e) => handleChangeTratamientos(e)}
+								onChangeAreas={(e) => handleChangeAreas(e)}
                 onChangeFecha={(e) => handleChangeFecha(e)}
                 onChangeHora={(e) => handleChangeHora(e)}
                 onChangeTipoCita={(e) => handleChangeTipoCita(e)}
@@ -417,6 +466,8 @@ const ModalCita = (props) => {
                 onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
                 onChangeMedico={(e) => handleChangeMedico(e)}
                 onChangeTiempo={(e) => handleChangeTiempo(e)}
+                tratamientos={tratamientos}
+                areas={areas}
                 horarios={horarios}
                 promovendedores={promovendedores}
                 cosmetologas={cosmetologas}

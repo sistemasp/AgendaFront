@@ -1,17 +1,16 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import {
-	findOfficeById,
-	findTreatmentByServicio,
 	findScheduleByDateAndSucursalAndService,
-	createDate,
 	findEmployeesByRolId,
 	showAllTipoCitas,
-	createTreatmentPrice,
 	findAreasByTreatmentServicio,
 	createConsecutivo,
 	showAllMedios,
 } from "../../services";
+import {
+	findTreatmentByServicio,
+} from "../../services/tratamientos";
 import {
 	createFacial,
 	findFacialByDateAndSucursal,
@@ -331,7 +330,11 @@ const AgendarFacial = (props) => {
 				setAreas([]);
 				setDisableDate(true);
 				setPacienteAgendado({});
-				loadFaciales(new Date());
+				loadFaciales(data.fecha_hora);
+				setFilterDate({
+					fecha_show: data.fecha_hora,
+					fecha: dateToString(data.fecha_hora),
+				});
 			}
 		}
 

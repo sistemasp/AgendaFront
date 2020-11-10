@@ -1,15 +1,16 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import {
-	findTreatmentByServicio,
 	findScheduleByDateAndSucursalAndService,
-	createDate,
 	findEmployeesByRolId,
 	showAllTipoCitas,
 	findAreasByTreatmentServicio,
 	createConsecutivo,
 	showAllMedios,
 } from "../../services";
+import {
+	findTreatmentByServicio,
+} from "../../services/tratamientos";
 import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
