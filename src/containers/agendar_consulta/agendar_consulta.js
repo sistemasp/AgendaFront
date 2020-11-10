@@ -17,6 +17,7 @@ import ModalImprimirConsulta from '../../components/modales/imprimir/consulta';
 import { toFormatterCurrency } from '../../utils/utils';
 import ModalCirugia from '../../components/modales/modal_cirugia';
 import ModalEstetica from '../../components/modales/modal_estetica';
+import { ButtonCustom } from '../../components/basic/ButtonCustom';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -28,6 +29,7 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     width: '100%',
+    color: '#FFFFFF',
   }
 }));
 
@@ -311,14 +313,13 @@ export const AgendarConsultaContainer = (props) => {
             <h1>{toFormatterCurrency(values.precio)}</h1>
           </Grid>
           <Grid item xs={12} sm={2}>
-            <Button
-              className={classes.button}
-              variant="contained"
-              color="primary"
-              disabled={dataComplete}
-              onClick={() => onClickAgendar(values)} >
-              Agendar
-            </Button>
+            <ButtonCustom
+							className={classes.button}
+							color="primary"
+							variant="contained"
+							disabled={dataComplete}
+							onClick={() => onClickAgendar(values)}
+							text='AGENDAR' />
           </Grid>
         </Grid>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>

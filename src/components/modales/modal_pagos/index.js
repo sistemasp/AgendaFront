@@ -4,6 +4,8 @@ import { addZero, toFormatterCurrency } from '../../../utils/utils';
 import ModalFormPagos from './ModalFormPagos';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import EditIcon from '@material-ui/icons/Edit';
+import { findCirugiaByConsultaId } from '../../../services/cirugias';
+import { findEsteticaByConsultaId } from '../../../services/estetica';
 
 const ModalPagos = (props) => {
   const {
@@ -17,6 +19,11 @@ const ModalPagos = (props) => {
     onGuardarModalPagos,
     tipoServicioId,
   } = props;
+
+  const efectivoMetodoPagoId = process.env.REACT_APP_METODO_PAGO_EFECTIVO;
+  const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
+
+  console.log("DFSOAJFOASFJOA", tipoServicioId, servicio);
 
   const [isLoading, setIsLoading] = useState(true);
   const [pagos, setPagos] = useState([]);
@@ -50,7 +57,7 @@ const ModalPagos = (props) => {
     { title: 'Pago confirmado', field: 'deposito_confirmado' },
     { title: 'Observaciones', field: 'observaciones' },
   ];
-  
+
   const options = {
     headerStyle: {
       backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
@@ -68,7 +75,7 @@ const ModalPagos = (props) => {
     rowData => ({
       disabled: rowData.factura,
       icon: AssignmentIcon,
-      tooltip: rowData.factura ? 'Ya se genero factura' : 'Generar factura',
+      tooltip: rowData.factura ? 'YA SE GENERO FACTURA' : 'GENERAR FACTURA',
       onClick: handleClickBuscarRazonSocial
     }),
     {
@@ -78,9 +85,22 @@ const ModalPagos = (props) => {
     }
   ];
 
-  const efectivoMetodoPagoId = process.env.REACT_APP_METODO_PAGO_EFECTIVO;
+
 
   const loadPagos = async () => {
+    let totalCE = 0;
+    if (tipoServicioId === consultaServicioId) { // SI ES CONSULTA BUSCA CIRUGIA Y ESTETICAS 
+      const resCirugias = await findCirugiaByConsultaId(servicio._id);
+      if (`${resCirugias.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        const cirugia = resCirugias.data;
+        totalCE += cirugia.total ? Number(cirugia.total) : 0;
+      }
+      const resEstetica = await findEsteticaByConsultaId(servicio._id);
+      if (`${resEstetica.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        const estetica = resEstetica.data;
+        totalCE += estetica.total ? Number(estetica.total) : 0;
+      }
+    }
     const response = await findPagosByTipoServicioAndServicio(tipoServicioId, servicio._id);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       let acomulado = 0;
@@ -98,7 +118,7 @@ const ModalPagos = (props) => {
         item.digitos_show = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.metodo_pago.nombre;
         acomulado = Number(acomulado) + Number(item.cantidad);
       });
-      setRestante(Number(servicio.total ? servicio.total : servicio.precio) - Number(acomulado));
+      setRestante(totalCE + Number(servicio.total ? servicio.total : servicio.precio) - Number(acomulado));
       servicio.pagos = response.data;
       setPagos(response.data);
     }
@@ -151,13 +171,12 @@ const ModalPagos = (props) => {
         empleado={empleado}
         sucursal={sucursal}
         onGuardarModalPagos={onGuardarModalPagos}
-        titulo={`Pagos: ${servicio.paciente.nombres} ${servicio.paciente.apellidos}`}
+        titulo={`PAGOS: ${servicio.paciente.nombres} ${servicio.paciente.apellidos}`}
         openModalFactura={openModalFactura}
         onCloseBuscarRazonSocial={handleCloseBuscarRazonSocial}
         loadPagos={loadPagos}
         restante={restante}
-        tipoServicioId={tipoServicioId}
-      />
+        tipoServicioId={tipoServicioId} />
     </Fragment>
 
 

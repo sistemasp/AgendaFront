@@ -38,6 +38,7 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     width: '100%',
+    color: '#FFFFFF',
   },
   label: {
     marginTop: '0px',

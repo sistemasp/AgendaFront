@@ -484,27 +484,20 @@ const AgendarConsulta = (props) => {
 		//new Date(anio, mes - 1, dia) < filterDate.fecha_show  ? 
 		{
 			icon: PrintIcon,
-			tooltip: 'Imprimir',
+			tooltip: 'IMPRIMIR',
 			onClick: handlePrint
 		},
 		{
 			icon: EditIcon,
-			tooltip: 'Editar consulta',
+			tooltip: 'EDITAR CONSULTA',
 			onClick: handleOnClickEditarConsulta
 		}, //: ''
-		rowData => (
-			rowData.status._id !== pendienteStatusId ? {
-				icon: AttachMoneyIcon,
-				tooltip: rowData.pagado ? 'VER PAGO' : 'PAGAR',
-				onClick: handleClickVerPagos
-			} : ''
-		),
 		rowData => {
 			return (rowData.status._id === enProcedimientoStatusId || rowData.status._id === enConsultorioStatusId
 				|| rowData.status._id === enCabinaStatusId)
 				? {
 					icon: LocalHospitalIcon,
-					tooltip: 'Pasar a Cirugias',
+					tooltip: 'PASAR A CIRUGIA',
 					onClick: handleClickCirugia
 				} : ''
 		},
@@ -513,10 +506,17 @@ const AgendarConsulta = (props) => {
 				|| rowData.status._id === enCabinaStatusId)
 				? {
 					icon: FaceIcon,
-					tooltip: 'Toxina y Rellenos',
+					tooltip: 'TOXINA Y RELLENOS',
 					onClick: handleClickEstetica
 				} : ''
 		},
+		rowData => (
+			rowData.status._id !== pendienteStatusId ? {
+				icon: AttachMoneyIcon,
+				tooltip: rowData.pagado ? 'VER PAGO' : 'PAGAR',
+				onClick: handleClickVerPagos
+			} : ''
+		),
 	];
 
 	const handleGuardarModalPagos = async (servicio) => {
