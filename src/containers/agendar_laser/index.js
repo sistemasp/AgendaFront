@@ -24,6 +24,7 @@ import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
 import { AgendarLaserContainer } from "./agendar_laser";
 import { createLaser, findLaserByDateAndSucursal, updateLaser } from "../../services/laser";
+import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -64,6 +65,7 @@ const AgendarLaser = (props) => {
 	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
 	const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
 	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
+	const atendidoStatusId = process.env.REACT_APP_ATENDIDO_STATUS_ID;
 	const medicoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
 	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
 	const servicioLaserId = process.env.REACT_APP_LASER_SERVICIO_ID;
@@ -92,6 +94,7 @@ const AgendarLaser = (props) => {
 	const [citas, setCitas] = useState([]);
 	const [areas, setAreas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
+	const [openModalProxima, setOpenModalProxima] = useState(false);
 	const [cita, setCita] = useState();
 	const [openModalPagos, setOpenModalPagos] = useState(false);
 	const [openModalImprimirCita, setOpenModalImprimirCita] = useState(false);
@@ -171,6 +174,7 @@ const AgendarLaser = (props) => {
 	}
 
 	const loadHorariosByServicio = async (date, servicio) => {
+		console.log("SERSORJSOJARA", servicio);
 		const dia = date ? date.getDate() : values.fecha_hora.getDate();
 		const mes = Number(date ? date.getMonth() : values.fecha_hora.getMonth());
 		const anio = date ? date.getFullYear() : values.fecha_hora.getFullYear();
@@ -352,6 +356,7 @@ const AgendarLaser = (props) => {
 	const handleCloseModal = () => {
 		setOpenModal(false);
 		setTratamientos([]);
+		setOpenModalProxima(false);
 	};
 
 	const handleOnClickEditarCita = async (event, rowData) => {
@@ -359,6 +364,14 @@ const AgendarLaser = (props) => {
 		setCita(rowData);
 		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio);
 		setOpenModal(true);
+		setIsLoading(false);
+	}
+
+	const handleOnClickNuevaCita = async (event, rowData) => {
+		setIsLoading(true);
+		setCita(rowData);
+		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio);
+		setOpenModalProxima(true);
 		setIsLoading(false);
 	}
 
@@ -398,7 +411,14 @@ const AgendarLaser = (props) => {
 				tooltip: rowData.pagado ? 'VER PAGO' : 'PAGAR',
 				onClick: handleClickVerPagos
 			} : ''
-		)
+		),
+		rowData => (
+			rowData.status._id === atendidoStatusId ? {
+				icon: EventAvailableIcon,
+				tooltip: 'NUEVA CITA',
+				onClick: handleOnClickNuevaCita
+			} : ''
+		),
 	];
 
 	const handleGuardarModalPagos = async (servicio) => {
@@ -521,6 +541,7 @@ const AgendarLaser = (props) => {
 								onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
 								onCloseVerPagos={handleCloseVerPagos}
 								openModalPagos={openModalPagos}
+								openModalProxima={openModalProxima}
 								openModalImprimirCita={openModalImprimirCita}
 								datosImpresion={datosImpresion}
 								onCloseImprimirConsulta={handleCloseImprimirConsulta}

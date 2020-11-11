@@ -16,6 +16,7 @@ import ModalPagos from '../../components/modales/modal_pagos';
 import { toFormatterCurrency } from '../../utils/utils';
 import ModalImprimirTratamiento from '../../components/modales/imprimir/tratamiento';
 import { ButtonCustom } from '../../components/basic/ButtonCustom';
+import ModalProximaCita from '../../components/modales/modal_proxima_cita';
 
 const useStyles = makeStyles(theme => ({
 	formControl: {
@@ -83,6 +84,8 @@ export const AgendarFacialContainer = (props) => {
 		onChangeAsistio,
 		loadFaciales,
 		setFilterDate,
+		// MODAL PROXIMA
+		openModalProxima,
 		// MODAL PAGOS
 		onCloseVerPagos,
 		openModalPagos,
@@ -102,6 +105,30 @@ export const AgendarFacialContainer = (props) => {
 				openModal ?
 					<ModalCita
 						open={openModal}
+						cita={cita}
+						onClickActualizarCita={onClickActualizarCita}
+						onClose={onClickCancel}
+						onChangeServicio={onChangeServicio}
+						onChangeTratamientos={onChangeTratamientos}
+						onChangeFecha={onChangeFecha}
+						onChangeHora={onChangeHora}
+						onChangeTipoCita={onChangeTipoCita}
+						onChangeMedio={onChangeMedio}
+						onChangeAsistio={onChangeAsistio}
+						servicios={servicios}
+						tratamientos={tratamientos}
+						horarios={horarios}
+						empleado={empleado}
+						loadFaciales={loadFaciales}
+						sucursal={sucursal}
+						setOpenAlert={setOpenAlert}
+						setMessage={setMessage}
+						setFilterDate={setFilterDate} /> : ''
+			}
+			{
+				openModalProxima ?
+					<ModalProximaCita
+						open={openModalProxima}
 						cita={cita}
 						onClickActualizarCita={onClickActualizarCita}
 						onClose={onClickCancel}

@@ -25,6 +25,7 @@ import { toFormatterCurrency, addZero, generateFolio, dateToString } from "../..
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
 import { AgendarFacialContainer } from "./agendar_facial";
+import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -62,6 +63,7 @@ const AgendarFacial = (props) => {
 	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
 	const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
 	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
+	const atendidoStatusId = process.env.REACT_APP_ATENDIDO_STATUS_ID;
 	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
 	const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
 	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
@@ -94,6 +96,7 @@ const AgendarFacial = (props) => {
 	const [faciales, setFaciales] = useState([]);
 	const [areas, setAreas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
+	const [openModalProxima, setOpenModalProxima] = useState(false);
 	const [cita, setCita] = useState();
 	const [openModalPagos, setOpenModalPagos] = useState(false);
 	const [openModalImprimirCita, setOpenModalImprimirCita] = useState(false);
@@ -386,14 +389,22 @@ const AgendarFacial = (props) => {
 	const handleCloseModal = () => {
 		setOpenModal(false);
 		setTratamientos([]);
+		setOpenModalProxima(false);
 	};
 
 	const handleOnClickEditarCita = async (event, rowData) => {
 		setIsLoading(true);
 		setCita(rowData);
-		// await loadTratamientos(rowData.servicio);
 		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio._id);
 		setOpenModal(true);
+		setIsLoading(false);
+	}
+
+	const handleOnClickNuevaCita = async (event, rowData) => {
+		setIsLoading(true);
+		setCita(rowData);
+		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio._id);
+		setOpenModalProxima(true);
 		setIsLoading(false);
 	}
 
@@ -432,6 +443,13 @@ const AgendarFacial = (props) => {
 				icon: AttachMoneyIcon,
 				tooltip: rowData.pagado ? 'VER PAGO' : 'PAGAR',
 				onClick: handleClickVerPagos
+			} : ''
+		),
+		rowData => (
+			rowData.status._id === atendidoStatusId ? {
+				icon: EventAvailableIcon,
+				tooltip: 'NUEVA CITA',
+				onClick: handleOnClickNuevaCita
 			} : ''
 		),
 	];
@@ -559,6 +577,7 @@ const AgendarFacial = (props) => {
 								onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
 								onCloseVerPagos={handleCloseVerPagos}
 								openModalPagos={openModalPagos}
+								openModalProxima={openModalProxima}
 								openModalImprimirCita={openModalImprimirCita}
 								datosImpresion={datosImpresion}
 								onCloseImprimirConsulta={handleCloseImprimirConsulta}
