@@ -127,7 +127,7 @@ const Pacientes = (props) => {
 			|| `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			setSeverity('success');
 			loadPacientes();
-			setMessage(paciente._id ? 'Paciente actualizado correctamente' : 'Paciente creado correctamente');
+			setMessage(paciente._id ? 'PACIENTE ACTUALIZADO' : 'PACIENTE CREADO');
 		}
 
 		handleClose();
@@ -155,7 +155,7 @@ const Pacientes = (props) => {
 			setSeverity('success');
 			loadPacientes();
 			onClickAgendar(e, val);
-			setMessage(paciente._id ? 'Paciente actualizado correctamente' : 'Paciente creado correctamente');
+			setMessage(paciente._id ? 'PACIENTE ACTUALIZADO' : 'PACIENTE CREADO');
 		}
 
 		handleClose();

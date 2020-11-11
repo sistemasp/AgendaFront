@@ -28,6 +28,7 @@ import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import FaceIcon from '@material-ui/icons/Face';
+import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import moment from "moment";
 
 function Alert(props) {
@@ -83,6 +84,7 @@ const AgendarConsulta = (props) => {
 
 	const [citas, setConsultas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
+	const [openModalProxima, setOpenModalProxima] = useState(false);
 	const [openModalPagos, setOpenModalPagos] = useState(false);
 	const [openModalCirugias, setOpenModalCirugias] = useState(false);
 	const [openModalEstetica, setOpenModalEstetica] = useState(false);
@@ -415,14 +417,23 @@ const AgendarConsulta = (props) => {
 
 	const handleCloseModal = () => {
 		setOpenModal(false);
+		setOpenModalProxima(false);
 	};
 
 	const handleOnClickEditarConsulta = async (event, rowData) => {
 		setIsLoading(true);
 		setConsulta(rowData);
-		// await loadTratamientos(rowData.servicio);
 		await loadHorarios(new Date(rowData.fecha_hora));
 		setOpenModal(true);
+		setIsLoading(false);
+	}
+
+	const handleOnClickNuevaConsulta = async (event, rowData) => {
+		setIsLoading(true);
+		setConsulta(rowData);
+		// await loadTratamientos(rowData.servicio);
+		await loadHorarios(new Date(rowData.fecha_hora));
+		setOpenModalProxima(true);
 		setIsLoading(false);
 	}
 
@@ -517,6 +528,13 @@ const AgendarConsulta = (props) => {
 				onClick: handleClickVerPagos
 			} : ''
 		),
+		rowData => (
+			rowData.status._id === atendidoStatusId ? {
+				icon: EventAvailableIcon,
+				tooltip: 'NUEVA CITA',
+				onClick: handleOnClickNuevaConsulta
+			} : ''
+		),
 	];
 
 	const handleGuardarModalPagos = async (servicio) => {
@@ -570,6 +588,7 @@ const AgendarConsulta = (props) => {
 						openModalPagos={openModalPagos}
 						openModalCirugias={openModalCirugias}
 						openModalEstetica={openModalEstetica}
+						openModalProxima={openModalProxima}
 						openModalImprimirConsultas={openModalImprimirConsultas}
 						datosImpresion={datosImpresion}
 						onCloseImprimirConsulta={handleCloseImprimirConsulta}

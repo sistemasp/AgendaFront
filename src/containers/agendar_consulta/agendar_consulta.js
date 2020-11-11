@@ -18,6 +18,7 @@ import { toFormatterCurrency } from '../../utils/utils';
 import ModalCirugia from '../../components/modales/modal_cirugia';
 import ModalEstetica from '../../components/modales/modal_estetica';
 import { ButtonCustom } from '../../components/basic/ButtonCustom';
+import ModalProximaConsulta from '../../components/modales/modal_proxima_consulta';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -106,6 +107,7 @@ export const AgendarConsultaContainer = (props) => {
     openModalEstetica,
     onCloseEstetica,
     onGuardarModalPagos,
+    openModalProxima,
   } = props;
 
   return (
@@ -114,6 +116,31 @@ export const AgendarConsultaContainer = (props) => {
         openModal ?
           <ModalConsulta
             open={openModal}
+            consulta={consulta}
+            onClickActualizarCita={onClickActualizarCita}
+            onClose={onClickCancel}
+            onChangeServicio={onChangeServicio}
+            onChangeTratamientos={onChangeTratamientos}
+            onChangeFecha={onChangeFecha}
+            onChangeHora={onChangeHora}
+            onChangeTipoCita={onChangeTipoCita}
+            onChangeMedio={onChangeMedio}
+            onChangeAsistio={onChangeAsistio}
+            servicios={servicios}
+            tratamientos={tratamientos}
+            horarios={horarios}
+            empleado={empleado}
+            sucursal={sucursal._id}
+            loadConsultas={loadConsultas}
+            setOpenAlert={setOpenAlert}
+            setMessage={setMessage}
+            setFilterDate={setFilterDate}
+          /> : ''
+      }
+      {
+        openModalProxima ?
+          <ModalProximaConsulta
+            open={openModalProxima}
             consulta={consulta}
             onClickActualizarCita={onClickActualizarCita}
             onClose={onClickCancel}

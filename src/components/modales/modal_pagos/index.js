@@ -85,18 +85,16 @@ const ModalPagos = (props) => {
     }
   ];
 
-
-
   const loadPagos = async () => {
     let totalCE = 0;
     if (tipoServicioId === consultaServicioId) { // SI ES CONSULTA BUSCA CIRUGIA Y ESTETICAS 
       const resCirugias = await findCirugiaByConsultaId(servicio._id);
-      if (`${resCirugias.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      if (`${resCirugias.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) { // BUSCA CIRUGIAS
         const cirugia = resCirugias.data;
         totalCE += cirugia.total ? Number(cirugia.total) : 0;
       }
       const resEstetica = await findEsteticaByConsultaId(servicio._id);
-      if (`${resEstetica.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      if (`${resEstetica.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) { // BUSCA TOXINAS Y RELLENOS
         const estetica = resEstetica.data;
         totalCE += estetica.total ? Number(estetica.total) : 0;
       }

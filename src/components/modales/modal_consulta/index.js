@@ -6,6 +6,7 @@ import {
   showAllStatus,
   updatePago,
   deletePago,
+  createConsecutivo,
 } from "../../../services";
 import {
   updateConsult,
@@ -273,8 +274,19 @@ const ModalConsulta = (props) => {
       rowData.fecha_hora = rowData.nueva_fecha_hora;
       const response = await createConsult(rowData);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-        setOpenAlert(true);
-        setMessage('La Consulta se reagendo correctamente');
+        const consecutivo = {
+          consecutivo: response.data.consecutivo,
+          tipo_servicio: consultaServicioId,
+          servicio: response.data._id,
+          sucursal: sucursal._id,
+          fecha_hora: new Date(),
+          status: response.data.status,
+        }
+        const responseConsecutivo = await createConsecutivo(consecutivo);
+        if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+          setOpenAlert(true);
+          setMessage('CONSULTA REAGENDADA CORRECTAMENTE');
+        }
       }
 
       const dia = addZero(rowData.fecha_hora.getDate());
