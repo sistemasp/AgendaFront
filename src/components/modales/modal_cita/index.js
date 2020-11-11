@@ -10,6 +10,7 @@ import {
   updatePago,
   deletePago,
   findAreasByTreatmentServicio,
+  createConsecutivo,
 } from "../../../services";
 import {
   updateIngreso,
@@ -21,9 +22,9 @@ import ModalFormCita from './ModalFormCita';
 import { Formik } from 'formik';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import { addZero } from '../../../utils/utils';
-import { updateAparatologia } from '../../../services/aparatolgia';
-import { updateFacial } from '../../../services/faciales';
-import { updateLaser } from '../../../services/laser';
+import { createAparatologia, updateAparatologia } from '../../../services/aparatolgia';
+import { createFacial, updateFacial } from '../../../services/faciales';
+import { createLaser, updateLaser } from '../../../services/laser';
 
 const validationSchema = Yup.object({
   fecha: Yup.string("Ingresa los nombres")
@@ -89,8 +90,8 @@ const ModalCita = (props) => {
   const servicioFacialId = process.env.REACT_APP_FACIAL_SERVICIO_ID;
   const servicioLaserId = process.env.REACT_APP_LASER_SERVICIO_ID;
   const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
-	const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
-	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
+  const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
+  const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 
   const [isLoading, setIsLoading] = useState(true);
   const [tratamientos, setTratamientos] = useState([]);
@@ -159,15 +160,15 @@ const ModalCita = (props) => {
   }
 
   const handleChangeTratamientos = async (e) => {
-		setIsLoading(true);
-		setValues({
-			...values,
+    setIsLoading(true);
+    setValues({
+      ...values,
       tratamientos: [e.target.value],
       areas: [],
     });
-		await loadAreas(e.target.value);
-		setIsLoading(false);
-	};
+    await loadAreas(e.target.value);
+    setIsLoading(false);
+  };
 
   const handleChangeFecha = async (date) => {
     setIsLoading(true);
@@ -188,7 +189,7 @@ const ModalCita = (props) => {
     date.setHours(Number(hora[0])); // -5 por zona horaria
     date.setMinutes(hora[1]);
     date.setSeconds(0);
-    const fechaObservaciones = `${addZero(date.getDate())}/${addZero(Number(date.getMonth()))}/${date.getFullYear()} - ${e.target.value} hrs`;
+    const fechaObservaciones = `${addZero(date.getDate())}/${addZero(Number(date.getMonth() + 1))}/${date.getFullYear()} - ${e.target.value} hrs`;
     setValues({
       ...values,
       nueva_fecha_hora: date,
@@ -268,7 +269,17 @@ const ModalCita = (props) => {
 
     //rowData.tiempo = getTimeToTratamiento(rowData.tratamientos);
     if (rowData.status === reagendoStatusId) {
-      await updateDate(cita._id, rowData);
+      switch (cita.servicio._id) {
+        case servicioAparatologiaId:
+          await updateAparatologia(cita._id, rowData);
+          break;
+        case servicioFacialId:
+          await updateFacial(cita._id, rowData);
+          break;
+        case servicioLaserId:
+          await updateLaser(cita._id, rowData);
+          break;
+      }
       rowData.quien_agenda = empleado._id;
       rowData.sucursal = sucursal;
       rowData.status = pendienteStatusId;
@@ -277,10 +288,32 @@ const ModalCita = (props) => {
       rowData.hora_salida = '--:--';
       rowData.observaciones = `TRATAMIENTO REAGENDADO ${values.fecha_actual} - ${values.hora_actual} HRS`;
       rowData.fecha_hora = rowData.nueva_fecha_hora;
-      const response = await createDate(rowData);
+      let response;
+      switch (cita.servicio._id) {
+        case servicioAparatologiaId:
+          response = await createAparatologia(rowData);
+          break;
+        case servicioFacialId:
+          response = await createFacial(rowData);
+          break;
+        case servicioLaserId:
+          response = await createLaser(rowData);
+          break;
+      }
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-        setOpenAlert(true);
-        setMessage('TRATAMIENTO REAGENDADO CORRECTAMENTE');
+        const consecutivo = {
+          consecutivo: response.data.consecutivo,
+          tipo_servicio: cita.servicio._id,
+          servicio: response.data._id,
+          sucursal: sucursal._id,
+          fecha_hora: new Date(),
+          status: response.data.status,
+        }
+        const responseConsecutivo = await createConsecutivo(consecutivo);
+        if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+          setOpenAlert(true);
+          setMessage('TRATAMIENTO REAGENDADO CORRECTAMENTE');
+        }
       }
       const dia = addZero(rowData.fecha_hora.getDate());
       const mes = addZero(rowData.fecha_hora.getMonth());
@@ -289,7 +322,17 @@ const ModalCita = (props) => {
         fecha_show: rowData.fecha_hora,
         fecha: `${dia}/${mes}/${anio}`
       });
-      await loadCitas(rowData.fecha_hora);
+      switch (cita.servicio._id) {
+        case servicioAparatologiaId:
+          await loadAparatologias(rowData.fecha_hora);
+          break;
+        case servicioFacialId:
+          await loadFaciales(rowData.fecha_hora);
+          break;
+        case servicioLaserId:
+          await loadLaser(rowData.fecha_hora);
+          break;
+      }
     } else {
       const dia = addZero(rowData.fecha_show.getDate());
       const mes = addZero(rowData.fecha_show.getMonth());
@@ -364,24 +407,24 @@ const ModalCita = (props) => {
   }
 
   const handleChangeAreas = async (items) => {
-		setIsLoading(true);
-		let precio = 0;
-		items.map((item) => {
-			const itemPrecio =
-				sucursal === sucursalManuelAcunaId ? item.precio_ma // Precio Manuel Acuña
-					: (sucursal === sucursalOcciId ? item.precio_oc // Precio Occidental
-						: (sucursal === sucursalFedeId ? item.precio_fe // Precio Federalismo
-							: 0)); // Error
-			precio = Number(precio) + Number(itemPrecio);
-		});
-		setValues({
-			...values,
-			precio: precio,
-			areas: items
-		});
-		setIsLoading(false);
+    setIsLoading(true);
+    let precio = 0;
+    items.map((item) => {
+      const itemPrecio =
+        sucursal === sucursalManuelAcunaId ? item.precio_ma // Precio Manuel Acuña
+          : (sucursal === sucursalOcciId ? item.precio_oc // Precio Occidental
+            : (sucursal === sucursalFedeId ? item.precio_fe // Precio Federalismo
+              : 0)); // Error
+      precio = Number(precio) + Number(itemPrecio);
+    });
+    setValues({
+      ...values,
+      precio: precio,
+      areas: items
+    });
+    setIsLoading(false);
   }
-  
+
   useEffect(() => {
     const loadHorariosByServicio = async () => {
       const date = new Date(cita.fecha_hora);
@@ -457,7 +500,7 @@ const ModalCita = (props) => {
                 cita={cita}
                 onClickActualizarCita={handleOnClickActualizarCita}
                 onChangeTratamientos={(e) => handleChangeTratamientos(e)}
-								onChangeAreas={(e) => handleChangeAreas(e)}
+                onChangeAreas={(e) => handleChangeAreas(e)}
                 onChangeFecha={(e) => handleChangeFecha(e)}
                 onChangeHora={(e) => handleChangeHora(e)}
                 onChangeTipoCita={(e) => handleChangeTipoCita(e)}

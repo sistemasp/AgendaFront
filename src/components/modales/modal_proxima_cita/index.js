@@ -161,7 +161,7 @@ const ModalProximaCita = (props) => {
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
       const consecutivo = {
         consecutivo: response.data.consecutivo,
-        tipo_servicio: consultaServicioId,
+        tipo_servicio: cita.servicio._id,
         servicio: response.data._id,
         sucursal: sucursal._id,
         fecha_hora: new Date(),
