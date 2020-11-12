@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { ConsultasContainer } from "./consultas";
-import { showAllConsultsBySucursalAsistio } from "../../../services/consultas";
+import { showAllConsultsBySucursalPendiente } from "../../../services/consultas";
 import { Backdrop, CircularProgress, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
@@ -18,6 +18,8 @@ const Consultas = (props) => {
 	const [events, setEvents] = useState([]);
 
 	const { sucursal } = props;
+
+	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
 
 	const parseToEvents = (consultas) => {
 		return consultas.map(consulta => {
@@ -38,7 +40,7 @@ const Consultas = (props) => {
 
 	useEffect(() => {
 		const loadConsultas = async () => {
-			const response = await showAllConsultsBySucursalAsistio(sucursal);
+			const response = await showAllConsultsBySucursalPendiente(sucursal, pendienteStatusId);
 
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				setEvents(parseToEvents(response.data));

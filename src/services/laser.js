@@ -183,3 +183,15 @@ export const findLasersByPayOfDoctorHoraAplicacion = async (sucursalId, medicoId
         console.log('findLasersByPayOfDoctorHoraAplicacion', error);
     }
 }
+
+export const showAllLaserBySucursalPendiente = async (sucursalId, pendienteId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/laser/sucursal/${sucursalId}/pendiente/${pendienteId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllLaserBySucursalPendiente', error);
+    }
+}

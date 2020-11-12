@@ -3,6 +3,7 @@ import {
   createConsecutivo,
   findAreasByTreatmentServicio,
   findEmployeesByRolId,
+  findScheduleByDateAndSucursalAndService,
   findScheduleInConsultByDateAndSucursal,
 } from "../../../services";
 import { createAparatologia, updateAparatologia } from '../../../services/aparatolgia';
@@ -77,7 +78,7 @@ const ModalProximaCita = (props) => {
     tipo_cita: tipoCitaDerivadaId,
     promovendedor: promovendedorSinAsignarId,
     status: pendienteStatusId,
-    observaciones: cita.observaciones,
+    observaciones: '',
     medico: cita.medico ? cita.medico : '',
     frecuencia: reconsultaFrecuenciaId,
     servicio: cita.servicio,
@@ -92,7 +93,7 @@ const ModalProximaCita = (props) => {
     const dia = date ? date.getDate() : values.fecha_show.getDate();
     const mes = Number(date ? date.getMonth() : values.fecha_show.getMonth()) + 1;
     const anio = date ? date.getFullYear() : values.fecha_show.getFullYear();
-    const response = await findScheduleInConsultByDateAndSucursal(consultaServicioId, dia, mes, anio, sucursal);
+    const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, values.servicio._id);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setHorarios(response.data);
     }
@@ -228,7 +229,7 @@ const ModalProximaCita = (props) => {
       const dia = date ? date.getDate() : values.fecha_show.getDate();
       const mes = Number(date ? date.getMonth() : values.fecha_show.getMonth()) + 1;
       const anio = date ? date.getFullYear() : values.fecha_show.getFullYear();
-      const response = await findScheduleInConsultByDateAndSucursal(consultaServicioId, dia, mes, anio, sucursal);
+      const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, values.servicio._id);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setHorarios(response.data);
       }

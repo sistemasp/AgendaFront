@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { Backdrop, CircularProgress, makeStyles } from "@material-ui/core";
 import { LaserContainer } from "./laser";
-import { showAllLaserBySucursalAsistio } from "../../../services/laser";
+import { showAllLaserBySucursalPendiente } from "../../../services/laser";
 
 const useStyles = makeStyles(theme => ({
     backdrop: {
@@ -18,6 +18,8 @@ const Laser = (props) => {
     const [events, setEvents] = useState([]);
 
     const { sucursal } = props;
+
+	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
 
     const parseToEvents = (lasers) => {
         return lasers.map( laser => {
@@ -40,7 +42,7 @@ const Laser = (props) => {
     
     useEffect(() => {
         const loadCitas = async() => {
-            const response = await showAllLaserBySucursalAsistio(sucursal);
+            const response = await showAllLaserBySucursalPendiente(sucursal, pendienteStatusId);
             
             if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK ) {
                 setEvents(parseToEvents(response.data));

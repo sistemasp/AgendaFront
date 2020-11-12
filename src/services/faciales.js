@@ -183,3 +183,15 @@ export const findFacialesByPayOfDoctorHoraAplicacion = async (sucursalId, medico
         console.log('findFacialesByPayOfDoctorHoraAplicacion', error);
     }
 }
+
+export const showAllFacialBySucursalPendiente = async (sucursalId, pendienteId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/facial/sucursal/${sucursalId}/pendiente/${pendienteId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllFacialBySucursalPendiente', error);
+    }
+}

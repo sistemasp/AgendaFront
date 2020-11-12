@@ -38,6 +38,18 @@ export const showAllConsultsBySucursalAsistio = async (sucursalId) => {
     }
 }
 
+export const showAllConsultsBySucursalPendiente = async (sucursalId, pendienteId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta/sucursal/${sucursalId}/pendiente/${pendienteId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllConsultsBySucursalPendiente', error);
+    }
+}
+
 export const findConsultsByDate = async (dia, mes, anio) => {
     try {
         const response = await axios({

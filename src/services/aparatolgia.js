@@ -183,3 +183,15 @@ export const findAparatologiasByPayOfDoctorHoraAplicacion = async (sucursalId, m
         console.log('findAparatologiasByPayOfDoctorHoraAplicacion', error);
     }
 }
+
+export const showAllAparatologiasBySucursalPendiente = async (sucursalId, pendienteId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/aparatologia/sucursal/${sucursalId}/pendiente/${pendienteId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showAllAparatologiasBySucursalPendiente', error);
+    }
+}
