@@ -182,7 +182,7 @@ const ModalFormPago = (props) => {
 
                   onInput={(e) => {
                     e.target.value = e.target.value > 100 ? 100 : e.target.value;
-                    e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 3)
+                    e.target.value = Math.max(0, parseFloat(e.target.value)).toString().slice(0, 3)
                   }}
                   variant="outlined" />
               </Grid>

@@ -4,13 +4,15 @@ import {
 	findScheduleByDateAndSucursalAndService,
 	findEmployeesByRolId,
 	showAllTipoCitas,
-	findAreasByTreatmentServicio,
 	createConsecutivo,
 	showAllMedios,
 } from "../../services";
 import {
 	findTreatmentByServicio,
 } from "../../services/tratamientos";
+import {
+	findAreasByTreatmentServicio,
+} from "../../services/areas";
 import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';

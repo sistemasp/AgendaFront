@@ -3,14 +3,20 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
 	findScheduleByDateAndSucursalAndService,
 	findEmployeesByRolId,
-	showAllTipoCitas,
 	createConsecutivo,
 	showAllMedios,
+	showAllMaterials,
 } from "../../services";
 import {
 	findTreatmentByServicio,
 } from "../../services/tratamientos";
 import {
+	createFacial,
+	findFacialByDateAndSucursal,
+	updateFacial
+} from "../../services/faciales";
+import {
+	findAreaById,
 	findAreasByTreatmentServicio,
 } from "../../services/areas";
 import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
@@ -21,8 +27,7 @@ import * as Yup from "yup";
 import { toFormatterCurrency, addZero, generateFolio, dateToString } from "../../utils/utils";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
-import { AgendarLaserContainer } from "./agendar_laser";
-import { createLaser, findLaserByDateAndSucursal, updateLaser } from "../../services/laser";
+import { AgendarDermapenContainer } from "./agendar_dermapen";
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 
 function Alert(props) {
@@ -47,7 +52,7 @@ const validationSchema = Yup.object({
 		.required("Los nombres del pacientes son requeridos")
 });
 
-const AgendarLaser = (props) => {
+const AgendarDermapen = (props) => {
 	const classes = useStyles();
 
 	const {
@@ -61,13 +66,15 @@ const AgendarLaser = (props) => {
 	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
 	const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
 	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
+	const atendidoStatusId = process.env.REACT_APP_ATENDIDO_STATUS_ID;
 	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
 	const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
 	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
-	const atendidoStatusId = process.env.REACT_APP_ATENDIDO_STATUS_ID;
 	const medicoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
 	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
-	const servicioLaserId = process.env.REACT_APP_LASER_SERVICIO_ID;
+	const dermapenServicioId = process.env.REACT_APP_DERMAPEN_SERVICIO_ID;
+	const dermapenTratamientoId = process.env.REACT_APP_DERMAPEN_TRATAMIENTO_ID;
+	const dermapenAreaId = process.env.REACT_APP_DERMAPEN_AREA_ID;
 
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
@@ -79,18 +86,20 @@ const AgendarLaser = (props) => {
 	const [tipoCitas, setTipoCitas] = useState([]);
 	const [medios, setMedios] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
-	const [disableDate, setDisableDate] = useState(true);
+	const [disableDate, setDisableDate] = useState(false);
 	const [values, setValues] = useState({
-		servicio: servicioLaserId,
+		servicio: dermapenServicioId,
+		fecha_hora: new Date(),
+		tratamientos: [],
 		areas: [],
 		paciente: `${paciente._id}`,
 		precio: 0,
 		tipo_cita: tipoCitaNoAplicaId,
 		tiempo: '',
 		observaciones: '',
-		medico: { _id: medicoDirectoId },
+		materiales: [],
 	});
-	const [citas, setCitas] = useState([]);
+	const [faciales, setFaciales] = useState([]);
 	const [areas, setAreas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
 	const [openModalProxima, setOpenModalProxima] = useState(false);
@@ -98,6 +107,7 @@ const AgendarLaser = (props) => {
 	const [openModalPagos, setOpenModalPagos] = useState(false);
 	const [openModalImprimirCita, setOpenModalImprimirCita] = useState(false);
 	const [datosImpresion, setDatosImpresion] = useState();
+	const [materiales, setMateriales] = useState([]);
 
 	const date = new Date();
 	const dia = addZero(date.getDate());
@@ -114,8 +124,6 @@ const AgendarLaser = (props) => {
 		{ title: 'Hora', field: 'hora' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
 		{ title: 'Telefono', field: 'paciente.telefono' },
-		{ title: 'Servicio', field: 'servicio.nombre' },
-		{ title: 'Areas', field: 'show_areas' },
 		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
 		{ title: 'Medio', field: 'medio.nombre' },
 		{ title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' },
@@ -123,7 +131,6 @@ const AgendarLaser = (props) => {
 		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
 		{ title: 'Medico', field: 'medico_nombre' },
 		{ title: 'Tipo Cita', field: 'tipo_cita.nombre' },
-		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
 		{ title: 'Estado', field: 'status.nombre' },
 		{ title: 'Precio', field: 'precio_moneda' },
 		{ title: 'Tiempo (minutos)', field: 'tiempo' },
@@ -149,59 +156,14 @@ const AgendarLaser = (props) => {
 		paging: false,
 	}
 
-	const loadAreas = async () => {
-		const laserResponse = await findTreatmentByServicio(servicioLaserId);
-		if (`${laserResponse.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-			const laser = laserResponse.data[0];
-			values.tratamientos = [laser];
-			const response = await findAreasByTreatmentServicio(laser.servicio, laser._id);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setAreas(response.data);
-			}
-		}
-
-	}
-
-	const loadHorarios = async (date) => {
-		const dia = date ? date.getDate() : values.fecha_hora.getDate();
-		const mes = Number(date ? date.getMonth() : values.fecha_hora.getMonth());
-		const anio = date ? date.getFullYear() : values.fecha_hora.getFullYear();
-		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, values.servicio);
-		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-			setHorarios(response.data);
-		}
-	}
-
 	const loadHorariosByServicio = async (date, servicio) => {
-		console.log("SERSORJSOJARA", servicio);
 		const dia = date ? date.getDate() : values.fecha_hora.getDate();
 		const mes = Number(date ? date.getMonth() : values.fecha_hora.getMonth());
 		const anio = date ? date.getFullYear() : values.fecha_hora.getFullYear();
-		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, servicio._id);
+		const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal, servicio);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setHorarios(response.data);
 		}
-	}
-
-	const handleChangeAreas = async (items) => {
-		setIsLoading(true);
-		let precio = 0;
-		items.map((item) => {
-			const itemPrecio =
-				sucursal === sucursalManuelAcunaId ? item.precio_ma // Precio Manuel Acuña
-					: (sucursal === sucursalOcciId ? item.precio_oc // Precio Occidental
-						: (sucursal === sucursalFedeId ? item.precio_fe // Precio Federalismo
-							: 0)); // Error
-			precio = Number(precio) + Number(itemPrecio);
-		});
-		setValues({
-			...values,
-			fecha_hora: '',
-			precio: precio,
-			areas: items
-		});
-		setDisableDate(false);
-		setIsLoading(false);
 	}
 
 	const handleChangeFecha = (date) => {
@@ -210,7 +172,7 @@ const AgendarLaser = (props) => {
 			...values,
 			fecha_hora: date,
 		});
-		loadHorarios(date);
+		loadHorariosByServicio(date, dermapenServicioId);
 		setIsLoading(false);
 	};
 
@@ -238,12 +200,12 @@ const AgendarLaser = (props) => {
 			fecha_show: date,
 			fecha: `${dia}/${mes}/${anio}`
 		});
-		await loadLaser(date);
+		await loadFaciales(date);
 		setIsLoading(false);
 	};
 
-	const loadLaser = async (filterDate) => {
-		const response = await findLaserByDateAndSucursal(filterDate.getDate(), filterDate.getMonth(), filterDate.getFullYear(), sucursal);
+	const loadFaciales = async (filterDate) => {
+		const response = await findFacialByDateAndSucursal(filterDate.getDate(), filterDate.getMonth(), filterDate.getFullYear(), sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
 				item.folio = generateFolio(item);
@@ -254,12 +216,28 @@ const AgendarLaser = (props) => {
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.show_tratamientos = item.tratamientos.map(tratamiento => {
+					return `${tratamiento.nombre}, `;
+				});
 				item.show_areas = item.areas.map(area => {
 					return `${area.nombre}, `;
 				});
 			});
-			setCitas(response.data);
+			setFaciales(response.data);
 		}
+	}
+
+	const getTimeToTratamiento = (tratamientos) => {
+		tratamientos.sort((a, b) => {
+			if (a.tiempo < b.tiempo) return 1;
+			if (a.tiempo > b.tiempo) return -1;
+			return 0;
+		});
+		let tiempo = 0;
+		tratamientos.forEach((item, index) => {
+			tiempo += Number(index === 0 ? item.tiempo : (item.tiempo - (item.servicio !== 'APARATOLOGÍA' ? 20 : 0)));
+		});
+		return tiempo;
 	}
 
 	const handleClickAgendar = async (data) => {
@@ -271,8 +249,9 @@ const AgendarLaser = (props) => {
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
 		data.tipo_cita = data.medico._id === medicoDirectoId ? tipoCitaNoAplicaId : data.tipo_cita;
+		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 
-		const response = await createLaser(data);
+		const response = await createFacial(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			const consecutivo = {
 				consecutivo: response.data.consecutivo,
@@ -285,7 +264,7 @@ const AgendarLaser = (props) => {
 			const responseConsecutivo = await createConsecutivo(consecutivo);
 			if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 				setOpenAlert(true);
-				setMessage('EL LÁSER SE AGREGO CORRECTAMENTE');
+				setMessage('EL DERMAPEN SE AGREGO CORRECTAMENTE');
 				setValues({
 					servicio: '',
 					tratamientos: [],
@@ -296,10 +275,11 @@ const AgendarLaser = (props) => {
 					precio: '',
 					tipo_cita: {},
 				});
+				setTratamientos([]);
 				setAreas([]);
 				setDisableDate(true);
 				setPacienteAgendado({});
-				loadLaser(data.fecha_hora);
+				loadFaciales(data.fecha_hora);
 				setFilterDate({
 					fecha_show: data.fecha_hora,
 					fecha: dateToString(data.fecha_hora),
@@ -309,20 +289,6 @@ const AgendarLaser = (props) => {
 
 		setIsLoading(false);
 	};
-
-	const handleChangeItemPrecio = (e, index) => {
-		const newTratamientos = values.tratamientos;
-		newTratamientos[index].precio = e.target.value;
-		let precio = 0;
-		newTratamientos.map((item) => {
-			precio = Number(precio) + Number(item.precio);
-		});
-		setValues({
-			...values,
-			tratamientos: newTratamientos,
-			precio: precio,
-		});
-	}
 
 	const handleChangeTiempo = (e) => {
 		setValues({ ...values, tiempo: e.target.value });
@@ -361,7 +327,7 @@ const AgendarLaser = (props) => {
 	const handleOnClickEditarCita = async (event, rowData) => {
 		setIsLoading(true);
 		setCita(rowData);
-		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio);
+		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio._id);
 		setOpenModal(true);
 		setIsLoading(false);
 	}
@@ -369,7 +335,7 @@ const AgendarLaser = (props) => {
 	const handleOnClickNuevaCita = async (event, rowData) => {
 		setIsLoading(true);
 		setCita(rowData);
-		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio);
+		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio._id);
 		setOpenModalProxima(true);
 		setIsLoading(false);
 	}
@@ -422,15 +388,38 @@ const AgendarLaser = (props) => {
 
 	const handleGuardarModalPagos = async (servicio) => {
 		servicio.pagado = servicio.pagos.length > 0;
-		await updateLaser(servicio._id, servicio);
-		await loadLaser(new Date(servicio.fecha_hora));
+		await updateFacial(servicio._id, servicio);
+		await loadFaciales(new Date(servicio.fecha_hora));
 		setOpenModalPagos(false);
 	}
 
-	useEffect(() => {
+	const handleChangeMateriales = async (items) => {
+		setIsLoading(true);
+		setValues({
+			...values,
+			materiales: items
+		});
+		setIsLoading(false);
+	}
 
-		const loadLaser = async () => {
-			const response = await findLaserByDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
+	const handleChangeItemPrecio = (e, index) => {
+		const newMateriales = values.materiales;
+		newMateriales[index].precio = e.target.value;
+		let precio = Number(values.total);
+		newMateriales.map((item) => {
+			precio -= Number(item.precio);
+		});
+		precio -= Number(values.costo_biopsias);
+		setValues({
+			...values,
+			materiales: newMateriales,
+			precio: precio,
+		});
+	}
+
+	useEffect(() => {
+		const loadFaciales = async () => {
+			const response = await findFacialByDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
 					item.folio = generateFolio(item);
@@ -441,26 +430,32 @@ const AgendarLaser = (props) => {
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+					item.show_tratamientos = item.tratamientos.map(tratamiento => {
+						return `${tratamiento.nombre}, `;
+					});
 					item.show_areas = item.areas.map(area => {
 						return `${area.nombre}, `;
 					});
 				});
-				setCitas(response.data);
+				setFaciales(response.data);
 			}
 			setIsLoading(false);
+		}
+
+		const findDermapen = async () => {
+			const response = await findAreaById(dermapenAreaId);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setValues({
+					...values,
+					areas: [response.data]
+				});
+			}
 		}
 
 		const loadPromovendedores = async () => {
 			const response = await findEmployeesByRolId(promovendedorRolId);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				setPromovendedores(response.data);
-			}
-		}
-
-		const loadCosmetologas = async () => {
-			const response = await findEmployeesByRolId(cosmetologaRolId);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setCosmetologas(response.data);
 			}
 		}
 
@@ -471,13 +466,6 @@ const AgendarLaser = (props) => {
 			}
 		}
 
-		const loadTipoCitas = async () => {
-			const response = await showAllTipoCitas();
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setTipoCitas(response.data);
-			}
-		}
-
 		const loadMedios = async () => {
 			const response = await showAllMedios();
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -485,13 +473,20 @@ const AgendarLaser = (props) => {
 			}
 		}
 
+		const loadMateriales = async () => {
+			const response = await showAllMaterials();
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setMateriales(response.data);
+			}
+		}
+
 		setIsLoading(true);
-		loadLaser();
-		loadAreas();
+		findDermapen();
+		loadFaciales();
+		loadHorariosByServicio(new Date(), dermapenServicioId);
 		loadPromovendedores();
-		loadCosmetologas();
 		loadMedicos();
-		loadTipoCitas();
+		loadMateriales();
 		loadMedios();
 	}, [sucursal]);
 
@@ -504,14 +499,15 @@ const AgendarLaser = (props) => {
 						initialValues={values}
 						validationSchema={validationSchema} >
 						{
-							props => <AgendarLaserContainer
+							props => <AgendarDermapenContainer
 								tratamientos={tratamientos}
 								areas={areas}
 								horarios={horarios}
-								onChangeAreas={(e) => handleChangeAreas(e)}
 								onChangeFecha={(e) => handleChangeFecha(e)}
 								onChangeFilterDate={(e) => handleChangeFilterDate(e)}
 								onChangeHora={(e) => handleChangeHora(e)}
+								onChangeMateriales={(e) => handleChangeMateriales(e)}
+								onChangeItemPrecio={handleChangeItemPrecio}
 								onChangeObservaciones={(e) => handleChangeObservaciones(e)}
 								filterDate={filterDate.fecha_show}
 								paciente={paciente}
@@ -520,16 +516,16 @@ const AgendarLaser = (props) => {
 								cosmetologas={cosmetologas}
 								onClickAgendar={handleClickAgendar}
 								onChangeTiempo={(e) => handleChangeTiempo(e)}
-								titulo={`LÁSER (${dateToString(filterDate.fecha_show)})`}
+								titulo={`DERMAPEN (${dateToString(filterDate.fecha_show)})`}
 								columns={columns}
 								options={options}
-								citas={citas}
+								citas={faciales}
 								actions={actions}
 								cita={cita}
 								openModal={openModal}
 								empleado={empleado}
 								onClickCancel={handleCloseModal}
-								loadLaser={loadLaser}
+								loadFaciales={loadFaciales}
 								medicos={medicos}
 								tipoCitas={tipoCitas}
 								medios={medios}
@@ -545,12 +541,12 @@ const AgendarLaser = (props) => {
 								datosImpresion={datosImpresion}
 								onCloseImprimirConsulta={handleCloseImprimirConsulta}
 								sucursal={sucursal}
-								onChangeItemPrecio={handleChangeItemPrecio}
 								setOpenAlert={setOpenAlert}
 								setMessage={setMessage}
 								setFilterDate={setFilterDate}
 								medicoDirectoId={medicoDirectoId}
 								onGuardarModalPagos={handleGuardarModalPagos}
+								materiales={materiales}
 								{...props} />
 						}
 					</Formik> :
@@ -567,4 +563,4 @@ const AgendarLaser = (props) => {
 	);
 }
 
-export default AgendarLaser;
+export default AgendarDermapen;

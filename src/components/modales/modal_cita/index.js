@@ -9,7 +9,6 @@ import {
   createDate,
   updatePago,
   deletePago,
-  findAreasByTreatmentServicio,
   createConsecutivo,
 } from "../../../services";
 import {
@@ -17,6 +16,9 @@ import {
   deleteIngreso,
   findIngresoById,
 } from "../../../services/ingresos";
+import {
+  findAreasByTreatmentServicio,
+} from "../../../services/areas";
 import * as Yup from "yup";
 import ModalFormCita from './ModalFormCita';
 import { Formik } from 'formik';

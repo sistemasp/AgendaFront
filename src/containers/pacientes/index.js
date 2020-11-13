@@ -46,7 +46,6 @@ const Pacientes = (props) => {
 	const [open, setOpen] = useState(false);
 	const [openHistoric, setOpenHistoric] = useState(false);
 	const [openAlert, setOpenAlert] = useState(false);
-	const [pacientes, setPacientes] = useState([]);
 	const [paciente, setPaciente] = useState({});
 	const [isLoading, setIsLoading] = useState(true);
 	const [message, setMessage] = useState('');
@@ -58,6 +57,7 @@ const Pacientes = (props) => {
 		onClickAgendarFaciales,
 		onClickAgendarLaser,
 		onClickAgendarAparatologia,
+		onClickAgendarDermapen,
 	} = props;
 
 	const columns = [
@@ -194,6 +194,11 @@ const Pacientes = (props) => {
 			onClick: onClickAgendarAparatologia
 		},
 		{
+			icon: EventAvailableIcon,
+			tooltip: 'AGREGAR DERMAPEN',
+			onClick: onClickAgendarDermapen
+		},
+		{
 			icon: EditIcon,
 			tooltip: 'ACTUALIZAR REGISTRO',
 			onClick: handleOnClickEditar
@@ -220,6 +225,10 @@ const Pacientes = (props) => {
 			case 'AGREGAR APARATOLOGIA':
 				onClickAgendarAparatologia(e, rowData);
 				break;
+			case 'AGREGAR DERMAPEN':
+				onClickAgendarDermapen(e, rowData);
+				break;
+
 			case 'ACTUALIZAR REGISTRO':
 				handleOnClickEditar(e, rowData);
 				break;
@@ -269,7 +278,6 @@ const Pacientes = (props) => {
 			{
 				!isLoading ?
 					<PacientesContainer
-						pacientes={pacientes}
 						columns={columns}
 						titulo='Pacientes'
 						actions={actions}

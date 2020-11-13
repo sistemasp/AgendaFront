@@ -15,6 +15,8 @@ import AgendarAparatologia from '../agendar_aparatologia';
 import Faciales from '../calendario/faciales';
 import Laser from '../calendario/laser';
 import Aparatologia from '../calendario/aparatologia';
+import ModalDermapen from '../../components/modales/modal_dermapen';
+import AgendarDermapen from '../agendar_dermapen';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -74,6 +76,7 @@ export const MenuContainer = props => {
 		onClickAgendarConsulta,
 		onClickAgendarLaser,
 		onClickAgendarAparatologia,
+		onClickAgendarDermapen,
 		empleado,
 		sucursal,
 		history,
@@ -93,14 +96,16 @@ export const MenuContainer = props => {
 					scrollButtons="on"
 				>
 					<Tab label="PACIENTES" {...a11yProps(0)} />
-					<Tab label="AGENDAR CONSULTA" {...a11yProps(1)} />
-					<Tab label="AGENDAR FACIALES" {...a11yProps(2)} />
-					<Tab label="AGENDAR LÁSER" {...a11yProps(3)} />
-					<Tab label="AGENDAR APARATOLOGÍA" {...a11yProps(4)} />
-					<Tab label="CONSULTAS" {...a11yProps(5)} />
-					<Tab label="FACIALES" {...a11yProps(6)} />
-					<Tab label="LÁSER" {...a11yProps(7)} />
-					<Tab label="APARATOLOGÍA" {...a11yProps(8)} />
+					<Tab label="CONSULTA" {...a11yProps(1)} />
+					<Tab label="FACIALES" {...a11yProps(2)} />
+					<Tab label="LÁSER" {...a11yProps(3)} />
+					<Tab label="APARATOLOGÍA" {...a11yProps(4)} />
+					<Tab label="DERMAPEN" {...a11yProps(5)} />
+					<Tab label="VER CONSULTAS" {...a11yProps(6)} />
+					<Tab label="VER FACIALES" {...a11yProps(7)} />
+					<Tab label="VER LÁSER" {...a11yProps(8)} />
+					<Tab label="VER APARATOLOGÍA" {...a11yProps(9)} />
+					<Tab label="VER DERMAPEN" {...a11yProps(10)} />
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>
@@ -109,6 +114,7 @@ export const MenuContainer = props => {
 					onClickAgendarConsulta={onClickAgendarConsulta}
 					onClickAgendarLaser={onClickAgendarLaser}
 					onClickAgendarAparatologia={onClickAgendarAparatologia}
+					onClickAgendarDermapen={onClickAgendarDermapen}
 					onChangeTab={onChangeTab} />
 			</TabPanel>
 			<TabPanel value={value} index={1}>
@@ -141,19 +147,30 @@ export const MenuContainer = props => {
 					sucursal={sucursal._id} />
 			</TabPanel>
 			<TabPanel value={value} index={5}>
-				<Consultas
+				<AgendarDermapen
+					paciente={pacienteAgendado}
+					setPacienteAgendado={setPacienteAgendado}
+					empleado={empleado}
 					sucursal={sucursal._id} />
 			</TabPanel>
 			<TabPanel value={value} index={6}>
-				<Faciales
+				<Consultas
 					sucursal={sucursal._id} />
 			</TabPanel>
 			<TabPanel value={value} index={7}>
-				<Laser
+				<Faciales
 					sucursal={sucursal._id} />
 			</TabPanel>
 			<TabPanel value={value} index={8}>
+				<Laser
+					sucursal={sucursal._id} />
+			</TabPanel>
+			<TabPanel value={value} index={9}>
 				<Aparatologia
+					sucursal={sucursal._id} />
+			</TabPanel>
+			<TabPanel value={value} index={10}>
+				<Faciales
 					sucursal={sucursal._id} />
 			</TabPanel>
 		</div>

@@ -1,11 +1,12 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import {
   createConsecutivo,
-  findAreasByTreatmentServicio,
   findEmployeesByRolId,
   findScheduleByDateAndSucursalAndService,
-  findScheduleInConsultByDateAndSucursal,
 } from "../../../services";
+import {
+  findAreasByTreatmentServicio,
+} from "../../../services/areas";
 import { createAparatologia, updateAparatologia } from '../../../services/aparatolgia';
 import { createFacial } from '../../../services/faciales';
 import { createLaser, updateLaser } from '../../../services/laser';
