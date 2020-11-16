@@ -18,6 +18,7 @@ import { findLasersByPayOfDoctorHoraAplicacion } from '../../../../services/lase
 import { findAparatologiasByPayOfDoctorHoraAplicacion } from '../../../../services/aparatolgia';
 import { findCirugiasByPayOfDoctorHoraAplicacion } from '../../../../services/cirugias';
 import { findEsteticasByPayOfDoctorHoraAplicacion } from '../../../../services/estetica';
+import { findDermapensByPayOfDoctorHoraAplicacion } from '../../../../services/dermapens';
 
 const useStyles = makeStyles(theme => ({
   backdrop: {
@@ -46,6 +47,7 @@ const ModalImprimirPagoMedico = (props) => {
   const [consultasReconsultas, setConsultasReconsultas] = useState([]);
   const [cirugias, setCirugias] = useState([]);
   const [faciales, setFaciales] = useState([]);
+  const [dermapens, setDermapens] = useState([]);
   const [lasers, setLasers] = useState([]);
   const [aparatologias, setAparatologias] = useState([]);
   const [esteticas, setEsteticas] = useState([]);
@@ -101,6 +103,13 @@ const ModalImprimirPagoMedico = (props) => {
     }
   }
 
+  const loadDermapens = async (hora_apertura, hora_cierre) => {
+    const response = await findDermapensByPayOfDoctorHoraAplicacion(sucursal._id, medico._id, atendidoId, hora_apertura, hora_cierre ? hora_cierre : new Date());
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setDermapens(response.data);
+    }
+  }
+
   const loadLasers = async (hora_apertura, hora_cierre) => {
     const response = await findLasersByPayOfDoctorHoraAplicacion(sucursal._id, medico._id, atendidoId, hora_apertura, hora_cierre ? hora_cierre : new Date());
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -134,6 +143,7 @@ const ModalImprimirPagoMedico = (props) => {
       }
       await loadCirugias(hora_apertura, hora_cierre);
       await loadFaciales(hora_apertura, hora_cierre);
+      await loadDermapens(hora_apertura, hora_cierre);
       await loadLasers(hora_apertura, hora_cierre);
       await loadAparatologias(hora_apertura, hora_cierre);
       await loadEsteticas(hora_apertura, hora_cierre);
@@ -150,8 +160,6 @@ const ModalImprimirPagoMedico = (props) => {
     }, 0);
     setTimeout(() => { setShow(true); }, 15);
   }
-
-  console.log("CORTEfdgdfg", corte);
 
   const handleClickPagar = async () => {
     setIsLoading(true);
@@ -170,6 +178,12 @@ const ModalImprimirPagoMedico = (props) => {
     // TOTAL DE LAS CIRUGIAS
     cirugias.forEach(cirugia => {
       const pagoMedico = Number(cirugia.precio) * Number(medico.porcentaje) / 100;
+      total += Number(pagoMedico);
+    });
+
+    // TOTAL DERMAPENS
+    dermapens.forEach(dermapen => {
+      const pagoMedico = Number(dermapen.precio) * Number(medico.porcentaje) / 100;
       total += Number(pagoMedico);
     });
 
@@ -254,6 +268,7 @@ const ModalImprimirPagoMedico = (props) => {
       consultas: consultas,
       cirugias: cirugias,
       faciales: faciales,
+      dermapens: dermapens,
       lasers: lasers,
       aparatologias: aparatologias,
       esteticas: esteticas,
@@ -329,6 +344,7 @@ const ModalImprimirPagoMedico = (props) => {
             consultasReconsultas={consultasReconsultas}
             cirugias={cirugias}
             faciales={faciales}
+            dermapens={dermapens}
             lasers={lasers}
             aparatologias={aparatologias}
             esteticas={esteticas}

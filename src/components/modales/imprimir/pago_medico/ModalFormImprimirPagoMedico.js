@@ -151,6 +151,7 @@ const ModalFormImprimirPagoMedico = (props) => {
     cirugias,
     esteticas,
     faciales,
+    dermapens,
     lasers,
     aparatologias,
     medico,
@@ -225,7 +226,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                       </Grid>
                       :
                       consultasPrimeraVez.length > 0 || consultasReconsultas.length > 0 || cirugias.length > 0 || esteticas.length > 0 ||
-                      faciales.length > 0 || lasers.length > 0 || aparatologias.length > 0  ?
+                      faciales.length > 0 || dermapens.length > 0 || lasers.length > 0 || aparatologias.length > 0  ?
                         <Grid item xs={12}>
                           <ButtonCustom
                             className={classes.button}
@@ -535,6 +536,61 @@ const ModalFormImprimirPagoMedico = (props) => {
                             </Grid>
                             <Grid item xs={true} >
                               <p className={classes.label_cells}>{`${facial.consecutivo}`}</p>
+                            </Grid>
+                            <Grid item xs={true} >
+                              <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
+                            </Grid>
+                          </Grid>
+                        })
+                        : ''
+                    }
+                  </Grid>
+                </Fragment>
+                : ''
+            }
+
+{
+              dermapens.length > 0 ?
+                <Fragment>
+                  <Grid container className={classes.container}>
+                    <Grid item xs={12}>
+                      <p className={classes.label_title_descripcion}> {`${dermapens.length} DERMAPENS`}</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>HORA</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>TIPO DE CITA</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>PACIENTE</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>CONSECUTIVO</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>CANTIDAD</p>
+                    </Grid>
+                    <Grid item xs={12} className={classes.label}>
+                      <hr className={classes.label} />
+                    </Grid>
+                    {
+                      dermapens ?
+                      dermapens.map(dermapen => {
+                          const pagoMedico = Number(dermapen.precio) * Number(medico.porcentaje) / 100;
+                          pagoTotal += Number(pagoMedico);
+                          return <Grid container>
+                            <Grid item xs={true} className={classes.label}>
+                              <p className={classes.label_cells}>{dermapen.hora_llegada}</p>
+                            </Grid>
+                            <Grid item xs={true} className={classes.label}>
+                              <p className={classes.label_cells}>{dermapen.tipo_cita.nombre}</p>
+                            </Grid>
+                            <Grid item xs={true} >
+                              <p className={classes.label_cells}>{`${dermapen.paciente.nombres} ${dermapen.paciente.apellidos}`}</p>
+                            </Grid>
+                            <Grid item xs={true} >
+                              <p className={classes.label_cells}>{`${dermapen.consecutivo}`}</p>
                             </Grid>
                             <Grid item xs={true} >
                               <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
