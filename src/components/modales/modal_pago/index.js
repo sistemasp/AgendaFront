@@ -43,8 +43,10 @@ const ModalPago = (props) => {
   const tipoIngresoEsteticaId = process.env.REACT_APP_TIPO_INGRESO_ESTETICA_ID;
   const tipoIngresoAparatologiaId = process.env.REACT_APP_TIPO_INGRESO_APARATOLOGIA_ID;
   const tipoIngresoLaserId = process.env.REACT_APP_TIPO_INGRESO_LASER_ID;
+  const tipoIngresoDermapenId = process.env.REACT_APP_TIPO_INGRESO_DERMAPEN_ID;
   const tipoIngresoOtrosId = process.env.REACT_APP_TIPO_INGRESO_OTROS_ID;
   const servicioFacialId = process.env.REACT_APP_FACIAL_SERVICIO_ID;
+  const servicioDermapenlId = process.env.REACT_APP_DERMAPEN_SERVICIO_ID;
   const servicioLaserId = process.env.REACT_APP_LASER_SERVICIO_ID;
   const servicioAparatologiaId = process.env.REACT_APP_APARATOLOGIA_SERVICIO_ID;
   const servicioConsultaId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
@@ -162,6 +164,9 @@ const ModalPago = (props) => {
     switch (rowData.tipo_servicio) {
       case servicioFacialId:
         tipoIngreso = tipoIngresoFacialesId;
+        break;
+      case servicioDermapenlId:
+        tipoIngreso = tipoIngresoDermapenId;
         break;
       case servicioLaserId:
         tipoIngreso = tipoIngresoLaserId;

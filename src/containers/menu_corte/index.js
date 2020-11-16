@@ -320,6 +320,7 @@ const Corte = (props) => {
     }
   }
 
+  console.log("FHSDJFSOJFOSD", corte);
   const handleOpenNuevoIngreso = () => {
     setOpenModalNuevoIngreso(true);
   };
