@@ -10,13 +10,14 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { Paper, Button, TextField } from '@material-ui/core';
 import TableComponent from '../../components/table/TableComponent';
-import ModalCita from '../../components/modales/modal_cita';
+import ModalCita from '../../components/modales/modal_dermapen';
 import { Multiselect } from 'multiselect-react-dropdown';
 import ModalPagos from '../../components/modales/modal_pagos';
 import { toFormatterCurrency } from '../../utils/utils';
 import ModalImprimirTratamiento from '../../components/modales/imprimir/tratamiento';
 import { ButtonCustom } from '../../components/basic/ButtonCustom';
 import ModalProximaCita from '../../components/modales/modal_proxima_cita';
+import ModalDermapen from '../../components/modales/modal_dermapen';
 
 const useStyles = makeStyles(theme => ({
 	formControl: {
@@ -75,17 +76,17 @@ export const AgendarDermapenContainer = (props) => {
 		// TABLE DATES PROPERTIES
 		titulo,
 		columns,
-		citas,
+		dermapens,
 		actions,
 		options,
 		components,
 		// MODAL PROPERTIES
 		openModal,
-		cita,
+		dermapen,
 		onClickActualizarCita,
 		onClickCancel,
 		onChangeAsistio,
-		loadFaciales,
+		loadDermapens,
 		setFilterDate,
 		// MODAL PROXIMA
 		openModalProxima,
@@ -106,9 +107,9 @@ export const AgendarDermapenContainer = (props) => {
 		<Fragment>
 			{
 				openModal ?
-					<ModalCita
+					<ModalDermapen
 						open={openModal}
-						cita={cita}
+						dermapen={dermapen}
 						onClickActualizarCita={onClickActualizarCita}
 						onClose={onClickCancel}
 						onChangeServicio={onChangeServicio}
@@ -122,7 +123,7 @@ export const AgendarDermapenContainer = (props) => {
 						tratamientos={tratamientos}
 						horarios={horarios}
 						empleado={empleado}
-						loadFaciales={loadFaciales}
+						loadDermapens={loadDermapens}
 						sucursal={sucursal}
 						setOpenAlert={setOpenAlert}
 						setMessage={setMessage}
@@ -132,7 +133,7 @@ export const AgendarDermapenContainer = (props) => {
 				openModalProxima ?
 					<ModalProximaCita
 						open={openModalProxima}
-						cita={cita}
+						dermapen={dermapen}
 						onClickActualizarCita={onClickActualizarCita}
 						onClose={onClickCancel}
 						onChangeServicio={onChangeServicio}
@@ -146,7 +147,7 @@ export const AgendarDermapenContainer = (props) => {
 						tratamientos={tratamientos}
 						horarios={horarios}
 						empleado={empleado}
-						loadFaciales={loadFaciales}
+						loadDermapens={loadDermapens}
 						sucursal={sucursal}
 						setOpenAlert={setOpenAlert}
 						setMessage={setMessage}
@@ -157,13 +158,13 @@ export const AgendarDermapenContainer = (props) => {
 					<ModalPagos
 						open={openModalPagos}
 						onClose={onCloseVerPagos}
-						servicio={cita}
+						servicio={dermapen}
 						empleado={empleado}
 						sucursal={sucursal}
 						setMessage={setMessage}
 						setOpenAlert={setOpenAlert}
 						onGuardarModalPagos={onGuardarModalPagos}
-						tipoServicioId={cita.servicio._id} />
+						tipoServicioId={dermapen.servicio._id} />
 					: ''
 			}
 			{
@@ -248,10 +249,10 @@ export const AgendarDermapenContainer = (props) => {
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
-							<InputLabel id="simple-select-outlined-tipo-cita">Medio</InputLabel>
+							<InputLabel id="simple-select-outlined-tipo-dermapen">Medio</InputLabel>
 							<Select
-								labelId="simple-select-outlined-tipo-cita"
-								id="simple-select-outlined-tipo-cita"
+								labelId="simple-select-outlined-tipo-dermapen"
+								id="simple-select-outlined-tipo-dermapen"
 								value={values.medio}
 								onChange={onChangeMedio}
 								label="Medio" >
@@ -315,7 +316,7 @@ export const AgendarDermapenContainer = (props) => {
 							text='AGENDAR' />
 					</Grid>
 					<Grid item xs={12} sm={2}>
-						<h1>Total: {toFormatterCurrency(values.precio)}</h1>
+						<h1>Total: {toFormatterCurrency(values.total)}</h1>
 					</Grid>
 				</Grid>
 				<MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -344,7 +345,7 @@ export const AgendarDermapenContainer = (props) => {
 			<TableComponent
 				titulo={titulo}
 				columns={columns}
-				data={citas}
+				data={dermapens}
 				actions={actions}
 				options={options}
 				components={components} />

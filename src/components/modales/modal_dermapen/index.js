@@ -1,20 +1,31 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import {
-  findEmployeesByRolId,
-  showAllMaterials,
-  createConsecutivo,
-  createBiopsia,
+  getAllSchedules,
   findScheduleByDateAndSucursalAndService,
+  updateDate,
+  findEmployeesByRolId,
+  showAllTipoCitas,
+  showAllStatus,
+  createDate,
+  updatePago,
+  deletePago,
+  createConsecutivo,
+  showAllMaterials,
 } from "../../../services";
 import {
-  createCirugia,
-  updateCirugia,
-} from "../../../services/cirugias";
-import { updateConsult } from '../../../services/consultas';
+  updateIngreso,
+  deleteIngreso,
+  findIngresoById,
+} from "../../../services/ingresos";
+import * as Yup from "yup";
+import ModalFormDermapen from './ModalFormDermapen';
+import { Formik } from 'formik';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import { addZero } from '../../../utils/utils';
-import ModalFormDermapen from './ModalFormDermapen';
-import { createFacial } from '../../../services/faciales';
+import { createAparatologia, updateAparatologia } from '../../../services/aparatolgia';
+import { createFacial, updateFacial } from '../../../services/faciales';
+import { createLaser, updateLaser } from '../../../services/laser';
+import { createDermapen, updateDermapen } from '../../../services/dermapens';
 
 const useStyles = makeStyles(theme => ({
   backdrop: {
@@ -30,43 +41,267 @@ const ModalDermapen = (props) => {
   const {
     open,
     onClose,
+    dermapen,
     empleado,
+    loadDermapens,
     sucursal,
     setOpenAlert,
     setMessage,
-    paciente,
+    setFilterDate,
   } = props;
 
+  const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
+  const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
   const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
-  const dermapenServicioId = process.env.REACT_APP_DERMAPEN_SERVICIO_ID;
-  const dermapenTratamientoId = process.env.REACT_APP_DERMAPEN_TRATAMIENTO_ID;
-  const dermapenAreaId = process.env.REACT_APP_DERMAPEN_AREA_ID;
-	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
+  const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
+  const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
+  const reagendoStatusId = process.env.REACT_APP_REAGENDO_STATUS_ID;
+  const canceloCPServicioId = process.env.REACT_APP_CANCELO_CP_STATUS_ID;
+  const canceloSPServicioId = process.env.REACT_APP_CANCELO_SP_STATUS_ID;
+  const pagoAnticipadoMetodoPagoId = process.env.REACT_APP_PAGO_ANTICIPADO_METODO_PAGO_ID;
+  const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
+  const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
+  const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 
   const [isLoading, setIsLoading] = useState(true);
-  const [medicos, setMedicos] = useState([]);
+  const [horarios, setHorarios] = useState([]);
+  const [doctores, setDoctores] = useState([]);
+  const [tipoCitas, setTipoCitas] = useState([]);
+  const [statements, setStatements] = useState([]);
   const [materiales, setMateriales] = useState([]);
-  const [horarios, setHorarios] = useState([{}]);
-  const [disableDate, setDisableDate] = useState(false);
+  const [previousState, setPreviousState] = useState();
 
   const [openModalPagos, setOpenModalPagos] = useState(false);
+  const [openModalConfirmacion, setOpenModalConfirmacion] = useState(false);
+
+  const fecha_dermapen = new Date(dermapen.fecha_hora);
+  const fecha = `${addZero(fecha_dermapen.getDate())}/${addZero(Number(fecha_dermapen.getMonth()) + 1)}/${addZero(fecha_dermapen.getFullYear())}`;
+  const hora = `${addZero(Number(fecha_dermapen.getHours()))}:${addZero(fecha_dermapen.getMinutes())}`;
 
   const [values, setValues] = useState({
-    fecha_hora: new Date(),
-    tratamientos: [{_id: dermapenTratamientoId}],
-    materiales: [],
+    fecha_hora: dermapen.fecha_hora,
+    fecha_show: fecha_dermapen,
+    materiales: dermapen.materiales,
+    fecha: fecha,
+    hora: hora,
+    fecha_actual: fecha,
+    hora_actual: hora,
+    paciente: dermapen.paciente,
+    paciente_nombre: `${dermapen.paciente.nombres} ${dermapen.paciente.apellidos}`,
+    telefono: dermapen.paciente.telefono,
+    servicio: dermapen.servicio,
+    tratamientos: dermapen.tratamientos,
+    areas: dermapen.areas,
+    numero_sesion: dermapen.numero_sesion,
+    quien_agenda: dermapen.quien_agenda,
+    tipo_cita: dermapen.tipo_cita ? dermapen.tipo_cita._id : '',
+    confirmo: dermapen.confirmo,
+    quien_confirma: dermapen.quien_confirma,
+    promovendedor: dermapen.promovendedor ? dermapen.promovendedor._id : '',
+    cosmetologa: dermapen.cosmetologa ? dermapen.cosmetologa._id : '',
+    status: dermapen.status ? dermapen.status._id : '',
+    precio: dermapen.precio,
+    total: dermapen.total,
+    motivos: dermapen.motivos,
+    observaciones: dermapen.observaciones,
+    medico: dermapen.medico ? dermapen.medico._id : '',
+    tiempo: dermapen.tiempo,
+    pagado: dermapen.pagado,
+    pagos: dermapen.pagos,
+    hora_llegada: dermapen.hora_llegada,
+    hora_aplicacion: dermapen.hora_aplicacion,
+    tratamientos: dermapen.tratamientos,
+    areas: dermapen.areas,
   });
 
-  const dataComplete = values.pagado;
-
-  const loadHorariosByServicio = async (date, servicio) => {
-    const dia = date ? date.getDate() : values.fecha_hora.getDate();
-    const mes = Number(date ? date.getMonth() : values.fecha_hora.getMonth());
-    const anio = date ? date.getFullYear() : values.fecha_hora.getFullYear();
-    const response = await findScheduleByDateAndSucursalAndService(dia, mes, anio, sucursal._id, servicio);
+  const loadHorarios = async () => {
+    const response = await getAllSchedules();
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setHorarios(response.data);
     }
+  }
+
+  const handleChangeFecha = async (date) => {
+    setIsLoading(true);
+    const fechaObservaciones = `${addZero(date.getDate())}/${addZero(Number(date.getMonth() + 1))}/${date.getFullYear()} - ${values.hora} hrs`;
+    await setValues({
+      ...values,
+      nueva_fecha_hora: date,
+      observaciones: fechaObservaciones,
+    });
+    await loadHorarios(date);
+    setIsLoading(false);
+  };
+
+  const handleChangeHora = e => {
+    setIsLoading(true);
+    const hora = (e.target.value).split(':');
+    const date = new Date(values.nueva_fecha_hora);
+    date.setHours(Number(hora[0]));
+    date.setMinutes(hora[1]);
+    date.setSeconds(0);
+    const fechaObservaciones = `${addZero(date.getDate())}/${addZero(Number(date.getMonth() + 1))}/${date.getFullYear()} - ${e.target.value} hrs`;
+    setValues({
+      ...values,
+      nueva_fecha_hora: date,
+      hora: e.target.value,
+      observaciones: fechaObservaciones,
+    });
+    setIsLoading(false);
+  };
+
+  const handleChangeTipoCita = e => {
+    setValues({ ...values, tipo_cita: e.target.value });
+  }
+
+  const handleChangePromovendedor = e => {
+    setValues({ ...values, promovendedor: e.target.value });
+  }
+
+  const handleChangeCosmetologa = e => {
+    setValues({ ...values, cosmetologa: e.target.value });
+  }
+
+  const handleChangeStatus = e => {
+    setPreviousState(values.status);
+    const estado = statements.find(statement => {
+      return statement._id === e.target.value;
+    });
+    setOpenModalConfirmacion(estado.confirmacion);
+    setValues({ ...values, status: e.target.value });
+  }
+
+  const handleChangeObservaciones = e => {
+    setValues({ ...values, observaciones: e.target.value });
+  }
+
+  const handleOnClickActualizarDermapen = async (event, rowData) => {
+    if (rowData.pagado) {
+      if (rowData.status === canceloCPServicioId) {
+        rowData.pagos.forEach(async (pago) => {
+          pago.pago_anticipado = true;
+          const ingreso = await findIngresoById(pago.ingreso);
+          if (`${ingreso.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+            const updateIngresoData = ingreso.data;
+            updateIngresoData.metodo_pago = pagoAnticipadoMetodoPagoId;
+            await updateIngreso(updateIngresoData._id, updateIngresoData);
+            await updatePago(pago._id, pago);
+          }
+        });
+      } else if (rowData.status === canceloSPServicioId) {
+        rowData.pagos.forEach(async (pago) => {
+          await deleteIngreso(pago.ingreso);
+          await deletePago(pago._id);
+        });
+        rowData.pagado = false;
+      }
+    }
+    if (rowData.status._id !== pendienteStatusId) {
+      rowData.quien_confirma_asistencia = empleado._id;
+      if (rowData.status === asistioStatusId) {
+        const dateNow = new Date();
+        rowData.hora_aplicacion = rowData.hora_aplicacion ? rowData.hora_aplicacion : dateNow;
+        rowData.hora_llegada = (rowData.hora_llegada && rowData.hora_llegada !== '--:--') ? rowData.hora_llegada : `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
+      }
+    }
+
+    if (rowData.status === reagendoStatusId) {
+      await updateDermapen(dermapen._id, rowData);
+      rowData.quien_agenda = empleado._id;
+      rowData.sucursal = sucursal;
+      rowData.status = pendienteStatusId;
+      rowData.hora_llegada = '--:--';
+      rowData.hora_atencion = '--:--';
+      rowData.hora_salida = '--:--';
+      rowData.observaciones = `DERMAPEN REAGENDADO ${values.fecha_actual} - ${values.hora_actual} HRS`;
+      rowData.fecha_hora = rowData.nueva_fecha_hora;
+      const response = await createDermapen(rowData);
+
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+        const consecutivo = {
+          consecutivo: response.data.consecutivo,
+          tipo_servicio: dermapen.servicio._id,
+          servicio: response.data._id,
+          sucursal: sucursal._id,
+          fecha_hora: new Date(),
+          status: response.data.status,
+        }
+        const responseConsecutivo = await createConsecutivo(consecutivo);
+        if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+          setOpenAlert(true);
+          setMessage('DERMAPEN REAGENDADO CORRECTAMENTE');
+        }
+      }
+      const dia = addZero(rowData.fecha_hora.getDate());
+      const mes = addZero(rowData.fecha_hora.getMonth());
+      const anio = rowData.fecha_hora.getFullYear();
+      setFilterDate({
+        fecha_show: rowData.fecha_hora,
+        fecha: `${dia}/${mes}/${anio}`
+      });
+      await loadDermapens(rowData.fecha_hora);
+
+    } else {
+      const dia = addZero(rowData.fecha_show.getDate());
+      const mes = addZero(rowData.fecha_show.getMonth());
+      const anio = rowData.fecha_show.getFullYear();
+      setFilterDate({
+        fecha_show: rowData.fecha_show,
+        fecha: `${dia}/${mes}/${anio}`
+      });
+      await updateDermapen(dermapen._id, rowData);
+      await loadDermapens(rowData.fecha_show);
+      setOpenAlert(true);
+      setMessage('DERMAPEN ACTUALIZADO');
+    }
+    onClose();
+  }
+
+  const handleChangeSesion = e => {
+    setValues({ ...values, numero_sesion: e.target.value });
+  };
+
+  const handleChangePrecio = e => {
+    setValues({ ...values, precio: e.target.value });
+  };
+
+  const handleChangeMotivos = e => {
+    setValues({ ...values, motivos: e.target.value });
+  }
+
+  const handleChangeMedico = (e) => {
+    setValues({ ...values, medico: e.target.value });
+  }
+
+  const handleChangeTiempo = e => {
+    setValues({ ...values, tiempo: e.target.value });
+  };
+
+  const handleChangePagado = (e) => {
+    setValues({ ...values, pagado: !values.pagado });
+    setOpenModalPagos(!values.pagado);
+  }
+
+  const handleCloseModalPagos = () => {
+    setOpenModalPagos(false);
+    setValues({ ...values, pagado: false });
+  }
+
+  const handleCloseModalConfirmacion = () => {
+    setOpenModalConfirmacion(false);
+    setValues({ ...values, status: previousState });
+  }
+
+  const handleConfirmModalConfirmacion = () => {
+    setOpenModalConfirmacion(false);
+  }
+
+  const handleGuardarModalPagos = (pagos) => {
+    setValues({
+      ...values,
+      pagos: pagos,
+    });
+    setOpenModalPagos(false);
   }
 
   const handleChangeMateriales = async (items) => {
@@ -78,143 +313,19 @@ const ModalDermapen = (props) => {
     setIsLoading(false);
   }
 
-  const handleClickCrearDermapen = async (event, data) => {
-    const fecha_actual = new Date();
-    data.fecha_hora = fecha_actual;
-    const response = await createCirugia(data);
-    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
-      || `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-      const consecutivo = {
-        consecutivo: response.data.consecutivo,
-        tipo_servicio: dermapenServicioId,
-        servicio: response.data._id,
-        sucursal: data.sucursal,
-        fecha_hora: new Date(),
-        status: response.data.status,
-      }
-      const responseConsecutivo = await createConsecutivo(consecutivo);
-      if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-        setOpenAlert(true);
-        setMessage('CIRUGIA AGREGADA CORRECTAMENTE');
-      }
-    }
-    onClose();
-  }
-
-  const handleChange = (e) => {
-    setValues({
-      ...values,
-      [e.target.name]: e.target.value
-    });
-  }
-
-  const handleChangeTotal = e => {
-    let precio = Number(e.target.value);
-    values.materiales.map(item => {
-      precio -= Number(item.precio);
-    });
-    precio -= Number(values.costo_biopsias);
-    setValues({
-      ...values,
-      total: e.target.value,
-      precio: precio,
-    });
-  };
-
-  const handleChangeFecha = (date) => {
-    setIsLoading(true);
-    setValues({
-      ...values,
-      fecha_hora: date,
-    });
-    loadHorariosByServicio(date, dermapenServicioId);
-    setIsLoading(false);
-  };
-
-  const handleChangeHora = e => {
-    setIsLoading(true);
-    const hora = (e.target.value).split(':');
-    const date = values.fecha_hora;
-    date.setHours(Number(hora[0]));
-    date.setMinutes(hora[1]);
-    date.setSeconds(0);
-    setValues({ ...values, hora: e.target.value, fecha_hora: date });
-    setIsLoading(false);
-  };
-
-
-  const handleCloseModalPagos = () => {
-    setOpenModalPagos(false);
-    setValues({ ...values, pagado: false });
-  }
-
-  const handleGuardarModalPagos = (pagos) => {
-    setValues({
-      ...values,
-      pagado: true,
-      pagos: pagos,
-    });
-    setOpenModalPagos(false);
-  }
-
-  const handleChangePagado = (e) => {
-    //setValues({ ...values, pagado: !values.pagado });
-    setOpenModalPagos(!values.pagado);
-  }
-
   const handleChangeItemPrecio = (e, index) => {
     const newMateriales = values.materiales;
     newMateriales[index].precio = e.target.value;
-    let precio = Number(values.total);
+    let total = Number(values.precio);
     newMateriales.map((item) => {
-      precio -= Number(item.precio);
+      total += Number(item.precio);
     });
-    precio -= Number(values.costo_biopsias);
     setValues({
       ...values,
       materiales: newMateriales,
-      precio: precio,
+      total: total,
     });
   }
-
-  const handleClickAgendar = async (data) => {
-    setIsLoading(true);
-    data.quien_agenda = empleado._id;
-    data.sucursal = sucursal;
-    data.status = pendienteStatusId;
-    data.hora_llegada = '--:--';
-    data.hora_atencion = '--:--';
-    data.hora_salida = '--:--';
-    /*
-    const response = await createFacial(data);
-    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-      const consecutivo = {
-        consecutivo: response.data.consecutivo,
-        tipo_servicio: response.data.servicio,
-        servicio: response.data._id,
-        sucursal: sucursal,
-        fecha_hora: new Date(),
-        status: response.data.status,
-      }
-      const responseConsecutivo = await createConsecutivo(consecutivo);
-      if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-        setOpenAlert(true);
-        setMessage('EL FACIAL SE AGREGO CORRECTAMENTE');
-        setValues({
-          servicio: '',
-          tratamientos: [],
-          medico: '',
-          promovendedor: '',
-          cosmetologa: '',
-          paciente: `${paciente._id}`,
-          precio: '',
-          tipo_cita: {},
-        });
-      }
-    }*/
-
-    setIsLoading(false);
-  };
 
   useEffect(() => {
 
@@ -225,20 +336,45 @@ const ModalDermapen = (props) => {
       }
     }
 
-    const loadMedicos = async () => {
-      const response = await findEmployeesByRolId(medicoRolId);
+    const loadHorariosByServicio = async () => {
+      const date = new Date(dermapen.fecha_hora);
+      const response = await findScheduleByDateAndSucursalAndService(date.getDate(), Number(date.getMonth()), date.getFullYear(), dermapen.sucursal._id, dermapen.servicio._id);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setMedicos(response.data);
+        response.data.push({ hora: values.hora });
+        setHorarios(response.data);
       }
     }
 
+    const loadDoctores = async () => {
+      const response = await findEmployeesByRolId(medicoRolId);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setDoctores(response.data);
+      }
+    }
+
+    const loadTipoCitas = async () => {
+      const response = await showAllTipoCitas();
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setTipoCitas(response.data);
+      }
+      setIsLoading(false);
+    }
+
+    const loadStaus = async () => {
+      const response = await showAllStatus();
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setStatements(response.data);
+      }
+      setIsLoading(false);
+    }
     setIsLoading(true);
     loadMateriales();
-    loadMedicos();
-    loadHorariosByServicio(new Date(), dermapenServicioId);
+    loadHorariosByServicio();
+    loadDoctores();
+    loadTipoCitas();
+    loadStaus();
     setIsLoading(false);
-  }, [dermapenServicioId]);
-
+  }, [dermapen, promovendedorRolId, cosmetologaRolId, medicoRolId]);
 
   return (
     <Fragment>
@@ -248,31 +384,37 @@ const ModalDermapen = (props) => {
             aria-labelledby="simple-modal-title"
             aria-describedby="simple-modal-description"
             open={open}
-            onClose={onClose}
-            empleado={empleado}
-            onClickCrearCirugia={handleClickCrearDermapen}
-            onChange={handleChange}
-            onChangeTotal={handleChangeTotal}
+            onClickCancel={onClose}
+            dermapen={dermapen}
+            values={values}
+            onClickActualizarDermapen={handleOnClickActualizarDermapen}
+            onChangeFecha={(e) => handleChangeFecha(e)}
+            onChangeHora={(e) => handleChangeHora(e)}
+            onChangeTipoCita={(e) => handleChangeTipoCita(e)}
+            onChangeStatus={(e) => handleChangeStatus(e)}
+            onChangeMedico={(e) => handleChangeMedico(e)}
+            onChangeTiempo={(e) => handleChangeTiempo(e)}
+            horarios={horarios}
+            doctores={doctores}
+            tipoCitas={tipoCitas}
+            statements={statements}
+            materiales={materiales}
+            onChangeSesion={handleChangeSesion}
+            onChangePrecio={handleChangePrecio}
+            onChangeMotivos={handleChangeMotivos}
+            onChangeObservaciones={handleChangeObservaciones}
+            onChangePagado={(e) => handleChangePagado(e)}
             openModalPagos={openModalPagos}
             onCloseModalPagos={handleCloseModalPagos}
             onGuardarModalPagos={handleGuardarModalPagos}
-            onChangeMateriales={(e) => handleChangeMateriales(e)}
-            onClickAgendar={handleClickAgendar}
             sucursal={sucursal}
-            materiales={materiales}
-            onChangeItemPrecio={handleChangeItemPrecio}
-            values={values}
-            dataComplete={dataComplete}
-            onChangePagado={(e) => handleChangePagado(e)}
-            tipoServicioId={dermapenServicioId}
-            medicos={medicos}
-            horarios={horarios}
-            onChangeFecha={(e) => handleChangeFecha(e)}
-            onChangeHora={(e) => handleChangeHora(e)}
-            disableDate={disableDate}
-            paciente={paciente} />
-          :
-          <Backdrop className={classes.backdrop} open={isLoading} >
+            empleado={empleado}
+            openModalConfirmacion={openModalConfirmacion}
+            onCloseModalConfirmacion={handleCloseModalConfirmacion}
+            onConfirmModalConfirmacion={handleConfirmModalConfirmacion}
+            onChangeMateriales={(e) => handleChangeMateriales(e)}
+            onChangeItemPrecio={handleChangeItemPrecio} />
+          : <Backdrop className={classes.backdrop} open={isLoading} >
             <CircularProgress color="inherit" />
           </Backdrop>
       }

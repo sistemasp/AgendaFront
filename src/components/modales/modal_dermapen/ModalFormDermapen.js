@@ -1,14 +1,13 @@
 import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid, Divider } from '@material-ui/core';
+import { TextField, FormControl, InputLabel, Select, MenuItem, Grid } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import { CheckCustom } from '../../basic/CheckCustom';
-import ModalPagos from '../modal_pagos';
 import { Multiselect } from 'multiselect-react-dropdown';
-import { toFormatterCurrency } from '../../../utils/utils';
+import ModalConfirmacion from '../modal_confirmacion';
 import { ButtonCustom } from '../../basic/ButtonCustom';
+import { toFormatterCurrency } from '../../../utils/utils';
 
 function getModalStyle() {
   const top = 50;
@@ -18,13 +17,15 @@ function getModalStyle() {
     top: `${top}%`,
     left: `${left}%`,
     transform: `translate(-${top}%, -${left}%)`,
+    overflow: 'scroll',
+    height: '90%',
   };
 }
 
 const useStyles = makeStyles(theme => ({
   paper: {
     position: 'absolute',
-    width: 700,
+    width: 500,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -44,11 +45,6 @@ const useStyles = makeStyles(theme => ({
   label: {
     marginTop: '0px',
     marginBottom: '0px',
-  },
-  labelItemRight: {
-    marginTop: '0px',
-    marginBottom: '0px',
-    textAlign: 'right',
   }
 }));
 
@@ -65,33 +61,32 @@ const ModalFormDermapen = (props) => {
   const {
     values,
     handleSubmit,
-    onClose,
-    onClickCrearCirugia,
-    open,
-    medicos,
-    onChangeDoctors,
-    sucursal,
-    materiales,
-    onChangeMateriales,
-    onChangeItemPrecio,
-    dataComplete,
-    onChangeBiopsia,
-    onClickAgendar,
-    onChange,
     onChangeFecha,
     onChangeHora,
-    openModalPagos,
-    onCloseModalPagos,
-    onGuardarModalPagos,
-    consulta,
-    empleado,
-    tipoServicioId,
-    disableDate,
+    onChangeTiempo,
+    onChangeTipoCita,
+    onChangeStatus,
+    isValid,
+    onClickCancel,
+    materiales,
+    onClickActualizarDermapen,
+    open,
     horarios,
-    paciente,
+    doctores,
+    tipoCitas,
+    statements,
+    onChangeMotivos,
+    onChangeObservaciones,
+    onChangeMedico,
+    empleado,
+    sucursal,
+    openModalConfirmacion,
+    onCloseModalConfirmacion,
+    onConfirmModalConfirmacion,
+    onChangeMateriales,
+    onChangeItemPrecio,
   } = props;
 
-  console.log("DERADHIAD", materiales);
   return (
     <div>
       <Modal
@@ -101,79 +96,76 @@ const ModalFormDermapen = (props) => {
         <div style={modalStyle} className={classes.paper}>
           <form onSubmit={handleSubmit}>
             {
-              openModalPagos ?
-                <ModalPagos
-                  open={openModalPagos}
-                  onClose={onCloseModalPagos}
-                  onGuardarModalPagos={onGuardarModalPagos}
-                  servicio={values}
-                  empleado={empleado}
-                  sucursal={sucursal}
-                  tipoServicioId={tipoServicioId} />
+              openModalConfirmacion ?
+                <ModalConfirmacion
+                  open={openModalConfirmacion}
+                  onClose={onCloseModalConfirmacion}
+                  onConfirm={onConfirmModalConfirmacion}
+                  empleado={empleado} />
                 : ''
             }
             <Grid container spacing={1}>
               <Grid item xs={12}>
-                <h1 className={classes.label}>DERMAPEN</h1>
+                <h2 className={classes.label}>{values.paciente_nombre} ({values.telefono})</h2>
               </Grid>
               <Grid item xs={12}>
-          <h2 className={classes.label}>{`${paciente.nombres} ${paciente.apellidos}`}</h2>
+                <h3 className={classes.label}>Servicio: {values.servicio.nombre}</h3>
               </Grid>
-              <Grid item xs={12} >
+              <Grid item xs={12} className={classes.label}>
+                <h1 className={classes.label}>Total: {toFormatterCurrency(values.total)}</h1>
+              </Grid>
+              <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-hora">Medico</InputLabel>
+                  <InputLabel id="simple-select-outlined-statements">Estado</InputLabel>
                   <Select
-                    labelId="simple-select-outlined-medico"
-                    id="simple-select-outlined-medico"
-                    value={values.medico}
-                    onChange={onChangeDoctors}
-                    label="Medico" >
-                    {medicos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+                    labelId="simple-select-outlined-statements"
+                    id="simple-select-outlined-statements"
+                    value={values.status}
+                    onChange={onChangeStatus}
+                    label="Estado" >
+                    {statements.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                   </Select>
                 </FormControl>
               </Grid>
+              {
+                values.status === reagendoStatusId ?
+                  <Fragment>
+                    <Grid item xs={12} sm={6}>
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardDatePicker
+                          disableToolbar
+                          disablePast
+                          autoOk
+                          variant="inline"
+                          format="dd/MM/yyyy"
+                          margin="normal"
+                          id="date-picker-inline"
+                          label="Fecha"
+                          value={values.nueva_fecha_hora}
+                          onChange={onChangeFecha}
+                          KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                          }}
+                          invalidDateMessage='Selecciona una fecha' />
+                      </MuiPickersUtilsProvider>
+                    </Grid>
 
-              <Grid item xs={6}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <Grid
-                    container
-                    justify="center"
-                    alignItems="center" >
-                    <KeyboardDatePicker
-                      className={classes.button}
-                      disableToolbar
-                      //disablePast
-                      autoOk
-                      disabled={disableDate}
-                      variant="inline"
-                      format="dd/MM/yyyy"
-                      margin="normal"
-                      id="date-picker-inline"
-                      label="FECHA"
-                      value={values.fecha_hora}
-                      onChange={onChangeFecha}
-                      KeyboardButtonProps={{
-                        'aria-label': 'change date',
-                      }}
-                      invalidDateMessage='Selecciona una fecha' />
-                  </Grid>
-                </MuiPickersUtilsProvider>
-              </Grid>
-              <Grid item xs={6}>
-                <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-hora">HORA</InputLabel>
-                  <Select
-                    labelId="simple-select-outlined-hora"
-                    id="simple-select-outlined-hora"
-                    value={values.hora}
-                    onChange={onChangeHora}
-                    disabled={!values.fecha_hora}
-                    label="Hora" >
-                    {console.log("HOFOASFHOAFA", horarios)}
-                    {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
-                  </Select>
-                </FormControl>
-              </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <FormControl variant="outlined" className={classes.formControl}>
+                        <InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
+                        <Select
+                          labelId="simple-select-outlined-hora"
+                          id="simple-select-outlined-hora"
+                          value={values.hora}
+                          onChange={onChangeHora}
+                          label="Hora" >
+                          {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  </Fragment>
+                  : ''
+              }
 
               <Grid item xs={12} >
                 <Multiselect
@@ -188,7 +180,7 @@ const ModalFormDermapen = (props) => {
 
               {
                 values.materiales.map((item, index) =>
-                  <Grid item xs={12} sm={4}>
+                  <Grid item xs={12}>
                     <TextField
                       className={classes.button}
                       name={item.precio}
@@ -199,15 +191,81 @@ const ModalFormDermapen = (props) => {
                       variant="outlined" />
                   </Grid>)
               }
+
+              {
+                values.status === canceloStatusId || values.status === noAsistioStatusId || values.status === reagendoStatusId ?
+                  <Grid item xs={12}>
+                    <TextField
+                      className={classes.textField}
+                      name="motivos"
+                      //helperText={touched.numero_sesion ? errors.numero_sesion : ""}
+                      label="Motivos"
+                      value={values.motivos}
+                      onChange={onChangeMotivos}
+                      variant="outlined" />
+                  </Grid> : ''
+              }
+
               <Grid item xs={12}>
-                <br />
+                {
+                  /* values.medico*/ false ?
+                    <h3 className={classes.label}>MÉDICO: {values.medico.nombre}</h3> :
+                    <FormControl variant="outlined" className={classes.formControl}>
+                      <InputLabel id="simple-select-outlined-hora">MÉDICO</InputLabel>
+                      <Select
+                        labelId="simple-select-outlined-medico"
+                        id="simple-select-outlined-medico"
+                        value={values.medico}
+                        onChange={onChangeMedico}
+                        label="MÉDICO" >
+                        {doctores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
+                      </Select>
+                    </FormControl>
+                }
+              </Grid>
+              <Grid item xs={12}>
+                <h2 className={classes.label}>{values.fecha_actual} - {values.hora_actual} hrs</h2>
               </Grid>
 
               <Grid item xs={12}>
-                <h2 className={classes.labelItemRight}>PRECIO DERMAPEN: {toFormatterCurrency(values.precio)}</h2>
+                <TextField
+                  className={classes.textField}
+                  name="tiempo"
+                  //helperText={touched.tiempo ? errors.tiempo : ""}
+                  label="Tiempo (minutos)"
+                  value={values.tiempo}
+                  type='Number'
+                  onChange={onChangeTiempo}
+                  variant="outlined" />
               </Grid>
+
               <Grid item xs={12}>
-                <h1 className={classes.labelItemRight}>TOTAL A PAGAR: {toFormatterCurrency(values.total)}</h1>
+                {
+                  /* values.tipo_cita */ false ?
+                    <h3 className={classes.label}>Tipo cita: {values.tipo_cita.nombre}</h3> :
+                    <FormControl variant="outlined" className={classes.formControl}>
+                      <InputLabel id="simple-select-outlined-tipo-cita">Tipo cita</InputLabel>
+                      <Select
+                        labelId="simple-select-outlined-tipo-cita"
+                        id="simple-select-outlined-tipo-cita"
+                        value={values.tipo_cita}
+                        onChange={onChangeTipoCita}
+                        label="Tipo cita" >
+                        {tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
+                      </Select>
+                    </FormControl>
+                }
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  className={classes.textField}
+                  name="observaciones"
+                  //helperText={touched.observaciones ? errors.observaciones : ""}
+                  label="Observaciones"
+                  value={values.observaciones}
+                  onChange={onChangeObservaciones}
+                  variant="outlined" />
               </Grid>
 
               <Grid item xs={12} sm={6}>
@@ -215,16 +273,15 @@ const ModalFormDermapen = (props) => {
                   className={classes.button}
                   color="primary"
                   variant="contained"
-                  onClick={() => onClickAgendar(values)}
-                  text='AGENDAR' />
+                  onClick={(e) => onClickActualizarDermapen(e, values)}
+                  text='GUARDAR' />
               </Grid>
-
               <Grid item xs={12} sm={6}>
                 <ButtonCustom
                   className={classes.button}
                   color="secondary"
                   variant="contained"
-                  onClick={onClose}
+                  onClick={onClickCancel}
                   text='CANCELAR' />
               </Grid>
             </Grid>

@@ -8,16 +8,12 @@ import {
 	showAllMaterials,
 } from "../../services";
 import {
-	findTreatmentByServicio,
-} from "../../services/tratamientos";
-import {
-	createFacial,
-	findFacialByDateAndSucursal,
-	updateFacial
-} from "../../services/faciales";
+	createDermapen,
+	findDermapenByDateAndSucursal,
+	updateDermapen
+} from "../../services/dermapens";
 import {
 	findAreaById,
-	findAreasByTreatmentServicio,
 } from "../../services/areas";
 import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
@@ -90,7 +86,7 @@ const AgendarDermapen = (props) => {
 	const [values, setValues] = useState({
 		servicio: dermapenServicioId,
 		fecha_hora: new Date(),
-		tratamientos: [],
+		tratamientos: [{ _id: dermapenTratamientoId }],
 		areas: [],
 		paciente: `${paciente._id}`,
 		precio: 0,
@@ -99,11 +95,11 @@ const AgendarDermapen = (props) => {
 		observaciones: '',
 		materiales: [],
 	});
-	const [faciales, setFaciales] = useState([]);
+	const [dermapens, setDermapens] = useState([]);
 	const [areas, setAreas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
 	const [openModalProxima, setOpenModalProxima] = useState(false);
-	const [cita, setCita] = useState();
+	const [dermapen, setDermapen] = useState();
 	const [openModalPagos, setOpenModalPagos] = useState(false);
 	const [openModalImprimirCita, setOpenModalImprimirCita] = useState(false);
 	const [datosImpresion, setDatosImpresion] = useState();
@@ -200,12 +196,12 @@ const AgendarDermapen = (props) => {
 			fecha_show: date,
 			fecha: `${dia}/${mes}/${anio}`
 		});
-		await loadFaciales(date);
+		await loadDermapens(date);
 		setIsLoading(false);
 	};
 
-	const loadFaciales = async (filterDate) => {
-		const response = await findFacialByDateAndSucursal(filterDate.getDate(), filterDate.getMonth(), filterDate.getFullYear(), sucursal);
+	const loadDermapens = async (filterDate) => {
+		const response = await findDermapenByDateAndSucursal(filterDate.getDate(), filterDate.getMonth(), filterDate.getFullYear(), sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
 				item.folio = generateFolio(item);
@@ -223,7 +219,7 @@ const AgendarDermapen = (props) => {
 					return `${area.nombre}, `;
 				});
 			});
-			setFaciales(response.data);
+			setDermapens(response.data);
 		}
 	}
 
@@ -251,7 +247,7 @@ const AgendarDermapen = (props) => {
 		data.tipo_cita = data.medico._id === medicoDirectoId ? tipoCitaNoAplicaId : data.tipo_cita;
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 
-		const response = await createFacial(data);
+		const response = await createDermapen(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			const consecutivo = {
 				consecutivo: response.data.consecutivo,
@@ -266,20 +262,19 @@ const AgendarDermapen = (props) => {
 				setOpenAlert(true);
 				setMessage('EL DERMAPEN SE AGREGO CORRECTAMENTE');
 				setValues({
-					servicio: '',
-					tratamientos: [],
+					materiales: [],
 					medico: '',
 					promovendedor: '',
 					cosmetologa: '',
 					paciente: `${paciente._id}`,
 					precio: '',
+					total: '',
 					tipo_cita: {},
 				});
 				setTratamientos([]);
 				setAreas([]);
-				setDisableDate(true);
 				setPacienteAgendado({});
-				loadFaciales(data.fecha_hora);
+				loadDermapens(data.fecha_hora);
 				setFilterDate({
 					fecha_show: data.fecha_hora,
 					fecha: dateToString(data.fecha_hora),
@@ -325,8 +320,9 @@ const AgendarDermapen = (props) => {
 	};
 
 	const handleOnClickEditarCita = async (event, rowData) => {
+		console.log("FJOSDAFOSDOJFS", rowData );
 		setIsLoading(true);
-		setCita(rowData);
+		setDermapen(rowData);
 		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio._id);
 		setOpenModal(true);
 		setIsLoading(false);
@@ -334,14 +330,14 @@ const AgendarDermapen = (props) => {
 
 	const handleOnClickNuevaCita = async (event, rowData) => {
 		setIsLoading(true);
-		setCita(rowData);
+		setDermapen(rowData);
 		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio._id);
 		setOpenModalProxima(true);
 		setIsLoading(false);
 	}
 
 	const handleClickVerPagos = (event, rowData) => {
-		setCita(rowData);
+		setDermapen(rowData);
 		setOpenModalPagos(true);
 	}
 
@@ -361,13 +357,13 @@ const AgendarDermapen = (props) => {
 	const actions = [
 		{
 			icon: PrintIcon,
-			tooltip: 'Imprimir',
+			tooltip: 'IMPRIMIR',
 			onClick: handlePrint
 		},
 		//new Date(anio, mes - 1, dia) < filterDate.fecha_hora  ? 
 		{
 			icon: EditIcon,
-			tooltip: 'Editar cita',
+			tooltip: 'EDITAR DERMAPEN',
 			onClick: handleOnClickEditarCita
 		}, //: ''
 		rowData => (
@@ -380,7 +376,7 @@ const AgendarDermapen = (props) => {
 		rowData => (
 			rowData.status._id === atendidoStatusId ? {
 				icon: EventAvailableIcon,
-				tooltip: 'NUEVA CITA',
+				tooltip: 'NUEVO DERMAPEN',
 				onClick: handleOnClickNuevaCita
 			} : ''
 		),
@@ -388,8 +384,8 @@ const AgendarDermapen = (props) => {
 
 	const handleGuardarModalPagos = async (servicio) => {
 		servicio.pagado = servicio.pagos.length > 0;
-		await updateFacial(servicio._id, servicio);
-		await loadFaciales(new Date(servicio.fecha_hora));
+		await updateDermapen(servicio._id, servicio);
+		await loadDermapens(new Date(servicio.fecha_hora));
 		setOpenModalPagos(false);
 	}
 
@@ -405,21 +401,20 @@ const AgendarDermapen = (props) => {
 	const handleChangeItemPrecio = (e, index) => {
 		const newMateriales = values.materiales;
 		newMateriales[index].precio = e.target.value;
-		let precio = Number(values.total);
+		let total = Number(values.precio);
 		newMateriales.map((item) => {
-			precio -= Number(item.precio);
+			total += Number(item.precio);
 		});
-		precio -= Number(values.costo_biopsias);
 		setValues({
 			...values,
 			materiales: newMateriales,
-			precio: precio,
+			total: total,
 		});
 	}
 
 	useEffect(() => {
-		const loadFaciales = async () => {
-			const response = await findFacialByDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
+		const loadDermapens = async () => {
+			const response = await findDermapenByDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
 					item.folio = generateFolio(item);
@@ -437,7 +432,7 @@ const AgendarDermapen = (props) => {
 						return `${area.nombre}, `;
 					});
 				});
-				setFaciales(response.data);
+				setDermapens(response.data);
 			}
 			setIsLoading(false);
 		}
@@ -445,9 +440,17 @@ const AgendarDermapen = (props) => {
 		const findDermapen = async () => {
 			const response = await findAreaById(dermapenAreaId);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				const dermapen = response.data;
+				const precio =
+					sucursal === sucursalManuelAcunaId ? dermapen.precio_ma // Precio Manuel Acuña
+						: (sucursal === sucursalOcciId ? dermapen.precio_oc // Precio Occidental
+							: (sucursal === sucursalFedeId ? dermapen.precio_fe // Precio Federalismo
+								: 0)); // Error
 				setValues({
 					...values,
-					areas: [response.data]
+					areas: [dermapen],
+					total: precio,
+					precio: precio,
 				});
 			}
 		}
@@ -482,13 +485,15 @@ const AgendarDermapen = (props) => {
 
 		setIsLoading(true);
 		findDermapen();
-		loadFaciales();
+		loadDermapens();
 		loadHorariosByServicio(new Date(), dermapenServicioId);
 		loadPromovendedores();
 		loadMedicos();
 		loadMateriales();
 		loadMedios();
 	}, [sucursal]);
+
+	console.log("FSDFSDOFJSDF", values);
 
 	return (
 		<Fragment>
@@ -519,13 +524,13 @@ const AgendarDermapen = (props) => {
 								titulo={`DERMAPEN (${dateToString(filterDate.fecha_show)})`}
 								columns={columns}
 								options={options}
-								citas={faciales}
+								dermapens={dermapens}
 								actions={actions}
-								cita={cita}
+								dermapen={dermapen}
 								openModal={openModal}
 								empleado={empleado}
 								onClickCancel={handleCloseModal}
-								loadFaciales={loadFaciales}
+								loadDermapens={loadDermapens}
 								medicos={medicos}
 								tipoCitas={tipoCitas}
 								medios={medios}
