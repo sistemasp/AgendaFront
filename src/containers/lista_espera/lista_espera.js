@@ -33,6 +33,7 @@ export const ListaEsperaContainer = (props) => {
     cabinas,
     listaEsperaConsultas,
     listaEsperaFaciales,
+    listaEsperaDermapens,
     listaEsperaLasers,
     listaEsperaAparatologias,
     listaEsperaCirugias,
@@ -65,7 +66,7 @@ export const ListaEsperaContainer = (props) => {
   } = props;
 
   const listaEsperaSalaCirugia = [...listaEsperaEstetica, ...listaEsperaCirugias];
-  const listaEsperaTratamientos = [...listaEsperaFaciales, ...listaEsperaLasers, ...listaEsperaAparatologias];
+  const listaEsperaTratamientos = [...listaEsperaFaciales, ...listaEsperaLasers, ...listaEsperaAparatologias, ...listaEsperaDermapens];
 
   return (
     <Fragment>

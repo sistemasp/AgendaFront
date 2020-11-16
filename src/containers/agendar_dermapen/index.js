@@ -129,6 +129,7 @@ const AgendarDermapen = (props) => {
 		{ title: 'Tipo Cita', field: 'tipo_cita.nombre' },
 		{ title: 'Estado', field: 'status.nombre' },
 		{ title: 'Precio', field: 'precio_moneda' },
+		{ title: 'Total', field: 'total_moneda' },
 		{ title: 'Tiempo (minutos)', field: 'tiempo' },
 		{ title: 'Observaciones', field: 'observaciones' },
 		{ title: 'Hora llegada', field: 'hora_llegada' },
@@ -208,6 +209,7 @@ const AgendarDermapen = (props) => {
 				const fecha = new Date(item.fecha_hora);
 				item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);
+				item.total_moneda = toFormatterCurrency(item.total);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
@@ -421,6 +423,7 @@ const AgendarDermapen = (props) => {
 					const fecha = new Date(item.fecha_hora);
 					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
+					item.total_moneda = toFormatterCurrency(item.total);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';

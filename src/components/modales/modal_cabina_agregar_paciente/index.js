@@ -3,8 +3,6 @@ import * as Yup from "yup";
 import { Formik } from 'formik';
 import {
   findCabinaBySucursalIdAndFree,
-  findDateById,
-  updateDate,
   updateCabina,
 } from '../../../services';
 import { findFacialById, updateFacial } from '../../../services/faciales';
@@ -12,6 +10,7 @@ import { findLaserById, updateLaser } from '../../../services/laser';
 import { findAparatologiaById, updateAparatologia } from '../../../services/aparatolgia';
 import { addZero } from '../../../utils/utils';
 import ModalFormCabinaAgregarPaciente from './ModalFormCabinaAgregarPaciente';
+import { findDermapenById, updateDermapen } from '../../../services/dermapens';
 
 const validationSchema = Yup.object({
   nombre: Yup.string("Ingresa los nombres")
@@ -44,6 +43,7 @@ const ModalCabinaAgregarPaciente = (props) => {
   const facialServicioId = process.env.REACT_APP_FACIAL_SERVICIO_ID;
   const laserServicioId = process.env.REACT_APP_LASER_SERVICIO_ID;
   const aparatologiaServicioId = process.env.REACT_APP_APARATOLOGIA_SERVICIO_ID;
+  const dermapenServicioId = process.env.REACT_APP_DERMAPEN_SERVICIO_ID;
 
   useEffect(() => {
     const loadCabinasDisponibles = async () => {
@@ -65,6 +65,9 @@ const ModalCabinaAgregarPaciente = (props) => {
       case facialServicioId:
         responseCita = await findFacialById(servicio);
         break;
+      case dermapenServicioId:
+        responseCita = await findDermapenById(servicio);
+        break;
       case laserServicioId:
         responseCita = await findLaserById(servicio);
         break;
@@ -84,6 +87,9 @@ const ModalCabinaAgregarPaciente = (props) => {
         switch (tipo_servicio) {
           case facialServicioId:
             responseCita = await updateFacial(cita._id, updateCita);
+            break;
+          case dermapenServicioId:
+            responseCita = await updateDermapen(cita._id, updateCita);
             break;
           case laserServicioId:
             responseCita = await updateLaser(cita._id, updateCita);
