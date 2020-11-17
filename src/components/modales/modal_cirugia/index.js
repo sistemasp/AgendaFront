@@ -4,6 +4,7 @@ import {
   showAllMaterials,
   createConsecutivo,
   createBiopsia,
+  findScheduleByDateAndSucursalAndService,
 } from "../../../services";
 import {
   createCirugia,
@@ -43,6 +44,7 @@ const ModalCirugia = (props) => {
   const [patologos, setPatologos] = useState([]);
 
   const [openModalPagos, setOpenModalPagos] = useState(false);
+  const [horarios, setHorarios] = useState([]);
 
   const [values, setValues] = useState({
     _id: cirugia._id,
@@ -75,28 +77,6 @@ const ModalCirugia = (props) => {
   const biopsiaServicioId = process.env.REACT_APP_BIOPSIA_SERVICIO_ID;
 
   const dataComplete = values.pagado;
-
-  useEffect(() => {
-
-    const loadMateriales = async () => {
-      const response = await showAllMaterials();
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setMateriales(response.data);
-      }
-    }
-
-    const loadPatologos = async () => {
-      const response = await findEmployeesByRolId(patologoRolId);
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setPatologos(response.data);
-      }
-    }
-
-    setIsLoading(true);
-    loadMateriales();
-    loadPatologos();
-    setIsLoading(false);
-  }, []);
 
   const handleChangeMateriales = async (items) => {
     setIsLoading(true);
@@ -255,6 +235,53 @@ const ModalCirugia = (props) => {
     });
   }
 
+  const loadHorariosByServicio = async () => {
+    const date = new Date(consulta.fecha_hora);
+    const response = await findScheduleByDateAndSucursalAndService(date.getDate(), Number(date.getMonth()), date.getFullYear(), consulta.sucursal._id, consulta.servicio._id);
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      response.data.push({ hora: values.hora });
+      setHorarios(response.data);
+    }
+  }
+
+  const handleChangeFecha = async (date) => {
+    setIsLoading(true);
+    const fechaObservaciones = `${addZero(date.getDate())}/${addZero(Number(date.getMonth() + 1))}/${date.getFullYear()} - ${values.hora} hrs`;
+    await setValues({
+      ...values,
+      nueva_fecha_hora: date,
+      observaciones: fechaObservaciones,
+    });
+    await loadHorariosByServicio(date);
+    setIsLoading(false);
+  };
+  
+
+  useEffect(() => {
+    
+    
+
+    const loadMateriales = async () => {
+      const response = await showAllMaterials();
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setMateriales(response.data);
+      }
+    }
+
+    const loadPatologos = async () => {
+      const response = await findEmployeesByRolId(patologoRolId);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setPatologos(response.data);
+      }
+    }
+
+    setIsLoading(true);
+    loadMateriales();
+    loadPatologos();
+    loadHorariosByServicio();
+    setIsLoading(false);
+  }, []);
+
   return (
     <Fragment>
       {
@@ -267,6 +294,7 @@ const ModalCirugia = (props) => {
             consulta={consulta}
             empleado={empleado}
             onClickCrearCirugia={handleClickCrearCirugia}
+            onChangeFecha={(e) => handleChangeFecha(e)}
             onChange={handleChange}
             onChangeTotal={handleChangeTotal}
             openModalPagos={openModalPagos}
@@ -278,6 +306,7 @@ const ModalCirugia = (props) => {
             onChangeItemPrecio={handleChangeItemPrecio}
             values={values}
             dataComplete={dataComplete}
+            horarios={horarios}
             onChangePagado={(e) => handleChangePagado(e)}
             onChangeBiopsia={(e) => handleChangeBiopsia(e)}
             onChangeCostoBiopsias={handleChangeCostoBiopsias}

@@ -505,10 +505,10 @@ const AgendarConsulta = (props) => {
 		}, //: ''
 		rowData => {
 			return (rowData.status._id === enProcedimientoStatusId || rowData.status._id === enConsultorioStatusId
-				|| rowData.status._id === enCabinaStatusId)
+				|| rowData.status._id === enCabinaStatusId || rowData.status._id === atendidoStatusId)
 				? {
 					icon: LocalHospitalIcon,
-					tooltip: 'PASAR A CIRUGIA',
+					tooltip: 'AGENDAR CIRUGIA',
 					onClick: handleClickCirugia
 				} : ''
 		},

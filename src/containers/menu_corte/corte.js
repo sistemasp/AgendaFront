@@ -33,9 +33,11 @@ export const CorteContainer = (props) => {
   const {
     tituloIngreso,
     tituloEgreso,
+    tituloPagoAnticipado,
     columnsIngreso,
     columnsEgreso,
     dataIngresos,
+    dataPagosAnticipados,
     dataEgresos,
     options,
     openModal,
@@ -199,6 +201,16 @@ export const CorteContainer = (props) => {
             <h1>{toFormatterCurrency(totalIngresos)}</h1>
           </Grid>
         </Grid>
+
+        <Grid item xs={12} sm={8}>
+          <TableComponent
+            titulo={tituloPagoAnticipado}
+            columns={columnsIngreso}
+            data={dataPagosAnticipados}
+            options={options}
+            detailPanel={detailPanelIngreso} />
+        </Grid>
+
         <Grid item xs={12} sm={8}>
           <TableComponent
             titulo={tituloEgreso}

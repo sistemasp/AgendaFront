@@ -194,7 +194,7 @@ const ModalConsulta = (props) => {
     setIsLoading(true);
     const hora = (e.target.value).split(':');
     const date = new Date(values.nueva_fecha_hora);
-    date.setHours(Number(hora[0])); // -5 por zona horaria
+    date.setHours(Number(hora[0]));
     date.setMinutes(hora[1]);
     date.setSeconds(0);
     const fechaObservaciones = `${addZero(date.getDate())}/${addZero(Number(date.getMonth() + 1))}/${date.getFullYear()} - ${e.target.value} hrs`;

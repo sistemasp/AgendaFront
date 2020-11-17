@@ -9,7 +9,7 @@ import {
   showAllTipoIngresos,
 } from '../../services';
 import {
-  showIngresosTodayBySucursalAndHoraAplicacion,
+  showIngresosTodayBySucursalAndHoraAplicacion, showIngresosTodayBySucursalAndHoraAplicacionPA,
 } from '../../services/ingresos';
 import {
   showEgresosTodayBySucursalAndHoraAplicacion,
@@ -57,8 +57,10 @@ const Corte = (props) => {
   const [openModalImprimir, setOpenModalInmprimir] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
   const [dataIngresos, setDataIngresos] = useState([]);
+  const [dataPagosAnticipados, setDataPagosAnticipados] = useState([]);
   const [dataEgresos, setDataEgresos] = useState([]);
   const [ingresos, setIngresos] = useState([]);
+  const [pagosAnticipados, setPagosAnticipados] = useState([]);
   const [egresos, setEgresos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState('');
@@ -243,6 +245,58 @@ const Corte = (props) => {
     setDataIngresos(dataIngresosTemp);
   }
 
+  const loadDataPagosAnticipados = async (tipoIngresos, ingresos, metodoPagos) => {
+
+    const dataIngresosTemp = [];
+    metodoPagos.map((metodoPago) => {
+
+      const tipoIngresosDetalles = [];
+      tipoIngresos.map((tipoIngreso) => {
+
+        const ingresosPorTipo = [];
+        let totalTipoIngreso = 0;
+
+        ingresos.forEach(ingreso => {
+          if (ingreso.metodo_pago._id === metodoPago._id) {
+            if (ingreso.tipo_ingreso._id === tipoIngreso._id) {
+              totalTipoIngreso += Number(ingreso.cantidad);
+              const date = new Date(ingreso.create_date);
+              ingreso.hora = `${addZero(date.getHours())}:${addZero(date.getMinutes())}`;
+              ingresosPorTipo.push(ingreso);
+            }
+          }
+        });
+
+        if (totalTipoIngreso !== 0) {
+          const tipoIngresoDetalle = {
+            tipo_ingreso: tipoIngreso.nombre,
+            total: totalTipoIngreso,
+            total_moneda: toFormatterCurrency(totalTipoIngreso),
+            cantidad_ingresos: ingresosPorTipo.length,
+            ingresos: ingresosPorTipo,
+          }
+
+          tipoIngresosDetalles.push(tipoIngresoDetalle);
+        }
+      });
+
+      let total = 0;
+      tipoIngresosDetalles.forEach(tipoIngresoDetalle => {
+        return total += Number(tipoIngresoDetalle.total);
+      });
+
+      const dataIngreso = {
+        metodo_pago: metodoPago.nombre,
+        total: total,
+        total_moneda: toFormatterCurrency(total),
+        tipo_ingresos_detalles: tipoIngresosDetalles,
+      }
+
+      dataIngresosTemp.push(dataIngreso);
+    });
+    setDataPagosAnticipados(dataIngresosTemp);
+  }
+
   const loadDataEgresos = async (egresos, tipoEgresos) => {
 
     const dataEgresosTemp = [];
@@ -283,6 +337,19 @@ const Corte = (props) => {
     }
   }
 
+  const loadPagosAnticipados = async (tipoIngresos, metodoPagos, hora_apertura, hora_cierre) => {
+    const response = await showIngresosTodayBySucursalAndHoraAplicacionPA(sucursal, hora_apertura, hora_cierre ? hora_cierre : new Date());
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      const data = response.data;
+      data.map((item) => {
+        item.cantidad_moneda = toFormatterCurrency(item.cantidad);
+      });
+      setPagosAnticipados(data);
+      await loadDataPagosAnticipados(tipoIngresos, data, metodoPagos);
+      setIsLoading(false);
+    }
+  }
+
   const loadEgresos = async (tipoEgresos, hora_apertura, hora_cierre) => {
     const response = await showEgresosTodayBySucursalAndHoraAplicacion(sucursal, hora_apertura, hora_cierre ? hora_cierre : new Date());
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -301,6 +368,7 @@ const Corte = (props) => {
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       const metodoPagos = response.data;
       await loadIngresos(tipoIngresos, metodoPagos, hora_apertura, hora_cierre);
+      await loadPagosAnticipados(tipoIngresos, metodoPagos, hora_apertura, hora_cierre);
     }
   }
 
@@ -320,7 +388,6 @@ const Corte = (props) => {
     }
   }
 
-  console.log("FHSDJFSOJFOSD", corte);
   const handleOpenNuevoIngreso = () => {
     setOpenModalNuevoIngreso(true);
   };
@@ -421,6 +488,7 @@ const Corte = (props) => {
             columnsIngreso={columnsIngreso}
             columnsEgreso={columnsEgreso}
             tituloIngreso='INGRESOS BRUTOS'
+            tituloPagoAnticipado='PAGOS ANTICIPADOS'
             tituloEgreso='EGRESOS'
             options={options}
             openModalNuevoIngreso={openModalNuevoIngreso}
@@ -428,6 +496,7 @@ const Corte = (props) => {
             openModalImprimir={openModalImprimir}
             dataIngresos={dataIngresos}
             dataEgresos={dataEgresos}
+            dataPagosAnticipados={dataPagosAnticipados}
             handleOpenNuevoIngreso={handleOpenNuevoIngreso}
             handleOpenNuevoEgreso={handleOpenNuevoEgreso}
             handleOpenImprimir={handleOpenImprimir}

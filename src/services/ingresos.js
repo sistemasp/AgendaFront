@@ -41,6 +41,18 @@ export const showIngresosTodayBySucursalAndHoraAplicacion = async (sucursalId, h
     }
 }
 
+export const showIngresosTodayBySucursalAndHoraAplicacionPA = async (sucursalId, hora_apertura, hora_cierre) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/ingreso/sucursal/${sucursalId}/apertura/${hora_apertura}/cierre/${hora_cierre}/pa`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('showIngresosTodayBySucursalAndHoraAplicacionPA', error);
+    }
+}
+
 export const findIngresoById = async (ingresoId) => {
     try {
         const response = await axios({
@@ -50,6 +62,18 @@ export const findIngresoById = async (ingresoId) => {
         return response;
     } catch (error) {
         console.log('findIngresoById', error);
+    }
+}
+
+export const findIngresoByPago = async (pagoId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/ingreso/pago/${pagoId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findIngresoByPago', error);
     }
 }
 

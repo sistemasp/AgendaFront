@@ -9,7 +9,7 @@ import {
   updatePago,
 } from '../../../services';
 import {
-  createIngreso,
+  createIngreso, findIngresoById, findIngresoByPago, updateIngreso,
 } from '../../../services/ingresos';
 import { addZero, generateFolio } from '../../../utils/utils';
 import ModalFormPago from './ModalFormPago';
@@ -156,7 +156,6 @@ const ModalPago = (props) => {
     rowData.sucursal = sucursal;
     rowData.servicio = servicio._id;
     rowData.tipo_servicio = tipoServicioId;
-    rowData.porcentaje_descuento = `${rowData.porcentaje_descuento} %`;
     rowData.hora_aplicacion = servicio.hora_aplicacion;
 
     let tipoIngreso = '';
@@ -194,6 +193,7 @@ const ModalPago = (props) => {
     const create_date = new Date();
     create_date.setHours(create_date.getHours());
 
+    let response;
     const ingreso = {
       create_date: create_date,
       hora_aplicacion: servicio.hora_aplicacion,
@@ -202,14 +202,29 @@ const ModalPago = (props) => {
       cantidad: rowData.total,
       tipo_ingreso: tipoIngreso,
       sucursal: sucursal,
-      metodo_pago: rowData.pago_anticipado ? pagoAnticipadoMetodoPagoId : rowData.metodo_pago,
+      metodo_pago: rowData.metodo_pago,
+      pago_anticipado: rowData.pago_anticipado,
     }
-    const response = await createIngreso(ingreso);
-    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-      rowData.ingreso = response.data._id;
+    const resExistIngreso = await findIngresoByPago(pago._id);
+    if (`${resExistIngreso.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      const existIngreso = resExistIngreso.data;
+
+      if (existIngreso) {
+        response = await updateIngreso(existIngreso._id, ingreso);
+      } else {
+        response = await createIngreso(ingreso);
+      }
+    }
+
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED
+      || `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      const resIngreso = response.data;
+      rowData.ingreso = resIngreso._id;
       const res = pago._id ? await updatePago(pago._id, rowData) : await createPago(rowData);
       if (`${res.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
         || `${res.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+        resIngreso.pago = res.data._id;
+        await updateIngreso(resIngreso._id, resIngreso);
         onClose();
         loadPagos();
       }
