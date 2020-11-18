@@ -173,7 +173,6 @@ const AgendarLaser = (props) => {
 	}
 
 	const loadHorariosByServicio = async (date, servicio) => {
-		console.log("SERSORJSOJARA", servicio);
 		const dia = date ? date.getDate() : values.fecha_hora.getDate();
 		const mes = Number(date ? date.getMonth() : values.fecha_hora.getMonth());
 		const anio = date ? date.getFullYear() : values.fecha_hora.getFullYear();

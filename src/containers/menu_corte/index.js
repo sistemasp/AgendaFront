@@ -223,8 +223,9 @@ const Corte = (props) => {
             cantidad_ingresos: ingresosPorTipo.length,
             ingresos: ingresosPorTipo,
           }
-
-          tipoIngresosDetalles.push(tipoIngresoDetalle);
+          if (tipoIngresoDetalle.total > 0) {
+            tipoIngresosDetalles.push(tipoIngresoDetalle);
+          }
         }
       });
 
@@ -239,8 +240,9 @@ const Corte = (props) => {
         total_moneda: toFormatterCurrency(total),
         tipo_ingresos_detalles: tipoIngresosDetalles,
       }
-
-      dataIngresosTemp.push(dataIngreso);
+      if (dataIngreso.total > 0) {
+        dataIngresosTemp.push(dataIngreso);
+      }
     });
     setDataIngresos(dataIngresosTemp);
   }
@@ -276,7 +278,9 @@ const Corte = (props) => {
             ingresos: ingresosPorTipo,
           }
 
-          tipoIngresosDetalles.push(tipoIngresoDetalle);
+          if (tipoIngresoDetalle.total > 0) {
+            tipoIngresosDetalles.push(tipoIngresoDetalle);
+          }
         }
       });
 
@@ -292,7 +296,9 @@ const Corte = (props) => {
         tipo_ingresos_detalles: tipoIngresosDetalles,
       }
 
-      dataIngresosTemp.push(dataIngreso);
+      if (dataIngreso.total > 0) {
+        dataIngresosTemp.push(dataIngreso);
+      }
     });
     setDataPagosAnticipados(dataIngresosTemp);
   }
@@ -319,7 +325,9 @@ const Corte = (props) => {
         total: total,
         total_moneda: toFormatterCurrency(total),
       }
-      dataEgresosTemp.push(dataEgreso);
+      if (dataEgreso > 0) {
+        dataEgresosTemp.push(dataEgreso);
+      }
     });
     setDataEgresos(dataEgresosTemp);
   }
@@ -436,6 +444,7 @@ const Corte = (props) => {
       create_date: create_date,
       turno: turno,
       ingresos: ingresos,
+      pagos_anticipados: pagosAnticipados,
       egresos: egresos,
       recepcionista: empleado,
       sucursal: sucursal,
@@ -451,6 +460,7 @@ const Corte = (props) => {
   const handleGenerarCorte = async () => {
     corte.egresos = egresos;
     corte.ingresos = ingresos;
+    corte.pagos_anticipados = pagosAnticipados;
     corte.generado = true;
     const response = await updateCorte(corte._id, corte);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {

@@ -113,9 +113,8 @@ const ModalConsulta = (props) => {
   const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
   const reagendoStatusId = process.env.REACT_APP_REAGENDO_STATUS_ID;
   const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
-  const canceloCPServicioId = process.env.REACT_APP_CANCELO_CP_STATUS_ID;
-  const canceloSPServicioId = process.env.REACT_APP_CANCELO_SP_STATUS_ID;
-  const pagoAnticipadoMetodoPagoId = process.env.REACT_APP_PAGO_ANTICIPADO_METODO_PAGO_ID;
+  const canceloCPStatusId = process.env.REACT_APP_CANCELO_CP_STATUS_ID;
+  const canceloSPStatusId = process.env.REACT_APP_CANCELO_SP_STATUS_ID;
 
   useEffect(() => {
 
@@ -216,7 +215,6 @@ const ModalConsulta = (props) => {
   }
 
   const handleChangeStatus = e => {
-    console.log(e.target.value === asistioStatusId);
     if (e.target.value === asistioStatusId) {
       const hora_aplicacion = values.hora_aplicacion ? values.hora_aplicacion : new Date();
       setValues({ ...values, hora_aplicacion: hora_aplicacion });
@@ -235,18 +233,18 @@ const ModalConsulta = (props) => {
 
   const handleOnClickActualizarCita = async (event, rowData) => {
     if (rowData.pagado) {
-      if (rowData.status === canceloCPServicioId) {
+      if (rowData.status === canceloCPStatusId) {
         rowData.pagos.forEach(async (pago) => {
           pago.pago_anticipado = true;
           const ingreso = await findIngresoById(pago.ingreso);
           if (`${ingreso.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
             const updateIngresoData = ingreso.data;
-            updateIngresoData.metodo_pago = pagoAnticipadoMetodoPagoId;
+            updateIngresoData.pago_anticipado = true;
             await updateIngreso(updateIngresoData._id, updateIngresoData);
             await updatePago(pago._id, pago);
           }
         });
-      } else if (rowData.status === canceloSPServicioId) {
+      } else if (rowData.status === canceloSPStatusId) {
         rowData.pagos.forEach(async (pago) => {
           await deleteIngreso(pago.ingreso);
           await deletePago(pago._id);

@@ -322,7 +322,6 @@ const AgendarDermapen = (props) => {
 	};
 
 	const handleOnClickEditarCita = async (event, rowData) => {
-		console.log("FJOSDAFOSDOJFS", rowData );
 		setIsLoading(true);
 		setDermapen(rowData);
 		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio._id);
@@ -495,8 +494,6 @@ const AgendarDermapen = (props) => {
 		loadMateriales();
 		loadMedios();
 	}, [sucursal]);
-
-	console.log("FSDFSDOFJSDF", values);
 
 	return (
 		<Fragment>

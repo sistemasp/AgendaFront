@@ -66,6 +66,8 @@ const useStyles = makeStyles(theme => ({
     fontSize: '13px',
     paddingTop: 1,
     paddingBottom: 1,
+    marginTop: 0,
+    marginBottom: 0,
     color: '#000000',
   },
   label_cells: {
@@ -125,17 +127,20 @@ const ModalFormImprimirCorte = (props) => {
     tipoEgresos,
     metodoPagos,
     dataIngresos,
+    dataPagosAnticipados,
     dataEgresos,
     empleado,
   } = props;
 
   let totalIngresos = 0;
+  let totalPagosAnticipados = 0;
   let totalEfectivo = 0;
   let pagoMedicos = 0;
   let retirosParciales = 0;
   let otrosEgresos = 0;
 
   let totalesIngresos = [0, 0, 0, 0, 0, 0, 0, 0];
+  let totalesPagosAnticipados = [0, 0, 0, 0, 0, 0, 0, 0];
 
   return (
     <div>
@@ -249,6 +254,94 @@ const ModalFormImprimirCorte = (props) => {
                 <h3 className={classes.label_cells_totales}>{toFormatterCurrency(totalIngresos)}</h3>
               </Grid>
             </Grid>
+
+            {
+              dataPagosAnticipados.length > 0 ?
+                <Grid container xs={12} className={classes.grid_left}>
+                  <Grid item xs={12} className={classes.label}>
+                    <h2 className={classes.label_title_descripcion} >PAGOS ANTICIPADOS</h2>
+                  </Grid>
+                  <Grid container>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_title_ingresos}>METODO PAGO</p>
+                    </Grid>
+
+                    {
+                      tipoIngresos.map(tipoIngreso => {
+                        return (
+                          <Grid item xs={true} className={classes.label}>
+                            <p className={classes.label_title_ingresos}>{tipoIngreso.nombre}</p>
+                          </Grid>
+                        )
+                      })
+                    }
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_title_ingresos}>TOTAL</p>
+                    </Grid>
+                  </Grid>
+
+                  {
+                    metodoPagos.map(metodoPago => {
+                      return (
+                        <Fragment>
+                          <Grid container>
+                            <Grid item xs={true} className={classes.label}>
+                              <h3 className={classes.label_cells_concepto}>{metodoPago.nombre}</h3>
+                            </Grid>
+                            {
+                              dataPagosAnticipados ? dataPagosAnticipados.filter(dataPagoAnticipado => {
+                                return dataPagoAnticipado.metodo_pago === metodoPago.nombre
+                              }).map((dataPagoAnticipado) => {
+                                totalPagosAnticipados += dataPagoAnticipado.total;
+                                //totalEfectivo += dataPagoAnticipado.metodo_pago === 'EFECTIVO' ? dataPagoAnticipado.total : 0;
+
+                                return (
+                                  <Fragment>
+                                    {
+                                      tipoIngresos.map((tipoIngreso, index) => {
+                                        const ingreso = dataPagoAnticipado.tipo_ingresos_detalles.find(detalle => {
+                                          return detalle.tipo_ingreso === tipoIngreso.nombre;
+                                        });
+                                        totalesPagosAnticipados[index] += ingreso ? Number(ingreso.total) : Number(0);
+                                        return (
+                                          <Grid item xs={true} className={classes.label}>
+                                            <p className={classes.label_cells}>{ingreso ? ingreso.total_moneda : '-'}</p>
+                                          </Grid>
+                                        )
+                                      })
+                                    }
+                                    <Grid item xs={true} className={classes.label_cells_total}>
+                                      <h3 className={classes.label_cells}>{dataPagoAnticipado.total_moneda}</h3>
+                                    </Grid>
+                                  </Fragment>
+
+                                )
+                              }) : ''
+                            }
+                          </Grid>
+                        </Fragment>
+                      )
+                    })
+                  }
+                  <Grid item xs={true} className={classes.label}>
+                    <h3 className={classes.label_cells_totales}>TOTALES</h3>
+                  </Grid>
+                  {
+                    totalesPagosAnticipados.map(val => {
+                      return (
+                        <Grid item xs={true} className={classes.label}>
+                          <h3 className={classes.label_cells_totales}>{toFormatterCurrency(val)}</h3>
+                        </Grid>
+                      )
+                    })
+                  }
+                  <Grid item xs={true} className={classes.label}>
+                    <h3 className={classes.label_cells_totales}>{toFormatterCurrency(totalIngresos)}</h3>
+                  </Grid>
+                </Grid>
+                : ''
+            }
+
             {
               dataEgresos.map(dataEgreso => {
                 {
@@ -335,7 +428,7 @@ const ModalFormImprimirCorte = (props) => {
 
             <Grid container xs={6} className={classes.grid_right}>
               <Grid item xs={12} className={classes.label}>
-                <h1 className={classes.label_utilidad_perdida}>{`UTILIDAD O PÉRDIDA: ${toFormatterCurrency(totalEfectivo - pagoMedicos - retirosParciales - otrosEgresos)}`}<br/><br/></h1>
+                <h1 className={classes.label_utilidad_perdida}>{`UTILIDAD O PÉRDIDA: ${toFormatterCurrency(totalEfectivo - pagoMedicos - retirosParciales - otrosEgresos)}`}<br /><br /></h1>
               </Grid>
               <Grid container>
                 <Grid item xs={true}>

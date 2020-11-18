@@ -56,12 +56,8 @@ const ModalDermapen = (props) => {
   const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
   const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
   const reagendoStatusId = process.env.REACT_APP_REAGENDO_STATUS_ID;
-  const canceloCPServicioId = process.env.REACT_APP_CANCELO_CP_STATUS_ID;
-  const canceloSPServicioId = process.env.REACT_APP_CANCELO_SP_STATUS_ID;
-  const pagoAnticipadoMetodoPagoId = process.env.REACT_APP_PAGO_ANTICIPADO_METODO_PAGO_ID;
-  const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
-  const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
-  const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
+  const canceloCPStatusId = process.env.REACT_APP_CANCELO_CP_STATUS_ID;
+  const canceloSPStatusId = process.env.REACT_APP_CANCELO_SP_STATUS_ID;
 
   const [isLoading, setIsLoading] = useState(true);
   const [horarios, setHorarios] = useState([]);
@@ -177,18 +173,18 @@ const ModalDermapen = (props) => {
 
   const handleOnClickActualizarDermapen = async (event, rowData) => {
     if (rowData.pagado) {
-      if (rowData.status === canceloCPServicioId) {
+      if (rowData.status === canceloCPStatusId) {
         rowData.pagos.forEach(async (pago) => {
           pago.pago_anticipado = true;
           const ingreso = await findIngresoById(pago.ingreso);
           if (`${ingreso.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
             const updateIngresoData = ingreso.data;
-            updateIngresoData.metodo_pago = pagoAnticipadoMetodoPagoId;
+            updateIngresoData.pago_anticipado = true;
             await updateIngreso(updateIngresoData._id, updateIngresoData);
             await updatePago(pago._id, pago);
           }
         });
-      } else if (rowData.status === canceloSPServicioId) {
+      } else if (rowData.status === canceloSPStatusId) {
         rowData.pagos.forEach(async (pago) => {
           await deleteIngreso(pago.ingreso);
           await deletePago(pago._id);

@@ -121,6 +121,7 @@ export const CorteContainer = (props) => {
             sucursal={sucursal}
             empleado={empleado}
             dataIngresos={dataIngresos}
+            dataPagosAnticipados={dataPagosAnticipados}
             dataEgresos={dataEgresos}
             setOpenAlert={setOpenAlert}
             setMessage={setMessage}
@@ -201,16 +202,18 @@ export const CorteContainer = (props) => {
             <h1>{toFormatterCurrency(totalIngresos)}</h1>
           </Grid>
         </Grid>
-
-        <Grid item xs={12} sm={8}>
-          <TableComponent
-            titulo={tituloPagoAnticipado}
-            columns={columnsIngreso}
-            data={dataPagosAnticipados}
-            options={options}
-            detailPanel={detailPanelIngreso} />
-        </Grid>
-
+        {
+          dataPagosAnticipados.length > 0 ?
+            <Grid item xs={12} sm={8}>
+              <TableComponent
+                titulo={tituloPagoAnticipado}
+                columns={columnsIngreso}
+                data={dataPagosAnticipados}
+                options={options}
+                detailPanel={detailPanelIngreso} />
+            </Grid>
+            : ''
+        }
         <Grid item xs={12} sm={8}>
           <TableComponent
             titulo={tituloEgreso}

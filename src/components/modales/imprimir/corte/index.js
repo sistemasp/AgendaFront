@@ -23,6 +23,7 @@ const ModalImprimirCorte = (props) => {
     open,
     onClose,
     dataIngresos,
+    dataPagosAnticipados,
     dataEgresos,
     corte,
     empleado,
@@ -37,7 +38,7 @@ const ModalImprimirCorte = (props) => {
     setTimeout(() => {
       window.print();
     }, 500);
-    setTimeout(() => { onClose(); }, 550);
+    //setTimeout(() => { onClose(); }, 550);
   }
 
   useEffect(() => {
@@ -84,6 +85,7 @@ const ModalImprimirCorte = (props) => {
         tipoEgresos={tipoEgresos}
         metodoPagos={metodoPagos}
         dataIngresos={dataIngresos}
+        dataPagosAnticipados={dataPagosAnticipados}
         dataEgresos={dataEgresos} />
     </Fragment>
 

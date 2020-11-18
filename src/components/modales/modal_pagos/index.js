@@ -23,8 +23,6 @@ const ModalPagos = (props) => {
   const efectivoMetodoPagoId = process.env.REACT_APP_METODO_PAGO_EFECTIVO;
   const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
 
-  console.log("DFSOAJFOASFJOA", tipoServicioId, servicio);
-
   const [isLoading, setIsLoading] = useState(true);
   const [pagos, setPagos] = useState([]);
   const [pago, setPago] = useState({});

@@ -72,9 +72,6 @@ const ModalPago = (props) => {
   const tarjetaMetodoPagoId = process.env.REACT_APP_METODO_PAGO_TARJETA;
   const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
   const consultaTratamientoId = process.env.REACT_APP_CONSULTA_TRATAMIENTO_ID;
-  const pagoAnticipadoMetodoPagoId = process.env.REACT_APP_PAGO_ANTICIPADO_METODO_PAGO_ID;
-
-
 
   const handleChangePaymentMethod = (event) => {
     const datos = {
