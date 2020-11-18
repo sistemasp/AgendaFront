@@ -38,7 +38,7 @@ const ModalImprimirCorte = (props) => {
     setTimeout(() => {
       window.print();
     }, 500);
-    //setTimeout(() => { onClose(); }, 550);
+    setTimeout(() => { onClose(); }, 550);
   }
 
   useEffect(() => {
