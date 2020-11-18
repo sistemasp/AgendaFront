@@ -94,7 +94,7 @@ export const findSchedulesBySucursalAndServicio = async (idSucursal, idServicio)
         });
         return response;
     } catch (error) {
-        console.log('getAllSchedules', error);
+        console.log('findSchedulesBySucursalAndServicio', error);
     }
 }
 

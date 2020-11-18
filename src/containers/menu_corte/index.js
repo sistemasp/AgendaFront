@@ -325,7 +325,8 @@ const Corte = (props) => {
         total: total,
         total_moneda: toFormatterCurrency(total),
       }
-      if (dataEgreso > 0) {
+      console.log("FJOSOJFDSOJ", dataEgreso);
+      if (dataEgreso.total > 0) {
         dataEgresosTemp.push(dataEgreso);
       }
     });
@@ -447,8 +448,9 @@ const Corte = (props) => {
       pagos_anticipados: pagosAnticipados,
       egresos: egresos,
       recepcionista: empleado,
-      sucursal: sucursal,
+      sucursal: sucursal._id,
     }
+    console.log("FJOSOJFDSOJ", newCorte);
     const response = await createCorte(newCorte);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
       setMessage("CORTE GARDAR CORRECTAMENTE.");
@@ -458,9 +460,15 @@ const Corte = (props) => {
   }
 
   const handleGenerarCorte = async () => {
-    corte.egresos = egresos;
-    corte.ingresos = ingresos;
-    corte.pagos_anticipados = pagosAnticipados;
+    corte.egresos = egresos.map((egreso) => {
+      return egreso._id;
+    });
+    corte.ingresos = ingresos.map((ingreso) => {
+      return ingreso._id;
+    });
+    corte.pagos_anticipados = pagosAnticipados.map((pagoAnticipado) => {
+      return pagoAnticipado._id;
+    });
     corte.generado = true;
     const response = await updateCorte(corte._id, corte);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {

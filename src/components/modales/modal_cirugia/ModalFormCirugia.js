@@ -120,7 +120,8 @@ const ModalFormCirugia = (props) => {
               <Grid item xs={12}>
                 <h2 className={classes.label}>MÉDICO: {values.consulta.medico.nombre}</h2>
               </Grid>
-
+{
+  /*
               <Grid item xs={12} sm={6}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
@@ -153,7 +154,8 @@ const ModalFormCirugia = (props) => {
                     {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
                   </Select>
                 </FormControl>
-              </Grid>
+              </Grid>*/
+}
 
               <Grid item xs={12}>
                 <TextField

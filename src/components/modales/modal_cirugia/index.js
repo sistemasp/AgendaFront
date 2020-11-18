@@ -4,7 +4,7 @@ import {
   showAllMaterials,
   createConsecutivo,
   createBiopsia,
-  findScheduleByDateAndSucursalAndService,
+  findSchedulesBySucursalAndServicio,
 } from "../../../services";
 import {
   createCirugia,
@@ -236,8 +236,7 @@ const ModalCirugia = (props) => {
   }
 
   const loadHorariosByServicio = async () => {
-    const date = new Date(consulta.fecha_hora);
-    const response = await findScheduleByDateAndSucursalAndService(date.getDate(), Number(date.getMonth()), date.getFullYear(), consulta.sucursal._id, consulta.servicio._id);
+    const response = await findSchedulesBySucursalAndServicio(consulta.sucursal._id, consulta.servicio._id);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       response.data.push({ hora: values.hora });
       setHorarios(response.data);
@@ -249,10 +248,10 @@ const ModalCirugia = (props) => {
     const fechaObservaciones = `${addZero(date.getDate())}/${addZero(Number(date.getMonth() + 1))}/${date.getFullYear()} - ${values.hora} hrs`;
     await setValues({
       ...values,
-      nueva_fecha_hora: date,
+      fecha_hora: date,
       observaciones: fechaObservaciones,
     });
-    await loadHorariosByServicio(date);
+    await loadHorariosByServicio();
     setIsLoading(false);
   };
   

@@ -336,7 +336,7 @@ const ModalFormImprimirCorte = (props) => {
                     })
                   }
                   <Grid item xs={true} className={classes.label}>
-                    <h3 className={classes.label_cells_totales}>{toFormatterCurrency(totalIngresos)}</h3>
+                    <h3 className={classes.label_cells_totales}>{toFormatterCurrency(totalPagosAnticipados)}</h3>
                   </Grid>
                 </Grid>
                 : ''
