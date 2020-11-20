@@ -77,9 +77,10 @@ const AgendarConsulta = (props) => {
 		hora: '',
 		fecha_hora: new Date(),
 		paciente: `${paciente._id}`,
-		precio: isHoliDay ? sucursal.precio_festivo : // Dia Festivo
+		/*precio: isHoliDay ? sucursal.precio_festivo : // Dia Festivo
 			date.getDay() === 6 ? (date.getHours() >= 13 ? sucursal.precio_sabado_vespertino : sucursal.precio_sabado_matutino) // SABADO
-				: (date.getHours() >= 14 ? sucursal.precio_vespertino : sucursal.precio_matutino), // L-V
+				: (date.getHours() >= 14 ? sucursal.precio_vespertino : sucursal.precio_matutino), // L-V*/
+				precio: 220
 	});
 
 	const [citas, setConsultas] = useState([]);

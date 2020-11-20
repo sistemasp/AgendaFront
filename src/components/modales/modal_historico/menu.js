@@ -80,8 +80,8 @@ const useStyles = makeStyles(theme => ({
 		backgroundColor: "#2BA6C6",
 	},
 	button: {
-    width: '100%',
-  }
+		width: '100%',
+	}
 }));
 
 export const MenuHistoricoContainer = props => {
@@ -108,10 +108,14 @@ export const MenuHistoricoContainer = props => {
 				open={open} >
 				<div style={modalStyle} className={classes.paper}>
 					<div className={classes.root}>
-						<h1> HISTORIAL: {`${paciente.nombres} ${paciente.apellidos}`}
-						</h1>
+						<h1> HISTORIAL: {`${paciente.nombres} ${paciente.apellidos}`} </h1>
 						<AppBar className={classes.bar} position="static">
-							<Tabs value={value} onChange={onChangeTab} aria-label="simple tabs">
+							<Tabs
+								value={value}
+								onChange={onChangeTab}
+								aria-label="simple tabs"
+								variant="scrollable"
+								scrollButtons="on" >
 								{
 									servicios.map((item, index) => {
 										return <Tab label={item.nombre} {...a11yProps(index)} />

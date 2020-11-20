@@ -84,7 +84,7 @@ const ModalFormNuevoEgreso = (props) => {
               value={values.cantidad}
               type='Number'
               onInput={(e) => {
-                e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 7)
+                e.target.value = Math.max(0, parseFloat(e.target.value)).toString().slice(0, 7)
               }}
               onChange={onChange}
               variant="outlined" />
