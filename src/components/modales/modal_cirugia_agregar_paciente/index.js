@@ -70,14 +70,14 @@ const ModalCirugiaAgregarPaciente = (props) => {
         let updateData = currentService;
         updateData.status = enSalaCirugiaStatusId;
         updateData.hora_atencion = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
-        updateData.medico = values.sala_cirugia.medico;
+        updateData.dermatologo = values.sala_cirugia.dermatologo;
         tipo_servicio === cirugiaServicioId ? await updateCirugia(currentService._id, updateData) : updateEstetica(currentService._id, updateData);
       }
 
       setValues({ sala_cirugia: { paciente: currentService.paciente._id } });
       let salaCirugia = values.sala_cirugia;
       salaCirugia.cirugia = currentService._id;
-      salaCirugia.medico = currentService.medico;
+      salaCirugia.dermatologo = currentService.dermatologo;
       salaCirugia.paciente = paciente._id;
       salaCirugia.tipo_servicio = tipo_servicio;
       salaCirugia.servicio = servicio;

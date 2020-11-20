@@ -42,7 +42,7 @@ const ReportesPagos = (props) => {
 		{ title: 'Fecha', field: 'fecha_show' },
 		{ title: 'Hora', field: 'hora' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
-		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
 		{ title: 'Servicio', field: 'servicio.nombre' },
 		{ title: 'Tratamientos', field: 'show_tratamientos' },
 		{ title: 'Quien recibio pago', field: 'quien_recibe_pago.nombre' },
@@ -93,7 +93,7 @@ const ReportesPagos = (props) => {
 					item.comision_show = toFormatterCurrency(item.comision);
 					item.total_show = toFormatterCurrency(item.total);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
-					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+					item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 					item.show_tratamientos = item.tratamientos.map(tratamiento => {
 						return `${tratamiento.nombre}, `;
 					});
@@ -148,7 +148,7 @@ const ReportesPagos = (props) => {
 				item.comision_show = toFormatterCurrency(item.comision);
 				item.total_show = toFormatterCurrency(item.total);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 				item.show_tratamientos = item.tratamientos.map(tratamiento => {
 					return `${tratamiento.nombre}, `;
 				});

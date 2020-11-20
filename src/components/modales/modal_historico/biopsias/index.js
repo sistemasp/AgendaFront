@@ -30,7 +30,7 @@ const TabBiopsias = (props) => {
     { title: 'Fecha', field: 'fecha_show' },
     { title: 'Hora', field: 'hora' },
     { title: 'Consecutivo', field: 'consecutivo' },
-    { title: 'Medico', field: 'medico.nombre' },
+    { title: 'Dermatologo', field: 'dermatologo.nombre' },
     { title: 'Patologo', field: 'patoloo.nombre' },
     { title: 'Sucursal', field: 'sucursal.nombre' },
     { title: 'Fecha entrega', field: 'precio_moneda' },

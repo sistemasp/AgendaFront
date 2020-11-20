@@ -160,10 +160,10 @@ export const waitingFacialList = async (sucursalId, statusAsistioId) => {
     }
 }
 
-export const findFacialByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, medicoId, atendidoId, turno) => {
+export const findFacialByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, dermatologoId, atendidoId, turno) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/facial/${dia}/${mes}/${anio}/sucursal/${sucursalId}/medico/${medicoId}/atendido/${atendidoId}/turno/${turno}`,
+            url: `${baseUrl}/facial/${dia}/${mes}/${anio}/sucursal/${sucursalId}/dermatologo/${dermatologoId}/atendido/${atendidoId}/turno/${turno}`,
             method: 'GET'
         });
         return response;
@@ -172,10 +172,10 @@ export const findFacialByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, m
     }
 }
 
-export const findFacialesByPayOfDoctorHoraAplicacion = async (sucursalId, medicoId, atendidoId, hora_apertura, hora_cierre) => {
+export const findFacialesByPayOfDoctorHoraAplicacion = async (sucursalId, dermatologoId, atendidoId, hora_apertura, hora_cierre) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/facial/sucursal/${sucursalId}/medico/${medicoId}/atendido/${atendidoId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
+            url: `${baseUrl}/facial/sucursal/${sucursalId}/dermatologo/${dermatologoId}/atendido/${atendidoId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
             method: 'GET'
         });
         return response;

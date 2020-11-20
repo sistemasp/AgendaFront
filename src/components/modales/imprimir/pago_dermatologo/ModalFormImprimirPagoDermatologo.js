@@ -137,7 +137,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ModalFormImprimirPagoMedico = (props) => {
+const ModalFormImprimirPagoDermatologo = (props) => {
   const classes = useStyles();
 
   // getModalStyle is not a pure function, we roll the style only on the first render
@@ -154,7 +154,7 @@ const ModalFormImprimirPagoMedico = (props) => {
     dermapens,
     lasers,
     aparatologias,
-    medico,
+    dermatologo,
     onClose,
     onClickImprimir,
     onClickPagar,
@@ -164,7 +164,7 @@ const ModalFormImprimirPagoMedico = (props) => {
     findCorte,
     show,
     turno,
-    pagoMedico,
+    pagoDermatologo,
     empleado,
   } = props;
 
@@ -196,7 +196,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                 <h2 className={classes.label_title}>CENTRO DERMATOLÓGICO M. E. PIEL S. C.</h2>
               </Grid>
               <Grid item xs={8}>
-                <h3 className={classes.label_left}>MÉDICO: {medico.nombre}</h3>
+                <h3 className={classes.label_left}>MÉDICO: {dermatologo.nombre}</h3>
               </Grid>
               <Grid item xs={4} >
                 <h3 className={classes.label}>FECHA: {dateToString(corte.create_date)} </h3>
@@ -215,7 +215,7 @@ const ModalFormImprimirPagoMedico = (props) => {
               show ?
                 <Fragment>
                   {
-                    pagoMedico.pagado ?
+                    pagoDermatologo.pagado ?
                       <Grid item xs={12}>
                         <ButtonCustom
                           className={classes.button}
@@ -302,8 +302,8 @@ const ModalFormImprimirPagoMedico = (props) => {
                         consulta.pagos.map(pago => {
                           totalPagos += Number(pago.total);
                         });
-                        const pagoMedico = Number(totalPagos) * Number(medico.porcentaje) / 100;
-                        pagoTotal += Number(pagoMedico);
+                        const pagoDermatologo = Number(totalPagos) * Number(dermatologo.porcentaje) / 100;
+                        pagoTotal += Number(pagoDermatologo);
 
                         return <Grid container>
                           <Grid item xs={true} className={classes.label}>
@@ -316,7 +316,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                             <p className={classes.label_cells}>{`${consulta.consecutivo}`}</p>
                           </Grid>
                           <Grid item xs={true} className={classes.label}>
-                            <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
+                            <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoDermatologo)}`} </p>
                           </Grid>
                         </Grid>
                       })
@@ -354,8 +354,8 @@ const ModalFormImprimirPagoMedico = (props) => {
                         consulta.pagos.map(pago => {
                           totalPagos += Number(pago.total);
                         });
-                        const pagoMedico = Number(totalPagos) * Number(medico.porcentaje) / 100;
-                        pagoTotal += Number(pagoMedico);
+                        const pagoDermatologo = Number(totalPagos) * Number(dermatologo.porcentaje) / 100;
+                        pagoTotal += Number(pagoDermatologo);
                         return <Grid container>
                           <Grid item xs={true} className={classes.label}>
                             <p className={classes.label_cells}>{consulta.hora_llegada}</p>
@@ -367,7 +367,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                             <p className={classes.label_cells}>{`${consulta.consecutivo}`}</p>
                           </Grid>
                           <Grid item xs={true} className={classes.label}>
-                            <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
+                            <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoDermatologo)}`} </p>
                           </Grid>
                         </Grid>
                       })
@@ -402,8 +402,8 @@ const ModalFormImprimirPagoMedico = (props) => {
                     {
                       cirugias ?
                         cirugias.map(cirugia => {
-                          const pagoMedico = Number(cirugia.precio) * Number(medico.porcentaje) / 100;
-                          pagoTotal += Number(pagoMedico);
+                          const pagoDermatologo = Number(cirugia.precio) * Number(dermatologo.porcentaje) / 100;
+                          pagoTotal += Number(pagoDermatologo);
                           const date = new Date(cirugia.hora_aplicacion);
                           return <Grid container>
                             <Grid item xs={true} className={classes.label}>
@@ -416,7 +416,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                               <p className={classes.label_cells}>{`${cirugia.consecutivo}`}</p>
                             </Grid>
                             <Grid item xs={true} className={classes.label}>
-                              <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
+                              <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoDermatologo)}`} </p>
                             </Grid>
                           </Grid>
                         })
@@ -452,8 +452,8 @@ const ModalFormImprimirPagoMedico = (props) => {
                     {
                       esteticas ?
                         esteticas.map(estetica => {
-                          const pagoMedico = Number(estetica.precio) * Number(medico.porcentaje_estetica) / 100;
-                          pagoTotal += Number(pagoMedico);
+                          const pagoDermatologo = Number(estetica.precio) * Number(dermatologo.porcentaje_estetica) / 100;
+                          pagoTotal += Number(pagoDermatologo);
                           const date = new Date(estetica.hora_aplicacion);
                           return <Grid container>
                             <Grid item xs={true} className={classes.label}>
@@ -466,7 +466,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                               <p className={classes.label_cells}>{`${estetica.consecutivo}`}</p>
                             </Grid>
                             <Grid item xs={true} className={classes.label}>
-                              <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
+                              <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoDermatologo)}`} </p>
                             </Grid>
                           </Grid>
                         })
@@ -505,25 +505,25 @@ const ModalFormImprimirPagoMedico = (props) => {
                     {
                       faciales ?
                         faciales.map(facial => {
-                          let comisionMedico = 0;
+                          let comisionDermatologo = 0;
                           facial.areas.map(area => {
                             switch (facial.tipo_cita._id) {
                               case revisadoTipoCitaId:
-                                comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
+                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
                                 break;
                               case derivadoTipoCitaId:
-                                comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
+                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
                                 break;
                               case realizadoTipoCitaId:
-                                comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
+                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
                                 break;
                               case noAplicaTipoCitaId:
-                                comisionMedico += Number(0);
+                                comisionDermatologo += Number(0);
                                 break;
                             }
                           });
-                          const pagoMedico = comisionMedico;
-                          pagoTotal += Number(pagoMedico);
+                          const pagoDermatologo = comisionDermatologo;
+                          pagoTotal += Number(pagoDermatologo);
                           return <Grid container>
                             <Grid item xs={true} className={classes.label}>
                               <p className={classes.label_cells}>{facial.hora_llegada}</p>
@@ -538,7 +538,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                               <p className={classes.label_cells}>{`${facial.consecutivo}`}</p>
                             </Grid>
                             <Grid item xs={true} >
-                              <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
+                              <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoDermatologo)}`} </p>
                             </Grid>
                           </Grid>
                         })
@@ -577,8 +577,8 @@ const ModalFormImprimirPagoMedico = (props) => {
                     {
                       dermapens ?
                       dermapens.map(dermapen => {
-                          const pagoMedico = Number(dermapen.precio) * Number(medico.porcentaje) / 100;
-                          pagoTotal += Number(pagoMedico);
+                          const pagoDermatologo = Number(dermapen.precio) * Number(dermatologo.porcentaje) / 100;
+                          pagoTotal += Number(pagoDermatologo);
                           return <Grid container>
                             <Grid item xs={true} className={classes.label}>
                               <p className={classes.label_cells}>{dermapen.hora_llegada}</p>
@@ -593,7 +593,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                               <p className={classes.label_cells}>{`${dermapen.consecutivo}`}</p>
                             </Grid>
                             <Grid item xs={true} >
-                              <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
+                              <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoDermatologo)}`} </p>
                             </Grid>
                           </Grid>
                         })
@@ -632,25 +632,25 @@ const ModalFormImprimirPagoMedico = (props) => {
                     {
                       lasers ?
                         lasers.map(laser => {
-                          let comisionMedico = 0;
+                          let comisionDermatologo = 0;
                           laser.areas.map(area => {
                             switch (laser.tipo_cita._id) {
                               case revisadoTipoCitaId:
-                                comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
+                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
                                 break;
                               case derivadoTipoCitaId:
-                                comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
+                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
                                 break;
                               case realizadoTipoCitaId:
-                                comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
+                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
                                 break;
                               case noAplicaTipoCitaId:
-                                comisionMedico += Number(0);
+                                comisionDermatologo += Number(0);
                                 break;
                             }
                           });
-                          const pagoMedico = comisionMedico;
-                          pagoTotal += Number(pagoMedico);
+                          const pagoDermatologo = comisionDermatologo;
+                          pagoTotal += Number(pagoDermatologo);
                           return <Grid container>
                             <Grid item xs={true} className={classes.label}>
                               <p className={classes.label_cells}>{laser.hora_llegada}</p>
@@ -665,7 +665,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                               <p className={classes.label_cells}>{`${laser.consecutivo}`}</p>
                             </Grid>
                             <Grid item xs={true} >
-                              <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
+                              <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoDermatologo)}`} </p>
                             </Grid>
                           </Grid>
                         })
@@ -704,25 +704,25 @@ const ModalFormImprimirPagoMedico = (props) => {
                     {
                       aparatologias ?
                         aparatologias.map(aparatologia => {
-                          let comisionMedico = 0;
+                          let comisionDermatologo = 0;
                           aparatologia.areas.map(area => {
                             switch (aparatologia.tipo_cita._id) {
                               case revisadoTipoCitaId:
-                                comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
+                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
                                 break;
                               case derivadoTipoCitaId:
-                                comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
+                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
                                 break;
                               case realizadoTipoCitaId:
-                                comisionMedico += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
+                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
                                 break;
                               case noAplicaTipoCitaId:
-                                comisionMedico += Number(0);
+                                comisionDermatologo += Number(0);
                                 break;
                             }
                           });
-                          const pagoMedico = comisionMedico;
-                          pagoTotal += Number(pagoMedico);
+                          const pagoDermatologo = comisionDermatologo;
+                          pagoTotal += Number(pagoDermatologo);
                           return <Grid container>
                             <Grid item xs={true} className={classes.label}>
                               <p className={classes.label_cells}>{aparatologia.hora_llegada}</p>
@@ -737,7 +737,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                               <p className={classes.label_cells}>{`${aparatologia.consecutivo}`}</p>
                             </Grid>
                             <Grid item xs={true} >
-                              <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoMedico)}`} </p>
+                              <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoDermatologo)}`} </p>
                             </Grid>
                           </Grid>
                         })
@@ -763,7 +763,7 @@ const ModalFormImprimirPagoMedico = (props) => {
                   <hr className={classes.hr} />
                 </Grid>
                 <Grid item xs={12} >
-                  <p className={classes.label_cells_totales}>{`MÉDICO: ${medico.nombre}`}</p>
+                  <p className={classes.label_cells_totales}>{`MÉDICO: ${dermatologo.nombre}`}</p>
                 </Grid>
               </Grid>
             </Grid>
@@ -782,4 +782,4 @@ const ModalFormImprimirPagoMedico = (props) => {
   );
 }
 
-export default ModalFormImprimirPagoMedico;
+export default ModalFormImprimirPagoDermatologo;

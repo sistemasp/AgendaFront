@@ -81,7 +81,7 @@ const ModalCita = (props) => {
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
   const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
-  const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
+  const dermatologoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
   const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
   const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
   const reagendoStatusId = process.env.REACT_APP_REAGENDO_STATUS_ID;
@@ -136,7 +136,7 @@ const ModalCita = (props) => {
     precio: cita.precio,
     motivos: cita.motivos,
     observaciones: cita.observaciones,
-    medico: cita.medico ? cita.medico._id : '',
+    dermatologo: cita.dermatologo ? cita.dermatologo._id : '',
     tiempo: cita.tiempo,
     pagado: cita.pagado,
     pagos: cita.pagos,
@@ -372,8 +372,8 @@ const ModalCita = (props) => {
     setValues({ ...values, motivos: e.target.value });
   }
 
-  const handleChangeMedico = (e) => {
-    setValues({ ...values, medico: e.target.value });
+  const handleChangeDermatologo = (e) => {
+    setValues({ ...values, dermatologo: e.target.value });
   }
 
   const handleChangeTiempo = e => {
@@ -451,7 +451,7 @@ const ModalCita = (props) => {
     }
 
     const loadDoctores = async () => {
-      const response = await findEmployeesByRolId(medicoRolId);
+      const response = await findEmployeesByRolId(dermatologoRolId);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setDoctores(response.data);
       }
@@ -482,7 +482,7 @@ const ModalCita = (props) => {
     loadTipoCitas();
     loadStaus();
     setIsLoading(false);
-  }, [cita, promovendedorRolId, cosmetologaRolId, medicoRolId]);
+  }, [cita, promovendedorRolId, cosmetologaRolId, dermatologoRolId]);
 
   return (
     <Fragment>
@@ -508,7 +508,7 @@ const ModalCita = (props) => {
                 onChangeStatus={(e) => handleChangeStatus(e)}
                 onChangePromovendedor={(e) => handleChangePromovendedor(e)}
                 onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
-                onChangeMedico={(e) => handleChangeMedico(e)}
+                onChangeDermatologo={(e) => handleChangeDermatologo(e)}
                 onChangeTiempo={(e) => handleChangeTiempo(e)}
                 tratamientos={tratamientos}
                 areas={areas}

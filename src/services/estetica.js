@@ -90,10 +90,10 @@ export const findEsteticasHistoricByPaciente = async (pacienteId) => {
     }
 }
 
-export const findEsteticasByPayOfDoctorHoraAplicacion = async (sucursalId, medicoId, atendidoId, hora_apertura, hora_cierre) => {
+export const findEsteticasByPayOfDoctorHoraAplicacion = async (sucursalId, dermatologoId, atendidoId, hora_apertura, hora_cierre) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/estetica/sucursal/${sucursalId}/medico/${medicoId}/atendido/${atendidoId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
+            url: `${baseUrl}/estetica/sucursal/${sucursalId}/dermatologo/${dermatologoId}/atendido/${atendidoId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
             method: 'GET'
         });
         return response;

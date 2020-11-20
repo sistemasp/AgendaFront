@@ -64,7 +64,7 @@ const ModalProximaConsulta = (props) => {
     promovendedor: promovendedorSinAsignarId,
     status: pendienteStatusId,
     observaciones: consulta.observaciones,
-    medico: consulta.medico ? consulta.medico : '',
+    dermatologo: consulta.dermatologo ? consulta.dermatologo : '',
     frecuencia: reconsultaFrecuenciaId,
     servicio: consulta.servicio,
     sucursal: consulta.sucursal,

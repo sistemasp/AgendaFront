@@ -59,7 +59,7 @@ export const AgendarAparatologiaContainer = (props) => {
 		onChangeObservaciones,
 		empleado,
 		disableDate,
-		medicos,
+		dermatologos,
 		promovendedores,
 		cosmetologas,
 		onChangeDoctors,
@@ -68,7 +68,7 @@ export const AgendarAparatologiaContainer = (props) => {
 		onChangeCosmetologa,
 		onChangeMedio,
 		medios,
-		medicoDirectoId,
+		dermatologoDirectoId,
 		// TABLE DATES PROPERTIES
 		titulo,
 		columns,
@@ -212,20 +212,20 @@ export const AgendarAparatologiaContainer = (props) => {
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
-							<InputLabel id="simple-select-outlined-hora">Medico</InputLabel>
+							<InputLabel id="simple-select-outlined-hora">Dermatologo</InputLabel>
 							<Select
-								labelId="simple-select-outlined-medico"
-								id="simple-select-outlined-medico"
-								value={values.medico}
-								error={Boolean(errors.medico)}
+								labelId="simple-select-outlined-dermatologo"
+								id="simple-select-outlined-dermatologo"
+								value={values.dermatologo}
+								error={Boolean(errors.dermatologo)}
 								onChange={onChangeDoctors}
-								label="Medico" >
-								{medicos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+								label="Dermatologo" >
+								{dermatologos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
 					</Grid>
 					{
-						medicoDirectoId !== values.medico._id ?
+						dermatologoDirectoId !== values.dermatologo._id ?
 							<Grid item xs={12} sm={2}>
 								<FormControl variant="outlined" className={classes.formControl}>
 									<InputLabel id="simple-select-outlined-tipo-cita">Tipo Cita</InputLabel>

@@ -27,13 +27,13 @@ const Consultas = (props) => {
 			const endDate = new Date(consulta.fecha_hora);
 			// const minutos = Number(endDate.getMinutes()) + Number(consulta.tiempo);
 			// endDate.setMinutes(minutos);
-			const medico = consulta.medico.nombre;
+			const dermatologo = consulta.dermatologo.nombre;
 			return {
 				id: consulta._id,
-				title: medico,
+				title: dermatologo,
 				start: startDate,
 				end: endDate,
-				medico: consulta.medico
+				dermatologo: consulta.dermatologo
 			}
 		});
 	}

@@ -30,7 +30,7 @@ const TabCirugias = (props) => {
     { title: 'Fecha', field: 'fecha_show' },
     { title: 'Hora', field: 'hora' },
     { title: 'Consecutivo', field: 'consecutivo' },
-    { title: 'Medico', field: 'medico.nombre' },
+    { title: 'Dermatologo', field: 'dermatologo.nombre' },
     { title: 'Sucursal', field: 'sucursal.nombre' },
     { title: 'Precio', field: 'precio_moneda' },
     { title: 'Total', field: 'precio_moneda' },

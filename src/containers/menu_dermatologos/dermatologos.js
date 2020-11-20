@@ -4,7 +4,7 @@ import TableComponent from '../../components/table/TableComponent';
 import { makeStyles } from '@material-ui/core';
 import ModalPaciente from '../../components/modales/modal_paciente';
 import ModHistorico from '../../components/modales/modal_historico';
-import ModalImprimirPagoMedico from '../../components/modales/imprimir/pago_medico';
+import ModalImprimirPagoDermatologo from '../../components/modales/imprimir/pago_dermatologo';
 
 const useStyles = makeStyles(theme => ({
 	button: {
@@ -12,18 +12,18 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export const MedicosContainer = (props) => {
+export const DermatologosContainer = (props) => {
 
   const classes = useStyles();
 
   const {
     titulo,
     columns,
-    medicos,
-    medico,
+    dermatologos,
+    dermatologo,
     actions,
     options,
-    openPagoMedico,
+    openPagoDermatologo,
     openHistoric,
     handleOpen,
     handleClose,
@@ -34,11 +34,11 @@ export const MedicosContainer = (props) => {
   return (
     <Fragment>
       {
-        openPagoMedico ? 
-        <ModalImprimirPagoMedico
-          open={openPagoMedico}
+        openPagoDermatologo ? 
+        <ModalImprimirPagoDermatologo
+          open={openPagoDermatologo}
           onClose={handleClose}
-          medico={medico}
+          dermatologo={dermatologo}
           sucursal={sucursal}
           empleado={empleado} /> : ''
       }
@@ -52,7 +52,7 @@ export const MedicosContainer = (props) => {
       <TableComponent
         titulo={titulo}
         columns={columns}
-        data={medicos}
+        data={dermatologos}
         actions={actions}
         options={options} />
     </Fragment>

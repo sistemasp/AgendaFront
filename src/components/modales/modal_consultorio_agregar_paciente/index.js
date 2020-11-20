@@ -64,7 +64,7 @@ const ModalConsultorioAgregarPaciente = (props) => {
         let updateConsulta = consulta;
         updateConsulta.status = enConsultorioStatusId;
         updateConsulta.hora_atencion = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
-        updateConsulta.medico = values.consultorio.medico;
+        updateConsulta.dermatologo = values.consultorio.dermatologo;
         await updateConsult(consulta._id, updateConsulta);
       }
 

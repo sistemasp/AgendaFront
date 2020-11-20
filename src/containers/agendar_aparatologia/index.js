@@ -57,7 +57,7 @@ const AgendarAparatologia = (props) => {
 		sucursal,
 	} = props;
 
-	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
+	const dermatologoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
 	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
 	const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
 	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
@@ -65,7 +65,7 @@ const AgendarAparatologia = (props) => {
 	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
 	const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
 	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
-	const medicoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
+	const dermatologoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
 	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
 	const servicioAparatologiaId = process.env.REACT_APP_APARATOLOGIA_SERVICIO_ID;
 
@@ -74,7 +74,7 @@ const AgendarAparatologia = (props) => {
 	const [servicios, setServicios] = useState([]);
 	const [tratamientos, setTratamientos] = useState([]);
 	const [horarios, setHorarios] = useState([]);
-	const [medicos, setMedicos] = useState([]);
+	const [dermatologos, setDermatologos] = useState([]);
 	const [promovendedores, setPromovendedores] = useState([]);
 	const [cosmetologas, setCosmetologas] = useState([]);
 	const [tipoCitas, setTipoCitas] = useState([]);
@@ -89,7 +89,7 @@ const AgendarAparatologia = (props) => {
 		precio: 0,
 		tipo_cita: tipoCitaNoAplicaId,
 		observaciones: '',
-		medico: { _id: medicoDirectoId },
+		dermatologo: { _id: dermatologoDirectoId },
 		tiempo: '30',
 	});
 	const [aparatologias, setAparatologia] = useState([]);
@@ -124,7 +124,7 @@ const AgendarAparatologia = (props) => {
 		{ title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' },
 		{ title: 'Quien confirma asistencia', field: 'quien_confirma_asistencia.nombre' },
 		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
-		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
 		{ title: 'Tipo Cita', field: 'tipo_cita.nombre' },
 		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
 		{ title: 'Estado', field: 'status.nombre' },
@@ -281,7 +281,7 @@ const AgendarAparatologia = (props) => {
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 				item.show_tratamientos = item.tratamientos.map(tratamiento => {
 					return `${tratamiento.nombre}, `;
 				});
@@ -301,7 +301,7 @@ const AgendarAparatologia = (props) => {
 		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
-		data.tipo_cita = data.medico._id === medicoDirectoId ? tipoCitaNoAplicaId : data.tipo_cita;
+		data.tipo_cita = data.dermatologo._id === dermatologoDirectoId ? tipoCitaNoAplicaId : data.tipo_cita;
 
 		const response = await createAparatologia(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
@@ -320,7 +320,7 @@ const AgendarAparatologia = (props) => {
 				setValues({
 					servicio: '',
 					tratamientos: [],
-					medico: '',
+					dermatologo: '',
 					promovendedor: '',
 					cosmetologa: '',
 					paciente: `${paciente._id}`,
@@ -354,7 +354,7 @@ const AgendarAparatologia = (props) => {
 	}
 
 	const handleChangeDoctors = (e) => {
-		setValues({ ...values, medico: e.target.value });
+		setValues({ ...values, dermatologo: e.target.value });
 	}
 
 	const handleChangePromovendedor = (e) => {
@@ -465,7 +465,7 @@ const AgendarAparatologia = (props) => {
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+					item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 					item.show_tratamientos = item.tratamientos.map(tratamiento => {
 						return `${tratamiento.nombre}, `;
 					});
@@ -492,10 +492,10 @@ const AgendarAparatologia = (props) => {
 			}
 		}
 
-		const loadMedicos = async () => {
-			const response = await findEmployeesByRolId(medicoRolId);
+		const loadDermatologos = async () => {
+			const response = await findEmployeesByRolId(dermatologoRolId);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setMedicos(response.data);
+				setDermatologos(response.data);
 			}
 		}
 
@@ -518,7 +518,7 @@ const AgendarAparatologia = (props) => {
 		loadAparatologias();
 		loadPromovendedores();
 		loadCosmetologas();
-		loadMedicos();
+		loadDermatologos();
 		loadTipoCitas();
 		loadMedios();
 	}, [sucursal]);
@@ -559,7 +559,7 @@ const AgendarAparatologia = (props) => {
 								empleado={empleado}
 								onClickCancel={handleCloseModal}
 								loadAparatologias={loadAparatologias}
-								medicos={medicos}
+								dermatologos={dermatologos}
 								tipoCitas={tipoCitas}
 								medios={medios}
 								onChangeTipoCita={(e) => handleChangeTipoCita(e)}
@@ -577,7 +577,7 @@ const AgendarAparatologia = (props) => {
 								setOpenAlert={setOpenAlert}
 								setMessage={setMessage}
 								setFilterDate={setFilterDate}
-								medicoDirectoId={medicoDirectoId}
+								dermatologoDirectoId={dermatologoDirectoId}
 								onGuardarModalPagos={handleGuardarModalPagos}
 								{...props} />
 						}

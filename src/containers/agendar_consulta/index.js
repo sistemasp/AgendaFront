@@ -65,7 +65,7 @@ const AgendarConsulta = (props) => {
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
 	const [horarios, setHorarios] = useState([]);
-	const [medicos, setMedicos] = useState([]);
+	const [dermatologos, setDermatologos] = useState([]);
 	const [frecuencias, setFrecuencias] = useState([]);
 	const [tipoCitas, setTipoCitas] = useState([]);
 	const [medios, setMedios] = useState([]);
@@ -108,7 +108,7 @@ const AgendarConsulta = (props) => {
 		fecha: `${dia}/${mes}/${anio}`,
 	});
 
-	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
+	const dermatologoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
 	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
 	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
 	const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
@@ -118,7 +118,7 @@ const AgendarConsulta = (props) => {
 	const atendidoStatusId = process.env.REACT_APP_ATENDIDO_STATUS_ID;
 	const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
 	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
-	const medicoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
+	const dermatologoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
 	const promovendedorSinAsignarId = process.env.REACT_APP_PROMOVENDEDOR_SIN_ASIGNAR_ID;
 	const frecuenciaPrimeraVezId = process.env.REACT_APP_FRECUENCIA_PRIMERA_VEZ_ID;
 	const fercuenciaReconsultaId = process.env.REACT_APP_FRECUENCIA_RECONSULTA_ID;
@@ -140,7 +140,7 @@ const AgendarConsulta = (props) => {
 		{ title: 'Tipo Consulta', field: 'tipo_cita.nombre' },
 		sucursal._id === sucursalManuelAcunaId ? { title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' } : {},
 		{ title: 'Quien confirma asistencia', field: 'quien_confirma_asistencia.nombre' },
-		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
 		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
 		{ title: 'Estado', field: 'status.nombre' },
 		{ title: 'Precio', field: 'precio_moneda' },
@@ -156,7 +156,7 @@ const AgendarConsulta = (props) => {
 		}
 	}
 
-	const dataComplete = !paciente.nombres || !values.precio || !values.medico
+	const dataComplete = !paciente.nombres || !values.precio || !values.dermatologo
 		 || !values.promovendedor || (sucursal._id === sucursalManuelAcunaId ? (!values.fecha_hora || !values.medio) : false);
 
 	const options = {
@@ -187,17 +187,17 @@ const AgendarConsulta = (props) => {
 					item.precio_moneda = toFormatterCurrency(item.precio);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+					item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 				});
 				setConsultas(response.data);
 			}
 			setIsLoading(false);
 		}
 
-		const loadMedicos = async () => {
-			const response = await findEmployeesByRolId(medicoRolId);
+		const loadDermatologos = async () => {
+			const response = await findEmployeesByRolId(dermatologoRolId);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setMedicos(response.data);
+				setDermatologos(response.data);
 			}
 		}
 
@@ -231,13 +231,13 @@ const AgendarConsulta = (props) => {
 
 		setIsLoading(true);
 		loadConsultas();
-		loadMedicos();
+		loadDermatologos();
 		loadPromovendedores();
 		loadTipoCitas();
 		loadFrecuencias();
 		loadMedios();
 		loadHorarios(values.fecha_hora);
-	}, [sucursal, medicoRolId, promovendedorRolId]);
+	}, [sucursal, dermatologoRolId, promovendedorRolId]);
 
 	const loadHorarios = async (date) => {
 		const dia = date ? date.getDate() : values.fecha_show.getDate();
@@ -293,7 +293,7 @@ const AgendarConsulta = (props) => {
 				item.precio_moneda = toFormatterCurrency(item.precio);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 			});
 			setConsultas(response.data);
 		}
@@ -384,8 +384,8 @@ const AgendarConsulta = (props) => {
 		setValues({ ...values, tiempo: e.target.value });
 	}
 
-	const handleChangeMedicos = (e) => {
-		setValues({ ...values, medico: e.target.value });
+	const handleChangeDermatologos = (e) => {
+		setValues({ ...values, dermatologo: e.target.value });
 	}
 
 	const handleChangeObservaciones = e => {
@@ -398,8 +398,8 @@ const AgendarConsulta = (props) => {
 
 	const handleChangeFrecuencia = (e) => {
 		const frecuencia = e.target.value._id;
-		const medico = medicos.filter(item => {
-			return item._id === medicoDirectoId;
+		const dermatologo = dermatologos.filter(item => {
+			return item._id === dermatologoDirectoId;
 		});
 		const promovendedor = promovendedores.filter(item => {
 			return item._id === promovendedorSinAsignarId;
@@ -407,7 +407,7 @@ const AgendarConsulta = (props) => {
 		setValues({
 			...values,
 			frecuencia: frecuencia,
-			medico: frecuencia === frecuenciaPrimeraVezId ? medico[0] : undefined,
+			dermatologo: frecuencia === frecuenciaPrimeraVezId ? dermatologo[0] : undefined,
 			promovendedor: frecuencia === fercuenciaReconsultaId ? promovendedor[0] : undefined,
 		});
 	}
@@ -578,9 +578,9 @@ const AgendarConsulta = (props) => {
 						medios={medios}
 						onChangeTipoCita={(e) => handleChangeTipoCita(e)}
 						onChangeMedio={(e) => handleChangeMedio(e)}
-						medicos={medicos}
+						dermatologos={dermatologos}
 						promovendedores={promovendedores}
-						onChangeMedicos={(e) => handleChangeMedicos(e)}
+						onChangeDermatologos={(e) => handleChangeDermatologos(e)}
 						onChangePromovendedor={(e) => handleChangePromovendedor(e)}
 						setOpenAlert={setOpenAlert}
 						setMessage={setMessage}

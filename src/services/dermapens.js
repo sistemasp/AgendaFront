@@ -160,10 +160,10 @@ export const waitingDermapenList = async (sucursalId, statusAsistioId) => {
     }
 }
 
-export const findDermapenByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, medicoId, atendidoId, turno) => {
+export const findDermapenByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, dermatologoId, atendidoId, turno) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/dermapen/${dia}/${mes}/${anio}/sucursal/${sucursalId}/medico/${medicoId}/atendido/${atendidoId}/turno/${turno}`,
+            url: `${baseUrl}/dermapen/${dia}/${mes}/${anio}/sucursal/${sucursalId}/dermatologo/${dermatologoId}/atendido/${atendidoId}/turno/${turno}`,
             method: 'GET'
         });
         return response;
@@ -172,10 +172,10 @@ export const findDermapenByPayOfDoctorTurno = async (dia, mes, anio, sucursalId,
     }
 }
 
-export const findDermapensByPayOfDoctorHoraAplicacion = async (sucursalId, medicoId, atendidoId, hora_apertura, hora_cierre) => {
+export const findDermapensByPayOfDoctorHoraAplicacion = async (sucursalId, dermatologoId, atendidoId, hora_apertura, hora_cierre) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/dermapen/sucursal/${sucursalId}/medico/${medicoId}/atendido/${atendidoId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
+            url: `${baseUrl}/dermapen/sucursal/${sucursalId}/dermatologo/${dermatologoId}/atendido/${atendidoId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
             method: 'GET'
         });
         return response;

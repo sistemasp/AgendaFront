@@ -80,7 +80,7 @@ const ModalProximaCita = (props) => {
     promovendedor: promovendedorSinAsignarId,
     status: pendienteStatusId,
     observaciones: '',
-    medico: cita.medico ? cita.medico : '',
+    dermatologo: cita.dermatologo ? cita.dermatologo : '',
     frecuencia: reconsultaFrecuenciaId,
     servicio: cita.servicio,
     sucursal: cita.sucursal,

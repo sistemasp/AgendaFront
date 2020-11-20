@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     position: 'absolute',
-    width: 400,
+    width: 550,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -89,7 +89,7 @@ const ModalFormConsultorioAgregarPaciente = (props) => {
                     error={Boolean(errors.consultorio)}
                     onChange={onChangeConsultorio}
                     label="Consultorio disponible" >
-                    {consultorios.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+                    {consultorios.sort().map((item, index) => <MenuItem key={index} value={item}>{`${item.nombre} - ${item.dermatologo.nombre}`} </MenuItem>)}
                   </Select>
                 </FormControl>
               </Grid>

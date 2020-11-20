@@ -60,7 +60,7 @@ export const AgendarDermapenContainer = (props) => {
 		onChangeObservaciones,
 		empleado,
 		disableDate,
-		medicos,
+		dermatologos,
 		promovendedores,
 		cosmetologas,
 		onChangeDoctors,
@@ -69,7 +69,7 @@ export const AgendarDermapenContainer = (props) => {
 		onChangeCosmetologa,
 		onChangeMedio,
 		medios,
-		medicoDirectoId,
+		dermatologoDirectoId,
 		materiales,
 		onChangeMateriales,
 		onChangeItemPrecio,
@@ -180,15 +180,15 @@ export const AgendarDermapenContainer = (props) => {
 				<Grid container spacing={3}>
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
-							<InputLabel id="simple-select-outlined-hora">Medico</InputLabel>
+							<InputLabel id="simple-select-outlined-hora">Dermatologo</InputLabel>
 							<Select
-								labelId="simple-select-outlined-medico"
-								id="simple-select-outlined-medico"
-								value={values.medico}
-								error={Boolean(errors.medico)}
+								labelId="simple-select-outlined-dermatologo"
+								id="simple-select-outlined-dermatologo"
+								value={values.dermatologo}
+								error={Boolean(errors.dermatologo)}
 								onChange={onChangeDoctors}
-								label="Medico" >
-								{medicos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+								label="Dermatologo" >
+								{dermatologos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
 					</Grid>
@@ -310,7 +310,7 @@ export const AgendarDermapenContainer = (props) => {
 							className={classes.button}
 							color="primary"
 							variant="contained"
-							disabled={!isValid || isSubmitting || !paciente.nombres || !values.medico
+							disabled={!isValid || isSubmitting || !paciente.nombres || !values.dermatologo
 								|| !values.fecha_hora || !values.tiempo}
 							onClick={() => onClickAgendar(values)}
 							text='AGENDAR' />

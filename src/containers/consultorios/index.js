@@ -5,10 +5,10 @@ import { ConsultorioContainer } from './consultorios';
 import {
 	findSurgeryBySucursalId,
 	createSurgery,
-	breakFreeSurgeryByIdMedico,
+	breakFreeSurgeryByIdDermatologo,
 	findCabinaBySucursalId,
 	createCabina,
-	breakFreeCabinaByIdMedico,
+	breakFreeCabinaByIdDermatologo,
 	createSalaCirugia,
 	findSalaCirugiaBySucursalId,
 	updateEmployee
@@ -68,7 +68,7 @@ const Consultorios = (props) => {
 
 	const columnsConsultorio = [
 		{ title: 'Nombre', field: 'nombre' },
-		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
 	];
 
@@ -80,7 +80,7 @@ const Consultorios = (props) => {
 
 	const columnsSalaCirugia = [
 		{ title: 'Nombre', field: 'nombre' },
-		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
 	];
 
@@ -101,7 +101,7 @@ const Consultorios = (props) => {
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'SIN MEDICO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN MEDICO';
 			});
 			setConsultorios(response.data);
 		}
@@ -123,7 +123,7 @@ const Consultorios = (props) => {
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'SIN ASIGNAR';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN ASIGNAR';
 			});
 			setSalaCirugias(response.data);
 		}
@@ -153,18 +153,18 @@ const Consultorios = (props) => {
 		setOpenAlert(false);
 	};
 
-	const handleOnClickAsignarMedico = (event, rowData) => {
+	const handleOnClickAsignarDermatologo = (event, rowData) => {
 		setConsultorio(rowData);
 		setOpenModalAsignar(true);
 	}
 
 	const handleOnClickLiberarConsultorio = async (event, rowData) => {
-		rowData.medico.disponible = true;
-    	await updateEmployee(rowData.medico._id, rowData.medico);
-		const response = await breakFreeSurgeryByIdMedico(rowData._id);
+		rowData.dermatologo.disponible = true;
+    	await updateEmployee(rowData.dermatologo._id, rowData.dermatologo);
+		const response = await breakFreeSurgeryByIdDermatologo(rowData._id);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setOpenAlert(true);
-			setMessage('Salio el medico');
+			setMessage('Salio el dermatologo');
 			await loadConsultorios();
 		}
 	}
@@ -183,7 +183,7 @@ const Consultorios = (props) => {
 	}
 
 	const handleOnClickLiberarCabina = async (event, rowData) => {
-		const response = await breakFreeCabinaByIdMedico(rowData._id);
+		const response = await breakFreeCabinaByIdDermatologo(rowData._id);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setOpenAlert(true);
 			setMessage('Salio la cosmetologa');
@@ -219,11 +219,11 @@ const Consultorios = (props) => {
 
 	const actionsConsultorio = [
 		rowData => (
-			!rowData.medico ?
+			!rowData.dermatologo ?
 				{
 					icon: AirlineSeatReclineExtraIcon,
-					tooltip: 'Asignar un medico',
-					onClick: handleOnClickAsignarMedico
+					tooltip: 'Asignar un dermatologo',
+					onClick: handleOnClickAsignarDermatologo
 				} :
 				(!rowData.paciente ? {
 					icon: DirectionsWalkIcon,
@@ -239,7 +239,7 @@ const Consultorios = (props) => {
 				{
 					icon: AirlineSeatReclineExtraIcon,
 					tooltip: 'Asignar una cosmetologa',
-					onClick: handleOnClickAsignarMedico
+					onClick: handleOnClickAsignarDermatologo
 				} :
 				(!rowData.paciente ? {
 					icon: DirectionsWalkIcon,
@@ -251,11 +251,11 @@ const Consultorios = (props) => {
 
 	const actionsSalaCirugia = [
 		rowData => (
-			!rowData.medico ?
+			!rowData.dermatologo ?
 				{
 					icon: AirlineSeatReclineExtraIcon,
-					tooltip: 'Asignar un medico',
-					onClick: handleOnClickAsignarMedico
+					tooltip: 'Asignar un dermatologo',
+					onClick: handleOnClickAsignarDermatologo
 				} :
 				(!rowData.paciente ? {
 					icon: DirectionsWalkIcon,
@@ -271,7 +271,7 @@ const Consultorios = (props) => {
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				response.data.forEach(item => {
 					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'SIN MEDICO';
+					item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN MEDICO';
 				});
 				setConsultorios(response.data);
 			}
@@ -293,7 +293,7 @@ const Consultorios = (props) => {
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				response.data.forEach(item => {
 					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'SIN ASIGNAR';
+					item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN ASIGNAR';
 				});
 				setSalaCirugias(response.data);
 			}

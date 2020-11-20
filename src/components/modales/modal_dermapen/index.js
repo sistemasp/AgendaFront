@@ -52,7 +52,7 @@ const ModalDermapen = (props) => {
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
   const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
-  const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
+  const dermatologoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
   const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
   const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
   const reagendoStatusId = process.env.REACT_APP_REAGENDO_STATUS_ID;
@@ -100,7 +100,7 @@ const ModalDermapen = (props) => {
     total: dermapen.total,
     motivos: dermapen.motivos,
     observaciones: dermapen.observaciones,
-    medico: dermapen.medico ? dermapen.medico._id : '',
+    dermatologo: dermapen.dermatologo ? dermapen.dermatologo._id : '',
     tiempo: dermapen.tiempo,
     pagado: dermapen.pagado,
     pagos: dermapen.pagos,
@@ -265,8 +265,8 @@ const ModalDermapen = (props) => {
     setValues({ ...values, motivos: e.target.value });
   }
 
-  const handleChangeMedico = (e) => {
-    setValues({ ...values, medico: e.target.value });
+  const handleChangeDermatologo = (e) => {
+    setValues({ ...values, dermatologo: e.target.value });
   }
 
   const handleChangeTiempo = e => {
@@ -342,7 +342,7 @@ const ModalDermapen = (props) => {
     }
 
     const loadDoctores = async () => {
-      const response = await findEmployeesByRolId(medicoRolId);
+      const response = await findEmployeesByRolId(dermatologoRolId);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setDoctores(response.data);
       }
@@ -370,7 +370,7 @@ const ModalDermapen = (props) => {
     loadTipoCitas();
     loadStaus();
     setIsLoading(false);
-  }, [dermapen, promovendedorRolId, cosmetologaRolId, medicoRolId]);
+  }, [dermapen, promovendedorRolId, cosmetologaRolId, dermatologoRolId]);
 
   return (
     <Fragment>
@@ -388,7 +388,7 @@ const ModalDermapen = (props) => {
             onChangeHora={(e) => handleChangeHora(e)}
             onChangeTipoCita={(e) => handleChangeTipoCita(e)}
             onChangeStatus={(e) => handleChangeStatus(e)}
-            onChangeMedico={(e) => handleChangeMedico(e)}
+            onChangeDermatologo={(e) => handleChangeDermatologo(e)}
             onChangeTiempo={(e) => handleChangeTiempo(e)}
             horarios={horarios}
             doctores={doctores}

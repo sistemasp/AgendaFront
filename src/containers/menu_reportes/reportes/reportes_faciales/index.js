@@ -54,7 +54,7 @@ const ReportesFaciales = (props) => {
 		{ title: 'Quien confirma llamada', field: 'quien_confirma.nombre' },
 		{ title: 'Quien confirma asistencia', field: 'quien_confirma.nombre' },
 		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
-		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
 		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
 		{ title: 'Estado', field: 'status.nombre' },
 		{ title: 'Motivos', field: 'motivos' },
@@ -93,7 +93,7 @@ const ReportesFaciales = (props) => {
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 				item.show_tratamientos = item.tratamientos.map(tratamiento => {
 					return `${tratamiento.nombre}, `;
 				});

@@ -293,10 +293,10 @@ export const waitingListTratamiento = async (sucursalId, statusAsistioId) => {
         console.log('waitingListTratamiento', error);
     }
 }
-export const findDatesByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, medicoId, atendidoId, turno) => {
+export const findDatesByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, dermatologoId, atendidoId, turno) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/cita/${dia}/${mes}/${anio}/sucursal/${sucursalId}/medico/${medicoId}/atendido/${atendidoId}/turno/${turno}`,
+            url: `${baseUrl}/cita/${dia}/${mes}/${anio}/sucursal/${sucursalId}/dermatologo/${dermatologoId}/atendido/${atendidoId}/turno/${turno}`,
             method: 'GET'
         });
         return response;
@@ -484,15 +484,15 @@ export const breakFreeSurgeryByIdPaciente = async (surgeryId) => {
     }
 }
 
-export const breakFreeSurgeryByIdMedico = async (surgeryId) => {
+export const breakFreeSurgeryByIdDermatologo = async (surgeryId) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/consultorio/liberar/medico/${surgeryId}`,
+            url: `${baseUrl}/consultorio/liberar/dermatologo/${surgeryId}`,
             method: 'PUT'
         });
         return response;
     } catch (error) {
-        console.log('breakFreeSurgeryByIdMedico', error);
+        console.log('breakFreeSurgeryByIdDermatologo', error);
     }
 }
 
@@ -572,15 +572,15 @@ export const breakFreeSalaCirugiaByIdPaciente = async (salaCirugiaId) => {
     }
 }
 
-export const breakFreeSalaCirugiaByIdMedico = async (salaCirugiaId) => {
+export const breakFreeSalaCirugiaByIdDermatologo = async (salaCirugiaId) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/salacirugia/liberar/medico/${salaCirugiaId}`,
+            url: `${baseUrl}/salacirugia/liberar/dermatologo/${salaCirugiaId}`,
             method: 'PUT'
         });
         return response;
     } catch (error) {
-        console.log('breakFreeSalaCirugiaByIdMedico', error);
+        console.log('breakFreeSalaCirugiaByIdDermatologo', error);
     }
 }
 
@@ -660,15 +660,15 @@ export const breakFreeCabinaByIdPaciente = async (surgeryId) => {
     }
 }
 
-export const breakFreeCabinaByIdMedico = async (surgeryId) => {
+export const breakFreeCabinaByIdDermatologo = async (surgeryId) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/cabina/liberar/medico/${surgeryId}`,
+            url: `${baseUrl}/cabina/liberar/dermatologo/${surgeryId}`,
             method: 'PUT'
         });
         return response;
     } catch (error) {
-        console.log('breakFreeCabinaByIdMedico', error);
+        console.log('breakFreeCabinaByIdDermatologo', error);
     }
 }
 
@@ -1048,10 +1048,10 @@ export const showAllSexos = async () => {
 
 // MEDICOS
 
-export const findCirugiasByPayOfDoctor = async (dia, mes, anio, sucursalId, medicoId) => {
+export const findCirugiasByPayOfDoctor = async (dia, mes, anio, sucursalId, dermatologoId) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/cirugia/${dia}/${mes}/${anio}/sucursal/${sucursalId}/medico/${medicoId}`,
+            url: `${baseUrl}/cirugia/${dia}/${mes}/${anio}/sucursal/${sucursalId}/dermatologo/${dermatologoId}`,
             method: 'GET'
         });
         return response;
@@ -1060,10 +1060,10 @@ export const findCirugiasByPayOfDoctor = async (dia, mes, anio, sucursalId, medi
     }
 }
 
-export const findCirugiasByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, medicoId, turno) => {
+export const findCirugiasByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, dermatologoId, turno) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/cirugia/${dia}/${mes}/${anio}/sucursal/${sucursalId}/medico/${medicoId}/turno/${turno}`,
+            url: `${baseUrl}/cirugia/${dia}/${mes}/${anio}/sucursal/${sucursalId}/dermatologo/${dermatologoId}/turno/${turno}`,
             method: 'GET'
         });
         return response;
@@ -1072,10 +1072,10 @@ export const findCirugiasByPayOfDoctorTurno = async (dia, mes, anio, sucursalId,
     }
 }
 
-export const findEsteticasByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, medicoId, turno) => {
+export const findEsteticasByPayOfDoctorTurno = async (dia, mes, anio, sucursalId, dermatologoId, turno) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/estetica/${dia}/${mes}/${anio}/sucursal/${sucursalId}/medico/${medicoId}/turno/${turno}`,
+            url: `${baseUrl}/estetica/${dia}/${mes}/${anio}/sucursal/${sucursalId}/dermatologo/${dermatologoId}/turno/${turno}`,
             method: 'GET'
         });
         return response;
@@ -1183,28 +1183,28 @@ export const showAllMaterialEsteticas = async () => {
 
 // PAGO MEDICO
 
-export const createPagoMedico = async (pagoMedico) => {
+export const createPagoDermatologo = async (pagoDermatologo) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/pagoMedico`,
+            url: `${baseUrl}/pagoDermatologo`,
             method: 'POST',
-            data: pagoMedico
+            data: pagoDermatologo
         });
         return response;
     } catch (error) {
-        console.log('createPagoMedico', error);
+        console.log('createPagoDermatologo', error);
     }
 }
 
-export const showTodayPagoMedicoBySucursalTurno = async (medicoId, sucursalId, turno) => {
+export const showTodayPagoDermatologoBySucursalTurno = async (dermatologoId, sucursalId, turno) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/pagoMedico/${medicoId}/sucursal/${sucursalId}/turno/${turno}`,
+            url: `${baseUrl}/pagoDermatologo/${dermatologoId}/sucursal/${sucursalId}/turno/${turno}`,
             method: 'GET'
         });
         return response;
     } catch (error) {
-        console.log('showTodayPagoMedicoBySucursalTurno', error);
+        console.log('showTodayPagoDermatologoBySucursalTurno', error);
     }
 }
 

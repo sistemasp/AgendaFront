@@ -44,7 +44,7 @@ const ReportesCirugias = (props) => {
 		{ title: 'Consecutivo', field: 'consecutivo' },
 		{ title: 'Paciente', field: 'paciente_nombre' },
 		{ title: 'Folio consulta', field: 'folio_consulta' },
-		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
 		{ title: 'Materiales', field: 'materiales_show' },
 		{ title: 'Biopsias', field: 'biopsias_show' },
 		{ title: 'Costo biopsias', field: 'costo_biopsias_moneda' },
@@ -91,7 +91,7 @@ const ReportesCirugias = (props) => {
 					item.costo_biopsias_moneda = toFormatterCurrency(item.costo_biopsias);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+					item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 				});
 				setCitas(response.data);
 			}
@@ -143,7 +143,7 @@ const ReportesCirugias = (props) => {
 				item.costo_biopsias_moneda = toFormatterCurrency(item.costo_biopsias);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 			});
 			setCitas(response.data);
 		}

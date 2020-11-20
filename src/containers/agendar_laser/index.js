@@ -57,7 +57,7 @@ const AgendarLaser = (props) => {
 		sucursal,
 	} = props;
 
-	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
+	const dermatologoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
 	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
 	const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
 	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
@@ -65,7 +65,7 @@ const AgendarLaser = (props) => {
 	const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
 	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 	const atendidoStatusId = process.env.REACT_APP_ATENDIDO_STATUS_ID;
-	const medicoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
+	const dermatologoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
 	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
 	const servicioLaserId = process.env.REACT_APP_LASER_SERVICIO_ID;
 
@@ -73,7 +73,7 @@ const AgendarLaser = (props) => {
 	const [message, setMessage] = useState('');
 	const [tratamientos, setTratamientos] = useState([]);
 	const [horarios, setHorarios] = useState([]);
-	const [medicos, setMedicos] = useState([]);
+	const [dermatologos, setDermatologos] = useState([]);
 	const [promovendedores, setPromovendedores] = useState([]);
 	const [cosmetologas, setCosmetologas] = useState([]);
 	const [tipoCitas, setTipoCitas] = useState([]);
@@ -88,7 +88,7 @@ const AgendarLaser = (props) => {
 		tipo_cita: tipoCitaNoAplicaId,
 		tiempo: '',
 		observaciones: '',
-		medico: { _id: medicoDirectoId },
+		dermatologo: { _id: dermatologoDirectoId },
 	});
 	const [citas, setCitas] = useState([]);
 	const [areas, setAreas] = useState([]);
@@ -121,7 +121,7 @@ const AgendarLaser = (props) => {
 		{ title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' },
 		{ title: 'Quien confirma asistencia', field: 'quien_confirma_asistencia.nombre' },
 		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
-		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
 		{ title: 'Tipo Cita', field: 'tipo_cita.nombre' },
 		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
 		{ title: 'Estado', field: 'status.nombre' },
@@ -252,7 +252,7 @@ const AgendarLaser = (props) => {
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 				item.show_areas = item.areas.map(area => {
 					return `${area.nombre}, `;
 				});
@@ -269,7 +269,7 @@ const AgendarLaser = (props) => {
 		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
-		data.tipo_cita = data.medico._id === medicoDirectoId ? tipoCitaNoAplicaId : data.tipo_cita;
+		data.tipo_cita = data.dermatologo._id === dermatologoDirectoId ? tipoCitaNoAplicaId : data.tipo_cita;
 
 		const response = await createLaser(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
@@ -288,7 +288,7 @@ const AgendarLaser = (props) => {
 				setValues({
 					servicio: '',
 					tratamientos: [],
-					medico: '',
+					dermatologo: '',
 					promovendedor: '',
 					cosmetologa: '',
 					paciente: `${paciente._id}`,
@@ -328,7 +328,7 @@ const AgendarLaser = (props) => {
 	}
 
 	const handleChangeDoctors = (e) => {
-		setValues({ ...values, medico: e.target.value });
+		setValues({ ...values, dermatologo: e.target.value });
 	}
 
 	const handleChangePromovendedor = (e) => {
@@ -439,7 +439,7 @@ const AgendarLaser = (props) => {
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-					item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+					item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 					item.show_areas = item.areas.map(area => {
 						return `${area.nombre}, `;
 					});
@@ -463,10 +463,10 @@ const AgendarLaser = (props) => {
 			}
 		}
 
-		const loadMedicos = async () => {
-			const response = await findEmployeesByRolId(medicoRolId);
+		const loadDermatologos = async () => {
+			const response = await findEmployeesByRolId(dermatologoRolId);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				setMedicos(response.data);
+				setDermatologos(response.data);
 			}
 		}
 
@@ -489,7 +489,7 @@ const AgendarLaser = (props) => {
 		loadAreas();
 		loadPromovendedores();
 		loadCosmetologas();
-		loadMedicos();
+		loadDermatologos();
 		loadTipoCitas();
 		loadMedios();
 	}, [sucursal]);
@@ -529,7 +529,7 @@ const AgendarLaser = (props) => {
 								empleado={empleado}
 								onClickCancel={handleCloseModal}
 								loadLaser={loadLaser}
-								medicos={medicos}
+								dermatologos={dermatologos}
 								tipoCitas={tipoCitas}
 								medios={medios}
 								onChangeTipoCita={(e) => handleChangeTipoCita(e)}
@@ -548,7 +548,7 @@ const AgendarLaser = (props) => {
 								setOpenAlert={setOpenAlert}
 								setMessage={setMessage}
 								setFilterDate={setFilterDate}
-								medicoDirectoId={medicoDirectoId}
+								dermatologoDirectoId={dermatologoDirectoId}
 								onGuardarModalPagos={handleGuardarModalPagos}
 								{...props} />
 						}

@@ -25,7 +25,7 @@ import AirlineSeatReclineNormalIcon from '@material-ui/icons/AirlineSeatReclineN
 import { Button, Grid } from '@material-ui/core';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import ModalPassword from '../../components/modales/modal_password';
-import Medicos from '../menu_medicos';
+import Dermatologos from '../menu_dermatologos';
 import Consultorios from '../consultorios';
 import Corte from '../menu_corte';
 import ListaEspera from '../lista_espera';
@@ -256,9 +256,9 @@ export const MainContainer = props => {
 						<ListItemIcon> <AccessibilityNewIcon /> </ListItemIcon>
 						<ListItemText primary={'Pacientes'} />
 					</ListItem>
-					<ListItem button key={'Medicos'} onClick={(e) => onChangeTab(e, 1, handleDrawerClose)}>
+					<ListItem button key={'Dermatologos'} onClick={(e) => onChangeTab(e, 1, handleDrawerClose)}>
 						<ListItemIcon> <People /> </ListItemIcon>
-						<ListItemText primary={'Medicos'} />
+						<ListItemText primary={'Dermatologos'} />
 					</ListItem>
 					<ListItem button key={'Consultorios / Cabinas'} onClick={(e) => onChangeTab(e, 2, handleDrawerClose)}>
 						<ListItemIcon> <AirlineSeatReclineNormalIcon /> </ListItemIcon>
@@ -296,7 +296,7 @@ export const MainContainer = props => {
 							history={history} />
 					</TabPanel>
 					<TabPanel value={value} index={1}>
-						<Medicos
+						<Dermatologos
 							empleado={empleado}
 							sucursal={sucursal} />
 					</TabPanel>

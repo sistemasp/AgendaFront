@@ -58,7 +58,7 @@ const ModalCirugia = (props) => {
     biopsias: cirugia.biopsias,
     pagado: cirugia.pagado,
     paciente: consulta.paciente,
-    medico: consulta.medico,
+    dermatologo: consulta.dermatologo,
     hasBiopsia: cirugia.hasBiopsia,
     cantidad_biopsias: cirugia.biopsias ? cirugia.biopsias.length : 0,
     costo_biopsias: cirugia.costo_biopsias ? cirugia.costo_biopsias : 0,
@@ -67,7 +67,7 @@ const ModalCirugia = (props) => {
   });
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
-  const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
+  const dermatologoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
   const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
   const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
   const reagendoStatusId = process.env.REACT_APP_REAGENDO_STATUS_ID;
@@ -102,7 +102,7 @@ const ModalCirugia = (props) => {
         const biopsia = {
           fecha_realizacion: fecha_actual,
           consulta: data.consulta._id,
-          medico: data.medico._id,
+          dermatologo: data.dermatologo._id,
           paciente: data.paciente._id,
           sucursal: data.sucursal,
           patologo: data.patologo,

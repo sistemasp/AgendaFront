@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as Yup from "yup";
 import { Formik } from 'formik';
-import ModalFormConsultorioAgregarMedico from './ModalFormConsultorioAgregarMedico';
+import ModalFormConsultorioAgregarDermatologo from './ModalFormConsultorioAgregarDermatologo';
 import { findEmployeesByRolIdAvailable, updateSurgery, updateEmployee } from '../../../services';
 
 const validationSchema = Yup.object({
@@ -9,7 +9,7 @@ const validationSchema = Yup.object({
     .required("Los nombres del pacientes son requeridos")
 });
 
-const ModalConsultorioAgregarMedico = (props) => {
+const ModalConsultorioAgregarDermatologo = (props) => {
   const {
     open,
     onClose,
@@ -20,43 +20,43 @@ const ModalConsultorioAgregarMedico = (props) => {
   } = props;
 
   const [isLoading, setIsLoading] = useState(true);
-  const [medicos, setMedicos] = useState([]);
+  const [dermatologos, setDermatologos] = useState([]);
 
   const [values, setValues] = useState({
     _id: consultorio._id,
     nombre: consultorio.nombre
   });
 
-  const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
+  const dermatologoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
 
   useEffect(() => {
-    const loadMedicos = async () => {
-      const response = await findEmployeesByRolIdAvailable(medicoRolId);
+    const loadDermatologos = async () => {
+      const response = await findEmployeesByRolIdAvailable(dermatologoRolId);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setMedicos(response.data);
+        setDermatologos(response.data);
       }
       setIsLoading(false);
     }
 
-    loadMedicos();
-  }, [medicoRolId]);
+    loadDermatologos();
+  }, [dermatologoRolId]);
 
   const handleClickGuardar = async (event, rowData) => {
-    values.medico.disponible = false;
-    await updateEmployee(values.medico._id, values.medico);
+    values.dermatologo.disponible = false;
+    await updateEmployee(values.dermatologo._id, values.dermatologo);
     values.disponible = true;
     const response = await updateSurgery(values._id, values);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setOpenAlert(true);
-      setMessage('El medico se agrego al consultorio correctamente');
+      setMessage('El dermatologo se agrego al consultorio correctamente');
       onClose();
       await loadConsultorios();
     }
 
   }
 
-  const handleChangeMedicos = (event) => {
-    setValues({ ...values, medico: event.target.value });
+  const handleChangeDermatologos = (event) => {
+    setValues({ ...values, dermatologo: event.target.value });
   }
 
   return (
@@ -64,7 +64,7 @@ const ModalConsultorioAgregarMedico = (props) => {
       initialValues={values}
       validationSchema={validationSchema} >
       {
-        props => <ModalFormConsultorioAgregarMedico
+        props => <ModalFormConsultorioAgregarDermatologo
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
           open={open}
@@ -72,12 +72,12 @@ const ModalConsultorioAgregarMedico = (props) => {
           consultorio={consultorio}
           onClickGuardar={handleClickGuardar}
           isLoading={isLoading}
-          medicos={medicos}
-          onChangeMedicos={(e) => handleChangeMedicos(e)}
+          dermatologos={dermatologos}
+          onChangeDermatologos={(e) => handleChangeDermatologos(e)}
           {...props} />
       }
     </Formik>
   );
 }
 
-export default ModalConsultorioAgregarMedico;
+export default ModalConsultorioAgregarDermatologo;

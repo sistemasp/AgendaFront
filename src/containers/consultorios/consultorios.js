@@ -4,7 +4,7 @@ import TableComponent from '../../components/table/TableComponent';
 import { makeStyles, Grid } from '@material-ui/core';
 import { ButtonCustom } from '../../components/basic/ButtonCustom';
 import ModalConsultorio from '../../components/modales/modal_consultorio';
-import ModalConsultorioAgregarMedico from '../../components/modales/modal_consultorio_agregar_medico';
+import ModalConsultorioAgregarDermatologo from '../../components/modales/modal_consultorio_agregar_dermatologo';
 import ModalCabina from '../../components/modales/modal_cabina';
 import ModalSalaCirugia from '../../components/modales/modal_sala_cirugia';
 
@@ -85,7 +85,7 @@ export const ConsultorioContainer = (props) => {
       }
       {
         openModalAsignar ?
-          <ModalConsultorioAgregarMedico
+          <ModalConsultorioAgregarDermatologo
             open={openModalAsignar}
             onClose={handleClose}
             consultorio={consultorio}

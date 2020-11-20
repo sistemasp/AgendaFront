@@ -135,7 +135,7 @@ const ModalFormImprimirCorte = (props) => {
   let totalIngresos = 0;
   let totalPagosAnticipados = 0;
   let totalEfectivo = 0;
-  let pagoMedicos = 0;
+  let pagoDermatologos = 0;
   let retirosParciales = 0;
   let otrosEgresos = 0;
 
@@ -345,7 +345,7 @@ const ModalFormImprimirCorte = (props) => {
             {
               dataEgresos.map(dataEgreso => {
                 {
-                  pagoMedicos += dataEgreso.tipo_egreso === 'PAGO MEDICO' ? dataEgreso.total : 0;
+                  pagoDermatologos += dataEgreso.tipo_egreso === 'PAGO MEDICO' ? dataEgreso.total : 0;
                   retirosParciales += dataEgreso.tipo_egreso === 'RETIRO PARCIAL' ? dataEgreso.total : 0;
                   otrosEgresos += dataEgreso.tipo_egreso === 'OTROS EGRESOS' ? dataEgreso.total : 0;
                 }
@@ -408,7 +408,7 @@ const ModalFormImprimirCorte = (props) => {
                 <h3 className={classes.label_cells_concepto}>TOTAL PAGO MEDICOS</h3>
               </Grid>
               <Grid item xs={4} className={classes.label}>
-                <h3 className={classes.label_cells}>{toFormatterCurrency(pagoMedicos)}</h3>
+                <h3 className={classes.label_cells}>{toFormatterCurrency(pagoDermatologos)}</h3>
               </Grid>
 
               <Grid item xs={8} className={classes.label}>
@@ -428,7 +428,7 @@ const ModalFormImprimirCorte = (props) => {
 
             <Grid container xs={6} className={classes.grid_right}>
               <Grid item xs={12} className={classes.label}>
-                <h1 className={classes.label_utilidad_perdida}>{`UTILIDAD O PÉRDIDA: ${toFormatterCurrency(totalEfectivo - pagoMedicos - retirosParciales - otrosEgresos)}`}<br /><br /></h1>
+                <h1 className={classes.label_utilidad_perdida}>{`UTILIDAD O PÉRDIDA: ${toFormatterCurrency(totalEfectivo - pagoDermatologos - retirosParciales - otrosEgresos)}`}<br /><br /></h1>
               </Grid>
               <Grid container>
                 <Grid item xs={true}>

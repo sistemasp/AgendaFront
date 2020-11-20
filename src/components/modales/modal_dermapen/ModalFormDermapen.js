@@ -77,7 +77,7 @@ const ModalFormDermapen = (props) => {
     statements,
     onChangeMotivos,
     onChangeObservaciones,
-    onChangeMedico,
+    onChangeDermatologo,
     empleado,
     sucursal,
     openModalConfirmacion,
@@ -208,15 +208,15 @@ const ModalFormDermapen = (props) => {
 
               <Grid item xs={12}>
                 {
-                  /* values.medico*/ false ?
-                    <h3 className={classes.label}>MÉDICO: {values.medico.nombre}</h3> :
+                  /* values.dermatologo*/ false ?
+                    <h3 className={classes.label}>MÉDICO: {values.dermatologo.nombre}</h3> :
                     <FormControl variant="outlined" className={classes.formControl}>
                       <InputLabel id="simple-select-outlined-hora">MÉDICO</InputLabel>
                       <Select
-                        labelId="simple-select-outlined-medico"
-                        id="simple-select-outlined-medico"
-                        value={values.medico}
-                        onChange={onChangeMedico}
+                        labelId="simple-select-outlined-dermatologo"
+                        id="simple-select-outlined-dermatologo"
+                        value={values.dermatologo}
+                        onChange={onChangeDermatologo}
                         label="MÉDICO" >
                         {doctores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                       </Select>

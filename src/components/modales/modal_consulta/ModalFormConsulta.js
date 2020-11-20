@@ -75,7 +75,7 @@ const ModalFormConsulta = (props) => {
     onChangePrecio,
     onChangeMotivos,
     onChangeObservaciones,
-    onChangeMedico,
+    onChangeDermatologo,
   } = props;
   
   return (
@@ -98,16 +98,16 @@ const ModalFormConsulta = (props) => {
               </Grid>
               <Grid item xs={12}>
                 {
-                  /* values.medico*/ false ?
-                    <h3 className={classes.label}>Medico : {values.medico.nombre}</h3> :
+                  /* values.dermatologo*/ false ?
+                    <h3 className={classes.label}>Dermatologo : {values.dermatologo.nombre}</h3> :
                     <FormControl variant="outlined" className={classes.formControl}>
-                      <InputLabel id="simple-select-outlined-hora">Medico</InputLabel>
+                      <InputLabel id="simple-select-outlined-hora">Dermatologo</InputLabel>
                       <Select
-                        labelId="simple-select-outlined-medico"
-                        id="simple-select-outlined-medico"
-                        value={values.medico}
-                        onChange={onChangeMedico}
-                        label="Medico" >
+                        labelId="simple-select-outlined-dermatologo"
+                        id="simple-select-outlined-dermatologo"
+                        value={values.dermatologo}
+                        onChange={onChangeDermatologo}
+                        label="Dermatologo" >
                         {doctores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                       </Select>
                     </FormControl>

@@ -103,7 +103,7 @@ const ModalCabinaAgregarPaciente = (props) => {
       setValues({ cabina: { paciente: cita.paciente._id } });
       let cabina = values.cabina;
       cabina.cita = cita._id;
-      cabina.medico = cita.medico;
+      cabina.dermatologo = cita.dermatologo;
       cabina.cosmetologa = cita.cosmetologa;
       cabina.paciente = paciente._id;
       cabina.tipo_servicio = tipo_servicio;

@@ -98,7 +98,7 @@ const ModalConsulta = (props) => {
     precio: consulta.precio,
     motivos: consulta.motivos,
     observaciones: consulta.observaciones,
-    medico: consulta.medico ? consulta.medico._id : '',
+    dermatologo: consulta.dermatologo ? consulta.dermatologo._id : '',
     pagado: consulta.pagado,
     frecuencia: consulta.frecuencia,
     hora_llegada: consulta.hora_llegada,
@@ -108,7 +108,7 @@ const ModalConsulta = (props) => {
   });
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
-  const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
+  const dermatologoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
   const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
   const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
   const reagendoStatusId = process.env.REACT_APP_REAGENDO_STATUS_ID;
@@ -126,7 +126,7 @@ const ModalConsulta = (props) => {
     }
 
     const loadDoctores = async () => {
-      const response = await findEmployeesByRolId(medicoRolId);
+      const response = await findEmployeesByRolId(dermatologoRolId);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
         setDoctores(response.data);
       }
@@ -165,7 +165,7 @@ const ModalConsulta = (props) => {
     loadStaus();
     loadHorarios();
     setIsLoading(false);
-  }, [consulta, promovendedorRolId, medicoRolId]);
+  }, [consulta, promovendedorRolId, dermatologoRolId]);
 
   const loadHorarios = async (date) => {
     const dia = date ? date.getDate() : values.fecha_show.getDate();
@@ -321,8 +321,8 @@ const ModalConsulta = (props) => {
     setValues({ ...values, motivos: e.target.value });
   }
 
-  const handleChangeMedico = (e) => {
-    setValues({ ...values, medico: e.target.value });
+  const handleChangeDermatologo = (e) => {
+    setValues({ ...values, dermatologo: e.target.value });
   }
 
   const handleChangeTiempo = e => {
@@ -360,7 +360,7 @@ const ModalConsulta = (props) => {
             onChangeTipoCita={(e) => handleChangeTipoCita(e)}
             onChangeStatus={(e) => handleChangeStatus(e)}
             onChangePromovendedor={(e) => handleChangePromovendedor(e)}
-            onChangeMedico={(e) => handleChangeMedico(e)}
+            onChangeDermatologo={(e) => handleChangeDermatologo(e)}
             onChangeTiempo={(e) => handleChangeTiempo(e)}
             horarios={horarios}
             promovendedores={promovendedores}

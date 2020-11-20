@@ -29,7 +29,7 @@ export const CirugiasContainer = (props) => {
     const eventPropGetter = (event, start, end, isSelected) => {
 
         let newStyle = {
-            backgroundColor: event.medico.color,
+            backgroundColor: event.dermatologo.color,
             color: textColor,
             borderRadius: "5px",
         };

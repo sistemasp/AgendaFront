@@ -51,7 +51,7 @@ const ReportesConsultas = (props) => {
 		{ title: 'Tipo Consulta', field: 'tipo_cita.nombre' },
 		{ title: 'Quien confirma', field: 'quien_confirma.nombre' },
 		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
-		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
 		{ title: 'Estado', field: 'status.nombre' },
 		{ title: 'Precio', field: 'precio_moneda' },
 		{ title: 'Sucursal', field: 'sucursal.nombre'},
@@ -87,7 +87,7 @@ const ReportesConsultas = (props) => {
 				item.precio_moneda = toFormatterCurrency(item.precio);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 			});
 			setCitas(response.data);
 		}

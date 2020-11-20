@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { Backdrop, CircularProgress } from '@material-ui/core';
-import { MedicosContainer } from './medicos';
+import { DermatologosContainer } from './dermatologos';
 import { findEmployeesByRolId } from '../../services';
 import EditIcon from '@material-ui/icons/Edit';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const Medicos = (props) => {
+const Dermatologos = (props) => {
 
 	const classes = useStyles();
 
@@ -45,11 +45,11 @@ const Medicos = (props) => {
 		empleado,
 	} = props;
 
-	const [openPagoMedico, setOpenPagoMedico] = useState(false);
+	const [openPagoDermatologo, setOpenPagoDermatologo] = useState(false);
 	const [openHistoric, setOpenHistoric] = useState(false);
 	const [openAlert, setOpenAlert] = useState(false);
-	const [medicos, setMedicos] = useState([]);
-	const [medico, setMedico] = useState({});
+	const [dermatologos, setDermatologos] = useState([]);
+	const [dermatologo, setDermatologo] = useState({});
 	const [isLoading, setIsLoading] = useState(true);
 	const [message, setMessage] = useState('');
 	const [severity, setSeverity] = useState('success');
@@ -73,15 +73,15 @@ const Medicos = (props) => {
 		exportDelimiter: ';'
 	}
 
-	const medicoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
+	const dermatologoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
 
 	const handleOpen = () => {
-		setOpenPagoMedico(true);
+		setOpenPagoDermatologo(true);
 	};
 
 	const handleClose = () => {
-		setMedico({});
-		setOpenPagoMedico(false);
+		setDermatologo({});
+		setOpenPagoDermatologo(false);
 		setOpenHistoric(false);
 	};
 
@@ -91,13 +91,13 @@ const Medicos = (props) => {
 
 	/*
 	const handleClickHistorico = (event, rowData) => {
-		setMedico(rowData);
+		setDermatologo(rowData);
 		setOpenHistoric(true);
 	}*/
 
 	const handleClickGenerarPago = (event, rowData) => {
-		setMedico(rowData);
-		setOpenPagoMedico(true);
+		setDermatologo(rowData);
+		setOpenPagoDermatologo(true);
 	}
 
 	const actions = [
@@ -114,8 +114,8 @@ const Medicos = (props) => {
 	];
 
 	useEffect(() => {
-		const loadMedicos = async () => {
-			const response = await findEmployeesByRolId(medicoRolId);
+		const loadDermatologos = async () => {
+			const response = await findEmployeesByRolId(dermatologoRolId);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				response.data.forEach(item => {
 					const fecha_ingreso = new Date(item.fecha_ingreso);
@@ -125,26 +125,26 @@ const Medicos = (props) => {
 					item.fecha_ingreso_show = fecha_ingreso_show;
 					item.fecha_baja_show = item.fecha_baja ? fecha_baja_show : 'VIGENTE';
 				});
-				setMedicos(response.data);
+				setDermatologos(response.data);
 			}
 			setIsLoading(false);
 		}
-		loadMedicos();
+		loadDermatologos();
 	}, []);
 
 	return (
 		<Fragment>
 			{
 				!isLoading ?
-					<MedicosContainer
-						medicos={medicos}
+					<DermatologosContainer
+						dermatologos={dermatologos}
 						columns={columns}
-						titulo='Medicos'
+						titulo='Dermatologos'
 						actions={actions}
 						options={options}
-						openPagoMedico={openPagoMedico}
+						openPagoDermatologo={openPagoDermatologo}
 						openHistoric={openHistoric}
-						medico={medico}
+						dermatologo={dermatologo}
 						sucursal={sucursal}
 						empleado={empleado}
 						handleOpen={handleOpen}
@@ -162,4 +162,4 @@ const Medicos = (props) => {
 	);
 }
 
-export default Medicos;
+export default Dermatologos;

@@ -117,20 +117,20 @@ const ListaEspera = (props) => {
 	const columnsConsultorios = [
 		{ title: 'Consultorio', field: 'nombre' },
 		{ title: 'Nombre', field: 'paciente_nombre' },
-		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
 	];
 
 	const columnsCabinas = [
 		{ title: 'Cabina', field: 'nombre' },
 		{ title: 'Nombre', field: 'paciente_nombre' },
 		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
-		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
 	];
 
 	const columnsSalaCirugias = [
 		{ title: 'Sala', field: 'nombre' },
 		{ title: 'Nombre', field: 'paciente_nombre' },
-		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
 	];
 
 	const columnsEspera = [
@@ -138,13 +138,13 @@ const ListaEspera = (props) => {
 		{ title: 'Servicio', field: 'servicio.nombre' },
 		{ title: 'Hora llegada', field: 'hora_llegada' },
 		{ title: 'Consecutivo', field: 'consecutivo' },
-		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
 	];
 
 	const columnsEsperaConsultas = [
 		{ title: 'Nombre', field: 'paciente_nombre' },
 		{ title: 'Hora llegada', field: 'hora_llegada' },
-		{ title: 'Medico', field: 'medico_nombre' },
+		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
 		{ title: 'Consecutivo', field: 'consecutivo' },
 	];
 
@@ -200,7 +200,7 @@ const ListaEspera = (props) => {
 			response.data.forEach(item => {
 				item.folio = generateFolio(item);
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'LIBRE';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'SIN MEDICO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN MEDICO';
 			});
 			setConsultorios(response.data);
 		}
@@ -212,7 +212,7 @@ const ListaEspera = (props) => {
 			response.data.forEach(item => {
 				item.folio = generateFolio(item);
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 			});
 			setListaEsperaConsultas(response.data);
 		}
@@ -225,7 +225,7 @@ const ListaEspera = (props) => {
 				item.folio = generateFolio(item);
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 			});
 			setListaEsperaFaciales(response.data);
 		}
@@ -237,7 +237,7 @@ const ListaEspera = (props) => {
 			response.data.forEach(item => {
 				item.folio = generateFolio(item);
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 			});
 			setListaEsperaDermapens(response.data);
 		}
@@ -250,7 +250,7 @@ const ListaEspera = (props) => {
 				item.folio = generateFolio(item);
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 			});
 			setListaEsperaLasers(response.data);
 		}
@@ -263,7 +263,7 @@ const ListaEspera = (props) => {
 				item.folio = generateFolio(item);
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 			});
 			setListaEsperaAparatologias(response.data);
 		}
@@ -275,7 +275,7 @@ const ListaEspera = (props) => {
 			response.data.forEach(item => {
 				item.folio = generateFolio(item);
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'LIBRE';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'SIN MEDICO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN MEDICO';
 			});
 			setSalaCirugias(response.data);
 		}
@@ -287,7 +287,7 @@ const ListaEspera = (props) => {
 			response.data.forEach(item => {
 				item.folio = generateFolio(item);
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'LIBRE';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'SIN MEDICO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN MEDICO';
 			});
 			setListaEsperaCirugias(response.data);
 		}
@@ -299,7 +299,7 @@ const ListaEspera = (props) => {
 			response.data.forEach(item => {
 				item.folio = generateFolio(item);
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 			});
 			setListaEsperaEstetica(response.data);
 			setIsLoading(false);
@@ -598,7 +598,7 @@ const ListaEspera = (props) => {
 			response.data.forEach(item => {
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-				item.medico_nombre = item.medico ? item.medico.nombre : 'DIRECTO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 			});
 			setCabinas(response.data);
 		}

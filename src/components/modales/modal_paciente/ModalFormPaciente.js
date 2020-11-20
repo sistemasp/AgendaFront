@@ -125,8 +125,8 @@ const ModalFormPaciente = (props) => {
                 <FormControl variant="outlined" className={classes.formControl}>
                   <InputLabel id="simple-select-outlined-hora">Sexo</InputLabel>
                   <Select
-                    labelId="simple-select-outlined-medico"
-                    id="simple-select-outlined-medico"
+                    labelId="simple-select-outlined-dermatologo"
+                    id="simple-select-outlined-dermatologo"
                     value={values.sexo}
                     onChange={onChangeSexo}
                     name="sexo"
