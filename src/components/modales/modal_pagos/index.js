@@ -20,7 +20,8 @@ const ModalPagos = (props) => {
     tipoServicioId,
   } = props;
 
-  const efectivoMetodoPagoId = process.env.REACT_APP_METODO_PAGO_EFECTIVO;
+  const efectivoFormaPagoId = process.env.REACT_APP_FORMA_PAGO_EFECTIVO;
+  const noPagaFormaPagoId = process.env.REACT_APP_FORMA_PAGO_NO_PAGA;
   const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
 
   const [isLoading, setIsLoading] = useState(true);
@@ -43,7 +44,7 @@ const ModalPagos = (props) => {
   const columns = [
     { title: 'Fecha', field: 'fecha' },
     { title: 'Hora', field: 'hora' },
-    { title: 'Metodo pago', field: 'metodo_pago.nombre' },
+    { title: 'Metodo pago', field: 'forma_pago.nombre' },
     { title: 'Cantidad', field: 'cantidad_moneda' },
     { title: 'Descuento(%)', field: 'porcentaje_descuento' },
     { title: 'Descuento', field: 'descuento_moneda' },
@@ -109,9 +110,9 @@ const ModalPagos = (props) => {
         item.subtotal_moneda = toFormatterCurrency((Number(item.cantidad) - Number(item.descuento)));
         item.comision_moneda = toFormatterCurrency(item.comision);
         item.total_moneda = toFormatterCurrency(item.total);
-        item.banco_nombre = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.banco.nombre;
-        item.tipo_tarjeta_nombre = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.tipo_tarjeta.nombre;
-        item.digitos_show = item.metodo_pago._id === efectivoMetodoPagoId ? '-' : item.metodo_pago.nombre;
+        item.banco_nombre = item.banco ? item.banco.nombre : '-';
+        item.tipo_tarjeta_nombre = item.tipo_tarjeta ? item.tipo_tarjeta.nombre : '-';
+        item.digitos_show = item.digitos ? item.digitos : '-';
         acomulado = Number(acomulado) + Number(item.cantidad);
       });
       setRestante(totalCE + Number(servicio.total ? servicio.total : servicio.precio) - Number(acomulado));

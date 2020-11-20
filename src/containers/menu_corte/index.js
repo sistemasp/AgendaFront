@@ -74,7 +74,7 @@ const Corte = (props) => {
   } = props;
 
   const columnsIngreso = [
-    { title: 'METODO DE PAGO', field: 'metodo_pago' },
+    { title: 'FORMA DE PAGO', field: 'forma_pago' },
     { title: 'TOTAL', field: 'total_moneda' },
   ];
 
@@ -146,7 +146,7 @@ const Corte = (props) => {
 
   const detailPanelIngresoDetalle = [
     {
-      tooltip: 'Detalles',
+      tooltip: 'DETALLES',
       render: rowData => {
         return (
           <Fragment>
@@ -162,7 +162,7 @@ const Corte = (props) => {
 
   const detailPanelIngreso = [
     {
-      tooltip: 'Detalles',
+      tooltip: 'DETALLES',
       render: rowData => {
         return (
           <Fragment>
@@ -193,10 +193,10 @@ const Corte = (props) => {
     }
   ];
 
-  const loadDataIngresos = async (tipoIngresos, ingresos, metodoPagos) => {
+  const loadDataIngresos = async (tipoIngresos, ingresos, formaPagos) => {
 
     const dataIngresosTemp = [];
-    metodoPagos.map((metodoPago) => {
+    formaPagos.map((formaPago) => {
 
       const tipoIngresosDetalles = [];
       tipoIngresos.map((tipoIngreso) => {
@@ -205,7 +205,7 @@ const Corte = (props) => {
         let totalTipoIngreso = 0;
 
         ingresos.forEach(ingreso => {
-          if (ingreso.metodo_pago._id === metodoPago._id) {
+          if (ingreso.forma_pago._id === formaPago._id) {
             if (ingreso.tipo_ingreso._id === tipoIngreso._id) {
               totalTipoIngreso += Number(ingreso.cantidad);
               const date = new Date(ingreso.create_date);
@@ -235,7 +235,7 @@ const Corte = (props) => {
       });
 
       const dataIngreso = {
-        metodo_pago: metodoPago.nombre,
+        forma_pago: formaPago.nombre,
         total: total,
         total_moneda: toFormatterCurrency(total),
         tipo_ingresos_detalles: tipoIngresosDetalles,
@@ -247,10 +247,10 @@ const Corte = (props) => {
     setDataIngresos(dataIngresosTemp);
   }
 
-  const loadDataPagosAnticipados = async (tipoIngresos, ingresos, metodoPagos) => {
+  const loadDataPagosAnticipados = async (tipoIngresos, ingresos, formaPagos) => {
 
     const dataIngresosTemp = [];
-    metodoPagos.map((metodoPago) => {
+    formaPagos.map((formaPago) => {
 
       const tipoIngresosDetalles = [];
       tipoIngresos.map((tipoIngreso) => {
@@ -259,7 +259,7 @@ const Corte = (props) => {
         let totalTipoIngreso = 0;
 
         ingresos.forEach(ingreso => {
-          if (ingreso.metodo_pago._id === metodoPago._id) {
+          if (ingreso.forma_pago._id === formaPago._id) {
             if (ingreso.tipo_ingreso._id === tipoIngreso._id) {
               totalTipoIngreso += Number(ingreso.cantidad);
               const date = new Date(ingreso.create_date);
@@ -290,7 +290,7 @@ const Corte = (props) => {
       });
 
       const dataIngreso = {
-        metodo_pago: metodoPago.nombre,
+        forma_pago: formaPago.nombre,
         total: total,
         total_moneda: toFormatterCurrency(total),
         tipo_ingresos_detalles: tipoIngresosDetalles,
@@ -333,7 +333,7 @@ const Corte = (props) => {
     setDataEgresos(dataEgresosTemp);
   }
 
-  const loadIngresos = async (tipoIngresos, metodoPagos, hora_apertura, hora_cierre) => {
+  const loadIngresos = async (tipoIngresos, formaPagos, hora_apertura, hora_cierre) => {
     const response = await showIngresosTodayBySucursalAndHoraAplicacion(sucursal, hora_apertura, hora_cierre ? hora_cierre : new Date());
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       const data = response.data;
@@ -341,12 +341,12 @@ const Corte = (props) => {
         item.cantidad_moneda = toFormatterCurrency(item.cantidad);
       });
       setIngresos(data);
-      await loadDataIngresos(tipoIngresos, data, metodoPagos);
+      await loadDataIngresos(tipoIngresos, data, formaPagos);
       setIsLoading(false);
     }
   }
 
-  const loadPagosAnticipados = async (tipoIngresos, metodoPagos, hora_apertura, hora_cierre) => {
+  const loadPagosAnticipados = async (tipoIngresos, formaPagos, hora_apertura, hora_cierre) => {
     const response = await showIngresosTodayBySucursalAndHoraAplicacionPA(sucursal, hora_apertura, hora_cierre ? hora_cierre : new Date());
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       const data = response.data;
@@ -354,7 +354,7 @@ const Corte = (props) => {
         item.cantidad_moneda = toFormatterCurrency(item.cantidad);
       });
       setPagosAnticipados(data);
-      await loadDataPagosAnticipados(tipoIngresos, data, metodoPagos);
+      await loadDataPagosAnticipados(tipoIngresos, data, formaPagos);
       setIsLoading(false);
     }
   }
@@ -375,9 +375,9 @@ const Corte = (props) => {
   const loadMetodoPagos = async (tipoIngresos, hora_apertura, hora_cierre) => {
     const response = await showAllMetodoPago();
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-      const metodoPagos = response.data;
-      await loadIngresos(tipoIngresos, metodoPagos, hora_apertura, hora_cierre);
-      await loadPagosAnticipados(tipoIngresos, metodoPagos, hora_apertura, hora_cierre);
+      const formaPagos = response.data;
+      await loadIngresos(tipoIngresos, formaPagos, hora_apertura, hora_cierre);
+      await loadPagosAnticipados(tipoIngresos, formaPagos, hora_apertura, hora_cierre);
     }
   }
 

@@ -21,17 +21,17 @@ const ModalNuevoEgreso = (props) => {
     corte,
   } = props;
 
-	const efectivoMetodoPagoId = process.env.REACT_APP_METODO_PAGO_EFECTIVO;
+	const efectivoMetodoPagoId = process.env.REACT_APP_FORMA_PAGO_EFECTIVO;
 
   const [values, setValues] = useState({
     recepcionista: empleado._id,
     sucursal: sucursal,
-    metodo_pago: efectivoMetodoPagoId,
+    forma_pago: efectivoMetodoPagoId,
   });
 
   const [tipoEgresos, setTipoEgresos] = useState([]);
 
-  const dataComplete = !values.concepto || !values.cantidad || !values.tipo_egreso || !values.metodo_pago;
+  const dataComplete = !values.concepto || !values.cantidad || !values.tipo_egreso || !values.forma_pago;
 
   const handleChange = (e) => {
     setValues({

@@ -125,7 +125,7 @@ const ModalFormImprimirCorte = (props) => {
     show,
     tipoIngresos,
     tipoEgresos,
-    metodoPagos,
+    formaPagos,
     dataIngresos,
     dataPagosAnticipados,
     dataEgresos,
@@ -178,7 +178,7 @@ const ModalFormImprimirCorte = (props) => {
               </Grid>
               <Grid container>
                 <Grid item xs={true} className={classes.label}>
-                  <p className={classes.label_title_ingresos}>METODO PAGO</p>
+                  <p className={classes.label_title_ingresos}>FORMA PAGO</p>
                 </Grid>
 
                 {
@@ -196,19 +196,19 @@ const ModalFormImprimirCorte = (props) => {
               </Grid>
 
               {
-                metodoPagos.map(metodoPago => {
+                formaPagos.map(formaPago => {
                   return (
                     <Fragment>
                       <Grid container>
                         <Grid item xs={true} className={classes.label}>
-                          <h3 className={classes.label_cells_concepto}>{metodoPago.nombre}</h3>
+                          <h3 className={classes.label_cells_concepto}>{formaPago.nombre}</h3>
                         </Grid>
                         {
                           dataIngresos ? dataIngresos.filter(dataIngreso => {
-                            return dataIngreso.metodo_pago === metodoPago.nombre
+                            return dataIngreso.forma_pago === formaPago.nombre
                           }).map((dataIngreso) => {
                             totalIngresos += dataIngreso.total;
-                            totalEfectivo += dataIngreso.metodo_pago === 'EFECTIVO' ? dataIngreso.total : 0;
+                            totalEfectivo += dataIngreso.forma_pago === 'EFECTIVO' ? dataIngreso.total : 0;
 
                             return (
                               <Fragment>
@@ -263,7 +263,7 @@ const ModalFormImprimirCorte = (props) => {
                   </Grid>
                   <Grid container>
                     <Grid item xs={true} className={classes.label}>
-                      <p className={classes.label_title_ingresos}>METODO PAGO</p>
+                      <p className={classes.label_title_ingresos}>FORMA PAGO</p>
                     </Grid>
 
                     {
@@ -281,19 +281,19 @@ const ModalFormImprimirCorte = (props) => {
                   </Grid>
 
                   {
-                    metodoPagos.map(metodoPago => {
+                    formaPagos.map(formaPago => {
                       return (
                         <Fragment>
                           <Grid container>
                             <Grid item xs={true} className={classes.label}>
-                              <h3 className={classes.label_cells_concepto}>{metodoPago.nombre}</h3>
+                              <h3 className={classes.label_cells_concepto}>{formaPago.nombre}</h3>
                             </Grid>
                             {
                               dataPagosAnticipados ? dataPagosAnticipados.filter(dataPagoAnticipado => {
-                                return dataPagoAnticipado.metodo_pago === metodoPago.nombre
+                                return dataPagoAnticipado.forma_pago === formaPago.nombre
                               }).map((dataPagoAnticipado) => {
                                 totalPagosAnticipados += dataPagoAnticipado.total;
-                                //totalEfectivo += dataPagoAnticipado.metodo_pago === 'EFECTIVO' ? dataPagoAnticipado.total : 0;
+                                //totalEfectivo += dataPagoAnticipado.forma_pago === 'EFECTIVO' ? dataPagoAnticipado.total : 0;
 
                                 return (
                                   <Fragment>

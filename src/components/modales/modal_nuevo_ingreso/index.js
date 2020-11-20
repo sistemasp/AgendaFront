@@ -27,9 +27,9 @@ const ModalNuevoIngreso = (props) => {
   });
 
   const [tipoIngresos, setTipoIngresos] = useState([]);
-  const [metodoPagos, setMetodoPagos] = useState([]);
+  const [formaPagos, setMetodoPagos] = useState([]);
 
-  const dataComplete = !values.concepto || !values.cantidad || !values.tipo_ingreso || !values.metodo_pago;
+  const dataComplete = !values.concepto || !values.cantidad || !values.tipo_ingreso || !values.forma_pago;
 
   const handleChange = (e) => {
     setValues({
@@ -48,7 +48,7 @@ const ModalNuevoIngreso = (props) => {
   const handleChangeMetodoPago = (e) => {
     setValues({
       ...values,
-      metodo_pago: e.target.value
+      forma_pago: e.target.value
     });
   }
 
@@ -95,7 +95,7 @@ const ModalNuevoIngreso = (props) => {
       dataComplete={dataComplete}
       values={values}
       tipoIngresos={tipoIngresos}
-      metodoPagos={metodoPagos}
+      formaPagos={formaPagos}
       onAgregarConceto={handleAgregarConceto}
       onChange={handleChange}
       onChangeTipoIngreso={(e) => handleChangeTipoIngreso(e)}

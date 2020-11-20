@@ -94,8 +94,8 @@ const ModalFormPago = (props) => {
                   <Select
                     labelId="simple-select-outlined-payment"
                     id="simple-select-outlined-payment"
-                    value={values.metodo_pago}
-                    error={Boolean(errors.metodo_pago)}
+                    value={values.forma_pago}
+                    error={Boolean(errors.forma_pago)}
                     onChange={onChangePaymentMethod}
                     label="Metodo pago" >
                     {metodosPago.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
@@ -103,7 +103,9 @@ const ModalFormPago = (props) => {
                 </FormControl>
               </Grid>
               {
-                values.metodo_pago !== process.env.REACT_APP_METODO_PAGO_EFECTIVO && values.metodo_pago !== '' ?
+                values.forma_pago !== process.env.REACT_APP_FORMA_PAGO_EFECTIVO &&
+                  values.forma_pago !== process.env.REACT_APP_FORMA_PAGO_NO_PAGA &&
+                  values.forma_pago !== '' ?
                   <Fragment>
 
                     <Grid item xs={12}>
@@ -200,7 +202,9 @@ const ModalFormPago = (props) => {
               </Grid>
 
               {
-                values.metodo_pago !== process.env.REACT_APP_METODO_PAGO_EFECTIVO && values.metodo_pago !== '' ?
+                values.forma_pago !== process.env.REACT_APP_FORMA_PAGO_EFECTIVO &&
+                  values.forma_pago !== process.env.REACT_APP_FORMA_PAGO_NO_PAGA &&
+                  values.forma_pago !== '' ?
                   <Grid item xs={6}>
                     <CheckCustom
                       checked={values.confirmado}

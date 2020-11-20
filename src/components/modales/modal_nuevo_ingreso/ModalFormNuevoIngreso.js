@@ -54,7 +54,7 @@ const ModalFormNuevoIngreso = (props) => {
     onChangeTipoIngreso,
     tipoIngresos,
     onChangeMetodoPago,
-    metodoPagos,
+    formaPagos,
     onChange,
     onAgregarConceto,
   } = props;
@@ -110,10 +110,10 @@ const ModalFormNuevoIngreso = (props) => {
               <Select
                 labelId="simple-select-outlined-metodo-pago"
                 id="simple-select-outlined-metodo-pago"
-                value={values.metodo_pago}
+                value={values.forma_pago}
                 onChange={onChangeMetodoPago}
                 label="Metodo pago" >
-                {metodoPagos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
+                {formaPagos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
               </Select>
             </FormControl>
           </Grid>

@@ -70,7 +70,7 @@ export const CorteContainer = (props) => {
   let totalEfectivo = 0;
 
   dataIngresos.forEach(data => {
-    if (data.metodo_pago === 'EFECTIVO') {
+    if (data.forma_pago === 'EFECTIVO') {
       totalEfectivo = data.total;
     }
     totalIngresos += Number(data.total);

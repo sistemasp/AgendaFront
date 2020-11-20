@@ -733,7 +733,7 @@ export const showAllBanco = async () => {
 export const showAllMetodoPago = async () => {
     try {
         const response = await axios({
-            url: `${baseUrl}/metodopago`,
+            url: `${baseUrl}/formapago`,
             method: 'GET'
         });
         return response;

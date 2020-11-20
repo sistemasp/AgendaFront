@@ -60,7 +60,7 @@ const ModalPago = (props) => {
   const [tiposTarjeta, setTiposTarjeta] = useState([]);
 
   const [values, setValues] = useState({
-    metodo_pago: pago.metodo_pago ? pago.metodo_pago._id : '',
+    forma_pago: pago.forma_pago ? pago.forma_pago._id : '',
     observaciones: pago.observaciones ? pago.observaciones : '',
     cantidad: pago.cantidad ? pago.cantidad : '0',
     porcentaje_descuento: pago.porcentaje_descuento ? pago.porcentaje_descuento : '0',
@@ -69,14 +69,14 @@ const ModalPago = (props) => {
     pago_anticipado: pago.pago_anticipado,
   });
 
-  const tarjetaMetodoPagoId = process.env.REACT_APP_METODO_PAGO_TARJETA;
+  const tarjetaMetodoPagoId = process.env.REACT_APP_FORMA_PAGO_TARJETA;
   const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
   const consultaTratamientoId = process.env.REACT_APP_CONSULTA_TRATAMIENTO_ID;
 
   const handleChangePaymentMethod = (event) => {
     const datos = {
       ...values,
-      metodo_pago: event.target.value,
+      forma_pago: event.target.value,
     }
     calcularTotal(datos);
   }
@@ -111,7 +111,7 @@ const ModalPago = (props) => {
     let total = cantidad - descuento;
     setValues({
       ...values,
-      metodo_pago: datos.metodo_pago,
+      forma_pago: datos.forma_pago,
       cantidad: cantidad,
       porcentaje_descuento: datos.porcentaje_descuento,
       descuento: descuento,
@@ -199,7 +199,7 @@ const ModalPago = (props) => {
       cantidad: rowData.total,
       tipo_ingreso: tipoIngreso,
       sucursal: sucursal,
-      metodo_pago: rowData.metodo_pago,
+      forma_pago: rowData.forma_pago,
       pago_anticipado: rowData.pago_anticipado,
     }
     const resExistIngreso = await findIngresoByPago(pago._id);

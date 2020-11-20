@@ -32,7 +32,7 @@ const ModalImprimirCorte = (props) => {
   const [show, setShow] = useState(true);
   const [tipoIngresos, setTipoIngresos] = useState([]);
   const [tipoEgresos, setTipoEgresos] = useState([]);
-  const [metodoPagos, setMetodoPagos] = useState([]);
+  const [formaPagos, setMetodoPagos] = useState([]);
 
   const handleClickImprimir = (e) => {
     setTimeout(() => {
@@ -83,7 +83,7 @@ const ModalImprimirCorte = (props) => {
         show={show}
         tipoIngresos={tipoIngresos}
         tipoEgresos={tipoEgresos}
-        metodoPagos={metodoPagos}
+        formaPagos={formaPagos}
         dataIngresos={dataIngresos}
         dataPagosAnticipados={dataPagosAnticipados}
         dataEgresos={dataEgresos} />

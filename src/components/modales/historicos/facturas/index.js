@@ -18,7 +18,7 @@ const ModHistoricoFacturas = (props) => {
     { title: 'Fecha', field: 'fecha_show' },
     { title: 'Hora', field: 'hora' },
     { title: 'Paciente', field: 'paciente_nombre' },
-    { title: 'Metodo pago', field: 'metodo_pago.nombre' },
+    { title: 'Metodo pago', field: 'forma_pago.nombre' },
     { title: 'Cantidad', field: 'cantidad_moneda' },
     { title: 'Uso CFDI', field: 'uso_cfdi_nombre' },
     { title: 'Sucursal', field: 'sucursal.nombre' },

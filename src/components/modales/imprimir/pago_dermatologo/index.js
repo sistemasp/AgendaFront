@@ -64,7 +64,7 @@ const ModalImprimirPagoDermatologo = (props) => {
   const realizadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_REALIZADO_ID;
   const noAplicaTipoCitaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
   const pagoDermatologoTipoEgresoId = process.env.REACT_APP_TIPO_EGRESO_PAGO_MEDICO_ID;
-  const efectivoMetodoPagoId = process.env.REACT_APP_METODO_PAGO_EFECTIVO;
+  const efectivoMetodoPagoId = process.env.REACT_APP_FORMA_PAGO_EFECTIVO;
   const manuelAcunaSucursalId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
 
   const loadConsultas = async (hora_apertura, hora_cierre) => {
@@ -296,7 +296,7 @@ const ModalImprimirPagoDermatologo = (props) => {
         concepto: dermatologo.nombre,
         cantidad: data.retencion,
         sucursal: sucursal._id,
-        metodo_pago: efectivoMetodoPagoId,
+        forma_pago: efectivoMetodoPagoId,
       }
 
       const resp = await createEgreso(egreso);

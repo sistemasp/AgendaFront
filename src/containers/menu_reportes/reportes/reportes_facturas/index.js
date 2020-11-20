@@ -44,7 +44,7 @@ const ReportesFacturas = (props) => {
 		{ title: 'Paciente', field: 'paciente_nombre' },
 		{ title: 'Razon Social', field: 'razon_social.nombre_completo' },
 		{ title: 'Cantidad', field: 'cantidad_moneda' },
-		{ title: 'Metodo pago', field: 'metodo_pago.nombre' },
+		{ title: 'Metodo pago', field: 'forma_pago.nombre' },
 		{ title: 'Sucursal', field: 'sucursal.nombre'},
 		{ title: 'Digitos', field: 'ultimos_4_digitos' },
 	];
