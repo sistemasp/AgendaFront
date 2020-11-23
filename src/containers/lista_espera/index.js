@@ -332,15 +332,16 @@ const ListaEspera = (props) => {
 
 	const handleOnConsultorioCambiarPaciente = async (event, rowData) => {
 		setIsLoading(true);
-		const response = await breakFreeSurgeryByIdPaciente(rowData._id);
+		rowData.disponible = true;
+
+		const response = await updateSurgery(rowData._id, rowData);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setPaciente(rowData.paciente);
 			setServicio(rowData.servicio);
 			setTipoServicio(rowData.tipo_servicio);
 			setCambio(true);
 			setOpenModalConsultorioAsignar(true);
-			rowData.disponible = true;
-			await updateSurgery(rowData._id, rowData);
+			await breakFreeSurgeryByIdPaciente(rowData._id);
 		};
 		setIsLoading(false);
 	}

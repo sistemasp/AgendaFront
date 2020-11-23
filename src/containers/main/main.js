@@ -206,7 +206,7 @@ export const MainContainer = props => {
 			}
 			<CssBaseline />
 			<AppBar
-				position="fixed"
+				position="absolute"
 				className={clsx(classes.appBar, {
 					[classes.appBarShift]: openDrawer,
 				})}
@@ -252,33 +252,33 @@ export const MainContainer = props => {
 				</div>
 				<Divider />
 				<List>
-					<ListItem button key={'Pacientes'} onClick={(e) => onChangeTab(e, 0, handleDrawerClose)}>
+					<ListItem button key={'PACIENTES'} onClick={(e) => onChangeTab(e, 0, handleDrawerClose)}>
 						<ListItemIcon> <AccessibilityNewIcon /> </ListItemIcon>
-						<ListItemText primary={'Pacientes'} />
+						<ListItemText primary={'PACIENTES'} />
 					</ListItem>
-					<ListItem button key={'Dermatologos'} onClick={(e) => onChangeTab(e, 1, handleDrawerClose)}>
+					<ListItem button key={'DERMATOLÓGOS'} onClick={(e) => onChangeTab(e, 1, handleDrawerClose)}>
 						<ListItemIcon> <People /> </ListItemIcon>
-						<ListItemText primary={'Dermatologos'} />
+						<ListItemText primary={'DERMATOLÓGOS'} />
 					</ListItem>
-					<ListItem button key={'Consultorios / Cabinas'} onClick={(e) => onChangeTab(e, 2, handleDrawerClose)}>
+					<ListItem button key={'CONSULTORIOS / CABINAS'} onClick={(e) => onChangeTab(e, 2, handleDrawerClose)}>
 						<ListItemIcon> <AirlineSeatReclineNormalIcon /> </ListItemIcon>
-						<ListItemText primary={'Consultorios / Cabinas'} />
+						<ListItemText primary={'CONSULTORIOS / CABINAS'} />
 					</ListItem>
-					<ListItem button key={'Corte'} onClick={(e) => onChangeTab(e, 3, handleDrawerClose)}>
+					<ListItem button key={'CORTE'} onClick={(e) => onChangeTab(e, 3, handleDrawerClose)}>
 						<ListItemIcon> <AttachMoneyIcon /> </ListItemIcon>
-						<ListItemText primary={'Corte'} />
+						<ListItemText primary={'CORTE'} />
 					</ListItem>
-					<ListItem button key={'Lista de Espera'} onClick={(e) => onChangeTab(e, 4, handleDrawerClose)}>
+					<ListItem button key={'LISTA DE ESPERA'} onClick={(e) => onChangeTab(e, 4, handleDrawerClose)}>
 						<ListItemIcon> <ListAltIcon /> </ListItemIcon>
-						<ListItemText primary={'Lista de Espera'} />
+						<ListItemText primary={'LISTA DE ESPERA'} />
 					</ListItem>
-					<ListItem button key={'Razon social'} onClick={(e) => onChangeTab(e, 5, handleDrawerClose)}>
+					<ListItem button key={'RAZON SOCIAL'} onClick={(e) => onChangeTab(e, 5, handleDrawerClose)}>
 						<ListItemIcon> <Description /> </ListItemIcon>
-						<ListItemText primary={'Razon social'} />
+						<ListItemText primary={'RAZON SOCIAL'} />
 					</ListItem>
-					<ListItem button key={'Reportes'} onClick={(e) => onChangeTab(e, 6, handleDrawerClose)}>
+					<ListItem button key={'REPORTES'} onClick={(e) => onChangeTab(e, 6, handleDrawerClose)}>
 						<ListItemIcon> <AssignmentIcon /> </ListItemIcon>
-						<ListItemText primary={'Reportes'} />
+						<ListItemText primary={'EPORTES'} />
 					</ListItem>
 				</List>
 			</Drawer>

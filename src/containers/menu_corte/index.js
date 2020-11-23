@@ -325,7 +325,6 @@ const Corte = (props) => {
         total: total,
         total_moneda: toFormatterCurrency(total),
       }
-      console.log("FJOSOJFDSOJ", dataEgreso);
       if (dataEgreso.total > 0) {
         dataEgresosTemp.push(dataEgreso);
       }
@@ -450,7 +449,6 @@ const Corte = (props) => {
       recepcionista: empleado,
       sucursal: sucursal._id,
     }
-    console.log("FJOSOJFDSOJ", newCorte);
     const response = await createCorte(newCorte);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
       setMessage("CORTE GARDAR CORRECTAMENTE.");

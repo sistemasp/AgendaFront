@@ -771,7 +771,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
             <Grid container xs={6} className={classes.container_buttom}>
               <Grid item xs={12} className={classes.labelItemRight}>
                 <h2 className={classes.labelItemRight}>TOTAL: {toFormatterCurrency(pagoTotal)}</h2>
-                <h1 className={classes.labelItemRight}>RETENCIÓN: {toFormatterCurrency(pagoTotal / 2)}</h1>
+                <h1 className={classes.labelItemRight}>RETENCIÓN: {toFormatterCurrency(pagoTotal / (dermatologo.pago_completo ? 1 : 2))}</h1>
               </Grid>
             </Grid>
 

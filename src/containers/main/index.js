@@ -60,7 +60,7 @@ const MenuMain = (props) => {
 
 	let fragment;
 
-	if (empleado.rol.nombre === "GERENTE" || empleado.rol.nombre === "MASTER" || empleado.rol.nombre === "RECEPCIONISTA" || empleado.rol.nombre === "ENCARGADO SUCURSAL") {
+	if (empleado.rol.nombre === "GERENTE" || empleado.rol.nombre === "DIOS SUPREMO" || empleado.rol.nombre === "RECEPCIONISTA" || empleado.rol.nombre === "ENCARGADO SUCURSAL") {
 		fragment = <Fragment>
 			<MainContainer
 				pacienteAgendado={pacienteAgendado}
@@ -106,6 +106,10 @@ const MenuMain = (props) => {
 	} else if (empleado.rol.nombre === "PROMOCION") {
 		fragment = <Fragment>
 			<h1>TRABAJANDO EN PROMOCION</h1>
+		</Fragment>
+	} else {
+		fragment = <Fragment>
+			<h1>NO SE ENCONTRO ROL</h1>
 		</Fragment>
 	}
 

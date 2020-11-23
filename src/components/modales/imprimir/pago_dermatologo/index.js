@@ -274,7 +274,7 @@ const ModalImprimirPagoDermatologo = (props) => {
       esteticas: esteticas,
       sucursal: sucursal._id,
       turno: turno,
-      retencion: (total / 2),
+      retencion: (total / (dermatologo.pago_completo ? 1 : 2)),
       total: total,
       pagado: true,
     }

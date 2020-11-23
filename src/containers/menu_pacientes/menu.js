@@ -60,7 +60,7 @@ const useStyles = makeStyles(theme => ({
 		flexGrow: 1,
 	},
 	bar: {
-		backgroundColor: "#2BA6C6",
+		backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
 	}
 }));
 
@@ -86,7 +86,7 @@ export const MenuContainer = props => {
 		<div className={classes.root}>
 			<AppBar
 				className={classes.bar}
-				position="static"
+				position="sticky"
 			>
 				<Tabs
 					value={value}
