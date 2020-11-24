@@ -10,6 +10,7 @@ const Alert = (props) => {
 const MenuPatient = (props) => {
 
     const [pacienteAgendado, setPacienteAgendado] = useState({});
+    const [consultaAgendada, setConsultaAgendada] = useState({});
     const [value, setValue] = useState(0);
     const [open, setOpen] = useState(false);
     const [openAlert, setOpenAlert] = useState(false);
@@ -51,6 +52,16 @@ const MenuPatient = (props) => {
         setValue(Number(process.env.REACT_APP_PAGE_AGENDAR_CONSULTA));
     }
 
+    const handleClickAgendarCirugia = (event, rowData) => {
+        setConsultaAgendada(rowData);
+        setValue(Number(process.env.REACT_APP_PAGE_AGENDAR_CIRUGIA));
+    }
+
+    const handleClickAgendarEstetica = (event, rowData) => {
+        setConsultaAgendada(rowData);
+        setValue(Number(process.env.REACT_APP_PAGE_AGENDAR_ESTETICA));
+    }
+
     const handleLogout = () => {
         history.push('/', { empleado: {}, sucursal: {} });
     }
@@ -76,9 +87,13 @@ const MenuPatient = (props) => {
             <MenuContainer
                 pacienteAgendado={pacienteAgendado}
                 setPacienteAgendado={setPacienteAgendado}
+                setConsultaAgendada={setConsultaAgendada}
+                consultaAgendada={consultaAgendada}
                 onChangeTab={handleChangeTab}
                 onClickAgendarFaciales={handleAgendarFaciales}
                 onClickAgendarConsulta={handleClickAgendarConsulta}
+                onClickAgendarCirugia={handleClickAgendarCirugia}
+                onClickAgendarEstetica={handleClickAgendarEstetica}
                 onClickAgendarLaser={handleAgendarLaser}
                 onClickAgendarAparatologia={handleAgendarAparatologia}
                 onClickAgendarDermapen={handleAgendarDermapen}

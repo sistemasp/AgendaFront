@@ -52,6 +52,18 @@ export const findCirugiaByConsultaId = async (consultaId) => {
     }
 }
 
+export const findCirugiaByDateAndSucursal = async (dia, mes, anio, sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cirugia/${dia}/${mes}/${anio}/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findCirugiaByDateAndSucursal', error);
+    }
+}
+
 export const findCirugiasByRangeDateAndSucursal = async (diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
     try {
         const response = await axios({

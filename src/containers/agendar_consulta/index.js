@@ -9,7 +9,7 @@ import {
 	showAllFrecuencias,
 	createConsecutivo,
 } from "../../services";
-import { 
+import {
 	createConsult,
 	findConsultsByDateAndSucursal,
 	updateConsult
@@ -58,6 +58,8 @@ const AgendarConsulta = (props) => {
 		setPacienteAgendado,
 		sucursal,
 		history,
+		onClickAgendarCirugia,
+		onClickAgendarEstetica,
 	} = props;
 
 	const date = new Date();
@@ -80,7 +82,7 @@ const AgendarConsulta = (props) => {
 		/*precio: isHoliDay ? sucursal.precio_festivo : // Dia Festivo
 			date.getDay() === 6 ? (date.getHours() >= 13 ? sucursal.precio_sabado_vespertino : sucursal.precio_sabado_matutino) // SABADO
 				: (date.getHours() >= 14 ? sucursal.precio_vespertino : sucursal.precio_matutino), // L-V*/
-				precio: 220
+		precio: 220
 	});
 
 	const [citas, setConsultas] = useState([]);
@@ -127,24 +129,24 @@ const AgendarConsulta = (props) => {
 	const medioSinCitaId = process.env.REACT_APP_MEDIO_SIN_CITA_ID;
 
 	const columns = [
-		{ title: 'Folio', field: 'consecutivo' },
-		{ title: 'Hora', field: 'hora' },
-		{ title: 'Paciente', field: 'paciente_nombre' },
-		{ title: 'Telefono', field: 'paciente.telefono' },
-		{ title: 'Hora llegada', field: 'hora_llegada' },
-		{ title: 'Hora atendido', field: 'hora_atencion' },
-		{ title: 'Hora salida', field: 'hora_salida' },
-		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
-		{ title: 'Frecuencia', field: 'frecuencia.nombre' },
-		sucursal._id === sucursalManuelAcunaId ? { title: 'Medio', field: 'medio.nombre' } : {},
-		{ title: 'Tipo Consulta', field: 'tipo_cita.nombre' },
+		{ title: 'FOLIO', field: 'consecutivo' },
+		{ title: 'HORA', field: 'hora' },
+		{ title: 'PACIENTE', field: 'paciente_nombre' },
+		{ title: 'TELEFONO', field: 'paciente.telefono' },
+		{ title: 'HORA LLEGADA', field: 'hora_llegada' },
+		{ title: 'HORA ATENDIDO', field: 'hora_atencion' },
+		{ title: 'HORA SALIDA', field: 'hora_salida' },
+		{ title: 'QUIEN AGENDA', field: 'quien_agenda.nombre' },
+		{ title: 'FRECUENCIA', field: 'frecuencia.nombre' },
+		sucursal._id === sucursalManuelAcunaId ? { title: 'MEDIO', field: 'medio.nombre' } : {},
+		{ title: 'TIPO CONSULTA', field: 'tipo_cita.nombre' },
 		sucursal._id === sucursalManuelAcunaId ? { title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' } : {},
-		{ title: 'Quien confirma asistencia', field: 'quien_confirma_asistencia.nombre' },
-		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
-		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
-		{ title: 'Estado', field: 'status.nombre' },
-		{ title: 'Precio', field: 'precio_moneda' },
-		{ title: 'Observaciones', field: 'observaciones' },
+		{ title: 'QUIEN CONFIRMA ASISTENCIA', field: 'quien_confirma_asistencia.nombre' },
+		{ title: 'DERMATÓLOGO', field: 'dermatologo_nombre' },
+		{ title: 'PROMOVENDEDOR', field: 'promovendedor_nombre' },
+		{ title: 'ESTADO', field: 'status.nombre' },
+		{ title: 'PRECIO', field: 'precio_moneda' },
+		{ title: 'OBSERVACIONES', field: 'observaciones' },
 	];
 
 	const components = {
@@ -157,7 +159,7 @@ const AgendarConsulta = (props) => {
 	}
 
 	const dataComplete = !paciente.nombres || !values.precio || !values.dermatologo
-		 || !values.promovendedor || (sucursal._id === sucursalManuelAcunaId ? (!values.fecha_hora || !values.medio) : false);
+		|| !values.promovendedor || (sucursal._id === sucursalManuelAcunaId ? (!values.fecha_hora || !values.medio) : false);
 
 	const options = {
 		rowStyle: rowData => {
@@ -263,7 +265,7 @@ const AgendarConsulta = (props) => {
 		setIsLoading(true);
 		const hora = (e.target.value).split(':');
 		const date = values.fecha_hora;
-		date.setHours(Number(hora[0])); // -5 por zona horaria
+		date.setHours(Number(hora[0]));
 		date.setMinutes(hora[1]);
 		date.setSeconds(0);
 		setValues({ ...values, hora: e.target.value, fecha_hora: date });
@@ -355,7 +357,7 @@ const AgendarConsulta = (props) => {
 			const responseConsecutivo = await createConsecutivo(consecutivo);
 			if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 				setOpenAlert(true);
-				setMessage('La Consulta se agendo correctamente');
+				setMessage('LA CONSULTA SE AGENDO CORRECTAMENTE');
 				setValues({
 					servicio: '',
 					tratamiento: '',
@@ -510,7 +512,7 @@ const AgendarConsulta = (props) => {
 				? {
 					icon: LocalHospitalIcon,
 					tooltip: 'AGENDAR CIRUGIA',
-					onClick: handleClickCirugia
+					onClick: onClickAgendarCirugia
 				} : ''
 		},
 		rowData => {
@@ -602,7 +604,7 @@ const AgendarConsulta = (props) => {
 						estetica={estetica}
 						tipoServicioId={consultaServicioId}
 						frecuenciaPrimeraVezId={frecuenciaPrimeraVezId}
-						fercuenciaReconsultaId={fercuenciaReconsultaId} 
+						fercuenciaReconsultaId={fercuenciaReconsultaId}
 						onGuardarModalPagos={handleGuardarModalPagos} /> :
 					<Backdrop className={classes.backdrop} open={isLoading} >
 						<CircularProgress color="inherit" />

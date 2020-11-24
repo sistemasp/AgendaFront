@@ -229,11 +229,11 @@ export const MainContainer = props => {
 					<Button
 						color="default"
 						variant="contained"
-						onClick={onClickCambioPassword}>Cambiar Contraseña</Button>
+						onClick={onClickCambioPassword}>CAMBIAR CONTRASEÑA</Button>
 					<Button
 						color="secondary"
 						variant="contained"
-						onClick={onClickLogout}>Cerrar Sesion</Button>
+						onClick={onClickLogout}>CERRAR SESION</Button>
 				</Toolbar>
 			</AppBar>
 			<Drawer
@@ -278,7 +278,7 @@ export const MainContainer = props => {
 					</ListItem>
 					<ListItem button key={'REPORTES'} onClick={(e) => onChangeTab(e, 6, handleDrawerClose)}>
 						<ListItemIcon> <AssignmentIcon /> </ListItemIcon>
-						<ListItemText primary={'EPORTES'} />
+						<ListItemText primary={'REPORTES'} />
 					</ListItem>
 				</List>
 			</Drawer>

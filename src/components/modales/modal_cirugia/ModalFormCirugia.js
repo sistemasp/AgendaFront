@@ -82,13 +82,15 @@ const ModalFormCirugia = (props) => {
     openModalPagos,
     onCloseModalPagos,
     onGuardarModalPagos,
-    consulta,
+    cirugia,
     empleado,
     tipoServicioId,
     onChangeFecha,
     onChangeHora,
     horarios,
   } = props;
+
+  console.log("FJSOFJSDF", cirugia);
 
   return (
     <div>
@@ -115,47 +117,47 @@ const ModalFormCirugia = (props) => {
                 <h1 className={classes.label}>CIRUGIA</h1>
               </Grid>
               <Grid item xs={12}>
-                <h2 className={classes.label}>{values.consulta.paciente_nombre} ({values.consulta.paciente.telefono})</h2>
+                <h2 className={classes.label}>{cirugia.paciente_nombre} ({cirugia.paciente.telefono})</h2>
               </Grid>
               <Grid item xs={12}>
-                <h2 className={classes.label}>MÉDICO: {values.consulta.dermatologo.nombre}</h2>
+                <h2 className={classes.label}>MÉDICO: {cirugia.dermatologo.nombre}</h2>
               </Grid>
-{
-  /*
-              <Grid item xs={12} sm={6}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardDatePicker
-                    disableToolbar
-                    disablePast
-                    autoOk
-                    variant="inline"
-                    format="dd/MM/yyyy"
-                    margin="normal"
-                    id="date-picker-inline"
-                    label="FECHA"
-                    value={values.fecha_hora}
-                    onChange={onChangeFecha}
-                    KeyboardButtonProps={{
-                      'aria-label': 'change date',
-                    }}
-                    invalidDateMessage='SELECCIONA UNA FECHA' />
-                </MuiPickersUtilsProvider>
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
-                  <Select
-                    labelId="simple-select-outlined-hora"
-                    id="simple-select-outlined-hora"
-                    value={values.hora}
-                    onChange={onChangeHora}
-                    label="HORA" >
-                    {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
-                  </Select>
-                </FormControl>
-              </Grid>*/
-}
+              {
+                /*
+                            <Grid item xs={12} sm={6}>
+                              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <KeyboardDatePicker
+                                  disableToolbar
+                                  disablePast
+                                  autoOk
+                                  variant="inline"
+                                  format="dd/MM/yyyy"
+                                  margin="normal"
+                                  id="date-picker-inline"
+                                  label="FECHA"
+                                  value={values.fecha_hora}
+                                  onChange={onChangeFecha}
+                                  KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                  }}
+                                  invalidDateMessage='SELECCIONA UNA FECHA' />
+                              </MuiPickersUtilsProvider>
+                            </Grid>
+              
+                            <Grid item xs={12} sm={6}>
+                              <FormControl variant="outlined" className={classes.formControl}>
+                                <InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
+                                <Select
+                                  labelId="simple-select-outlined-hora"
+                                  id="simple-select-outlined-hora"
+                                  value={values.hora}
+                                  onChange={onChangeHora}
+                                  label="HORA" >
+                                  {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
+                                </Select>
+                              </FormControl>
+                            </Grid>*/
+              }
 
               <Grid item xs={12}>
                 <TextField

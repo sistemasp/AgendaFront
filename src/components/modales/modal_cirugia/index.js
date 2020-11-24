@@ -29,9 +29,8 @@ const ModalCirugia = (props) => {
   const {
     open,
     onClose,
-    consulta,
     empleado,
-    loadConsultas,
+    loadCirugias,
     sucursal,
     setOpenAlert,
     setMessage,
@@ -49,21 +48,21 @@ const ModalCirugia = (props) => {
   const [values, setValues] = useState({
     _id: cirugia._id,
     fecha_hora: cirugia.fecha_hora,
-    consulta: consulta,
+    consulta: cirugia.consulta,
     consecutivo: cirugia.consecutivo,
-    sucursal: cirugia.sucursal ? cirugia.sucursal : consulta.sucursal,
+    sucursal: cirugia.sucursal,
     precio: cirugia.precio ? cirugia.precio : 0,
     total: cirugia.total ? cirugia.total : 0,
     materiales: cirugia.materiales,
     biopsias: cirugia.biopsias,
     pagado: cirugia.pagado,
-    paciente: consulta.paciente,
-    dermatologo: consulta.dermatologo,
+    paciente: cirugia.paciente,
+    dermatologo: cirugia.dermatologo,
     hasBiopsia: cirugia.hasBiopsia,
     cantidad_biopsias: cirugia.biopsias ? cirugia.biopsias.length : 0,
     costo_biopsias: cirugia.costo_biopsias ? cirugia.costo_biopsias : 0,
     patologo: cirugia.patologo ? cirugia.patologo._id : undefined,
-    hora_aplicacion: consulta.hora_aplicacion,
+    hora_aplicacion: cirugia.hora_aplicacion,
   });
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
@@ -122,9 +121,6 @@ const ModalCirugia = (props) => {
     const response = data._id ? await updateCirugia(data._id, data) : await createCirugia(data);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
       || `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-      //consulta.status = enProcedimientoStatusId;
-      await updateConsult(consulta._id, { ...consulta, status: enProcedimientoStatusId });
-      //loadConsultas(new Date(consulta.fecha_hora));
       if (data._id) {
         setOpenAlert(true);
         setMessage('CIRUGIA ACTUALIZADA CORRECTAMENTE');
@@ -144,6 +140,7 @@ const ModalCirugia = (props) => {
         }
       }
     }
+    loadCirugias(data.fecha_hora);
     onClose();
   }
 
@@ -236,7 +233,7 @@ const ModalCirugia = (props) => {
   }
 
   const loadHorariosByServicio = async () => {
-    const response = await findSchedulesBySucursalAndServicio(consulta.sucursal._id, consulta.servicio._id);
+    const response = await findSchedulesBySucursalAndServicio(cirugia.sucursal._id, cirugia.servicio._id);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       response.data.push({ hora: values.hora });
       setHorarios(response.data);
@@ -257,8 +254,6 @@ const ModalCirugia = (props) => {
   
 
   useEffect(() => {
-    
-    
 
     const loadMateriales = async () => {
       const response = await showAllMaterials();
@@ -290,7 +285,6 @@ const ModalCirugia = (props) => {
             aria-describedby="simple-modal-description"
             open={open}
             onClose={onClose}
-            consulta={consulta}
             empleado={empleado}
             onClickCrearCirugia={handleClickCrearCirugia}
             onChangeFecha={(e) => handleChangeFecha(e)}
@@ -310,7 +304,8 @@ const ModalCirugia = (props) => {
             onChangeBiopsia={(e) => handleChangeBiopsia(e)}
             onChangeCostoBiopsias={handleChangeCostoBiopsias}
             patologos={patologos}
-            tipoServicioId={cirugiaServicioId} />
+            tipoServicioId={cirugiaServicioId}
+            cirugia={cirugia} />
           :
           <Backdrop className={classes.backdrop} open={isLoading} >
             <CircularProgress color="inherit" />

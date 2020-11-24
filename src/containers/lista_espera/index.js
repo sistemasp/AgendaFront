@@ -454,7 +454,6 @@ const ListaEspera = (props) => {
 		//const responseServicio = await findCirugiaById(rowData.servicio);
 		if (`${responseServicio.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			const currentService = responseServicio.data;
-			await updateConsult(currentService.consulta._id, { ...currentService.consulta, status: enConsultorioStatusId });
 			let updateData = currentService;
 			updateData.status = atendidoStatusId;
 			updateData.hora_salida = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;

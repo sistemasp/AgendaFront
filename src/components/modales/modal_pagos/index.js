@@ -42,19 +42,19 @@ const ModalPagos = (props) => {
   }
 
   const columns = [
-    { title: 'Fecha', field: 'fecha' },
-    { title: 'Hora', field: 'hora' },
-    { title: 'Metodo pago', field: 'forma_pago.nombre' },
-    { title: 'Cantidad', field: 'cantidad_moneda' },
-    { title: 'Descuento(%)', field: 'porcentaje_descuento' },
-    { title: 'Descuento', field: 'descuento_moneda' },
-    { title: 'Subtotal', field: 'subtotal_moneda' },
-    { title: 'Total', field: 'total_moneda' },
-    { title: 'Banco', field: 'banco_nombre' },
-    { title: 'Tipo Tarjeta', field: 'tipo_tarjeta_nombre' },
-    { title: 'Digitos', field: 'digitos_show' },
-    { title: 'Pago confirmado', field: 'deposito_confirmado' },
-    { title: 'Observaciones', field: 'observaciones' },
+    { title: 'FECHA', field: 'fecha' },
+    { title: 'HORA', field: 'hora' },
+    { title: 'FORMA PAGO', field: 'forma_pago.nombre' },
+    { title: 'CANTIDAD', field: 'cantidad_moneda' },
+    { title: 'DESCUENTO(%)', field: 'porcentaje_descuento' },
+    { title: 'DESCUENTO', field: 'descuento_moneda' },
+    { title: 'SUBTOTAL', field: 'subtotal_moneda' },
+    { title: 'TOTAL', field: 'total_moneda' },
+    { title: 'BANDO', field: 'banco_nombre' },
+    { title: 'TIPO TARJETA', field: 'tipo_tarjeta_nombre' },
+    { title: 'DIGITOS', field: 'digitos_show' },
+    { title: 'PAGO CONFIRMADO', field: 'deposito_confirmado' },
+    { title: 'OBSERVACIONES', field: 'observaciones' },
   ];
 
   const options = {
@@ -67,7 +67,7 @@ const ModalPagos = (props) => {
   }
 
   const localization = {
-    header: { actions: 'Facturar' }
+    header: { actions: 'FACTURAR' }
   };
 
   const actions = [
@@ -79,14 +79,14 @@ const ModalPagos = (props) => {
     }),
     {
       icon: EditIcon,
-      tooltip: 'Editar pago',
+      tooltip: 'EDITAR PAGO',
       onClick: handleOnClickEditarPago
     }
   ];
 
   const loadPagos = async () => {
     let totalCE = 0;
-    if (tipoServicioId === consultaServicioId) { // SI ES CONSULTA BUSCA CIRUGIA Y ESTETICAS 
+    /*if (tipoServicioId === consultaServicioId) { // SI ES CONSULTA BUSCA CIRUGIA Y ESTETICAS 
       const resCirugias = await findCirugiaByConsultaId(servicio._id);
       if (`${resCirugias.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) { // BUSCA CIRUGIAS
         const cirugia = resCirugias.data;
@@ -97,7 +97,7 @@ const ModalPagos = (props) => {
         const estetica = resEstetica.data;
         totalCE += estetica.total ? Number(estetica.total) : 0;
       }
-    }
+    }*/
     const response = await findPagosByTipoServicioAndServicio(tipoServicioId, servicio._id);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       let acomulado = 0;
