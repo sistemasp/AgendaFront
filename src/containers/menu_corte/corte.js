@@ -73,7 +73,7 @@ export const CorteContainer = (props) => {
     if (data.forma_pago === 'EFECTIVO') {
       totalEfectivo = data.total;
     }
-    totalIngresos += Number(data.total);
+    totalIngresos += data.forma_pago !== 'NO PAGA' ? Number(data.total) : 0;
   });
 
   dataEgresos.forEach(data => {
@@ -191,7 +191,7 @@ export const CorteContainer = (props) => {
                   color="primary"
                   variant="contained"
                   onClick={handleOpenNuevoIngreso}
-                  text='Agregar Ingreso' />
+                  text='AGREGAR INGRESO' />
               </Grid>
               : ''
           }
@@ -231,7 +231,7 @@ export const CorteContainer = (props) => {
                   color="primary"
                   variant="contained"
                   onClick={handleOpenNuevoEgreso}
-                  text='Agregar Egreso' />
+                  text='AGREGAR EGRESO' />
               </Grid>
               : ''
           }

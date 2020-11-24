@@ -85,7 +85,14 @@ const ModalImprimirPagoDermatologo = (props) => {
     const date = new Date();
     const response = await findConsultsByPayOfDoctorHoraAplicacionFrecuencia(sucursal._id, dermatologo._id, atendidoId, hora_apertura, hora_cierre ? hora_cierre : new Date(), reconsultaFrecuenciaId);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-      setConsultasReconsultas(response.data);
+      const newReconsultas = response.data.filter(reconsulta => {
+        let total = 0;
+        reconsulta.pagos.forEach(pago => {
+          total += Number(pago.total);
+        });
+        return total > 0;
+      }); 
+      setConsultasReconsultas(newReconsultas);
     }
   }
 

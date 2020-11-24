@@ -128,9 +128,8 @@ const ModalPago = (props) => {
   }
 
   const handleChangeObservaciones = (event) => {
-    setValues({ ...values, observaciones: event.target.value });
+    setValues({ ...values, observaciones: event.target.value.toUpperCase() });
   }
-
 
   /*const handleClickGuardar = async (event, rowData) => {
     setIsLoading(true);

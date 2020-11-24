@@ -207,7 +207,7 @@ const ModalFormImprimirCorte = (props) => {
                           dataIngresos ? dataIngresos.filter(dataIngreso => {
                             return dataIngreso.forma_pago === formaPago.nombre
                           }).map((dataIngreso) => {
-                            totalIngresos += dataIngreso.total;
+                            totalIngresos += dataIngreso.forma_pago !== 'NO PAGA' ? dataIngreso.total : 0;
                             totalEfectivo += dataIngreso.forma_pago === 'EFECTIVO' ? dataIngreso.total : 0;
 
                             return (
@@ -345,7 +345,7 @@ const ModalFormImprimirCorte = (props) => {
             {
               dataEgresos.map(dataEgreso => {
                 {
-                  pagoDermatologos += dataEgreso.tipo_egreso === 'PAGO MEDICO' ? dataEgreso.total : 0;
+                  pagoDermatologos += dataEgreso.tipo_egreso === 'PAGO DERMATÓLOGOS' ? dataEgreso.total : 0;
                   retirosParciales += dataEgreso.tipo_egreso === 'RETIRO PARCIAL' ? dataEgreso.total : 0;
                   otrosEgresos += dataEgreso.tipo_egreso === 'OTROS EGRESOS' ? dataEgreso.total : 0;
                 }
@@ -405,7 +405,7 @@ const ModalFormImprimirCorte = (props) => {
               </Grid>
 
               <Grid item xs={8} className={classes.label}>
-                <h3 className={classes.label_cells_concepto}>TOTAL PAGO MEDICOS</h3>
+                <h3 className={classes.label_cells_concepto}>TOTAL PAGO DERMATÓLOGOS</h3>
               </Grid>
               <Grid item xs={4} className={classes.label}>
                 <h3 className={classes.label_cells}>{toFormatterCurrency(pagoDermatologos)}</h3>
