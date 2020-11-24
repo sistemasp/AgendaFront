@@ -17,7 +17,7 @@ import { findFacialesByPayOfDoctorHoraAplicacion } from '../../../../services/fa
 import { findLasersByPayOfDoctorHoraAplicacion } from '../../../../services/laser';
 import { findAparatologiasByPayOfDoctorHoraAplicacion } from '../../../../services/aparatolgia';
 import { findCirugiasByPayOfDoctorHoraAplicacion } from '../../../../services/cirugias';
-import { findEsteticasByPayOfDoctorHoraAplicacion } from '../../../../services/estetica';
+import { findEsteticasByPayOfDoctorHoraAplicacion } from '../../../../services/esteticas';
 import { findDermapensByPayOfDoctorHoraAplicacion } from '../../../../services/dermapens';
 
 const useStyles = makeStyles(theme => ({

@@ -19,7 +19,7 @@ import {
 } from "../../services/cirugias";
 import {
 	findEsteticaByConsultaId,
-} from "../../services/estetica";
+} from "../../services/esteticas";
 import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import EditIcon from '@material-ui/icons/Edit';
@@ -517,11 +517,11 @@ const AgendarConsulta = (props) => {
 		},
 		rowData => {
 			return (rowData.status._id === enProcedimientoStatusId || rowData.status._id === enConsultorioStatusId
-				|| rowData.status._id === enCabinaStatusId)
+				|| rowData.status._id === enCabinaStatusId || rowData.status._id === atendidoStatusId)
 				? {
 					icon: FaceIcon,
 					tooltip: 'TOXINA Y RELLENOS',
-					onClick: handleClickEstetica
+					onClick: onClickAgendarEstetica
 				} : ''
 		},
 		rowData => (

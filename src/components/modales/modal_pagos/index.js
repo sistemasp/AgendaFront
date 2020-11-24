@@ -5,7 +5,7 @@ import ModalFormPagos from './ModalFormPagos';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import EditIcon from '@material-ui/icons/Edit';
 import { findCirugiaByConsultaId } from '../../../services/cirugias';
-import { findEsteticaByConsultaId } from '../../../services/estetica';
+import { findEsteticaByConsultaId } from '../../../services/esteticas';
 
 const ModalPagos = (props) => {
   const {

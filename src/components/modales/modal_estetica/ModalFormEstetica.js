@@ -8,6 +8,7 @@ import { CheckCustom } from '../../basic/CheckCustom';
 import ModalPagos from '../modal_pagos';
 import { Multiselect } from 'multiselect-react-dropdown';
 import { toFormatterCurrency } from '../../../utils/utils';
+import { ButtonCustom } from '../../basic/ButtonCustom';
 
 function getModalStyle() {
   const top = 50;
@@ -86,7 +87,7 @@ const ModalFormEstetica = (props) => {
     values,
     handleSubmit,
     onClose,
-    onClickCrearCirugia,
+    onClickCrearEstetica,
     open,
     onChangeTotal,
     onChangePagado,
@@ -103,6 +104,7 @@ const ModalFormEstetica = (props) => {
     consulta,
     empleado,
     tipoServicioId,
+    estetica,
   } = props;
 
   return (
@@ -130,10 +132,10 @@ const ModalFormEstetica = (props) => {
                 <h1 className={classes.label}>TOXINAS Y RELLENOS</h1>
               </Grid>
               <Grid item xs={12}>
-                <h2 className={classes.label}>{values.consulta.paciente_nombre} ({values.consulta.paciente.telefono})</h2>
+                <h2 className={classes.label}>{estetica.paciente_nombre} ({estetica.paciente.telefono})</h2>
               </Grid>
               <Grid item xs={12}>
-                <h2 className={classes.label}>Dermatologo: {values.consulta.dermatologo.nombre}</h2>
+                <h2 className={classes.label}>DERMATÓLOGO: {estetica.dermatologo.nombre}</h2>
               </Grid>
 
               <Grid item xs={12}>
@@ -162,16 +164,16 @@ const ModalFormEstetica = (props) => {
                 />
               </Grid>
               <Grid item xs={3} >
-                <h3 className={classes.labelItemLeft}>{`Nombre`}</h3>
+                <h3 className={classes.labelItemLeft}>{`NOMBRE`}</h3>
               </Grid>
               <Grid item xs={3} >
-                <h3 className={classes.labelItemCenter}> {`Cantidad unidades`} </h3>
+                <h3 className={classes.labelItemCenter}> {`CANTIDAD UNIDADES`} </h3>
               </Grid>
               <Grid className={classes.labelItemLeft} item xs={3} >
-                <h3 className={classes.labelItemCenter}>{`Precio por unidad`}</h3>
+                <h3 className={classes.labelItemCenter}>{`PRECIO POR UNIDAD`}</h3>
               </Grid>
               <Grid item xs={3} >
-                <h3 className={classes.labelItemRight}> {`Total`} </h3>
+                <h3 className={classes.labelItemRight}> {`TOTALS`} </h3>
               </Grid>
               {
                 values.toxinas_rellenos ?
@@ -190,7 +192,7 @@ const ModalFormEstetica = (props) => {
                           onChange={(e) => onChangeItemUnidades(e, index)}
                           onInput={(e) => {
                             e.target.value = e.target.value < 0 ? 0 : e.target.value;
-                            e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 3)
+                            e.target.value = Math.max(0, parseFloat(e.target.value)).toString().slice(0, 3)
                           }}
                           variant="outlined" />
                       </Grid>
@@ -246,25 +248,21 @@ const ModalFormEstetica = (props) => {
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Button
+                <ButtonCustom
                   className={classes.button}
                   color="primary"
                   variant="contained"
-                  onClick={(e) => onClickCrearCirugia(e, values)}
-                //disabled={!dataComplete} 
-                >
-                  Guardar
-                </Button>
+                  onClick={(e) => onClickCrearEstetica(e, values)}
+                  text='GUARDAR' />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Button
+                <ButtonCustom
                   className={classes.button}
                   color="secondary"
                   variant="contained"
-                  onClick={onClose} >
-                  Cancelar
-              </Button>
+                  onClick={onClose}
+                  text='CANCELAR' />
               </Grid>
             </Grid>
           </form>

@@ -148,7 +148,7 @@ const ModalFormPago = (props) => {
                         value={values.digitos}
                         type='Number'
                         onInput={(e) => {
-                          e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 4)
+                          e.target.value = Math.max(0, parseFloat(e.target.value)).toString().slice(0, 4)
                         }}
                         onChange={onChangeDigitos}
                         variant="outlined" />

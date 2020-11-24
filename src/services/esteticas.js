@@ -17,6 +17,18 @@ export const createEstetica = async (estetica) => {
     }
 }
 
+export const findEsteticaByDateAndSucursal = async (dia, mes, anio, sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/estetica/${dia}/${mes}/${anio}/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findEsteticaByDateAndSucursal', error);
+    }
+}
+
 export const updateEstetica = async (idEstetica, estetica) => {
     try {
         const response = await axios({

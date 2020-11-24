@@ -90,8 +90,6 @@ const ModalFormCirugia = (props) => {
     horarios,
   } = props;
 
-  console.log("FJSOFJSDF", cirugia);
-
   return (
     <div>
       <Modal
@@ -224,7 +222,7 @@ const ModalFormCirugia = (props) => {
                       onChange={onChange}
                       onInput={(e) => {
                         e.target.value = e.target.value <= 0 ? 1 : e.target.value;
-                        e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 1)
+                        e.target.value = Math.max(0, parseFloat(e.target.value)).toString().slice(0, 1)
                       }}
                       variant="outlined" />
                   </Grid>
@@ -239,7 +237,7 @@ const ModalFormCirugia = (props) => {
                       onChange={onChangeCostoBiopsias}
                       onInput={(e) => {
                         e.target.value = e.target.value <= 0 ? 0 : e.target.value;
-                        e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 4)
+                        e.target.value = Math.max(0, parseFloat(e.target.value)).toString().slice(0, 4)
                       }}
                       variant="outlined" />
                   </Grid>

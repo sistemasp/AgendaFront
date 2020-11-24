@@ -8,7 +8,7 @@ import { updateConsult } from '../../../services/consultas';
 import {
   updateEstetica,
   createEstetica,
-} from "../../../services/estetica";
+} from "../../../services/esteticas";
 import * as Yup from "yup";
 import { Formik } from 'formik';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
@@ -66,17 +66,17 @@ const ModalEstetica = (props) => {
   const [values, setValues] = useState({
     _id: estetica._id,
     fecha_hora: estetica.fecha_hora,
-    consulta: consulta,
+    consulta: estetica.consulta,
     consecutivo: estetica.consecutivo,
-    sucursal: estetica.sucursal ? estetica.sucursal : consulta.sucursal,
+    sucursal: estetica.sucursal,
     precio: estetica.precio ? estetica.precio : 0,
     total: estetica.total ? estetica.total : 0,
     toxinas_rellenos: estetica.toxinas_rellenos ? estetica.toxinas_rellenos : [],
     materiales: estetica.materiales ? estetica.materiales : [],
     pagado: estetica.pagado,
-    paciente: consulta.paciente,
-    dermatologo: consulta.dermatologo,
-    hora_aplicacion: consulta.hora_aplicacion,
+    paciente: estetica.paciente,
+    dermatologo: estetica.dermatologo,
+    hora_aplicacion: estetica.hora_aplicacion,
   });
   const [materiales, setMateriales] = useState([]);
 
@@ -124,7 +124,7 @@ const ModalEstetica = (props) => {
     setIsLoading(false);
   }
 
-  const handleClickCrearCirugia = async (event, data) => {
+  const handleClickCrearEstetica = async (event, data) => {
     const fecha_actual = new Date();
     fecha_actual.setHours(fecha_actual.getHours());
     data.fecha_hora = fecha_actual;
@@ -255,7 +255,7 @@ const ModalEstetica = (props) => {
             onClose={onClose}
             consulta={consulta}
             empleado={empleado}
-            onClickCrearCirugia={handleClickCrearCirugia}
+            onClickCrearEstetica={handleClickCrearEstetica}
             onChange={handleChange}
             onChangeTotal={handleChangeTotal}
             openModalPagos={openModalPagos}
@@ -271,7 +271,8 @@ const ModalEstetica = (props) => {
             values={values}
             dataComplete={dataComplete}
             onChangePagado={(e) => handleChangePagado(e)}
-            tipoServicioId={esteticaServicioId} />
+            tipoServicioId={esteticaServicioId}
+            estetica={estetica} />
           :
           <Backdrop className={classes.backdrop} open={isLoading} >
             <CircularProgress color="inherit" />

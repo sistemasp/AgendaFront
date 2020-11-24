@@ -5,12 +5,13 @@ import {
 	findEmployeesByRolId,
 	createConsecutivo,
 	showAllMaterials,
+	showAllMaterialEsteticas,
 } from "../../services";
 import {
-	createCirugia,
-	findCirugiaByDateAndSucursal,
-	updateCirugia
-} from "../../services/cirugias";
+	createEstetica,
+	findEsteticaByDateAndSucursal,
+	updateEstetica
+} from "../../services/esteticas";
 import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import { Formik } from 'formik';
@@ -19,7 +20,7 @@ import * as Yup from "yup";
 import { toFormatterCurrency, addZero, generateFolio, dateToString } from "../../utils/utils";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
-import { AgendarCirugiaContainer } from "./agendar_cirugia";
+import { AgendarEsteticaContainer } from "./agendar_estetica";
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 
 function Alert(props) {
@@ -42,7 +43,7 @@ const validationSchema = Yup.object({
 		.required("Los nombres del pacientes son requeridos")
 });
 
-const AgendarCirugia = (props) => {
+const AgendarEstetica = (props) => {
 	const classes = useStyles();
 
 	const {
@@ -65,7 +66,7 @@ const AgendarCirugia = (props) => {
 	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 	const dermatologoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
 	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
-	const cirugiaServicioId = process.env.REACT_APP_CIRUGIA_SERVICIO_ID;
+	const esteticaServicioId = process.env.REACT_APP_ESTETICA_SERVICIO_ID;
 
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
@@ -73,18 +74,20 @@ const AgendarCirugia = (props) => {
 	const [dermatologos, setDermatologos] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [disableDate, setDisableDate] = useState(false);
+	const [toxinasRellenos, setToxinaRellenos] = useState([]);
+
 	const [values, setValues] = useState({
-		servicio: cirugiaServicioId,
+		servicio: esteticaServicioId,
 		fecha_hora: new Date(),
 		precio: 0,
 		total: 0,
 		observaciones: '',
 		materiales: [],
 	});
-	const [cirugias, setCirugias] = useState([]);
+	const [esteticas, setEsteticas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
 	const [openModalProxima, setOpenModalProxima] = useState(false);
-	const [cirugia, setCirugia] = useState();
+	const [estetica, setEstetica] = useState();
 	const [openModalPagos, setOpenModalPagos] = useState(false);
 	const [openModalImprimirCita, setOpenModalImprimirCita] = useState(false);
 	const [datosImpresion, setDatosImpresion] = useState();
@@ -148,7 +151,7 @@ const AgendarCirugia = (props) => {
 			...values,
 			fecha_hora: date,
 		});
-		loadHorariosByServicio(date, cirugiaServicioId);
+		loadHorariosByServicio(date, esteticaServicioId);
 		setIsLoading(false);
 	};
 
@@ -176,12 +179,12 @@ const AgendarCirugia = (props) => {
 			fecha_show: date,
 			fecha: `${dia}/${mes}/${anio}`
 		});
-		await loadCirugias(date);
+		await loadEsteticas(date);
 		setIsLoading(false);
 	};
 
-	const loadCirugias = async (filterDate) => {
-		const response = await findCirugiaByDateAndSucursal(filterDate.getDate(), filterDate.getMonth(), filterDate.getFullYear(), sucursal);
+	const loadEsteticas = async (filterDate) => {
+		const response = await findEsteticaByDateAndSucursal(filterDate.getDate(), filterDate.getMonth(), filterDate.getFullYear(), sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
 				item.folio = generateFolio(item);
@@ -190,11 +193,9 @@ const AgendarCirugia = (props) => {
 				item.precio_moneda = toFormatterCurrency(item.precio);
 				item.total_moneda = toFormatterCurrency(item.total);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
-				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 			});
-			setCirugias(response.data);
+			setEsteticas(response.data);
 		}
 	}
 
@@ -211,8 +212,7 @@ const AgendarCirugia = (props) => {
 		data.hora_llegada = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;;
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
-
-		const response = await createCirugia(data);
+		const response = await createEstetica(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			const consecutivo = {
 				consecutivo: response.data.consecutivo,
@@ -225,7 +225,7 @@ const AgendarCirugia = (props) => {
 			const responseConsecutivo = await createConsecutivo(consecutivo);
 			if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 				setOpenAlert(true);
-				setMessage('EL CIRUGIA SE AGREGO CORRECTAMENTE');
+				setMessage('EL ESTETICA SE AGREGO CORRECTAMENTE');
 				setValues({
 					materiales: [],
 					dermatologo: '',
@@ -236,7 +236,7 @@ const AgendarCirugia = (props) => {
 					total: '',
 					tipo_cita: {},
 				});
-				loadCirugias(data.fecha_hora);
+				loadEsteticas(data.fecha_hora);
 				setFilterDate({
 					fecha_show: data.fecha_hora,
 					fecha: dateToString(data.fecha_hora),
@@ -270,7 +270,7 @@ const AgendarCirugia = (props) => {
 
 	const handleOnClickEditarCita = async (event, rowData) => {
 		setIsLoading(true);
-		setCirugia(rowData);
+		setEstetica(rowData);
 		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio._id);
 		setOpenModal(true);
 		setIsLoading(false);
@@ -278,14 +278,14 @@ const AgendarCirugia = (props) => {
 
 	const handleOnClickNuevaCita = async (event, rowData) => {
 		setIsLoading(true);
-		setCirugia(rowData);
+		setEstetica(rowData);
 		await loadHorariosByServicio(new Date(rowData.fecha_hora), rowData.servicio._id);
 		setOpenModalProxima(true);
 		setIsLoading(false);
 	}
 
 	const handleClickVerPagos = (event, rowData) => {
-		setCirugia(rowData);
+		setEstetica(rowData);
 		setOpenModalPagos(true);
 	}
 
@@ -311,7 +311,7 @@ const AgendarCirugia = (props) => {
 		//new Date(anio, mes - 1, dia) < filterDate.fecha_hora  ? 
 		{
 			icon: EditIcon,
-			tooltip: 'EDITAR CIRUGIA',
+			tooltip: 'EDITAR ESTETICA',
 			onClick: handleOnClickEditarCita
 		}, //: ''
 		rowData => (
@@ -324,7 +324,7 @@ const AgendarCirugia = (props) => {
 		/*rowData => (
 			rowData.status._id === atendidoStatusId ? {
 				icon: EventAvailableIcon,
-				tooltip: 'NUEVO CIRUGIA',
+				tooltip: 'NUEVA ESTETICA',
 				onClick: handleOnClickNuevaCita
 			} : ''
 		),*/
@@ -332,8 +332,8 @@ const AgendarCirugia = (props) => {
 
 	const handleGuardarModalPagos = async (servicio) => {
 		servicio.pagado = servicio.pagos.length > 0;
-		await updateCirugia(servicio._id, servicio);
-		await loadCirugias(new Date(servicio.fecha_hora));
+		await updateEstetica(servicio._id, servicio);
+		await loadEsteticas(new Date(servicio.fecha_hora));
 		setOpenModalPagos(false);
 	}
 
@@ -374,9 +374,44 @@ const AgendarCirugia = (props) => {
 		});
 	};
 
+	const handleChangeToxinasRellenos = async (items) => {
+		setIsLoading(true);
+		setValues({
+			...values,
+			toxinas_rellenos: items
+		});
+		setIsLoading(false);
+	}
+
+	const handleChangeItemUnidades = (e, index) => {
+		const newToxinasRellenos = values.toxinas_rellenos;
+		newToxinasRellenos[index].unidades = e.target.value;
+		newToxinasRellenos[index].total = Number(newToxinasRellenos[index].precio) * Number(e.target.value)
+		let precio = values.total;
+		newToxinasRellenos.map((item) => {
+		  precio -= Number(item.precio) * Number(item.unidades);
+		});
+		values.materiales.map(item => {
+		  precio -= Number(item.precio);
+		});
+	
+		setValues({
+		  ...values,
+		  toxinas_rellenos: newToxinasRellenos,
+		  precio: precio,
+		});
+	  }
+
 	useEffect(() => {
-		const loadCirugias = async () => {
-			const response = await findCirugiaByDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
+		const loadToxinasRellenos = async () => {
+			const response = await showAllMaterialEsteticas();
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setToxinaRellenos(response.data);
+			}
+		}
+
+		const loadEsteticas = async () => {
+			const response = await findEsteticaByDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				await response.data.forEach(item => {
 					item.folio = generateFolio(item);
@@ -389,7 +424,7 @@ const AgendarCirugia = (props) => {
 					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 					item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 				});
-				setCirugias(response.data);
+				setEsteticas(response.data);
 			}
 			setIsLoading(false);
 		}
@@ -409,8 +444,9 @@ const AgendarCirugia = (props) => {
 		}
 
 		setIsLoading(true);
-		loadCirugias();
-		loadHorariosByServicio(new Date(), cirugiaServicioId);
+		loadToxinasRellenos();
+		loadEsteticas();
+		loadHorariosByServicio(new Date(), esteticaServicioId);
 		loadDermatologos();
 		loadMateriales();
 	}, [sucursal]);
@@ -424,7 +460,7 @@ const AgendarCirugia = (props) => {
 						initialValues={values}
 						validationSchema={validationSchema} >
 						{
-							props => <AgendarCirugiaContainer
+							props => <AgendarEsteticaContainer
 								horarios={horarios}
 								onChangeFecha={(e) => handleChangeFecha(e)}
 								onChangeFilterDate={(e) => handleChangeFilterDate(e)}
@@ -432,22 +468,25 @@ const AgendarCirugia = (props) => {
 								onChangeMateriales={(e) => handleChangeMateriales(e)}
 								onChangeItemPrecio={handleChangeItemPrecio}
 								onChangeObservaciones={(e) => handleChangeObservaciones(e)}
+								onChangeItemUnidades={handleChangeItemUnidades}
 								filterDate={filterDate.fecha_show}
 								paciente={paciente}
 								disableDate={disableDate}
 								onClickAgendar={handleClickAgendar}
 								onChangeTiempo={(e) => handleChangeTiempo(e)}
-								titulo={`CIRUGIA (${dateToString(filterDate.fecha_show)})`}
+								titulo={`ESTETICA (${dateToString(filterDate.fecha_show)})`}
+								onChangeToxinasRellenos={(e) => handleChangeToxinasRellenos(e)}
 								onChangeTotal={handleChangeTotal}
 								columns={columns}
 								options={options}
-								cirugias={cirugias}
+								esteticas={esteticas}
 								actions={actions}
-								cirugia={cirugia}
+								estetica={estetica}
 								openModal={openModal}
 								empleado={empleado}
+								toxinasRellenos={toxinasRellenos}
 								onClickCancel={handleCloseModal}
-								loadCirugias={loadCirugias}
+								loadEsteticas={loadEsteticas}
 								dermatologos={dermatologos}
 								onChangeMedio={(e) => handleChangeMedio(e)}
 								onChangeDoctors={(e) => handleChangeDoctors(e)}
@@ -480,4 +519,4 @@ const AgendarCirugia = (props) => {
 	);
 }
 
-export default AgendarCirugia;
+export default AgendarEstetica;

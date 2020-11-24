@@ -12,7 +12,7 @@ import {
 import {
   findEsteticaById,
   updateEstetica,
-} from '../../../services/estetica';
+} from '../../../services/esteticas';
 import { addZero } from '../../../utils/utils';
 import ModalFormCirugiaAgregarPaciente from './ModalFormCirugiaAgregarPaciente';
 
@@ -37,6 +37,7 @@ const ModalCirugiaAgregarPaciente = (props) => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [salaCirugias, setSalaCirugias] = useState([]);
+  const [currentService, setCurrentService] = useState({});
   //const [consulta, setConsulta] = useState();
   //const [cita, setCita] = useState();
 
@@ -46,48 +47,30 @@ const ModalCirugiaAgregarPaciente = (props) => {
   const enSalaCirugiaStatusId = process.env.REACT_APP_EN_SALA_CIRUGIA_STATUS_ID;
   const cirugiaServicioId = process.env.REACT_APP_CIRUGIA_SERVICIO_ID;
 
-  useEffect(() => {
-    const loadCabinasDisponibles = async () => {
-      const response = await findSalaCirugiaBySucursalIdAndFree(sucursal);
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setSalaCirugias(response.data);
-      }
-    }
-
-    loadCabinasDisponibles();
-    setIsLoading(false);
-
-  }, [sucursal]);
-
   const handleClickGuardar = async (event, rowData) => {
     setIsLoading(true);
 
-    const responseServicio = tipo_servicio === cirugiaServicioId ? await findCirugiaById(servicio) : await findEsteticaById(servicio);
-    if (`${responseServicio.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-      const currentService = responseServicio.data;
-      if (!cambio) {
-        const dateNow = new Date();
-        let updateData = currentService;
-        updateData.status = enSalaCirugiaStatusId;
-        updateData.hora_atencion = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
-        updateData.dermatologo = values.sala_cirugia.dermatologo;
-        tipo_servicio === cirugiaServicioId ? await updateCirugia(currentService._id, updateData) : updateEstetica(currentService._id, updateData);
-      }
+    if (!cambio) {
+      const dateNow = new Date();
+      let updateData = currentService;
+      updateData.status = enSalaCirugiaStatusId;
+      updateData.hora_atencion = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;
+      tipo_servicio === cirugiaServicioId ? await updateCirugia(currentService._id, updateData) : updateEstetica(currentService._id, updateData);
+    }
 
-      setValues({ sala_cirugia: { paciente: currentService.paciente._id } });
-      let salaCirugia = values.sala_cirugia;
-      salaCirugia.cirugia = currentService._id;
-      salaCirugia.dermatologo = currentService.dermatologo;
-      salaCirugia.paciente = paciente._id;
-      salaCirugia.tipo_servicio = tipo_servicio;
-      salaCirugia.servicio = servicio;
-      salaCirugia.disponible = false;
+    setValues({ sala_cirugia: { paciente: currentService.paciente._id } });
+    let salaCirugia = values.sala_cirugia;
+    salaCirugia.cirugia = currentService._id;
+    salaCirugia.dermatologo = currentService.dermatologo;
+    salaCirugia.paciente = paciente._id;
+    salaCirugia.tipo_servicio = tipo_servicio;
+    salaCirugia.servicio = servicio;
+    salaCirugia.disponible = false;
 
-      const response = await updateSalaCirugia(salaCirugia._id, salaCirugia);
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setOpenAlert(true);
-        setMessage('EL PACIENTE ENTRO A LA SALA DE CIRUGIA');
-      }
+    const response = await updateSalaCirugia(salaCirugia._id, salaCirugia);
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setOpenAlert(true);
+      setMessage('EL PACIENTE ENTRO A LA SALA DE CIRUGIA');
     }
 
     onClose();
@@ -98,6 +81,28 @@ const ModalCirugiaAgregarPaciente = (props) => {
   const handleChangeSalaCirugia = (event) => {
     setValues({ sala_cirugia: event.target.value });
   }
+
+  useEffect(() => {
+    const loadCabinasDisponibles = async () => {
+      const response = await findSalaCirugiaBySucursalIdAndFree(sucursal);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        setSalaCirugias(response.data);
+      }
+    }
+
+    const getCurrentService = async () => {
+      const responseServicio = tipo_servicio === cirugiaServicioId ? await findCirugiaById(servicio) : await findEsteticaById(servicio);
+      if (`${responseServicio.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        const currentService = responseServicio.data;
+        setCurrentService(currentService);
+      }
+    }
+
+    loadCabinasDisponibles();
+    getCurrentService();
+    setIsLoading(false);
+
+  }, [sucursal]);
 
   return (
     <Formik

@@ -18,6 +18,7 @@ import Aparatologia from '../calendario/aparatologia';
 import ModalDermapen from '../../components/modales/modal_dermapen';
 import AgendarDermapen from '../agendar_dermapen';
 import AgendarCirugia from '../agendar_cirugia';
+import AgendarEstetica from '../agendar_estetica';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -170,7 +171,7 @@ export const MenuContainer = props => {
 					sucursal={sucursal._id} />
 			</TabPanel>
 			<TabPanel value={value} index={7}>
-				<AgendarCirugia
+				<AgendarEstetica
 					consultaAgendada={consultaAgendada}
 					paciente={pacienteAgendado}
 					setPacienteAgendado={setPacienteAgendado}
