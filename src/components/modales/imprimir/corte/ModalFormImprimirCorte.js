@@ -139,8 +139,8 @@ const ModalFormImprimirCorte = (props) => {
   let retirosParciales = 0;
   let otrosEgresos = 0;
 
-  let totalesIngresos = [0, 0, 0, 0, 0, 0, 0, 0];
-  let totalesPagosAnticipados = [0, 0, 0, 0, 0, 0, 0, 0];
+  let totalesIngresos = [0, 0, 0, 0, 0, 0, 0];
+  let totalesPagosAnticipados = [0, 0, 0, 0, 0, 0, 0];
 
   return (
     <div>

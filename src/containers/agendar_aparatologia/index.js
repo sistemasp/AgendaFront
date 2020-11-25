@@ -90,7 +90,6 @@ const AgendarAparatologia = (props) => {
 		tipo_cita: tipoCitaNoAplicaId,
 		observaciones: '',
 		dermatologo: { _id: dermatologoDirectoId },
-		tiempo: '30',
 	});
 	const [aparatologias, setAparatologia] = useState([]);
 	const [areas, setAreas] = useState([]);
@@ -373,6 +372,10 @@ const AgendarAparatologia = (props) => {
 		setValues({ ...values, medio: e.target.value });
 	}
 
+	const handleChangeTiempo = (e) => {
+		setValues({ ...values, tiempo: e.target.value });
+	}
+
 	const handleCloseAlert = () => {
 		setOpenAlert(false);
 	};
@@ -567,6 +570,7 @@ const AgendarAparatologia = (props) => {
 								onChangeDoctors={(e) => handleChangeDoctors(e)}
 								onChangePromovendedor={(e) => handleChangePromovendedor(e)}
 								onChangeCosmetologa={(e) => handleChangeCosmetologa(e)}
+								onChangeTiempo={(e) => handleChangeTiempo(e)}
 								onCloseVerPagos={handleCloseVerPagos}
 								openModalPagos={openModalPagos}
 								openModalImprimirCita={openModalImprimirCita}

@@ -61,11 +61,11 @@ const Pacientes = (props) => {
 	} = props;
 
 	const columns = [
-		{ title: 'Nombres', field: 'nombres' },
-		{ title: 'Apellidos', field: 'apellidos' },
-		{ title: 'Telefono', field: 'telefono' },
-		{ title: 'Sexo', field: 'sexo.nombre' },
-		{ title: 'Fecha de nacimiento', field: 'fecha_nacimiento' },
+		{ title: 'NOMBRES', field: 'nombres' },
+		{ title: 'APELLIDOS', field: 'apellidos' },
+		{ title: 'TELEFONO', field: 'telefono' },
+		{ title: 'SEXO', field: 'sexo.nombre' },
+		{ title: 'FECHA DE NACIMIENTO', field: 'fecha_nacimiento' },
 	];
 
 	const options = {
@@ -183,11 +183,11 @@ const Pacientes = (props) => {
 			tooltip: 'AGREGAR FACIAL',
 			onClick: onClickAgendarFaciales
 		},
-		{
+		/*{
 			icon: EventAvailableIcon,
 			tooltip: 'AGREGAR LÁSER',
 			onClick: onClickAgendarLaser
-		},
+		},*/
 		{
 			icon: EventAvailableIcon,
 			tooltip: 'AGREGAR APARATOLOGIA',
@@ -219,9 +219,9 @@ const Pacientes = (props) => {
 			case 'AGREGAR FACIAL':
 				onClickAgendarFaciales(e, rowData);
 				break;
-			case 'AGREGAR LÁSER':
+			/*case 'AGREGAR LÁSER':
 				onClickAgendarLaser(e, rowData);
-				break;
+				break;*/
 			case 'AGREGAR APARATOLOGIA':
 				onClickAgendarAparatologia(e, rowData);
 				break;

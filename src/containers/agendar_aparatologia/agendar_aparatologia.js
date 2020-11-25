@@ -327,6 +327,17 @@ export const AgendarAparatologiaContainer = (props) => {
 					<Grid item xs={12} sm={2}>
 						<TextField
 							className={classes.button}
+							name="tiempo"
+							error={Boolean(errors.tiempo)}
+							label="Tiempo"
+							value={values.tiempo}
+							type='Number'
+							onChange={onChangeTiempo}
+							variant="outlined" />
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<TextField
+							className={classes.button}
 							name="observaciones"
 							error={Boolean(errors.observaciones)}
 							label="Observaciones"

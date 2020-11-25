@@ -116,25 +116,25 @@ const ListaEspera = (props) => {
 
 	const columnsConsultorios = [
 		{ title: 'CONSULTORIO', field: 'nombre' },
-		{ title: 'NOMBRE', field: 'paciente_nombre' },
+		{ title: 'PACIENTE', field: 'paciente_nombre' },
 		{ title: 'DERMATÓLOGO', field: 'dermatologo_nombre' },
 	];
 
 	const columnsCabinas = [
 		{ title: 'CABINA', field: 'nombre' },
-		{ title: 'NOMBRE', field: 'paciente_nombre' },
+		{ title: 'PACIENTE', field: 'paciente_nombre' },
 		{ title: 'COSMETÓLOGA', field: 'cosmetologa_nombre' },
 		{ title: 'DERMATÓLOGO', field: 'dermatologo_nombre' },
 	];
 
 	const columnsSalaCirugias = [
 		{ title: 'SALA', field: 'nombre' },
-		{ title: 'NOMBRE', field: 'paciente_nombre' },
+		{ title: 'PACIENTE', field: 'paciente_nombre' },
 		{ title: 'DERMATÓLOGO', field: 'dermatologo_nombre' },
 	];
 
 	const columnsEspera = [
-		{ title: 'NOMBRE', field: 'paciente_nombre' },
+		{ title: 'PACIENTE', field: 'paciente_nombre' },
 		{ title: 'SERVICIO', field: 'servicio.nombre' },
 		{ title: 'HORA LLEGADA', field: 'hora_llegada' },
 		{ title: 'CONSECUTIVO', field: 'consecutivo' },
@@ -142,7 +142,7 @@ const ListaEspera = (props) => {
 	];
 
 	const columnsEsperaConsultas = [
-		{ title: 'NOMBRE', field: 'paciente_nombre' },
+		{ title: 'PACIENTE', field: 'paciente_nombre' },
 		{ title: 'HORA LLEGADA', field: 'hora_llegada' },
 		{ title: 'DERMATÓLOGO', field: 'dermatologo_nombre' },
 		{ title: 'CONSECUTIVO', field: 'consecutivo' },
@@ -622,7 +622,7 @@ const ListaEspera = (props) => {
 	useEffect(() => {
 		loadAll();
 	}, []);
-
+console.log("FSHFOJSDOFJS", listaEsperaAparatologias);
 	return (
 		<Fragment>
 			{
