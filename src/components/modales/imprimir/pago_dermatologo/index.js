@@ -90,7 +90,7 @@ const ModalImprimirPagoDermatologo = (props) => {
         reconsulta.pagos.forEach(pago => {
           total += Number(pago.total);
         });
-        return total > 0;
+        return true;
       }); 
       setConsultasReconsultas(newReconsultas);
     }

@@ -206,7 +206,7 @@ export const MainContainer = props => {
 			}
 			<CssBaseline />
 			<AppBar
-				position="absolute"
+				position="fixed"
 				className={clsx(classes.appBar, {
 					[classes.appBarShift]: openDrawer,
 				})}
