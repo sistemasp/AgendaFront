@@ -224,7 +224,7 @@ export const AgendarCirugiaContainer = (props) => {
 									format="dd/MM/yyyy"
 									margin="normal"
 									id="date-picker-inline"
-									label="Fecha"
+									label="FECHA"
 									value={values.fecha_hora}
 									onChange={onChangeFecha}
 									KeyboardButtonProps={{
@@ -244,7 +244,7 @@ export const AgendarCirugiaContainer = (props) => {
 								error={Boolean(errors.hora)}
 								onChange={onChangeHora}
 								disabled={!values.fecha_hora}
-								label="Hora" >
+								label="HORA" >
 								{horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
 							</Select>
 						</FormControl>
@@ -278,7 +278,7 @@ export const AgendarCirugiaContainer = (props) => {
 							className={classes.button}
 							name="observaciones"
 							error={Boolean(errors.observaciones)}
-							label="Observaciones"
+							label="OBSERVACIONES"
 							value={values.observaciones}
 							onChange={onChangeObservaciones}
 							variant="outlined" />

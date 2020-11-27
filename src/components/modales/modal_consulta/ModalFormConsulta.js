@@ -107,7 +107,7 @@ const ModalFormConsulta = (props) => {
                         id="simple-select-outlined-dermatologo"
                         value={values.dermatologo}
                         onChange={onChangeDermatologo}
-                        label="Dermatologo" >
+                        label="DERMATÓLOGO" >
                         {doctores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                       </Select>
                     </FormControl>
@@ -143,7 +143,7 @@ const ModalFormConsulta = (props) => {
                         id="simple-select-outlined-promovendedor"
                         value={values.promovendedor}
                         onChange={onChangePromovendedor}
-                        label="Promovendedor" >
+                        label="PROMOVENDEDOR" >
                         {promovendedores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                       </Select>
                     </FormControl>
@@ -177,7 +177,7 @@ const ModalFormConsulta = (props) => {
                           format="dd/MM/yyyy"
                           margin="normal"
                           id="date-picker-inline"
-                          label="Fecha"
+                          label="FECHA"
                           value={values.nueva_fecha_hora}
                           onChange={onChangeFecha}
                           KeyboardButtonProps={{
@@ -195,7 +195,7 @@ const ModalFormConsulta = (props) => {
                           id="simple-select-outlined-hora"
                           value={values.hora}
                           onChange={onChangeHora}
-                          label="Hora" >
+                          label="HORA" >
                           {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
                         </Select>
                       </FormControl>
@@ -232,7 +232,7 @@ const ModalFormConsulta = (props) => {
                 <TextField
                   className={classes.textField}
                   name="observaciones"
-                  label="Observaciones"
+                  label="OBSERVACIONES"
                   value={values.observaciones}
                   onChange={onChangeObservaciones}
                   variant="outlined" />

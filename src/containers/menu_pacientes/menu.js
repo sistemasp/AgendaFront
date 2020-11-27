@@ -117,9 +117,7 @@ export const MenuContainer = props => {
 				<Pacientes
 					onClickAgendarFaciales={onClickAgendarFaciales}
 					onClickAgendarConsulta={onClickAgendarConsulta}
-					//onClickAgendarLaser={onClickAgendarLaser}
 					onClickAgendarAparatologia={onClickAgendarAparatologia}
-					onClickAgendarDermapen={onClickAgendarDermapen}
 					onChangeTab={onChangeTab} />
 			</TabPanel>
 			<TabPanel value={value} index={1}>
@@ -130,6 +128,7 @@ export const MenuContainer = props => {
 					sucursal={sucursal}
 					onClickAgendarCirugia={onClickAgendarCirugia}
 					onClickAgendarEstetica={onClickAgendarEstetica}
+					onClickAgendarDermapen={onClickAgendarDermapen}
 					history={history} />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
@@ -148,6 +147,7 @@ export const MenuContainer = props => {
 			</TabPanel>
 			<TabPanel value={value} index={4}>
 				<AgendarDermapen
+					consultaAgendada={consultaAgendada}
 					paciente={pacienteAgendado}
 					setPacienteAgendado={setPacienteAgendado}
 					empleado={empleado}

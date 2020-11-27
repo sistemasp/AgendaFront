@@ -20,7 +20,7 @@ import {
 import {
 	findEsteticaByConsultaId,
 } from "../../services/esteticas";
-import { Backdrop, CircularProgress, Snackbar, TablePagination } from "@material-ui/core";
+import { Backdrop, CircularProgress, FormControl, InputLabel, MenuItem, Select, Snackbar, TablePagination } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
 import EditIcon from '@material-ui/icons/Edit';
 import { toFormatterCurrency, addZero, generateFolio, dateToString } from "../../utils/utils";
@@ -60,6 +60,7 @@ const AgendarConsulta = (props) => {
 		history,
 		onClickAgendarCirugia,
 		onClickAgendarEstetica,
+		onClickAgendarDermapen,
 	} = props;
 
 	const date = new Date();
@@ -140,23 +141,14 @@ const AgendarConsulta = (props) => {
 		{ title: 'FRECUENCIA', field: 'frecuencia.nombre' },
 		sucursal._id === sucursalManuelAcunaId ? { title: 'MEDIO', field: 'medio.nombre' } : {},
 		{ title: 'TIPO CONSULTA', field: 'tipo_cita.nombre' },
-		sucursal._id === sucursalManuelAcunaId ? { title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' } : {},
-		{ title: 'QUIEN CONFIRMA ASISTENCIA', field: 'quien_confirma_asistencia.nombre' },
+		sucursal._id === sucursalManuelAcunaId ? { title: 'QUIEN CONFIRMA LLAMADA', field: 'quien_confirma_llamada.nombre' } : {},
+		sucursal._id === sucursalManuelAcunaId ? { title: 'QUIEN CONFIRMA ASISTENCIA', field: 'quien_confirma_asistencia.nombre' } : {},
 		{ title: 'DERMATÓLOGO', field: 'dermatologo_nombre' },
 		{ title: 'PROMOVENDEDOR', field: 'promovendedor_nombre' },
 		{ title: 'ESTADO', field: 'status.nombre' },
 		{ title: 'PRECIO', field: 'precio_moneda' },
 		{ title: 'OBSERVACIONES', field: 'observaciones' },
 	];
-
-	const components = {
-		Pagination: props => {
-			return <TablePagination
-				{...props}
-				rowsPerPageOptions={[5, 10, 20, 30, citas.length]}
-			/>
-		}
-	}
 
 	const dataComplete = !paciente.nombres || !values.precio || !values.dermatologo
 		|| !values.promovendedor || (sucursal._id === sucursalManuelAcunaId ? (!values.fecha_hora || !values.medio) : false);
@@ -494,6 +486,13 @@ const AgendarConsulta = (props) => {
 		setOpenModalImprimirConsultas(true);
 	}
 
+	const handleGuardarModalPagos = async (servicio) => {
+		servicio.pagado = servicio.pagos.length > 0;
+		await updateConsult(servicio._id, servicio);
+		await loadConsultas(new Date(servicio.fecha_hora));
+		setOpenModalPagos(false);
+	}
+
 	const actions = [
 		//new Date(anio, mes - 1, dia) < filterDate.fecha_show  ? 
 		{
@@ -505,13 +504,39 @@ const AgendarConsulta = (props) => {
 			icon: EditIcon,
 			tooltip: 'EDITAR CONSULTA',
 			onClick: handleOnClickEditarConsulta
-		}, //: ''
-		rowData => {
+		},
+		{
+			icon: LocalHospitalIcon,
+			tooltip: 'AGREGAR CIRUGIA',
+			onClick: onClickAgendarCirugia
+		},
+		{
+			icon: LocalHospitalIcon,
+			tooltip: 'AGREGAR DERMAPEN',
+			onClick: onClickAgendarDermapen
+		},
+		{
+			icon: FaceIcon,
+			tooltip: 'TOXINA Y RELLENOS',
+			onClick: onClickAgendarEstetica
+		},
+		{
+			icon: EventAvailableIcon,
+			tooltip: 'NUEVA CITA',
+			onClick: handleOnClickNuevaConsulta
+		},
+		{
+			icon: AttachMoneyIcon,
+			tooltip: 'PAGOS',
+			onClick: handleClickVerPagos
+		}
+		//: ''
+		/*rowData => {
 			return (rowData.status._id === enProcedimientoStatusId || rowData.status._id === enConsultorioStatusId
 				|| rowData.status._id === enCabinaStatusId || rowData.status._id === atendidoStatusId)
 				? {
 					icon: LocalHospitalIcon,
-					tooltip: 'AGENDAR CIRUGIA',
+					tooltip: 'AGREGAR CIRUGIA',
 					onClick: onClickAgendarCirugia
 				} : ''
 		},
@@ -537,14 +562,65 @@ const AgendarConsulta = (props) => {
 				tooltip: 'NUEVA CITA',
 				onClick: handleOnClickNuevaConsulta
 			} : ''
-		),
+		),*/
 	];
 
-	const handleGuardarModalPagos = async (servicio) => {
-		servicio.pagado = servicio.pagos.length > 0;
-		await updateConsult(servicio._id, servicio);
-		await loadConsultas(new Date(servicio.fecha_hora));
-		setOpenModalPagos(false);
+	const onChangeActions = (e, rowData) => {
+		const action = e.target.value;
+		switch (action) {
+			case 'IMPRIMIR':
+				handlePrint(e, rowData);
+				break;
+			case 'EDITAR CONSULTA':
+				handleOnClickEditarConsulta(e, rowData);
+				break;
+			case 'AGREGAR CIRUGIA':
+				onClickAgendarCirugia(e, rowData);
+				break;
+			case 'TOXINA Y RELLENOS':
+				onClickAgendarEstetica(e, rowData);
+				break;
+			case 'AGREGAR DERMAPEN':
+				onClickAgendarDermapen(e, rowData);
+				break;
+			case 'NUEVA CITA':
+				handleOnClickNuevaConsulta(e, rowData);
+				break;
+			case 'PAGOS':
+				handleClickVerPagos(e, rowData);
+				break;
+		}
+	}
+
+	const components = {
+		Pagination: props => {
+			return <TablePagination
+				{...props}
+				rowsPerPageOptions={[5, 10, 20, 30, citas.length]}
+			/>
+		},
+		Actions: props => {
+			return <Fragment>
+				<FormControl variant="outlined" className={classes.formControl}>
+					<InputLabel id="simple-select-outlined-hora"></InputLabel>
+					<Select
+						labelId="simple-select-outlined-actions"
+						id="simple-select-outlined-actions"
+						onChange={(e) => onChangeActions(e, props.data)}
+						label="Acciones">
+						{
+							props.actions.map((item, index) => {
+
+								return <MenuItem
+									key={index}
+									value={item.tooltip}
+								>{item.tooltip}</MenuItem>
+							})
+						}
+					</Select>
+				</FormControl>
+			</Fragment>
+		}
 	}
 
 	return (

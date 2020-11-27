@@ -43,7 +43,7 @@ const MenuPatient = (props) => {
     }
 
     const handleAgendarDermapen = (event, rowData) => {
-        setPacienteAgendado(rowData);
+        setConsultaAgendada(rowData);
         setValue(Number(process.env.REACT_APP_PAGE_AGENDAR_DERMAPEN));
     }
 

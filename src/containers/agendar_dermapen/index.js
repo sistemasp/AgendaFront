@@ -52,11 +52,12 @@ const AgendarDermapen = (props) => {
 	const classes = useStyles();
 
 	const {
-		paciente,
+		consultaAgendada,
 		empleado,
-		setPacienteAgendado,
 		sucursal,
 	} = props;
+
+	const paciente = consultaAgendada.paciente ? consultaAgendada.paciente : {};
 
 	const dermatologoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
 	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
@@ -116,25 +117,26 @@ const AgendarDermapen = (props) => {
 	});
 
 	const columns = [
-		{ title: 'Folio', field: 'folio' },
-		{ title: 'Hora', field: 'hora' },
-		{ title: 'Paciente', field: 'paciente_nombre' },
-		{ title: 'Telefono', field: 'paciente.telefono' },
-		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
-		{ title: 'Medio', field: 'medio.nombre' },
-		{ title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' },
-		{ title: 'Quien confirma asistencia', field: 'quien_confirma_asistencia.nombre' },
-		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
-		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
-		{ title: 'Tipo Cita', field: 'tipo_cita.nombre' },
-		{ title: 'Estado', field: 'status.nombre' },
-		{ title: 'Precio', field: 'precio_moneda' },
-		{ title: 'Total', field: 'total_moneda' },
-		{ title: 'Tiempo (minutos)', field: 'tiempo' },
-		{ title: 'Observaciones', field: 'observaciones' },
-		{ title: 'Hora llegada', field: 'hora_llegada' },
-		{ title: 'Hora atendido', field: 'hora_atencion' },
-		{ title: 'Hora salida', field: 'hora_salida' },
+		{ title: 'FOLIO', field: 'folio' },
+		{ title: 'HORA', field: 'hora' },
+		{ title: 'FOLIO CONSULTA', field: 'consulta.consecutivo' },
+		{ title: 'PACIENTE', field: 'paciente_nombre' },
+		{ title: 'TELEFONO', field: 'paciente.telefono' },
+		{ title: 'QUIEN AGENDA', field: 'quien_agenda.nombre' },
+		sucursal._id === sucursalManuelAcunaId ? { title: 'MEDIO', field: 'medio.nombre' } : {},
+		{ title: 'TIPO CONSULTA', field: 'tipo_cita.nombre' },
+		sucursal._id === sucursalManuelAcunaId ? { title: 'QUIEN CONFIRMA LLAMADA', field: 'quien_confirma_llamada.nombre' } : {},
+		sucursal._id === sucursalManuelAcunaId ? { title: 'QUIEN CONFIRMA ASISTENCIA', field: 'quien_confirma_asistencia.nombre' } : {},
+		{ title: 'PROMOVENDEDOR', field: 'promovendedor_nombre' },
+		{ title: 'DERMATÓLOGO', field: 'dermatologo_nombre' },
+		{ title: 'ESTADO', field: 'status.nombre' },
+		{ title: 'PREICO', field: 'precio_moneda' },
+		{ title: 'TOTAL', field: 'total_moneda' },
+		{ title: 'TIEMPO (MINUTOS)', field: 'tiempo' },
+		{ title: 'OBSERVACIONES', field: 'observaciones' },
+		{ title: 'HORA LLEGADA', field: 'hora_llegada' },
+		{ title: 'HORA ATENDIDO', field: 'hora_atencion' },
+		{ title: 'HORA SALIDA', field: 'hora_salida' },
 	];
 
 	const options = {
@@ -240,6 +242,7 @@ const AgendarDermapen = (props) => {
 
 	const handleClickAgendar = async (data) => {
 		setIsLoading(true);
+		data.consulta = consultaAgendada._id;
 		data.quien_agenda = empleado._id;
 		data.sucursal = sucursal;
 		data.status = pendienteStatusId;
@@ -275,7 +278,6 @@ const AgendarDermapen = (props) => {
 				});
 				setTratamientos([]);
 				setAreas([]);
-				setPacienteAgendado({});
 				loadDermapens(data.fecha_hora);
 				setFilterDate({
 					fecha_show: data.fecha_hora,
@@ -413,6 +415,17 @@ const AgendarDermapen = (props) => {
 		});
 	}
 
+	const handleChangeTotal = (event) => {
+		setValues({
+			...values,
+			total: event.target.value
+		})
+	}
+
+	const handleChangePrecio = (event) => {
+
+	}
+
 	useEffect(() => {
 		const loadDermapens = async () => {
 			const response = await findDermapenByDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
@@ -451,7 +464,7 @@ const AgendarDermapen = (props) => {
 				setValues({
 					...values,
 					areas: [dermapen],
-					total: precio,
+					total: 0,
 					precio: precio,
 				});
 			}
@@ -544,6 +557,8 @@ const AgendarDermapen = (props) => {
 								openModalProxima={openModalProxima}
 								openModalImprimirCita={openModalImprimirCita}
 								datosImpresion={datosImpresion}
+								onChangeTotal={handleChangeTotal}
+								onChangePrecio={handleChangePrecio}
 								onCloseImprimirConsulta={handleCloseImprimirConsulta}
 								sucursal={sucursal}
 								setOpenAlert={setOpenAlert}

@@ -232,7 +232,7 @@ export const AgendarConsultaContainer = (props) => {
                       format="dd/MM/yyyy"
                       margin="normal"
                       id="date-picker-inline"
-                      label="Fecha"
+                      label="FECHA"
                       value={values.fecha_hora}
                       onChange={onChangeFecha}
                       KeyboardButtonProps={{
@@ -251,7 +251,7 @@ export const AgendarConsultaContainer = (props) => {
                     value={values.hora}
                     onChange={onChangeHora}
                     disabled={values.fecha_show === ''}
-                    label="Hora" >
+                    label="HORA" >
                     {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
                   </Select>
                 </FormControl>
@@ -283,7 +283,7 @@ export const AgendarConsultaContainer = (props) => {
                     id="simple-select-outlined-dermatologo"
                     value={values.dermatologo}
                     onChange={onChangeDermatologos}
-                    label="Dermatologo" >
+                    label="DERMATÓLOGO" >
                     {dermatologos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
                   </Select>
                 </FormControl>
@@ -302,7 +302,7 @@ export const AgendarConsultaContainer = (props) => {
                     id="simple-select-outlined-promovendedor"
                     value={values.promovendedor}
                     onChange={onChangePromovendedor}
-                    label="Promovendedor" >
+                    label="PROMOVENDEDOR" >
                     {promovendedores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
                   </Select>
                 </FormControl>
@@ -319,7 +319,7 @@ export const AgendarConsultaContainer = (props) => {
                     id="simple-select-outlined-tipo-cita"
                     value={values.medio}
                     onChange={onChangeMedio}
-                    label="Medio" >
+                    label="MEDIO" >
                     {medios.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
                   </Select>
                 </FormControl>
@@ -331,7 +331,7 @@ export const AgendarConsultaContainer = (props) => {
               className={classes.button}
               name="observaciones"
               //helperText={touched.observaciones ? errors.observaciones : ""}
-              label="Observaciones"
+              label="OBSERVACIONES"
               value={values.observaciones}
               onChange={onChangeObservaciones}
               variant="outlined" />

@@ -312,7 +312,7 @@ export const AgendarEsteticaContainer = (props) => {
 								className={classes.button}
 								name="observaciones"
 								error={Boolean(errors.observaciones)}
-								label="Observaciones"
+								label="OBSERVACIONES"
 								value={values.observaciones}
 								onChange={onChangeObservaciones}
 								variant="outlined" />

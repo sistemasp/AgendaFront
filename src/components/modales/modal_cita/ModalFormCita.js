@@ -166,7 +166,7 @@ const ModalFormCita = (props) => {
                           format="dd/MM/yyyy"
                           margin="normal"
                           id="date-picker-inline"
-                          label="Fecha"
+                          label="FECHA"
                           value={values.nueva_fecha_hora}
                           onChange={onChangeFecha}
                           KeyboardButtonProps={{
@@ -185,7 +185,7 @@ const ModalFormCita = (props) => {
                           value={values.hora}
                           error={Boolean(errors.hora)}
                           onChange={onChangeHora}
-                          label="Hora" >
+                          label="HORA" >
                           {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
                         </Select>
                       </FormControl>
@@ -275,7 +275,7 @@ const ModalFormCita = (props) => {
                         value={values.promovendedor}
                         error={Boolean(errors.promovendedor)}
                         onChange={onChangePromovendedor}
-                        label="Promovendedor" >
+                        label="PROMOVENDEDOR" >
                         {promovendedores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                       </Select>
                     </FormControl>
@@ -307,7 +307,7 @@ const ModalFormCita = (props) => {
                   name="observaciones"
                   //helperText={touched.observaciones ? errors.observaciones : ""}
                   error={Boolean(errors.observaciones)}
-                  label="Observaciones"
+                  label="OBSERVACIONES"
                   value={values.observaciones}
                   onChange={onChangeObservaciones}
                   variant="outlined" />

@@ -140,7 +140,7 @@ const ModalFormDermapen = (props) => {
                           format="dd/MM/yyyy"
                           margin="normal"
                           id="date-picker-inline"
-                          label="Fecha"
+                          label="FECHA"
                           value={values.nueva_fecha_hora}
                           onChange={onChangeFecha}
                           KeyboardButtonProps={{
@@ -158,7 +158,7 @@ const ModalFormDermapen = (props) => {
                           id="simple-select-outlined-hora"
                           value={values.hora}
                           onChange={onChangeHora}
-                          label="Hora" >
+                          label="HORA" >
                           {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
                         </Select>
                       </FormControl>
@@ -262,7 +262,7 @@ const ModalFormDermapen = (props) => {
                   className={classes.textField}
                   name="observaciones"
                   //helperText={touched.observaciones ? errors.observaciones : ""}
-                  label="Observaciones"
+                  label="OBSERVACIONES"
                   value={values.observaciones}
                   onChange={onChangeObservaciones}
                   variant="outlined" />

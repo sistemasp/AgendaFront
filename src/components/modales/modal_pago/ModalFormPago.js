@@ -221,7 +221,7 @@ const ModalFormPago = (props) => {
                   name="observaciones"
                   //helperText={touched.numero_sesion ? errors.numero_sesion : ""}
                   error={Boolean(errors.observaciones)}
-                  label="Observaciones"
+                  label="OBSERVACIONES"
                   value={values.observaciones}
                   onChange={onChangeObservaciones}
                   variant="outlined" />

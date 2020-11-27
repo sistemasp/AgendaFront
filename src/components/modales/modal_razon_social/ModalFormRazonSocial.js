@@ -221,7 +221,7 @@ onChangeCiudad,
                     value={values.colonia}
                     error={Boolean(errors.colonia)}
                     onChange={onChangeColonia}
-                    label="Promovendedor" >
+                    label="PROMOVENDEDOR" >
                     {colonias.sort().map((item, index) => <MenuItem key={index} value={item}>{item}</MenuItem>)}
                   </Select>
                 </FormControl>

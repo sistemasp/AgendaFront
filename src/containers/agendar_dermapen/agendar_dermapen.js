@@ -30,6 +30,10 @@ const useStyles = makeStyles(theme => ({
 	button: {
 		width: '100%',
 		color: '#FFFFFF',
+	},
+	textField: {
+		minWidth: 120,
+		width: '100%',
 	}
 }));
 
@@ -73,6 +77,8 @@ export const AgendarDermapenContainer = (props) => {
 		materiales,
 		onChangeMateriales,
 		onChangeItemPrecio,
+		onChangeTotal,
+		onChangePrecio,
 		// TABLE DATES PROPERTIES
 		titulo,
 		columns,
@@ -176,8 +182,36 @@ export const AgendarDermapenContainer = (props) => {
 					: ''
 			}
 			<Paper>
-				<h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'Selecciona un paciente'}</h1>
+				<h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'SELECCIONA DESDE UNA CONSULTA'}</h1>
 				<Grid container spacing={3}>
+					<Grid item xs={12} sm={2}>
+						<TextField
+							className={classes.textField}
+							name="precio"
+							label="COSTO DERMAPEN"
+							value={values.precio}
+							type='Number'
+							onChange={onChangePrecio}
+							onInput={(e) => {
+								e.target.value = e.target.value < 0 ? 0 : e.target.value;
+								e.target.value = Math.max(0, parseFloat(e.target.value)).toString().slice(0, 6)
+							}}
+							variant="outlined" />
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<TextField
+							className={classes.textField}
+							name="total"
+							label="TOTAL DERMAPEN"
+							value={values.total}
+							type='Number'
+							onChange={onChangeTotal}
+							onInput={(e) => {
+								e.target.value = e.target.value < 0 ? 0 : e.target.value;
+								e.target.value = Math.max(0, parseFloat(e.target.value)).toString().slice(0, 6)
+							}}
+							variant="outlined" />
+					</Grid>
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
 							<InputLabel id="simple-select-outlined-hora">Dermatologo</InputLabel>
@@ -187,7 +221,7 @@ export const AgendarDermapenContainer = (props) => {
 								value={values.dermatologo}
 								error={Boolean(errors.dermatologo)}
 								onChange={onChangeDoctors}
-								label="Dermatologo" >
+								label="DERMATÓLOGO" >
 								{dermatologos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
@@ -201,7 +235,7 @@ export const AgendarDermapenContainer = (props) => {
 								value={values.promovendedor}
 								error={Boolean(errors.promovendedor)}
 								onChange={onChangePromovendedor}
-								label="Promovendedor" >
+								label="PROMOVENDEDOR" >
 								{promovendedores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
@@ -222,7 +256,7 @@ export const AgendarDermapenContainer = (props) => {
 									format="dd/MM/yyyy"
 									margin="normal"
 									id="date-picker-inline"
-									label="Fecha"
+									label="FECHA"
 									value={values.fecha_hora}
 									onChange={onChangeFecha}
 									KeyboardButtonProps={{
@@ -242,7 +276,7 @@ export const AgendarDermapenContainer = (props) => {
 								error={Boolean(errors.hora)}
 								onChange={onChangeHora}
 								disabled={!values.fecha_hora}
-								label="Hora" >
+								label="HORA" >
 								{horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
 							</Select>
 						</FormControl>
@@ -255,7 +289,7 @@ export const AgendarDermapenContainer = (props) => {
 								id="simple-select-outlined-tipo-dermapen"
 								value={values.medio}
 								onChange={onChangeMedio}
-								label="Medio" >
+								label="MEDIO" >
 								{medios.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
@@ -265,7 +299,7 @@ export const AgendarDermapenContainer = (props) => {
 							className={classes.button}
 							name="tiempo"
 							error={Boolean(errors.tiempo)}
-							label="Tiempo"
+							label="TIEMPO"
 							value={values.tiempo}
 							type='Number'
 							onChange={onChangeTiempo}
@@ -276,7 +310,7 @@ export const AgendarDermapenContainer = (props) => {
 							className={classes.button}
 							name="observaciones"
 							error={Boolean(errors.observaciones)}
-							label="Observaciones"
+							label="OBSERVACIONES"
 							value={values.observaciones}
 							onChange={onChangeObservaciones}
 							variant="outlined" />
@@ -314,6 +348,9 @@ export const AgendarDermapenContainer = (props) => {
 								|| !values.fecha_hora || !values.tiempo}
 							onClick={() => onClickAgendar(values)}
 							text='AGENDAR' />
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<h2>APLICACION: {toFormatterCurrency(values.precio)}</h2>
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<h1>Total: {toFormatterCurrency(values.total)}</h1>

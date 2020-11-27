@@ -70,7 +70,7 @@ export const PacientesContainer = (props) => {
         color="primary"
         variant="contained"
         onClick={handleOpen}
-        text='Nuevo Paciente' />
+        text='NUEVO PACIENTE' />
 
       <TableComponent
         titulo={titulo}

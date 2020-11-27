@@ -190,7 +190,7 @@ export const AgendarLaserContainer = (props) => {
 								value={values.dermatologo}
 								error={Boolean(errors.dermatologo)}
 								onChange={onChangeDoctors}
-								label="Dermatologo" >
+								label="DERMATÓLOGO" >
 								{dermatologos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
@@ -222,7 +222,7 @@ export const AgendarLaserContainer = (props) => {
 								value={values.promovendedor}
 								error={Boolean(errors.promovendedor)}
 								onChange={onChangePromovendedor}
-								label="Promovendedor" >
+								label="PROMOVENDEDOR" >
 								{promovendedores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
@@ -257,7 +257,7 @@ export const AgendarLaserContainer = (props) => {
 									format="dd/MM/yyyy"
 									margin="normal"
 									id="date-picker-inline"
-									label="Fecha"
+									label="FECHA"
 									value={values.fecha_hora}
 									onChange={onChangeFecha}
 									KeyboardButtonProps={{
@@ -277,7 +277,7 @@ export const AgendarLaserContainer = (props) => {
 								error={Boolean(errors.hora)}
 								onChange={onChangeHora}
 								disabled={!values.fecha_hora}
-								label="Hora" >
+								label="HORA" >
 								{horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
 							</Select>
 						</FormControl>
@@ -290,7 +290,7 @@ export const AgendarLaserContainer = (props) => {
 								id="simple-select-outlined-tipo-cita"
 								value={values.medio}
 								onChange={onChangeMedio}
-								label="Medio" >
+								label="MEDIO" >
 								{medios.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
@@ -300,7 +300,7 @@ export const AgendarLaserContainer = (props) => {
 							className={classes.button}
 							name="tiempo"
 							error={Boolean(errors.tiempo)}
-							label="Tiempo"
+							label="TIEMPO"
 							value={values.tiempo}
 							type='Number'
 							onChange={onChangeTiempo}
@@ -311,7 +311,7 @@ export const AgendarLaserContainer = (props) => {
 							className={classes.button}
 							name="observaciones"
 							error={Boolean(errors.observaciones)}
-							label="Observaciones"
+							label="OBSERVACIONES"
 							value={values.observaciones}
 							onChange={onChangeObservaciones}
 							variant="outlined" />

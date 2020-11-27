@@ -90,7 +90,7 @@ const ModalFormProximaConsulta = (props) => {
                     format="dd/MM/yyyy"
                     margin="normal"
                     id="date-picker-inline"
-                    label="Fecha"
+                    label="FECHA"
                     value={values.fecha_hora}
                     onChange={onChangeFecha}
                     KeyboardButtonProps={{
@@ -108,7 +108,7 @@ const ModalFormProximaConsulta = (props) => {
                     id="simple-select-outlined-hora"
                     value={values.hora}
                     onChange={onChangeHora}
-                    label="Hora" >
+                    label="HORA" >
                     {horarios.sort().map((item, index) => <MenuItem key={index} value={item.hora}>{item.hora}</MenuItem>)}
                   </Select>
                 </FormControl>
@@ -122,7 +122,7 @@ const ModalFormProximaConsulta = (props) => {
                 <TextField
                   className={classes.textField}
                   name="observaciones"
-                  label="Observaciones"
+                  label="OBSERVACIONES"
                   value={values.observaciones}
                   onChange={onChangeObservaciones}
                   variant="outlined" />
