@@ -130,7 +130,7 @@ const AgendarDermapen = (props) => {
 		{ title: 'PROMOVENDEDOR', field: 'promovendedor_nombre' },
 		{ title: 'DERMATÓLOGO', field: 'dermatologo_nombre' },
 		{ title: 'ESTADO', field: 'status.nombre' },
-		{ title: 'PREICO', field: 'precio_moneda' },
+		{ title: 'PRECIO', field: 'precio_moneda' },
 		{ title: 'TOTAL', field: 'total_moneda' },
 		{ title: 'TIEMPO (MINUTOS)', field: 'tiempo' },
 		{ title: 'OBSERVACIONES', field: 'observaciones' },
@@ -214,7 +214,6 @@ const AgendarDermapen = (props) => {
 				item.total_moneda = toFormatterCurrency(item.total);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 				item.show_tratamientos = item.tratamientos.map(tratamiento => {
 					return `${tratamiento.nombre}, `;
@@ -404,25 +403,28 @@ const AgendarDermapen = (props) => {
 	const handleChangeItemPrecio = (e, index) => {
 		const newMateriales = values.materiales;
 		newMateriales[index].precio = e.target.value;
-		let total = Number(values.precio);
+		let precio = Number(values.total) - Number(values.costo);
 		newMateriales.map((item) => {
-			total += Number(item.precio);
+			precio -= Number(item.precio);
 		});
 		setValues({
 			...values,
 			materiales: newMateriales,
-			total: total,
+			precio: precio,
 		});
 	}
 
 	const handleChangeTotal = (event) => {
+		const total = event.target.value;
+		let precio = total - values.costo;
 		setValues({
 			...values,
-			total: event.target.value
+			total: event.target.value,
+			precio: precio,
 		})
 	}
 
-	const handleChangePrecio = (event) => {
+	const handleChangeCosto = (event) => {
 
 	}
 
@@ -438,7 +440,6 @@ const AgendarDermapen = (props) => {
 					item.total_moneda = toFormatterCurrency(item.total);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
-					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 					item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 					item.show_tratamientos = item.tratamientos.map(tratamiento => {
 						return `${tratamiento.nombre}, `;
@@ -465,7 +466,8 @@ const AgendarDermapen = (props) => {
 					...values,
 					areas: [dermapen],
 					total: 0,
-					precio: precio,
+					precio: 0 - Number(precio),
+					costo: precio,
 				});
 			}
 		}
@@ -558,7 +560,7 @@ const AgendarDermapen = (props) => {
 								openModalImprimirCita={openModalImprimirCita}
 								datosImpresion={datosImpresion}
 								onChangeTotal={handleChangeTotal}
-								onChangePrecio={handleChangePrecio}
+								onChangeCosto={handleChangeCosto}
 								onCloseImprimirConsulta={handleCloseImprimirConsulta}
 								sucursal={sucursal}
 								setOpenAlert={setOpenAlert}

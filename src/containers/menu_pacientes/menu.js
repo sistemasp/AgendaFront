@@ -56,13 +56,17 @@ const useStyles = makeStyles(theme => ({
 		backgroundColor: theme.palette.background.paper,
 	},
 	menuButton: {
-		marginRight: theme.spacing(2),
+		marginRight: theme.spacing(1),
 	},
 	title: {
 		flexGrow: 1,
 	},
 	bar: {
 		backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
+	},
+	tabs: {
+		fontSize: 16,
+		height: 65,
 	}
 }));
 
@@ -91,26 +95,24 @@ export const MenuContainer = props => {
 		<div className={classes.root}>
 			<AppBar
 				className={classes.bar}
-				position="sticky"
-			>
+				position="sticky" >
 				<Tabs
 					value={value}
 					onChange={onChangeTab}
 					aria-label="simple tabs"
 					variant="scrollable"
-					scrollButtons="on"
-				>
-					<Tab label="PACIENTES" {...a11yProps(0)} />
-					<Tab label="CONSULTA" {...a11yProps(1)} />
-					<Tab label="FACIALES" {...a11yProps(2)} />
-					<Tab label="APARATOLOGÍA" {...a11yProps(3)} />
-					<Tab label="DERMAPEN" {...a11yProps(4)} />
-					<Tab label="CIRUGIA" {...a11yProps(5)} />
-					<Tab label="ESTETICA" {...a11yProps(6)} />
-					<Tab label="VER CONSULTAS" {...a11yProps(7)} />
-					<Tab label="VER FACIALES" {...a11yProps(8)} />
-					<Tab label="VER APARATOLOGÍA" {...a11yProps(9)} />
-					<Tab label="VER DERMAPEN" {...a11yProps(10)} />
+					scrollButtons="on" >
+					<Tab className={classes.tabs} label="PACIENTES" {...a11yProps(0)} />
+					<Tab className={classes.tabs} label="CONSULTA" {...a11yProps(1)} />
+					<Tab className={classes.tabs} label="FACIALES" {...a11yProps(2)} />
+					<Tab className={classes.tabs} label="APARATOLOGÍA" {...a11yProps(3)} />
+					<Tab className={classes.tabs} label="DERMAPEN" {...a11yProps(4)} />
+					<Tab className={classes.tabs} label="CIRUGIA" {...a11yProps(5)} />
+					<Tab className={classes.tabs} label="ESTETICA" {...a11yProps(6)} />
+					<Tab className={classes.tabs} label="VER CONSULTAS" {...a11yProps(7)} />
+					<Tab className={classes.tabs} label="VER FACIALES" {...a11yProps(8)} />
+					<Tab className={classes.tabs} label="VER APARATOLOGÍA" {...a11yProps(9)} />
+					<Tab className={classes.tabs} label="VER DERMAPEN" {...a11yProps(10)} />
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>

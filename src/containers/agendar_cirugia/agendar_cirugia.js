@@ -294,7 +294,7 @@ export const AgendarCirugiaContainer = (props) => {
 							text='AGENDAR' />
 					</Grid>
 					<Grid item xs={12} sm={2}>
-						<h2>APLICACION: {toFormatterCurrency(values.precio)}</h2>
+						<h2>APLICACIÓN: {toFormatterCurrency(values.precio)}</h2>
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<h1>TOTAL: {toFormatterCurrency(values.total)}</h1>

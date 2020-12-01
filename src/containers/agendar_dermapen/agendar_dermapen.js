@@ -78,7 +78,7 @@ export const AgendarDermapenContainer = (props) => {
 		onChangeMateriales,
 		onChangeItemPrecio,
 		onChangeTotal,
-		onChangePrecio,
+		onChangeCosto,
 		// TABLE DATES PROPERTIES
 		titulo,
 		columns,
@@ -187,11 +187,11 @@ export const AgendarDermapenContainer = (props) => {
 					<Grid item xs={12} sm={2}>
 						<TextField
 							className={classes.textField}
-							name="precio"
-							label="COSTO DERMAPEN"
-							value={values.precio}
+							name="total"
+							label="TOTAL DERMAPEN"
+							value={values.total}
 							type='Number'
-							onChange={onChangePrecio}
+							onChange={onChangeTotal}
 							onInput={(e) => {
 								e.target.value = e.target.value < 0 ? 0 : e.target.value;
 								e.target.value = Math.max(0, parseFloat(e.target.value)).toString().slice(0, 6)
@@ -201,11 +201,11 @@ export const AgendarDermapenContainer = (props) => {
 					<Grid item xs={12} sm={2}>
 						<TextField
 							className={classes.textField}
-							name="total"
-							label="TOTAL DERMAPEN"
-							value={values.total}
+							name="costo"
+							label="COSTO DERMAPEN"
+							value={values.costo}
 							type='Number'
-							onChange={onChangeTotal}
+							onChange={onChangeCosto}
 							onInput={(e) => {
 								e.target.value = e.target.value < 0 ? 0 : e.target.value;
 								e.target.value = Math.max(0, parseFloat(e.target.value)).toString().slice(0, 6)
@@ -350,7 +350,7 @@ export const AgendarDermapenContainer = (props) => {
 							text='AGENDAR' />
 					</Grid>
 					<Grid item xs={12} sm={2}>
-						<h2>APLICACION: {toFormatterCurrency(values.precio)}</h2>
+						<h2>APLICACIÓN: {toFormatterCurrency(values.precio)}</h2>
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<h1>Total: {toFormatterCurrency(values.total)}</h1>
