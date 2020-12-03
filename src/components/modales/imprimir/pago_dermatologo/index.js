@@ -63,7 +63,7 @@ const ModalImprimirPagoDermatologo = (props) => {
   const derivadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_DERIVADO_ID;
   const realizadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_REALIZADO_ID;
   const noAplicaTipoCitaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
-  const pagoDermatologoTipoEgresoId = process.env.REACT_APP_TIPO_EGRESO_PAGO_MEDICO_ID;
+  const pagoDermatologoTipoEgresoId = process.env.REACT_APP_TIPO_EGRESO_PAGO_DERMATOLOGO_ID;
   const efectivoMetodoPagoId = process.env.REACT_APP_FORMA_PAGO_EFECTIVO;
   const manuelAcunaSucursalId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
 
@@ -213,7 +213,8 @@ const ModalImprimirPagoDermatologo = (props) => {
             break;
         }
       });
-      const pagoDermatologo = comisionDermatologo;
+      const pagoDermatologo = comisionDermatologo - ((comisionDermatologo * facial.pagos[0].porcentaje_descuento_clinica) / 100);
+
       total += Number(pagoDermatologo);
     });
 
@@ -236,7 +237,7 @@ const ModalImprimirPagoDermatologo = (props) => {
             break;
         }
       });
-      const pagoDermatologo = comisionDermatologo;
+      const pagoDermatologo = comisionDermatologo - ((comisionDermatologo * laser.pagos[0].porcentaje_descuento_clinica) / 100);;
       total += Number(pagoDermatologo);
     });
 
@@ -259,7 +260,7 @@ const ModalImprimirPagoDermatologo = (props) => {
             break;
         }
       });
-      const pagoDermatologo = comisionDermatologo;
+      const pagoDermatologo = comisionDermatologo - ((comisionDermatologo * aparatologia.pagos[0].porcentaje_descuento_clinica) / 100);;
       total += Number(pagoDermatologo);
     });
 

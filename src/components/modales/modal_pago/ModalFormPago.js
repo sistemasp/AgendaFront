@@ -75,6 +75,7 @@ const ModalFormPago = (props) => {
     onChangeObservaciones,
     onChangeDigitos,
     onChangePagoAnticipado,
+    onChangDescuentoDermatologo,
     open,
   } = props;
 
@@ -90,14 +91,14 @@ const ModalFormPago = (props) => {
 
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-payment">Metodo pago</InputLabel>
+                  <InputLabel id="simple-select-outlined-payment">MÉTODO PAGO</InputLabel>
                   <Select
                     labelId="simple-select-outlined-payment"
                     id="simple-select-outlined-payment"
                     value={values.forma_pago}
                     error={Boolean(errors.forma_pago)}
                     onChange={onChangePaymentMethod}
-                    label="Metodo pago" >
+                    label="MÉTODO PAGO" >
                     {metodosPago.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                   </Select>
                 </FormControl>
@@ -110,14 +111,14 @@ const ModalFormPago = (props) => {
 
                     <Grid item xs={12}>
                       <FormControl variant="outlined" className={classes.formControl}>
-                        <InputLabel id="simple-select-outlined-banks">Bancos</InputLabel>
+                        <InputLabel id="simple-select-outlined-banks">BANCOS</InputLabel>
                         <Select
                           labelId="simple-select-outlined-banks"
                           id="simple-select-outlined-banks"
                           value={values.banco}
                           error={Boolean(errors.banco)}
                           onChange={onChangeBank}
-                          label="Bancos" >
+                          label="BANCOS" >
                           {bancos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                         </Select>
                       </FormControl>
@@ -125,14 +126,14 @@ const ModalFormPago = (props) => {
 
                     <Grid item xs={6}>
                       <FormControl variant="outlined" className={classes.formControl}>
-                        <InputLabel id="simple-select-outlined-card-type">Tipo tarjeta</InputLabel>
+                        <InputLabel id="simple-select-outlined-card-type">TIPO TARJETA</InputLabel>
                         <Select
                           labelId="simple-select-outlined-card-type"
                           id="simple-select-outlined-card-type"
                           value={values.tipoTarjeta}
                           error={Boolean(errors.tipoTarjeta)}
                           onChange={onChangeCardType}
-                          label="Tipo tarjeta" >
+                          label="TIPO TARJETA" >
                           {tiposTarjeta.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                         </Select>
                       </FormControl>
@@ -144,7 +145,7 @@ const ModalFormPago = (props) => {
                         name="digitos"
                         //helperText={touched.numero_sesion ? errors.numero_sesion : ""}
                         error={Boolean(errors.digitos)}
-                        label="Digitos"
+                        label="DIGITOS"
                         value={values.digitos}
                         type='Number'
                         onInput={(e) => {
@@ -162,7 +163,7 @@ const ModalFormPago = (props) => {
                   name="cantidad"
                   //helperText={touched.numero_sesion ? errors.numero_sesion : ""}
                   error={Boolean(errors.cantidad)}
-                  label="Cantidad"
+                  label="CANTIDAD"
                   value={values.cantidad}
                   onChange={onChangeCantidad}
                   type='Number'
@@ -175,10 +176,10 @@ const ModalFormPago = (props) => {
               <Grid item xs={12}>
                 <TextField
                   className={classes.textField}
-                  name="porcentaje_descuento"
-                  error={Boolean(errors.porcentaje_descuento)}
-                  label="% Descuento"
-                  value={values.porcentaje_descuento}
+                  name="porcentaje_descuento_clinica"
+                  error={Boolean(errors.porcentaje_descuento_clinica)}
+                  label="% DESCUENTO"
+                  value={values.porcentaje_descuento_clinica}
                   onChange={onChangeDescuento}
                   type='Number'
 
@@ -190,15 +191,23 @@ const ModalFormPago = (props) => {
               </Grid>
 
               <Grid item xs={12}>
-                <h3 className={classes.label}>{`${values.porcentaje_descuento}% descuento : ${toFormatterCurrency(values.descuento)}`}</h3>
+                <CheckCustom
+                  checked={values.has_descuento_dermatologo}
+                  onChange={onChangDescuentoDermatologo}
+                  name="checkedC"
+                  label="DESCUENTO DERMATÓLOGO" />
               </Grid>
 
               <Grid item xs={12}>
-                <h3 className={classes.label}>{`Subtotal : ${toFormatterCurrency((Number(values.cantidad) - Number(values.descuento)))}`}</h3>
+                <h3 className={classes.label}>{`${values.porcentaje_descuento_clinica}% DESCUENTO CLINICA: ${toFormatterCurrency(values.descuento_clinica)}`}</h3>
               </Grid>
 
               <Grid item xs={12}>
-                <h2 className={classes.label}>{`Total: ${toFormatterCurrency(values.total)}`}</h2>
+                <h3 className={classes.label}>{`DESCUENTO DERMATÓLOGO: ${toFormatterCurrency(values.descuento_dermatologo)}`}</h3>
+              </Grid>
+
+              <Grid item xs={12}>
+                <h2 className={classes.label}>{`TOTAL: ${toFormatterCurrency(values.total)}`}</h2>
               </Grid>
 
               {
@@ -210,7 +219,7 @@ const ModalFormPago = (props) => {
                       checked={values.confirmado}
                       onChange={onChangeConfirmado}
                       name="checkedC"
-                      label="Pago confirmado"
+                      label="PAGO CONFIRMADO"
                     />
                   </Grid> : ''
               }
@@ -249,8 +258,7 @@ const ModalFormPago = (props) => {
                   checked={values.pago_anticipado}
                   onChange={onChangePagoAnticipado}
                   name="checkedC"
-                  label="Pago anticipado"
-                />
+                  label="PAGO ANTICIPADO" />
               </Grid>
             </Grid>
 

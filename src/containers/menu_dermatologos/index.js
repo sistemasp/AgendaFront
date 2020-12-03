@@ -73,7 +73,7 @@ const Dermatologos = (props) => {
 		exportDelimiter: ';'
 	}
 
-	const dermatologoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
+	const dermatologoRolId = process.env.REACT_APP_DERMATOLOGO_ROL_ID;
 
 	const handleOpen = () => {
 		setOpenPagoDermatologo(true);

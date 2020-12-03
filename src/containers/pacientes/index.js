@@ -194,11 +194,6 @@ const Pacientes = (props) => {
 			onClick: onClickAgendarAparatologia
 		},
 		{
-			icon: EventAvailableIcon,
-			tooltip: 'AGREGAR DERMAPEN',
-			onClick: onClickAgendarDermapen
-		},
-		{
 			icon: EditIcon,
 			tooltip: 'ACTUALIZAR REGISTRO',
 			onClick: handleOnClickEditar
@@ -225,10 +220,6 @@ const Pacientes = (props) => {
 			case 'AGREGAR APARATOLOGIA':
 				onClickAgendarAparatologia(e, rowData);
 				break;
-			case 'AGREGAR DERMAPEN':
-				onClickAgendarDermapen(e, rowData);
-				break;
-
 			case 'ACTUALIZAR REGISTRO':
 				handleOnClickEditar(e, rowData);
 				break;

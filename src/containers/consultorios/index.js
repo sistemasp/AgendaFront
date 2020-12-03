@@ -101,7 +101,7 @@ const Consultorios = (props) => {
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			response.data.forEach(item => {
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
-				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN MEDICO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN DERMATÓLOGO';
 			});
 			setConsultorios(response.data);
 		}
@@ -271,7 +271,7 @@ const Consultorios = (props) => {
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				response.data.forEach(item => {
 					item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : '';
-					item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN MEDICO';
+					item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN DERMATÓLOGO';
 				});
 				setConsultorios(response.data);
 			}

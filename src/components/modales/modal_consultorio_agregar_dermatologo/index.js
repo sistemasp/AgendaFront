@@ -27,7 +27,7 @@ const ModalConsultorioAgregarDermatologo = (props) => {
     nombre: consultorio.nombre
   });
 
-  const dermatologoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
+  const dermatologoRolId = process.env.REACT_APP_DERMATOLOGO_ROL_ID;
 
   useEffect(() => {
     const loadDermatologos = async () => {

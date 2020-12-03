@@ -37,6 +37,7 @@ const ModalPago = (props) => {
   const porcetanjeComision = process.env.REACT_APP_COMISION_PAGO_TARJETA;
   const enConsultorioStatusId = process.env.REACT_APP_EN_CONSULTORIO_STATUS_ID;
 
+  const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
   const tipoIngresoConsultaId = process.env.REACT_APP_TIPO_INGRESO_CONSULTA_ID;
   const tipoIngresoCirugiaId = process.env.REACT_APP_TIPO_INGRESO_CIRUGIA_ID;
   const tipoIngresoFacialesId = process.env.REACT_APP_TIPO_INGRESO_FACIALES_ID;
@@ -53,6 +54,10 @@ const ModalPago = (props) => {
   const servicioCirugiaId = process.env.REACT_APP_CIRUGIA_SERVICIO_ID;
   const servicioBiopsiaId = process.env.REACT_APP_BIOPSIA_SERVICIO_ID;
   const servicioEsteticaId = process.env.REACT_APP_ESTETICA_SERVICIO_ID;
+  const dermatologoDirectoId = process.env.REACT_APP_DERMATOLOGO_DIRECTO_ID;
+  const tipoCitaRevisadoId = process.env.REACT_APP_TIPO_CITA_REVISADO_ID;
+  const tipoCitaDerivadoId = process.env.REACT_APP_TIPO_CITA_DERIVADO_ID;
+  const tipoCitaRealizadoId = process.env.REACT_APP_TIPO_CITA_REALIZADO_ID;
 
   const [isLoading, setIsLoading] = useState(true);
   const [bancos, setBancos] = useState([]);
@@ -63,10 +68,11 @@ const ModalPago = (props) => {
     forma_pago: pago.forma_pago ? pago.forma_pago._id : '',
     observaciones: pago.observaciones ? pago.observaciones : '',
     cantidad: pago.cantidad ? pago.cantidad : '0',
-    porcentaje_descuento: pago.porcentaje_descuento ? pago.porcentaje_descuento : '0',
-    descuento: pago.descuento ? pago.descuento : '0',
+    porcentaje_descuento_clinica: pago.porcentaje_descuento_clinica ? pago.porcentaje_descuento_clinica : '0',
+    descuento_clinica: pago.descuento_clinica ? pago.descuento_clinica : '0',
     total: pago.total ? pago.total : '0',
     pago_anticipado: pago.pago_anticipado,
+    has_descuento_dermatologo: false,
   });
 
   const tarjetaMetodoPagoId = process.env.REACT_APP_FORMA_PAGO_TARJETA;
@@ -89,10 +95,53 @@ const ModalPago = (props) => {
     setValues({ ...values, tipo_tarjeta: event.target.value });
   }
 
+  const getMayorDescuento = () => {
+    let cantidadDescuento = 0;
+    servicio.areas.forEach(area => {
+      switch (servicio.tipo_cita._id) {
+        case tipoCitaRevisadoId:
+          cantidadDescuento += sucursal === sucursalManuelAcunaId ? Number(area.comision_revisado_ma) : Number(area.comision_revisado);
+          break;
+        case tipoCitaDerivadoId:
+          cantidadDescuento += sucursal === sucursalManuelAcunaId ? Number(area.comision_derivado_ma) : Number(area.comision_derivado);
+          break;
+        case tipoCitaRealizadoId:
+          cantidadDescuento += sucursal === sucursalManuelAcunaId ? Number(area.comision_realizado_ma) : Number(area.comision_realizado);
+          break;
+      }
+    });
+
+    return cantidadDescuento;
+  }
+
+  const calcularTotal = (datos) => {
+    const cantidad = datos.cantidad;
+    const descuento_clinica = cantidad * datos.porcentaje_descuento_clinica / 100;
+
+    const descuento_dermatologo = datos.has_descuento_dermatologo
+      ? (servicio.dermatologo._id !== dermatologoDirectoId
+        ? (getMayorDescuento())
+        : 0)
+      : 0;
+
+    const descuento_dermatologo_final = descuento_dermatologo - (descuento_dermatologo * datos.porcentaje_descuento_clinica / 100);
+    let total = cantidad - descuento_clinica - descuento_dermatologo_final;
+    setValues({
+      ...values,
+      forma_pago: datos.forma_pago,
+      cantidad: cantidad,
+      porcentaje_descuento_clinica: datos.porcentaje_descuento_clinica,
+      descuento_clinica: descuento_clinica,
+      descuento_dermatologo: descuento_dermatologo_final,
+      has_descuento_dermatologo: datos.has_descuento_dermatologo,
+      total: total,
+    });
+  }
+
   const handleChangeDescuento = (event) => {
     const datos = {
       ...values,
-      porcentaje_descuento: event.target.value,
+      porcentaje_descuento_clinica: event.target.value,
     }
     calcularTotal(datos);
   }
@@ -105,26 +154,21 @@ const ModalPago = (props) => {
     calcularTotal(datos);
   }
 
-  const calcularTotal = (datos) => {
-    const cantidad = datos.cantidad;
-    const descuento = cantidad * datos.porcentaje_descuento / 100;
-    let total = cantidad - descuento;
-    setValues({
-      ...values,
-      forma_pago: datos.forma_pago,
-      cantidad: cantidad,
-      porcentaje_descuento: datos.porcentaje_descuento,
-      descuento: descuento,
-      total: total,
-    });
-  }
-
   const handleChangeConfirmado = (event) => {
     setValues({ ...values, deposito_confirmado: !values.deposito_confirmado });
   }
 
   const handleChangePagoAnticipado = (event) => {
     setValues({ ...values, pago_anticipado: !values.pago_anticipado });
+  }
+
+  const handleChangDescuentoDermatologo = (event) => {
+    const datos = {
+      ...values,
+      has_descuento_dermatologo: !values.has_descuento_dermatologo,
+    }
+    calcularTotal(datos);
+
   }
 
   const handleChangeObservaciones = (event) => {
@@ -194,7 +238,7 @@ const ModalPago = (props) => {
       create_date: create_date,
       hora_aplicacion: servicio.hora_aplicacion,
       recepcionista: empleado._id,
-      concepto: `Folio: ${generateFolio(servicio)}`,
+      concepto: `FOLIO: ${generateFolio(servicio)}`,
       cantidad: rowData.total,
       tipo_ingreso: tipoIngreso,
       sucursal: sucursal,
@@ -248,6 +292,7 @@ const ModalPago = (props) => {
         setTiposTarjeta(response.data);
       }
     }
+
     loadBancos();
     loadMetodosPago();
     loadTipoTarjeta();
@@ -280,6 +325,7 @@ const ModalPago = (props) => {
           onChangeDigitos={(e) => handleChangeDigitos(e)}
           onChangeDescuento={(e) => handleChangeDescuento(e)}
           onChangePagoAnticipado={(e) => handleChangePagoAnticipado(e)}
+          onChangDescuentoDermatologo={(e) => handleChangDescuentoDermatologo(e)}
           {...props} />
       }
     </Formik>

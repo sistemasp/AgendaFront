@@ -200,7 +200,7 @@ const ListaEspera = (props) => {
 			response.data.forEach(item => {
 				item.folio = generateFolio(item);
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'LIBRE';
-				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN MEDICO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN DERMATÓLOGO';
 			});
 			setConsultorios(response.data);
 		}
@@ -275,7 +275,7 @@ const ListaEspera = (props) => {
 			response.data.forEach(item => {
 				item.folio = generateFolio(item);
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'LIBRE';
-				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN MEDICO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN DERMATÓLOGO';
 			});
 			setSalaCirugias(response.data);
 		}
@@ -287,7 +287,7 @@ const ListaEspera = (props) => {
 			response.data.forEach(item => {
 				item.folio = generateFolio(item);
 				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'LIBRE';
-				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN MEDICO';
+				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'SIN DERMATÓLOGO';
 			});
 			setListaEsperaCirugias(response.data);
 		}

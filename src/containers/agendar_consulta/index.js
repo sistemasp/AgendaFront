@@ -110,7 +110,7 @@ const AgendarConsulta = (props) => {
 		fecha: `${dia}/${mes}/${anio}`,
 	});
 
-	const dermatologoRolId = process.env.REACT_APP_MEDICO_ROL_ID;
+	const dermatologoRolId = process.env.REACT_APP_DERMATOLOGO_ROL_ID;
 	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
 	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
 	const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
@@ -120,7 +120,7 @@ const AgendarConsulta = (props) => {
 	const atendidoStatusId = process.env.REACT_APP_ATENDIDO_STATUS_ID;
 	const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
 	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
-	const dermatologoDirectoId = process.env.REACT_APP_MEDICO_DIRECTO_ID;
+	const dermatologoDirectoId = process.env.REACT_APP_DERMATOLOGO_DIRECTO_ID;
 	const promovendedorSinAsignarId = process.env.REACT_APP_PROMOVENDEDOR_SIN_ASIGNAR_ID;
 	const frecuenciaPrimeraVezId = process.env.REACT_APP_FRECUENCIA_PRIMERA_VEZ_ID;
 	const fercuenciaReconsultaId = process.env.REACT_APP_FRECUENCIA_RECONSULTA_ID;

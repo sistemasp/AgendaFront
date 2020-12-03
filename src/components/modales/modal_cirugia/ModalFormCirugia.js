@@ -118,7 +118,7 @@ const ModalFormCirugia = (props) => {
                 <h2 className={classes.label}>{cirugia.paciente_nombre} ({cirugia.paciente.telefono})</h2>
               </Grid>
               <Grid item xs={12}>
-                <h2 className={classes.label}>MÉDICO: {cirugia.dermatologo.nombre}</h2>
+                <h2 className={classes.label}>DERMATÓLOGO: {cirugia.dermatologo.nombre}</h2>
               </Grid>
               {
                 /*

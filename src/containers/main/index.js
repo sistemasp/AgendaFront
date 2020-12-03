@@ -99,9 +99,9 @@ const MenuMain = (props) => {
 				setSeverity={setSeverity}
 				setOpenAlert={setOpenAlert} />
 		</Fragment>
-	} else if (empleado.rol.nombre === "MEDICO") {
+	} else if (empleado.rol.nombre === "DERMATÓLOGO") {
 		fragment = <Fragment>
-			<h1>TRABAJANDO EN MEDICOS</h1>
+			<h1>TRABAJANDO EN DERMATÓLOGOS</h1>
 		</Fragment>
 	} else if (empleado.rol.nombre === "PROMOCION") {
 		fragment = <Fragment>

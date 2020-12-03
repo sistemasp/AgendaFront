@@ -46,8 +46,8 @@ const ModalPagos = (props) => {
     { title: 'HORA', field: 'hora' },
     { title: 'FORMA PAGO', field: 'forma_pago.nombre' },
     { title: 'CANTIDAD', field: 'cantidad_moneda' },
-    { title: 'DESCUENTO(%)', field: 'porcentaje_descuento' },
-    { title: 'DESCUENTO', field: 'descuento_moneda' },
+    { title: 'DESCUENTO(%)', field: 'porcentaje_descuento_clinica' },
+    { title: 'DESCUENTO', field: 'descuento_clinica_moneda' },
     { title: 'SUBTOTAL', field: 'subtotal_moneda' },
     { title: 'TOTAL', field: 'total_moneda' },
     { title: 'BANDO', field: 'banco_nombre' },
@@ -106,8 +106,8 @@ const ModalPagos = (props) => {
         item.fecha = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth())}/${addZero(fecha.getFullYear())}`
         item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
         item.cantidad_moneda = toFormatterCurrency(item.cantidad);
-        item.descuento_moneda = toFormatterCurrency(item.descuento);
-        item.subtotal_moneda = toFormatterCurrency((Number(item.cantidad) - Number(item.descuento)));
+        item.descuento_clinica_moneda = toFormatterCurrency(item.descuento_clinica);
+        item.subtotal_moneda = toFormatterCurrency((Number(item.cantidad) - Number(item.descuento_clinica)));
         item.comision_moneda = toFormatterCurrency(item.comision);
         item.total_moneda = toFormatterCurrency(item.total);
         item.banco_nombre = item.banco ? item.banco.nombre : '-';

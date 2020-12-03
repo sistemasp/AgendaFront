@@ -185,7 +185,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
         <div style={modalStyle} className={classes.paper}>
           <Grid container>
             <Grid item xs={3}>
-              <img 
+              <img
                 src={bannerMePiel}
                 alt='banner'
                 width='100%'
@@ -196,7 +196,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                 <h2 className={classes.label_title}>CENTRO DERMATOLÓGICO M. E. PIEL S. C.</h2>
               </Grid>
               <Grid item xs={8}>
-                <h3 className={classes.label_left}>MÉDICO: {dermatologo.nombre}</h3>
+                <h3 className={classes.label_left}>DERMATÓLOGO: {dermatologo.nombre}</h3>
               </Grid>
               <Grid item xs={4} >
                 <h3 className={classes.label}>FECHA: {dateToString(corte.create_date)} </h3>
@@ -226,7 +226,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                       </Grid>
                       :
                       consultasPrimeraVez.length > 0 || consultasReconsultas.length > 0 || cirugias.length > 0 || esteticas.length > 0 ||
-                      faciales.length > 0 || dermapens.length > 0 || lasers.length > 0 || aparatologias.length > 0  ?
+                        faciales.length > 0 || dermapens.length > 0 || lasers.length > 0 || aparatologias.length > 0 ?
                         <Grid item xs={12}>
                           <ButtonCustom
                             className={classes.button}
@@ -267,7 +267,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                       color="secondary"
                       variant="contained"
                       onClick={onClose} >
-                      Cerrar
+                      CERRAR
               </Button>
                   </Grid>
                 </Fragment> : ''
@@ -506,24 +506,30 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                       faciales ?
                         faciales.map(facial => {
                           let comisionDermatologo = 0;
-                          facial.areas.map(area => {
-                            switch (facial.tipo_cita._id) {
-                              case revisadoTipoCitaId:
-                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
-                                break;
-                              case derivadoTipoCitaId:
-                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
-                                break;
-                              case realizadoTipoCitaId:
-                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
-                                break;
-                              case noAplicaTipoCitaId:
-                                comisionDermatologo += Number(0);
-                                break;
-                            }
-                          });
-                          const pagoDermatologo = comisionDermatologo;
-                          pagoTotal += Number(pagoDermatologo);
+                          let pagoDermatologo = 0;
+                          {
+                            console.log("JFAOFOSDf", facial.pagos[0].descuento_dermatologo !== undefined);
+                          }
+                          if (facial.pagos[0].descuento_dermatologo === undefined || Number(facial.pagos[0].descuento_dermatologo) === 0) {
+                            facial.areas.map(area => {
+                              switch (facial.tipo_cita._id) {
+                                case revisadoTipoCitaId:
+                                  comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
+                                  break;
+                                case derivadoTipoCitaId:
+                                  comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
+                                  break;
+                                case realizadoTipoCitaId:
+                                  comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
+                                  break;
+                                case noAplicaTipoCitaId:
+                                  comisionDermatologo += Number(0);
+                                  break;
+                              }
+                            });
+                            pagoDermatologo = comisionDermatologo - ((comisionDermatologo * facial.pagos[0].porcentaje_descuento_clinica) / 100);
+                            pagoTotal += Number(pagoDermatologo);
+                          }
                           return <Grid container>
                             <Grid item xs={true} className={classes.label}>
                               <p className={classes.label_cells}>{facial.hora_llegada}</p>
@@ -549,7 +555,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                 : ''
             }
 
-{
+            {
               dermapens.length > 0 ?
                 <Fragment>
                   <Grid container className={classes.container}>
@@ -576,7 +582,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                     </Grid>
                     {
                       dermapens ?
-                      dermapens.map(dermapen => {
+                        dermapens.map(dermapen => {
                           const pagoDermatologo = Number(dermapen.precio) * Number(dermatologo.porcentaje) / 100;
                           pagoTotal += Number(pagoDermatologo);
                           return <Grid container>
@@ -649,7 +655,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                                 break;
                             }
                           });
-                          const pagoDermatologo = comisionDermatologo;
+                          const pagoDermatologo = comisionDermatologo - ((comisionDermatologo * laser.pagos[0].porcentaje_descuento_clinica) / 100);
                           pagoTotal += Number(pagoDermatologo);
                           return <Grid container>
                             <Grid item xs={true} className={classes.label}>
@@ -721,7 +727,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                                 break;
                             }
                           });
-                          const pagoDermatologo = comisionDermatologo;
+                          const pagoDermatologo = comisionDermatologo - ((comisionDermatologo * aparatologia.pagos[0].porcentaje_descuento_clinica) / 100);
                           pagoTotal += Number(pagoDermatologo);
                           return <Grid container>
                             <Grid item xs={true} className={classes.label}>
@@ -763,7 +769,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                   <hr className={classes.hr} />
                 </Grid>
                 <Grid item xs={12} >
-                  <p className={classes.label_cells_totales}>{`MÉDICO: ${dermatologo.nombre}`}</p>
+                  <p className={classes.label_cells_totales}>{`DERMATÓLOGO: ${dermatologo.nombre}`}</p>
                 </Grid>
               </Grid>
             </Grid>

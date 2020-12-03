@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const baseUrl = process.env.REACT_APP_BASE_URL_LOCAL;
+export const baseUrl = process.env.REACT_APP_BASE_URL_LOCAL_HAMACHI;
 const urlSepomexGetEstados = 'https://api-sepomex.hckdrk.mx/query/get_estados';
 const urlSepomexGetMunicipos = 'https://api-sepomex.hckdrk.mx/query/get_municipio_por_estado/';
 const urlSepomexGetColonia = 'https://api-sepomex.hckdrk.mx/query/get_colonia_por_municipio/';
@@ -728,7 +728,7 @@ export const showAllBanco = async () => {
     }
 }
 
-// METODO PAGO
+// MÉTODO PAGO
 
 export const showAllMetodoPago = async () => {
     try {
@@ -1046,7 +1046,7 @@ export const showAllSexos = async () => {
     }
 }
 
-// MEDICOS
+// DERMATÓLOGOS
 
 export const findCirugiasByPayOfDoctor = async (dia, mes, anio, sucursalId, dermatologoId) => {
     try {
@@ -1181,7 +1181,7 @@ export const showAllMaterialEsteticas = async () => {
     }
 }
 
-// PAGO MEDICO
+// PAGO DERMATÓLOGO
 
 export const createPagoDermatologo = async (pagoDermatologo) => {
     try {

@@ -77,7 +77,7 @@ const ModalFormProximaConsulta = (props) => {
                 <h2 className={classes.label}>{values.paciente_nombre} ({values.telefono})</h2>
               </Grid>
               <Grid item xs={12}>
-                <h3 className={classes.label}>MÉDICO: {values.dermatologo.nombre}</h3>
+                <h3 className={classes.label}>DERMATÓLOGO: {values.dermatologo.nombre}</h3>
               </Grid>
 
               <Grid item xs={12} sm={6}>
