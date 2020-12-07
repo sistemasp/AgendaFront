@@ -88,7 +88,7 @@ const ModalFormConsultorioAgregarPaciente = (props) => {
                     value={values.consultorio}
                     error={Boolean(errors.consultorio)}
                     onChange={onChangeConsultorio}
-                    label="Consultorio disponible" >
+                    label="CONSULTORIO DISPONIBLE" >
                     {consultorios.sort().map((item, index) => <MenuItem key={index} value={item}>{`${item.nombre} - ${item.dermatologo.nombre}`} </MenuItem>)}
                   </Select>
                 </FormControl>
@@ -100,7 +100,7 @@ const ModalFormConsultorioAgregarPaciente = (props) => {
                   variant="contained"
                   onClick={(e) => onClickGuardar(e, values)}
                   disabled={!isValid}
-                  text={cambio ? 'Cambio' : 'Pasar'} />
+                  text={cambio ? 'CAMBIO' : 'PASAR'} />
               </Grid>
               {!cambio
                 ? <Grid item xs={12} sm={6}>
@@ -109,7 +109,7 @@ const ModalFormConsultorioAgregarPaciente = (props) => {
                     color="secondary"
                     variant="contained"
                     onClick={onClickCancel} >
-                    Cancelar
+                    CANCELAR
                 </Button>
                 </Grid>
                 : ''

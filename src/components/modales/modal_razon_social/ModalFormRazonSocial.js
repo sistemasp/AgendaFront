@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     width: '100%',
+    color: '#FFFFFF',
   },
   formControl: {
     minWidth: 120,
@@ -67,12 +68,12 @@ const ModalFormRazonSocial = (props) => {
     onClickBuscar,
     onChangeCP,
     onChangeDomicilio,
-onChangeEmail,
-onChangeNombre,
-onChangeNumero,
-onChangeRfc,
-onChangeTelefono,
-onChangeCiudad,
+    onChangeEmail,
+    onChangeNombre,
+    onChangeNumero,
+    onChangeRfc,
+    onChangeTelefono,
+    onChangeCiudad,
   } = props;
 
   return (
@@ -104,7 +105,7 @@ onChangeCiudad,
                   name="nombre_completo"
                   helperText={touched.nombre_completo ? errors.nombre_completo : ""}
                   error={Boolean(errors.nombre_completo)}
-                  label="Nombre  completo"
+                  label="NOMBRE COMPLETO"
                   value={values.nombre_completo}
                   onChange={onChangeNombre}
                   variant="outlined" />
@@ -115,7 +116,7 @@ onChangeCiudad,
                   name="domicilio"
                   helperText={touched.domicilio ? errors.domicilio : ""}
                   error={Boolean(errors.domicilio)}
-                  label="Domicilio"
+                  label="DOMICILIO"
                   value={values.domicilio}
                   onChange={onChangeDomicilio}
                   variant="outlined" />
@@ -126,7 +127,7 @@ onChangeCiudad,
                   name="numero"
                   helperText={touched.numero ? errors.numero : ""}
                   error={Boolean(errors.numero)}
-                  label="Numero"
+                  label="NUMERO"
                   value={values.numero}
                   onChange={onChangeNumero}
                   variant="outlined" />
@@ -137,7 +138,7 @@ onChangeCiudad,
                   name="codigo_postal"
                   helperText={touched.codigo_postal ? errors.codigo_postal : ""}
                   error={Boolean(errors.codigo_postal)}
-                  label="Codigo postal"
+                  label="CÓDIGO POSTAL"
                   value={values.codigo_postal}
                   onChange={onChangeCP}
                   variant="outlined" />
@@ -149,7 +150,7 @@ onChangeCiudad,
                   variant="contained"
                   onClick={(e) => onClickBuscar(e)}
                   disabled={!isValid} >
-                  Buscar
+                  BUSCAR
                 </Button>
               </Grid>
 
@@ -157,19 +158,19 @@ onChangeCiudad,
                 values.codigo_postal ?
                   <Fragment>
                     <Grid item xs={12}>
-                      <h3 className={classes.label}>Estado : {values.estado}</h3>
+                      <h3 className={classes.label}>ESTADO: {values.estado}</h3>
                     </Grid>
                     <Grid item xs={12}>
-                      <h3 className={classes.label}>Municipio : {values.municipio}</h3>
+                      <h3 className={classes.label}>MUNICIPIO: {values.municipio}</h3>
                     </Grid>
                     <Grid item xs={12}>
-                      <h3 className={classes.label}>Ciudad : {values.ciudad}</h3>
+                      <h3 className={classes.label}>CIUDAD : {values.ciudad}</h3>
                     </Grid>
                   </Fragment> :
                   <Fragment>
                     <Grid item xs={12}>
                       <FormControl variant="outlined" className={classes.formControl}>
-                        <InputLabel id="simple-select-outlined-estados">Estados</InputLabel>
+                        <InputLabel id="simple-select-outlined-estados">ESTADOS</InputLabel>
                         <Select
                           labelId="simple-select-outlined-estados"
                           id="simple-select-outlined-estados"
@@ -177,21 +178,21 @@ onChangeCiudad,
                           error={Boolean(errors.estados)}
                           isSearchable={true}
                           onChange={onChangeEstado}
-                          label="Estados" >
+                          label="ESTADOS" >
                           {estados.sort().map((item, index) => <MenuItem key={index} value={item}>{item}</MenuItem>)}
                         </Select>
                       </FormControl>
                     </Grid>
                     <Grid item xs={12}>
                       <FormControl variant="outlined" className={classes.formControl}>
-                        <InputLabel id="simple-select-outlined-municipio">Municipio</InputLabel>
+                        <InputLabel id="simple-select-outlined-municipio">MUNNICIPIO</InputLabel>
                         <Select
                           labelId="simple-select-outlined-municipio"
                           id="simple-select-outlined-municipio"
                           value={values.municipio}
                           error={Boolean(errors.municipio)}
                           onChange={onChangeMunicipio}
-                          label="Municipio" >
+                          label="MUNICIPIO" >
                           {municipios.sort().map((item, index) => <MenuItem key={index} value={item}>{item}</MenuItem>)}
                         </Select>
                       </FormControl>
@@ -201,28 +202,25 @@ onChangeCiudad,
                         className={classes.textField}
                         name="ciudad"
                         helperText={touched.ciudad ? errors.ciudad : ""}
-                        error={Boolean(errors.codigo_postal)}
-                        label="Ciudad"
+                        label="CIUDAD"
                         value={values.ciudad}
                         onChange={onChangeCiudad}
                         variant="outlined" />
                     </Grid>
                   </Fragment>
-
               }
-
 
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-colonia">Colonia</InputLabel>
+                  <InputLabel id="simple-select-outlined-colonia">COLONIA</InputLabel>
                   <Select
                     labelId="simple-select-outlined-colonia"
                     id="simple-select-outlined-colonia"
                     value={values.colonia}
                     error={Boolean(errors.colonia)}
                     onChange={onChangeColonia}
-                    label="PROMOVENDEDOR" >
-                    {colonias.sort().map((item, index) => <MenuItem key={index} value={item}>{item}</MenuItem>)}
+                    label="COLONIA" >
+                    {colonias.sort().map((item, index) => <MenuItem key={index} value={item}>{item.toUpperCase()}</MenuItem>)}
                   </Select>
                 </FormControl>
               </Grid>
@@ -232,7 +230,7 @@ onChangeCiudad,
                   name="telefono"
                   helperText={touched.telefono ? errors.telefono : ""}
                   error={Boolean(errors.telefono)}
-                  label="Telefono"
+                  label="TELÉFONO"
                   value={values.telefono}
                   onChange={onChangeTelefono}
                   inputProps={{
@@ -246,7 +244,7 @@ onChangeCiudad,
                   name="email"
                   helperText={touched.email ? errors.email : ""}
                   error={Boolean(errors.email)}
-                  label="Email"
+                  label="EMAIL"
                   value={values.email}
                   onChange={onChangeEmail}
                   variant="outlined" />
@@ -258,7 +256,7 @@ onChangeCiudad,
                   variant="contained"
                   onClick={(e) => onClickGuardar(e, values)}
                   disabled={!isValid} >
-                  Guardar
+                  GUARDAR
                 </Button>
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -267,7 +265,7 @@ onChangeCiudad,
                   color="secondary"
                   variant="contained"
                   onClick={onClickCancel} >
-                  Cancelar
+                  CANCELAR
                 </Button>
               </Grid>
             </Grid>

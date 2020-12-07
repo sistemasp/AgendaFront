@@ -88,7 +88,7 @@ const ModalFormCirugiaAgregarPaciente = (props) => {
                     value={values.salaCirugia}
                     error={Boolean(errors.salaCirugia)}
                     onChange={onChangeSalaCirugia}
-                    label="Sala cirugia disponible" >
+                    label="SALA CIRUGIA DISPONIBLE" >
                     {salaCirugias.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
                   </Select>
                 </FormControl>
@@ -100,7 +100,7 @@ const ModalFormCirugiaAgregarPaciente = (props) => {
                   variant="contained"
                   onClick={(e) => onClickGuardar(e, values)}
                   disabled={!isValid}
-                  text={cambio ? 'Cambio' : 'Pasar'} />
+                  text={cambio ? 'CAMBIO' : 'PASAR'} />
               </Grid>
               {!cambio
                 ? <Grid item xs={12} sm={6}>
@@ -109,7 +109,7 @@ const ModalFormCirugiaAgregarPaciente = (props) => {
                     color="secondary"
                     variant="contained"
                     onClick={onClickCancel} >
-                    Cancelar
+                    CANCELAR
                 </Button>
                 </Grid>
                 : ''

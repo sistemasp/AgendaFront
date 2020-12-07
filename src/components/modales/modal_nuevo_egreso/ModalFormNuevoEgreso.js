@@ -119,7 +119,7 @@ const ModalFormNuevoEgreso = (props) => {
                 id="simple-select-outlined-tipo-egreso"
                 value={values.tipo_egreso}
                 onChange={onChangeTipoEgreso}
-                label="Tipo egreso" >
+                label="TIPO EGRESO" >
                 {tipoEgresos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
               </Select>
             </FormControl>

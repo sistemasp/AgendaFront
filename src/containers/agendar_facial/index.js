@@ -71,6 +71,7 @@ const AgendarFacial = (props) => {
 	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 	const dermatologoDirectoId = process.env.REACT_APP_DERMATOLOGO_DIRECTO_ID;
 	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
+	const tipoCitaDerivadoId = process.env.REACT_APP_TIPO_CITA_DERIVADO_ID;
 	const servicioFacialId = process.env.REACT_APP_FACIAL_SERVICIO_ID;
 
 	const [openAlert, setOpenAlert] = useState(false);
@@ -91,7 +92,7 @@ const AgendarFacial = (props) => {
 		areas: [],
 		paciente: `${paciente._id}`,
 		precio: 0,
-		tipo_cita: tipoCitaNoAplicaId,
+		tipo_cita: tipoCitaDerivadoId,
 		tiempo: '',
 		observaciones: '',
 		dermatologo: { _id: dermatologoDirectoId },
@@ -305,7 +306,7 @@ const AgendarFacial = (props) => {
 		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
-		data.tipo_cita = data.dermatologo._id === dermatologoDirectoId ? tipoCitaNoAplicaId : data.tipo_cita;
+		data.tipo_cita = data.dermatologo._id === dermatologoDirectoId ? tipoCitaDerivadoId : data.tipo_cita;
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 
 		const response = await createFacial(data);

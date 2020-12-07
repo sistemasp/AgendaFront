@@ -83,8 +83,8 @@ export const MenuCosmetologaContainer = props => {
 		<div className={classes.root}>
 			<AppBar className={classes.bar} position="static">
 				<Tabs value={value} onChange={onChangeTab} aria-label="simple tabs">
-					<Tab label="Pacientes" {...a11yProps(0)} />
-					<Tab label="Buscar citas" {...a11yProps(1)} />
+					<Tab label="PACIENTES" {...a11yProps(0)} />
+					<Tab label="BUSCAR CITAS" {...a11yProps(1)} />
 					<Tab label="FACIALES" {...a11yProps(2)} />
 					<Tab label="LÁSER" {...a11yProps(3)} />
 					<Tab label="APARATOLOGÍA" {...a11yProps(4)} />

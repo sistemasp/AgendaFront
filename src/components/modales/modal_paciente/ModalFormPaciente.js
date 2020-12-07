@@ -68,7 +68,7 @@ const ModalFormPaciente = (props) => {
                 <TextField
                   className={classes.textField}
                   name="nombres"
-                  label="Nombres"
+                  label="NOMBRES"
                   value={values.nombres}
                   onChange={onChange}
                   variant="outlined" />
@@ -77,7 +77,7 @@ const ModalFormPaciente = (props) => {
                 <TextField
                   className={classes.textField}
                   name="apellidos"
-                  label="Apellidos"
+                  label="APELLIDOS"
                   value={values.apellidos}
                   onChange={onChange}
                   variant="outlined" />
@@ -99,7 +99,7 @@ const ModalFormPaciente = (props) => {
                 <TextField
                   className={classes.textField}
                   name="telefono"
-                  label="Telefono"
+                  label="TELEFONO"
                   value={values.telefono}
                   onChange={onChange}
                   inputProps={{
@@ -112,7 +112,7 @@ const ModalFormPaciente = (props) => {
                 <TextField
                   className={classes.textField}
                   name="fecha_nacimiento"
-                  label="Fecha de nacimiento"
+                  label="FECHA DE NACIMIENTO"
                   value={values.fecha_nacimiento}
                   onChange={onChange}
                   inputProps={{
@@ -123,14 +123,14 @@ const ModalFormPaciente = (props) => {
               </Grid>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-hora">Sexo</InputLabel>
+                  <InputLabel id="simple-select-outlined-hora">SEXO</InputLabel>
                   <Select
                     labelId="simple-select-outlined-dermatologo"
                     id="simple-select-outlined-dermatologo"
                     value={values.sexo}
                     onChange={onChangeSexo}
                     name="sexo"
-                    label="Sexo" >
+                    label="SEXO" >
                     {sexos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                   </Select>
                 </FormControl>
@@ -142,7 +142,7 @@ const ModalFormPaciente = (props) => {
                   variant="contained"
                   disabled={dataComplete}
                   onClick={(e) => onClickGuardar(e, values)}
-                  text='Guardar' />
+                  text='GUARDAR' />
               </Grid>
 
               <Grid item xs={12} sm={6}>
@@ -151,7 +151,7 @@ const ModalFormPaciente = (props) => {
                   color="secondary"
                   variant="contained"
                   onClick={onClickCancel} >
-                  Cancelar
+                  CAANCELAR
                 </Button>
               </Grid>
             </Grid>

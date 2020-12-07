@@ -88,7 +88,7 @@ const ModalFormCabinaAgregarPaciente = (props) => {
                     value={values.cabina}
                     error={Boolean(errors.cabina)}
                     onChange={onChangeCabina}
-                    label="Cabina disponible" >
+                    label="CABINA DISPONIBLE" >
                     {cabinas.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
                   </Select>
                 </FormControl>

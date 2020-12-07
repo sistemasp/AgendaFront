@@ -201,7 +201,7 @@ const RazonSocial = (props) => {
 					<RazonSocialContainer
 						razonSociales={razonSociales}
 						columns={columns}
-						titulo='Razon social'
+						titulo='RAZON SOCIAL'
 						actions={actions}
 						options={options}
 						open={open}

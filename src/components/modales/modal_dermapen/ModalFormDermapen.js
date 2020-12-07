@@ -116,13 +116,13 @@ const ModalFormDermapen = (props) => {
               </Grid>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-statements">Estado</InputLabel>
+                  <InputLabel id="simple-select-outlined-statements">ESTADO</InputLabel>
                   <Select
                     labelId="simple-select-outlined-statements"
                     id="simple-select-outlined-statements"
                     value={values.status}
                     onChange={onChangeStatus}
-                    label="Estado" >
+                    label="ESTADO" >
                     {statements.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                   </Select>
                 </FormControl>
@@ -152,7 +152,7 @@ const ModalFormDermapen = (props) => {
 
                     <Grid item xs={12} sm={6}>
                       <FormControl variant="outlined" className={classes.formControl}>
-                        <InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
+                        <InputLabel id="simple-select-outlined-hora">HORA</InputLabel>
                         <Select
                           labelId="simple-select-outlined-hora"
                           id="simple-select-outlined-hora"
@@ -199,7 +199,7 @@ const ModalFormDermapen = (props) => {
                       className={classes.textField}
                       name="motivos"
                       //helperText={touched.numero_sesion ? errors.numero_sesion : ""}
-                      label="Motivos"
+                      label="MOTIVOS"
                       value={values.motivos}
                       onChange={onChangeMotivos}
                       variant="outlined" />
@@ -224,7 +224,7 @@ const ModalFormDermapen = (props) => {
                 }
               </Grid>
               <Grid item xs={12}>
-                <h2 className={classes.label}>{values.fecha_actual} - {values.hora_actual} hrs</h2>
+                <h2 className={classes.label}>{values.fecha_actual} - {values.hora_actual} HRS</h2>
               </Grid>
 
               <Grid item xs={12}>
@@ -232,7 +232,7 @@ const ModalFormDermapen = (props) => {
                   className={classes.textField}
                   name="tiempo"
                   //helperText={touched.tiempo ? errors.tiempo : ""}
-                  label="Tiempo (minutos)"
+                  label="TIEMPO (MINUTOS)"
                   value={values.tiempo}
                   type='Number'
                   onChange={onChangeTiempo}
@@ -242,15 +242,15 @@ const ModalFormDermapen = (props) => {
               <Grid item xs={12}>
                 {
                   /* values.tipo_cita */ false ?
-                    <h3 className={classes.label}>Tipo cita: {values.tipo_cita.nombre}</h3> :
+                    <h3 className={classes.label}>TIPO CITA: {values.tipo_cita.nombre}</h3> :
                     <FormControl variant="outlined" className={classes.formControl}>
-                      <InputLabel id="simple-select-outlined-tipo-cita">Tipo cita</InputLabel>
+                      <InputLabel id="simple-select-outlined-tipo-cita">TIPO CITA</InputLabel>
                       <Select
                         labelId="simple-select-outlined-tipo-cita"
                         id="simple-select-outlined-tipo-cita"
                         value={values.tipo_cita}
                         onChange={onChangeTipoCita}
-                        label="Tipo cita" >
+                        label="TIPO CITA" >
                         {tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                       </Select>
                     </FormControl>

@@ -42,7 +42,7 @@ export const ReportesFacturasContainer = (props) => {
 									format="dd/MM/yyyy"
 									margin="normal"
 									id="date-picker-inline-filter"
-									label="Fecha Inicial"
+									label="FECHA INICIAL"
 									value={startDate}
 									onChange={onChangeStartDate}
 									KeyboardButtonProps={{
@@ -65,7 +65,7 @@ export const ReportesFacturasContainer = (props) => {
 									format="dd/MM/yyyy"
 									margin="normal"
 									id="date-picker-inline-filter"
-									label="Fecha Final"
+									label="FECHA FINAL"
 									value={endDate}
 									onChange={onChangeEndDate}
 									KeyboardButtonProps={{
@@ -79,7 +79,7 @@ export const ReportesFacturasContainer = (props) => {
                             variant="contained"
                             color="primary"
                             onClick={() => onClickReportes()} >
-                            Obtener datos
+                            OBTENER DATOS
                         </Button>
                     </Grid>
 				</Grid>

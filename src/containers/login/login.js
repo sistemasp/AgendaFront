@@ -61,14 +61,14 @@ export const LoginContainer = (props) => {
 				<Grid container className={classes.root} justify="center" spacing={3}>
 					<Grid item xs={12}>
 						<FormControl variant="outlined" className={classes.margin, classes.textField}>
-							<InputLabel id="simple-select-outlined-sucursal">Sucursales</InputLabel>
+							<InputLabel id="simple-select-outlined-sucursal">SUCURSALES</InputLabel>
 							<Select
 								labelId="simple-select-outlined-sucursal"
 								id="simple-select-outlined-sucursal"
 								value={values.sucursal}
 								error={Boolean(errors.sucursal)}
 								onChange={onChangeSucursal}
-								label="Servicio" >
+								label="SUCURSALES" >
 								{sucursales
 									? sucursales.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)
 									: ''}
@@ -81,14 +81,14 @@ export const LoginContainer = (props) => {
 							name="employee_number"
 							helperText={touched.employee_number ? errors.employee_number : ""}
 							error={Boolean(errors.employee_number)}
-							label="Numero de empleado"
+							label="NUMERO DE EMPLEADO"
 							value={values.employee_number}
 							onChange={handleChangeNumber}
 							variant="outlined" />
 					</Grid>
 					<Grid item xs={12}>
 						<FormControl className={classes.textField} variant="outlined">
-							<InputLabel htmlFor="outlined-adornment-password">Contraseña</InputLabel>
+							<InputLabel htmlFor="outlined-adornment-password">CONTRASEÑA</InputLabel>
 							<OutlinedInput
 								id="outlined-adornment-password"
 								type={values.showPassword ? 'text' : 'password'}

@@ -173,7 +173,7 @@ export const AgendarConsultaContainer = (props) => {
             setMessage={setMessage}
             setOpenAlert={setOpenAlert}
             tipoServicioId={tipoServicioId}
-						onGuardarModalPagos={onGuardarModalPagos} />
+            onGuardarModalPagos={onGuardarModalPagos} />
           : ''
       }
       {
@@ -190,7 +190,7 @@ export const AgendarConsultaContainer = (props) => {
             setOpenAlert={setOpenAlert} />
           : ''
       }
-{
+      {
         openModalEstetica ?
           <ModalEstetica
             open={openModalEstetica}
@@ -213,7 +213,7 @@ export const AgendarConsultaContainer = (props) => {
           : ''
       }
       <Paper>
-        <h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'Selecciona un paciente'}</h1>
+        <h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'SELECCIONA UN PACIENTE'}</h1>
 
         <Grid container spacing={3}>
           {sucursal._id === process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID ?
@@ -238,13 +238,13 @@ export const AgendarConsultaContainer = (props) => {
                       KeyboardButtonProps={{
                         'aria-label': 'change date',
                       }}
-                      invalidDateMessage='Selecciona una fecha' />
+                      invalidDateMessage='SELECCIONA UNA FECHA' />
                   </Grid>
                 </MuiPickersUtilsProvider>
               </Grid>
               <Grid item xs={12} sm={2}>
                 <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
+                  <InputLabel id="simple-select-outlined-hora">HORA</InputLabel>
                   <Select
                     labelId="simple-select-outlined-hora"
                     id="simple-select-outlined-hora"
@@ -259,13 +259,13 @@ export const AgendarConsultaContainer = (props) => {
             </Fragment> : ''}
           <Grid item xs={12} sm={2}>
             <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel id="simple-select-outlined-frecuencia">Frecuencia</InputLabel>
+              <InputLabel id="simple-select-outlined-frecuencia">FRECUENCIA</InputLabel>
               <Select
                 labelId="simple-select-outlined-frecuencia"
                 id="simple-select-outlined-frecuencia"
                 value={values.frecuencia}
                 onChange={onChangeFrecuencia}
-                label="frecuencia" >
+                label="FRECUENCIA" >
                 {frecuencias.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
               </Select>
             </FormControl>
@@ -277,7 +277,7 @@ export const AgendarConsultaContainer = (props) => {
               </Grid>
               : <Grid item xs={12} sm={2}>
                 <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-hora">Dermatologo</InputLabel>
+                  <InputLabel id="simple-select-outlined-hora">DERMATÓLOGO</InputLabel>
                   <Select
                     labelId="simple-select-outlined-dermatologo"
                     id="simple-select-outlined-dermatologo"
@@ -296,7 +296,7 @@ export const AgendarConsultaContainer = (props) => {
               </Grid>
               : <Grid item xs={12} sm={2}>
                 <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-promovendedor">Promovendedor</InputLabel>
+                  <InputLabel id="simple-select-outlined-promovendedor">PROMOVENDEDOR</InputLabel>
                   <Select
                     labelId="simple-select-outlined-promovendedor"
                     id="simple-select-outlined-promovendedor"
@@ -313,7 +313,7 @@ export const AgendarConsultaContainer = (props) => {
             <Fragment>
               <Grid item xs={12} sm={2}>
                 <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-tipo-cita">Medio</InputLabel>
+                  <InputLabel id="simple-select-outlined-tipo-cita">MEDIO</InputLabel>
                   <Select
                     labelId="simple-select-outlined-tipo-cita"
                     id="simple-select-outlined-tipo-cita"
@@ -341,12 +341,12 @@ export const AgendarConsultaContainer = (props) => {
           </Grid>
           <Grid item xs={12} sm={2}>
             <ButtonCustom
-							className={classes.button}
-							color="primary"
-							variant="contained"
-							disabled={dataComplete}
-							onClick={() => onClickAgendar(values)}
-							text='AGENDAR' />
+              className={classes.button}
+              color="primary"
+              variant="contained"
+              disabled={dataComplete}
+              onClick={() => onClickAgendar(values)}
+              text='AGENDAR' />
           </Grid>
         </Grid>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -362,7 +362,7 @@ export const AgendarConsultaContainer = (props) => {
               format="dd/MM/yyyy"
               margin="normal"
               id="date-picker-inline-filter"
-              label="Filtrado Consultas"
+              label="FILTRADO CONSULTAS"
               value={filterDate}
               onChange={onChangeFilterDate}
               KeyboardButtonProps={{

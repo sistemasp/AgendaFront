@@ -69,7 +69,7 @@ const ModalFormConsultorio = (props) => {
                 name="nombre"
                 helperText={touched.nombre ? errors.nombre : ""}
                 error={Boolean(errors.nombre)}
-                label="Nombre"
+                label="NOMBRE"
                 value={values.nombre}
                 onChange={handleChange}
                 variant="outlined" />
@@ -81,7 +81,7 @@ const ModalFormConsultorio = (props) => {
                   variant="contained"
                   onClick={(e) => onClickGuardar(e, values)}
                   disabled={!isValid} 
-                  text='Guardar' />
+                  text='GUARDAR' />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Button
@@ -89,7 +89,7 @@ const ModalFormConsultorio = (props) => {
                   color="secondary"
                   variant="contained"
                   onClick={onClickCancel} >
-                    Cancelar
+                    CANCELAR
                 </Button>
               </Grid>
             </Grid>

@@ -69,7 +69,7 @@ const ModalFormCabina = (props) => {
                 name="nombre"
                 helperText={touched.nombre ? errors.nombre : ""}
                 error={Boolean(errors.nombre)}
-                label="Nombre"
+                label="NOMBRE"
                 value={values.nombre}
                 onChange={handleChange}
                 variant="outlined" />

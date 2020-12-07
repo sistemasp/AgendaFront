@@ -102,7 +102,7 @@ const PacientesForCosmetologas = (props) => {
 				!isLoading ?
 					<PacientesCosmetologasContainer
 						columns={columns}
-						titulo='Pacientes'
+						titulo='PACIENTES'
 						actions={actions}
 						options={options}
 						open={open}

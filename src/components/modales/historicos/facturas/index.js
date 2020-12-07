@@ -75,7 +75,7 @@ const ModHistoricoFacturas = (props) => {
         historial={historial}
         columns={columns}
         options={options}
-        titulo={`Historial: ${razonSocial.nombre_completo}`}/>
+        titulo={`HISTORIAL: ${razonSocial.nombre_completo}`}/>
   );
 }
 

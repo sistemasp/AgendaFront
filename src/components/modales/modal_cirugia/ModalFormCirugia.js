@@ -161,7 +161,7 @@ const ModalFormCirugia = (props) => {
                 <TextField
                   className={classes.textField}
                   name="precio"
-                  label="Total de la cirugia"
+                  label="TOTAL CIRUGIA"
                   value={values.total}
                   type='Number'
                   onChange={onChangeTotal}
@@ -188,7 +188,7 @@ const ModalFormCirugia = (props) => {
                     <TextField
                       className={classes.button}
                       name={item.precio}
-                      label={`Precio: ${item.nombre}`}
+                      label={`PRECIO: ${item.nombre}`}
                       value={item.precio}
                       type='Number'
                       onChange={(e) => onChangeItemPrecio(e, index)}
@@ -205,7 +205,7 @@ const ModalFormCirugia = (props) => {
                       checked={values.hasBiopsia}
                       onChange={onChangeBiopsia}
                       name="checkedG"
-                      label="Biopsias" />
+                      label="BIOPSIAS" />
                   </Grid>
                   : ''
               }
@@ -216,7 +216,7 @@ const ModalFormCirugia = (props) => {
                     <TextField
                       className={classes.textField}
                       name="cantidad_biopsias"
-                      label="Cantidad Biopsias"
+                      label="CANTIDAD BIOPSIAS"
                       value={values.cantidad_biopsias}
                       type='Number'
                       onChange={onChange}
@@ -231,7 +231,7 @@ const ModalFormCirugia = (props) => {
                     <TextField
                       className={classes.textField}
                       name="costo_biopsias"
-                      label="Costo Biopsias"
+                      label="COSTO BIOPSIAS"
                       value={values.costo_biopsias}
                       type='Number'
                       onChange={onChangeCostoBiopsias}
@@ -244,14 +244,14 @@ const ModalFormCirugia = (props) => {
 
                   <Grid item xs={12} sm={4}>
                     <FormControl variant="outlined" className={classes.formControl}>
-                      <InputLabel id="simple-select-outlined-hora">Patólogo</InputLabel>
+                      <InputLabel id="simple-select-outlined-hora">PATÓLOGO</InputLabel>
                       <Select
                         labelId="simple-select-outlined-patologo"
                         id="simple-select-outlined-patologo"
                         value={values.patologo}
                         onChange={onChange}
                         name="patologo"
-                        label="Patólogo" >
+                        label="PATÓLOGO" >
                         {patologos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                       </Select>
                     </FormControl>
@@ -268,14 +268,14 @@ const ModalFormCirugia = (props) => {
                       onChange={onChangePagado}
                       disabled={values.pagado}
                       name="checkedG"
-                      label="Pagado" />
+                      label="PAGADO" />
                   </Grid> : ''
               }
               <Grid item xs={12}>
-                <h2 className={classes.labelItemRight}>Precio de aplicacion: {toFormatterCurrency(values.precio)}</h2>
+                <h2 className={classes.labelItemRight}>PRECIO DE LA APLICACIÓN: {toFormatterCurrency(values.precio)}</h2>
               </Grid>
               <Grid item xs={12}>
-                <h1 className={classes.labelItemRight}>Total de la cirugia: {toFormatterCurrency(values.total)}</h1>
+                <h1 className={classes.labelItemRight}>TOTAL DE LA CIRUGIA: {toFormatterCurrency(values.total)}</h1>
               </Grid>
 
               <Grid item xs={12} sm={6}>
@@ -286,7 +286,7 @@ const ModalFormCirugia = (props) => {
                   onClick={(e) => onClickCrearCirugia(e, values)}
                 //disabled={!dataComplete} 
                 >
-                  Guardar
+                  GUARDAR
                 </Button>
               </Grid>
 
@@ -296,7 +296,7 @@ const ModalFormCirugia = (props) => {
                   color="secondary"
                   variant="contained"
                   onClick={onClose} >
-                  Cancelar
+                  CANCELAR
               </Button>
               </Grid>
             </Grid>

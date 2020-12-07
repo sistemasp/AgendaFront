@@ -139,7 +139,7 @@ const Dermatologos = (props) => {
 					<DermatologosContainer
 						dermatologos={dermatologos}
 						columns={columns}
-						titulo='Dermatologos'
+						titulo='DERMATÓLOGOS'
 						actions={actions}
 						options={options}
 						openPagoDermatologo={openPagoDermatologo}

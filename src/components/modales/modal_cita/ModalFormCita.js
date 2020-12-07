@@ -149,14 +149,14 @@ const ModalFormCita = (props) => {
               </Grid>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-statements">Estado</InputLabel>
+                  <InputLabel id="simple-select-outlined-statements">ESTADO</InputLabel>
                   <Select
                     labelId="simple-select-outlined-statements"
                     id="simple-select-outlined-statements"
                     value={values.status}
                     error={Boolean(errors.statements)}
                     onChange={onChangeStatus}
-                    label="Estado" >
+                    label="ESTADO" >
                     {statements.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                   </Select>
                 </FormControl>
@@ -245,7 +245,7 @@ const ModalFormCita = (props) => {
                   name="tiempo"
                   //helperText={touched.tiempo ? errors.tiempo : ""}
                   error={Boolean(errors.tiempo)}
-                  label="Tiempo (minutos)"
+                  label="TIEMPO (MINUTOS)"
                   value={values.tiempo}
                   type='Number'
                   onChange={onChangeTiempo}
@@ -255,16 +255,16 @@ const ModalFormCita = (props) => {
               <Grid item xs={12}>
                 {
                   /* values.tipo_cita */ false ?
-                    <h3 className={classes.label}>Tipo cita: {values.tipo_cita.nombre}</h3> :
+                    <h3 className={classes.label}>TIPO CITA: {values.tipo_cita.nombre}</h3> :
                     <FormControl variant="outlined" className={classes.formControl}>
-                      <InputLabel id="simple-select-outlined-tipo-cita">Tipo cita</InputLabel>
+                      <InputLabel id="simple-select-outlined-tipo-cita">TIPO CITA</InputLabel>
                       <Select
                         labelId="simple-select-outlined-tipo-cita"
                         id="simple-select-outlined-tipo-cita"
                         value={values.tipo_cita}
                         error={Boolean(errors.tipo_cita)}
                         onChange={onChangeTipoCita}
-                        label="Tipo cita" >
+                        label="TIPO CITA" >
                         {tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                       </Select>
                     </FormControl>
@@ -293,16 +293,16 @@ const ModalFormCita = (props) => {
               <Grid item xs={12}>
                 {
                   /* values.cosmetologa */ false ?
-                    <h3 className={classes.label}>Cosmetologa: {values.cosmetologa.nombre}</h3> :
+                    <h3 className={classes.label}>COSMETOLOGA: {values.cosmetologa.nombre}</h3> :
                     <FormControl variant="outlined" className={classes.formControl}>
-                      <InputLabel id="simple-select-outlined-cosmetologa">Cosmetologa</InputLabel>
+                      <InputLabel id="simple-select-outlined-cosmetologa">COSMETOLOGA</InputLabel>
                       <Select
                         labelId="simple-select-outlined-cosmetologa"
                         id="simple-select-outlined-cosmetologa"
                         value={values.cosmetologa}
                         error={Boolean(errors.cosmetologa)}
                         onChange={onChangeCosmetologa}
-                        label="Cosmetologa" >
+                        label="COSMETOLOGA" >
                         {cosmetologas.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                       </Select>
                     </FormControl>

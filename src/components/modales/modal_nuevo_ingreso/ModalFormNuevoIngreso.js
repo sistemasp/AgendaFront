@@ -73,7 +73,7 @@ const ModalFormNuevoIngreso = (props) => {
             <TextField
               className={classes.textField}
               name="concepto"
-              label="Concepto"
+              label="CONCEPTO"
               value={values.concepto}
               onChange={onChange}
               variant="outlined" />
@@ -82,7 +82,7 @@ const ModalFormNuevoIngreso = (props) => {
             <TextField
               className={classes.textField}
               name="cantidad"
-              label="Cantidad"
+              label="CANTIDAD"
               value={values.cantidad}
               type='Number'
               onInput={(e) => {
@@ -93,26 +93,26 @@ const ModalFormNuevoIngreso = (props) => {
           </Grid>
           <Grid item xs={12}>
             <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel id="simple-select-outlined-hora">Tipo ingreso</InputLabel>
+              <InputLabel id="simple-select-outlined-hora">TIPO INGRESO</InputLabel>
               <Select
                 labelId="simple-select-outlined-tipo-ingreso"
                 id="simple-select-outlined-tipo-ingreso"
                 value={values.tipo_ingreso}
                 onChange={onChangeTipoIngreso}
-                label="Tipo ingreso" >
+                label="TIPO INGRESO" >
                 {tipoIngresos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
               </Select>
             </FormControl>
           </Grid>
           <Grid item xs={12}>
             <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel id="simple-select-outlined-metodo-pago">Metodo pago</InputLabel>
+              <InputLabel id="simple-select-outlined-metodo-pago">METODO PAGO</InputLabel>
               <Select
                 labelId="simple-select-outlined-metodo-pago"
                 id="simple-select-outlined-metodo-pago"
                 value={values.forma_pago}
                 onChange={onChangeMetodoPago}
-                label="Metodo pago" >
+                label="METODO PAGO" >
                 {formaPagos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
               </Select>
             </FormControl>
@@ -124,7 +124,7 @@ const ModalFormNuevoIngreso = (props) => {
               variant="contained"
               onClick={onAgregarConceto}
               disabled={dataComplete}
-              text='Agregar' />
+              text='AGREGAR' />
           </Grid>
           <Grid item xs={12} sm={6}>
             <ButtonCustom
@@ -132,7 +132,7 @@ const ModalFormNuevoIngreso = (props) => {
               color="secondary"
               variant="contained"
               onClick={onClickCancel}
-              text='Cancelar' />
+              text='CANCELAR' />
           </Grid>
         </Grid>
       </div>

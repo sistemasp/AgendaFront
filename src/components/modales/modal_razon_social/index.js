@@ -76,9 +76,9 @@ const ModalRazonSocial = (props) => {
       setColonias(res.asentamiento);
       setValues({
         ...values,
-        estado: res.estado,
-        municipio: res.municipio,
-        ciudad: res.ciudad,
+        estado: res.estado.toUpperCase(),
+        municipio: res.municipio.toUpperCase(),
+        ciudad: res.ciudad.toUpperCase(),
       });
     } else {
       setOpenAlert(true);
@@ -88,17 +88,17 @@ const ModalRazonSocial = (props) => {
   }
 
   const handleChangeEstado = async (event) => {
-    setValues({ ...values, estado: event.target.value });
+    setValues({ ...values, estado: event.target.value.toUpperCase() });
     await loadMunicipios(event.target.value);
   }
 
   const handleChangeMunicipio = async (event) => {
-    setValues({ ...values, municipio: event.target.value });
+    setValues({ ...values, municipio: event.target.value.toUpperCase() });
     await loadColonias(event.target.value);
   }
 
   const handleChangeColonia = (event) => {
-    setValues({ ...values, colonia: event.target.value });
+    setValues({ ...values, colonia: event.target.value.toUpperCase() });
   }
 
   const handleChangeCP = (event) => {
@@ -134,7 +134,7 @@ const ModalRazonSocial = (props) => {
   }
 
   const handleChangeCiudad = (event) => {
-    setValues({ ...values, ciudad: event.target.value });
+    setValues({ ...values, ciudad: event.target.value.toUpperCase() });
   }
 
   const handleClickGuardar = async(e) => {
@@ -143,7 +143,7 @@ const ModalRazonSocial = (props) => {
 			|| `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			setSeverity('success');
       setOpenAlert(true);
-			setMessage(razonSocial._id ? 'Razon Social actualizada correctamente' : 'Razon Social creada correctamente');
+			setMessage(`RAZON SOCIAL ${razonSocial._id ? 'ACTUALIZADA' : 'CREADA'} ORRECTAMENTE`);
     }
     loadRazonSocial();
     onClose();

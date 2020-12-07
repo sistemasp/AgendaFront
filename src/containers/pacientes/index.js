@@ -270,7 +270,7 @@ const Pacientes = (props) => {
 				!isLoading ?
 					<PacientesContainer
 						columns={columns}
-						titulo='Pacientes'
+						titulo='PACIENTES'
 						actions={actions}
 						options={options}
 						open={open}

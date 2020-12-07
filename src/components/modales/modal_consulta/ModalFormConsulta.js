@@ -117,9 +117,9 @@ const ModalFormConsulta = (props) => {
               <Grid item xs={12}>
                 {
                   /* values.tipo_cita */ false ?
-                    <h3 className={classes.label}>Tipo cita: {values.tipo_cita.nombre}</h3> :
+                    <h3 className={classes.label}>TIPO CITA: {values.tipo_cita.nombre}</h3> :
                     <FormControl variant="outlined" className={classes.formControl}>
-                      <InputLabel id="simple-select-outlined-tipo-cita">Tipo cita</InputLabel>
+                      <InputLabel id="simple-select-outlined-tipo-cita">TIPO CITA</InputLabel>
                       <Select
                         labelId="simple-select-outlined-tipo-cita"
                         id="simple-select-outlined-tipo-cita"
@@ -135,9 +135,9 @@ const ModalFormConsulta = (props) => {
               <Grid item xs={12}>
                 {
                   /* values.promovendedor */ false ?
-                    <h3 className={classes.label}>Promovendedor: {values.promovendedor.nombre}</h3> :
+                    <h3 className={classes.label}>PROMOVENDEDOR: {values.promovendedor.nombre}</h3> :
                     <FormControl variant="outlined" className={classes.formControl}>
-                      <InputLabel id="simple-select-outlined-promovendedor">Promovendedor</InputLabel>
+                      <InputLabel id="simple-select-outlined-promovendedor">PROMOVENDEDOR</InputLabel>
                       <Select
                         labelId="simple-select-outlined-promovendedor"
                         id="simple-select-outlined-promovendedor"
@@ -152,13 +152,13 @@ const ModalFormConsulta = (props) => {
 
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-statements">Estado</InputLabel>
+                  <InputLabel id="simple-select-outlined-statements">ESTADO</InputLabel>
                   <Select
                     labelId="simple-select-outlined-statements"
                     id="simple-select-outlined-statements"
                     value={values.status}
                     onChange={onChangeStatus}
-                    label="Estado" >
+                    label="ESTADO" >
                     {statements.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
                   </Select>
                 </FormControl>
@@ -189,7 +189,7 @@ const ModalFormConsulta = (props) => {
 
                     <Grid item xs={12} sm={6}>
                       <FormControl variant="outlined" className={classes.formControl}>
-                        <InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
+                        <InputLabel id="simple-select-outlined-hora">HORA</InputLabel>
                         <Select
                           labelId="simple-select-outlined-hora"
                           id="simple-select-outlined-hora"
@@ -210,7 +210,7 @@ const ModalFormConsulta = (props) => {
                     <TextField
                       className={classes.textField}
                       name="motivos"
-                      label="Motivos"
+                      label="MOTIVOS"
                       value={values.motivos}
                       onChange={onChangeMotivos}
                       variant="outlined" />
@@ -221,7 +221,7 @@ const ModalFormConsulta = (props) => {
                 <TextField
                   className={classes.textField}
                   name="precio"
-                  label="Precio"
+                  label="PRECIO"
                   value={values.precio}
                   type='Number'
                   onChange={onChangePrecio}
@@ -244,7 +244,7 @@ const ModalFormConsulta = (props) => {
                   color="primary"
                   variant="contained"
                   onClick={(e) => onClickActualizarCita(e, values)} >
-                  Guardar
+                  GUARDAR
                 </Button>
               </Grid>
 
@@ -254,7 +254,7 @@ const ModalFormConsulta = (props) => {
                   color="secondary"
                   variant="contained"
                   onClick={onClose} >
-                  Cancelar
+                  CANCELAR
               </Button>
               </Grid>
             </Grid>

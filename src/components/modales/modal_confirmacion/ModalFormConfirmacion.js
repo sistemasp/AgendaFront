@@ -90,7 +90,7 @@ const ModalFormConfirmacion = (props) => {
                 variant="contained"
                 onClick={onClickGuardar}
                 disabled={dataComplete}
-                text='Confirmar' />
+                text='CONFIRMAR' />
             </Grid>
             <Grid item xs={12} sm={6}>
               <ButtonCustom
@@ -98,7 +98,7 @@ const ModalFormConfirmacion = (props) => {
                 color="secondary"
                 variant="contained"
                 onClick={onClickCancel}
-                text='Cancelar' />
+                text='CANELAR' />
             </Grid>
           </Grid>
         </div>

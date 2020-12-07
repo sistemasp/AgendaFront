@@ -69,7 +69,7 @@ export const MenuRazonSocialContainer = props => {
 		<div className={classes.root}>
 			<AppBar className={classes.bar} position="static">
 				<Tabs value={value} onChange={onChangeTab} aria-label="simple tabs">
-					<Tab label="Razon Social" {...a11yProps(0)} />
+					<Tab label="RAZON SOCIAL" {...a11yProps(0)} />
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>

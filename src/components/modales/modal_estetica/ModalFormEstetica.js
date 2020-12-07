@@ -142,7 +142,7 @@ const ModalFormEstetica = (props) => {
                 <TextField
                   className={classes.textField}
                   name="total"
-                  label="Precio total"
+                  label="PRECIO TOTAL"
                   value={values.total}
                   type='Number'
                   onChange={onChangeTotal}
@@ -159,7 +159,7 @@ const ModalFormEstetica = (props) => {
                   displayValue="nombre" // Property name to display in the dropdown options
                   onSelect={(e) => onChangeToxinasRellenos(e)} // Function will trigger on select event
                   onRemove={(e) => onChangeToxinasRellenos(e)} // Function will trigger on remove event
-                  placeholder="Toxinas y rellenos"
+                  placeholder="TOXINAS Y RELLENOS"
                   selectedValues={values.toxinas_rellenos} // Preselected value to persist in dropdown
                 />
               </Grid>
@@ -173,7 +173,7 @@ const ModalFormEstetica = (props) => {
                 <h3 className={classes.labelItemCenter}>{`PRECIO POR UNIDAD`}</h3>
               </Grid>
               <Grid item xs={3} >
-                <h3 className={classes.labelItemRight}> {`TOTALS`} </h3>
+                <h3 className={classes.labelItemRight}> {`TOTAL`} </h3>
               </Grid>
               {
                 values.toxinas_rellenos ?
@@ -186,7 +186,7 @@ const ModalFormEstetica = (props) => {
                         <TextField
                           className={classes.labelItemCenter}
                           name={item.unidades}
-                          label={`Unidades`}
+                          label={`UNIDADES`}
                           value={item.unidades}
                           type='Number'
                           onChange={(e) => onChangeItemUnidades(e, index)}
@@ -211,7 +211,7 @@ const ModalFormEstetica = (props) => {
                   displayValue="nombre" // Property name to display in the dropdown options
                   onSelect={(e) => onChangeMateriales(e)} // Function will trigger on select event
                   onRemove={(e) => onChangeMateriales(e)} // Function will trigger on remove event
-                  placeholder="Selecciona materiales"
+                  placeholder="SELECCIONA MATERIALES"
                   selectedValues={values.materiales} // Preselected value to persist in dropdown
                 />
               </Grid>
@@ -221,7 +221,7 @@ const ModalFormEstetica = (props) => {
                     <TextField
                       className={classes.button}
                       name={item.precio}
-                      label={`Precio: ${item.nombre}`}
+                      label={`PRECIO: ${item.nombre}`}
                       value={item.precio}
                       type='Number'
                       onChange={(e) => onChangeItemPrecio(e, index)}
@@ -237,14 +237,14 @@ const ModalFormEstetica = (props) => {
                       onChange={onChangePagado}
                       disabled={values.pagado}
                       name="checkedG"
-                      label="Pagado" />
+                      label="PAGADO" />
                   </Grid> : ''
               }
               <Grid item xs={12}>
-                <h2 className={classes.labelItemRight}>Precio aplicacion: {toFormatterCurrency(values.precio)}</h2>
+                <h2 className={classes.labelItemRight}>PRECIO ACPLICACIÓN: {toFormatterCurrency(values.precio)}</h2>
               </Grid>
               <Grid item xs={12}>
-                <h1 className={classes.labelItemRight}>Total: {toFormatterCurrency(values.total)}</h1>
+                <h1 className={classes.labelItemRight}>TOTAL: {toFormatterCurrency(values.total)}</h1>
               </Grid>
 
               <Grid item xs={12} sm={6}>

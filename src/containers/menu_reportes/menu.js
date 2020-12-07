@@ -84,14 +84,14 @@ export const MenuContainer = props => {
 					variant="scrollable"
 					scrollButtons="on"
 				>
-					<Tab label="Consulta" {...a11yProps(0)} />
-					<Tab label="Faciales" {...a11yProps(1)} />
-					<Tab label="Laser" {...a11yProps(2)} />
-					<Tab label="Aparatologia" {...a11yProps(3)} />
-					<Tab label="Pagos" {...a11yProps(4)} />
-					<Tab label="Facturas" {...a11yProps(5)} />
-					<Tab label="Cirugias" {...a11yProps(6)} />
-					<Tab label="Biopsias" {...a11yProps(7)} />
+					<Tab label="CONSULTAS" {...a11yProps(0)} />
+					<Tab label="FACIALES" {...a11yProps(1)} />
+					<Tab label="LASERS" {...a11yProps(2)} />
+					<Tab label="APARATOLOGÍA" {...a11yProps(3)} />
+					<Tab label="PAGOS" {...a11yProps(4)} />
+					<Tab label="FACTURAS" {...a11yProps(5)} />
+					<Tab label="CIRGIAS" {...a11yProps(6)} />
+					<Tab label="BIOPSIAS" {...a11yProps(7)} />
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>

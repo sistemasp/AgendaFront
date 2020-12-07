@@ -172,7 +172,7 @@ export const AgendarAparatologiaContainer = (props) => {
 					: ''
 			}
 			<Paper>
-				<h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'Selecciona un paciente'}</h1>
+				<h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}`: 'SELECCIONA UN PACIENTE'}</h1>
 				<Grid container spacing={3}>
 					{
 						false ?
@@ -182,19 +182,19 @@ export const AgendarAparatologiaContainer = (props) => {
 									displayValue="nombre" // Property name to display in the dropdown options
 									onSelect={(e) => onChangeTratamientos(e)} // Function will trigger on select event
 									onRemove={(e) => onChangeTratamientos(e)} // Function will trigger on remove event
-									placeholder="Selecciona tratamientos"
+									placeholder="SELECCIONA TRATAMIENTOS"
 									selectedValues={values.tratamientos} // Preselected value to persist in dropdown
 								/>
 							</Grid> :
 							<Grid item xs={12} sm={2}>
 								<FormControl variant="outlined" className={classes.formControl}>
-									<InputLabel id="simple-select-outlined-tratamientos">Tratamientos</InputLabel>
+									<InputLabel id="simple-select-outlined-tratamientos">TRATAMIENTOS</InputLabel>
 									<Select
 										labelId="simple-select-outlined-tratamientos"
 										id="simple-select-outlined-tratamientos"
 										value={values.tratamientos[0]}
 										onChange={(e) => onChangeTratamientos(e)}
-										label="Tratamientos" >
+										label="RATAMIENTOS" >
 										{tratamientos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
 									</Select>
 								</FormControl>
@@ -206,13 +206,13 @@ export const AgendarAparatologiaContainer = (props) => {
 							displayValue="nombre" // Property name to display in the dropdown options
 							onSelect={(e) => onChangeAreas(e)} // Function will trigger on select event
 							onRemove={(e) => onChangeAreas(e)} // Function will trigger on remove event
-							placeholder={`Areas`}
+							placeholder={`AREAS`}
 							selectedValues={values.areas} // Preselected value to persist in dropdown
 						/>
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
-							<InputLabel id="simple-select-outlined-hora">Dermatologo</InputLabel>
+							<InputLabel id="simple-select-outlined-hora">DERMATÓLOGO</InputLabel>
 							<Select
 								labelId="simple-select-outlined-dermatologo"
 								id="simple-select-outlined-dermatologo"
@@ -228,14 +228,14 @@ export const AgendarAparatologiaContainer = (props) => {
 						dermatologoDirectoId !== values.dermatologo._id ?
 							<Grid item xs={12} sm={2}>
 								<FormControl variant="outlined" className={classes.formControl}>
-									<InputLabel id="simple-select-outlined-tipo-cita">Tipo Cita</InputLabel>
+									<InputLabel id="simple-select-outlined-tipo-cita">TIPO CITA</InputLabel>
 									<Select
 										labelId="simple-select-outlined-tipo-cita"
 										id="simple-select-outlined-tipo-cita"
 										value={values.tipoCita}
 										error={Boolean(errors.tipoCita)}
 										onChange={onChangeTipoCita}
-										label="Tipo Cita" >
+										label="TIPO CITA" >
 										{tipoCitas.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
 									</Select>
 								</FormControl>
@@ -244,7 +244,7 @@ export const AgendarAparatologiaContainer = (props) => {
 					}
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
-							<InputLabel id="simple-select-outlined-promovendedor">Promovendedor</InputLabel>
+							<InputLabel id="simple-select-outlined-promovendedor">PROMOVENDEDOR</InputLabel>
 							<Select
 								labelId="simple-select-outlined-promovendedor"
 								id="simple-select-outlined-promovendedor"
@@ -258,14 +258,14 @@ export const AgendarAparatologiaContainer = (props) => {
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
-							<InputLabel id="simple-select-outlined-cosmetologa">Cosmetologa</InputLabel>
+							<InputLabel id="simple-select-outlined-cosmetologa">COSMETOLOGA</InputLabel>
 							<Select
 								labelId="simple-select-outlined-cosmetologa"
 								id="simple-select-outlined-cosmetologa"
 								value={values.cosmetologa}
 								error={Boolean(errors.cosmetologa)}
 								onChange={onChangeCosmetologa}
-								label="Cosmetologa" >
+								label="COSMETOLOGA" >
 								{cosmetologas.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
@@ -298,7 +298,7 @@ export const AgendarAparatologiaContainer = (props) => {
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
-							<InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
+							<InputLabel id="simple-select-outlined-hora">HORA</InputLabel>
 							<Select
 								labelId="simple-select-outlined-hora"
 								id="simple-select-outlined-hora"
@@ -313,7 +313,7 @@ export const AgendarAparatologiaContainer = (props) => {
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
-							<InputLabel id="simple-select-outlined-tipo-cita">Medio</InputLabel>
+							<InputLabel id="simple-select-outlined-tipo-cita">MEDIO</InputLabel>
 							<Select
 								labelId="simple-select-outlined-tipo-cita"
 								id="simple-select-outlined-tipo-cita"
@@ -356,7 +356,7 @@ export const AgendarAparatologiaContainer = (props) => {
 							text='AGENDAR' />
 					</Grid>
 					<Grid item xs={12} sm={2}>
-						<h1>Total: {toFormatterCurrency(values.precio)}</h1>
+						<h1>TOTAL: {toFormatterCurrency(values.precio)}</h1>
 					</Grid>
 				</Grid>
 				<MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -372,7 +372,7 @@ export const AgendarAparatologiaContainer = (props) => {
 							format="dd/MM/yyyy"
 							margin="normal"
 							id="date-picker-inline-filter"
-							label="FILTRADO APARATOLOGIA"
+							label="FILTRADO APARATOLOGÍA"
 							value={filterDate}
 							onChange={onChangeFilterDate}
 							KeyboardButtonProps={{

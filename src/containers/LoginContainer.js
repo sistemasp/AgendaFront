@@ -19,7 +19,7 @@ const LoginContainer = (props) => {
                             <TextField
                                 id="usuario"
                                 name="usuario"
-                                label="Usuario"
+                                label="USUARIO"
                                 variant="outlined" />
                         }
                     </Field>
@@ -36,7 +36,7 @@ const LoginContainer = (props) => {
                             <TextField 
                                 id="contrasenia"
                                 name="contrasenia"
-                                label="Contraseña"
+                                label="CONTRASEÑA"
                                 variant="outlined"
                                 type="password" />
                         }
