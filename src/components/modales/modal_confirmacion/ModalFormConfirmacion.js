@@ -62,7 +62,7 @@ const ModalFormConfirmacion = (props) => {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <FormControl className={classes.margin, classes.textField} variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password">Contraseña de Confirmacion</InputLabel>
+                <InputLabel htmlFor="outlined-adornment-password">CONTRASEÑA DE SUPERVISOR</InputLabel>
                 <OutlinedInput
                   id="outlined-adornment-password"
                   type={values.showPassword ? 'text' : 'password'}

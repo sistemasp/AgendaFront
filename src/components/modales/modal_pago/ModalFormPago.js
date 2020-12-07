@@ -163,7 +163,7 @@ const ModalFormPago = (props) => {
                   name="cantidad"
                   //helperText={touched.numero_sesion ? errors.numero_sesion : ""}
                   error={Boolean(errors.cantidad)}
-                  label="CANTIDAD"
+                  label="CANTIDAD A COBRAR"
                   value={values.cantidad}
                   onChange={onChangeCantidad}
                   type='Number'

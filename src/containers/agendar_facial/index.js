@@ -75,6 +75,7 @@ const AgendarFacial = (props) => {
 
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
+	const [severity, setSeverity] = useState('success');
 	const [tratamientos, setTratamientos] = useState([]);
 	const [horarios, setHorarios] = useState([]);
 	const [dermatologos, setDermatologos] = useState([]);
@@ -587,6 +588,7 @@ const AgendarFacial = (props) => {
 								onChangeItemPrecio={handleChangeItemPrecio}
 								setOpenAlert={setOpenAlert}
 								setMessage={setMessage}
+								setSeverity={setSeverity}
 								setFilterDate={setFilterDate}
 								dermatologoDirectoId={dermatologoDirectoId}
 								onGuardarModalPagos={handleGuardarModalPagos}
@@ -598,7 +600,7 @@ const AgendarFacial = (props) => {
 					</Backdrop>
 			}
 			<Snackbar open={openAlert} autoHideDuration={5000} onClose={handleCloseAlert}>
-				<Alert onClose={handleCloseAlert} severity="success">
+				<Alert onClose={handleCloseAlert} severity={severity}>
 					{message}
 				</Alert>
 			</Snackbar>

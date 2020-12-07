@@ -111,7 +111,7 @@ const ModalFormPagos = (props) => {
         <div style={modalStyle} className={classes.paper}>
 
           {
-            !servicio.pagado ?
+           // !servicio.pagado ?
               <Grid item xs={12} sm={12}>
                 <ButtonCustom
                   className={classes.button}
@@ -119,7 +119,7 @@ const ModalFormPagos = (props) => {
                   variant="contained"
                   onClick={onClickNewPago}
                   text='AGREGAR PAGO' />
-              </Grid> : ''
+              </Grid> //: ''
           }
 
           <TableComponent

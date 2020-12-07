@@ -84,6 +84,7 @@ export const AgendarFacialContainer = (props) => {
 		onChangeAsistio,
 		loadFaciales,
 		setFilterDate,
+		setSeverity,
 		// MODAL PROXIMA
 		openModalProxima,
 		// MODAL PAGOS
@@ -123,6 +124,7 @@ export const AgendarFacialContainer = (props) => {
 						sucursal={sucursal}
 						setOpenAlert={setOpenAlert}
 						setMessage={setMessage}
+						setSeverity={setSeverity}
 						setFilterDate={setFilterDate} /> : ''
 			}
 			{

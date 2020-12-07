@@ -243,7 +243,7 @@ export const CorteContainer = (props) => {
           </Grid>
         </Grid>
         <Grid item sm={8}>
-          <h1 className={totalEfectivo > totalEgresos ? classes.label_positivo : classes.label_negativo} >EFECTIVO EN CAJA: {toFormatterCurrency(Number(totalEfectivo) - Number(totalEgresos))}</h1>
+          <h1 className={totalEfectivo < totalEgresos ? classes.label_positivo : classes.label_negativo} >EFECTIVO EN CAJA: {toFormatterCurrency(Number(totalEgresos) - Number(totalEfectivo))}</h1>
         </Grid>
 
       </Grid>

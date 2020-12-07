@@ -76,6 +76,7 @@ const ModalCita = (props) => {
     sucursal,
     setOpenAlert,
     setMessage,
+    setSeverity,
     setFilterDate,
   } = props;
 
@@ -531,6 +532,9 @@ const ModalCita = (props) => {
                 openModalConfirmacion={openModalConfirmacion}
                 onCloseModalConfirmacion={handleCloseModalConfirmacion}
                 onConfirmModalConfirmacion={handleConfirmModalConfirmacion}
+                setOpenAlert={setOpenAlert}
+                setMessage={setMessage}
+                setSeverity={setSeverity}
                 {...props} />
             }
           </Formik> :

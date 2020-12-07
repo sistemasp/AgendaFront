@@ -97,6 +97,9 @@ const ModalFormCita = (props) => {
     openModalConfirmacion,
     onCloseModalConfirmacion,
     onConfirmModalConfirmacion,
+    setMessage,
+    setSeverity,
+    setOpenAlert,
   } = props;
 
   return (
@@ -113,7 +116,12 @@ const ModalFormCita = (props) => {
                   open={openModalConfirmacion}
                   onClose={onCloseModalConfirmacion}
                   onConfirm={onConfirmModalConfirmacion}
-                  empleado={empleado} />
+                  empleado={empleado}
+                  cita={cita}
+                  status={values.status}
+                  setMessage={setMessage}
+                  setSeverity={setSeverity}
+                  setOpenAlert={setOpenAlert} />
                 : ''
             }
             <Grid container spacing={1}>
@@ -208,7 +216,7 @@ const ModalFormCita = (props) => {
                       variant="outlined" />
                   </Grid> : ''
               }
-              
+
               <Grid item xs={12}>
                 {
                   /* values.dermatologo*/ false ?
