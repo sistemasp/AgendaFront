@@ -5,6 +5,7 @@ import { Button, Grid, IconButton, InputAdornment, OutlinedInput, InputLabel, Fo
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { ButtonCustom } from '../../basic/ButtonCustom';
+import ModalConfirmacion from '../modal_confirmacion';
 
 function getModalStyle() {
   const top = 50;
@@ -55,6 +56,14 @@ const ModalFormNuevoEgreso = (props) => {
     tipoEgresos,
     onChange,
     onAgregarConceto,
+    empleado,
+    previousTipoEgreso,
+    openModalConfirmacion,
+    onCloseModalConfirmacion,
+    onConfirmModalConfirmacion,
+    setMessage,
+    setSeverity,
+    setOpenAlert,
   } = props;
 
   return (
@@ -63,6 +72,19 @@ const ModalFormNuevoEgreso = (props) => {
       aria-describedby="simple-modal-description"
       open={open} >
       <div style={modalStyle} className={classes.paper}>
+        {
+          openModalConfirmacion ?
+            <ModalConfirmacion
+              open={openModalConfirmacion}
+              onClose={onCloseModalConfirmacion}
+              onConfirm={onConfirmModalConfirmacion}
+              empleado={empleado}
+              status={values.status}
+              setMessage={setMessage}
+              setSeverity={setSeverity}
+              setOpenAlert={setOpenAlert} />
+            : ''
+        }
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <h2>AGREGAR EGRESO</h2>
@@ -71,7 +93,7 @@ const ModalFormNuevoEgreso = (props) => {
             <TextField
               className={classes.textField}
               name="concepto"
-              label="Concepto"
+              label="CONCEPTO"
               value={values.concepto}
               onChange={onChange}
               variant="outlined" />
@@ -80,7 +102,7 @@ const ModalFormNuevoEgreso = (props) => {
             <TextField
               className={classes.textField}
               name="cantidad"
-              label="Cantidad"
+              label="CANTIDAD"
               value={values.cantidad}
               type='Number'
               onInput={(e) => {
@@ -91,7 +113,7 @@ const ModalFormNuevoEgreso = (props) => {
           </Grid>
           <Grid item xs={12}>
             <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel id="simple-select-outlined-hora">Tipo egreso</InputLabel>
+              <InputLabel id="simple-select-outlined-hora">TIPO EGRESO</InputLabel>
               <Select
                 labelId="simple-select-outlined-tipo-egreso"
                 id="simple-select-outlined-tipo-egreso"
@@ -109,7 +131,7 @@ const ModalFormNuevoEgreso = (props) => {
               variant="contained"
               onClick={onAgregarConceto}
               disabled={dataComplete}
-              text='Agregar' />
+              text='AGREGAR' />
           </Grid>
           <Grid item xs={12} sm={6}>
             <ButtonCustom
@@ -117,7 +139,7 @@ const ModalFormNuevoEgreso = (props) => {
               color="secondary"
               variant="contained"
               onClick={onClickCancel}
-              text='Cancelar' />
+              text='CANCELAR' />
           </Grid>
         </Grid>
       </div>

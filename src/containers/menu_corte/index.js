@@ -451,7 +451,8 @@ const Corte = (props) => {
     }
     const response = await createCorte(newCorte);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-      setMessage("CORTE GARDAR CORRECTAMENTE.");
+      setSeverity('success');
+      setMessage("CORTE GUARDADO CORRECTAMENTE.");
       setOpenAlert(true);
       handleObtenerInformacion();
     }
@@ -470,6 +471,7 @@ const Corte = (props) => {
     corte.generado = true;
     const response = await updateCorte(corte._id, corte);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setSeverity('success');
       setMessage("EL CORTE SE GENERO.");
       setOpenAlert(true);
       handleObtenerInformacion();
@@ -481,6 +483,7 @@ const Corte = (props) => {
     corte.hora_cierre = date;
     const response = await updateCorte(corte._id, corte);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setSeverity('success');
       setMessage("CORTE CERRADO.");
       setOpenAlert(true);
       handleObtenerInformacion();

@@ -21,13 +21,17 @@ const ModalNuevoEgreso = (props) => {
     corte,
   } = props;
 
-	const efectivoMetodoPagoId = process.env.REACT_APP_FORMA_PAGO_EFECTIVO;
+  const efectivoMetodoPagoId = process.env.REACT_APP_FORMA_PAGO_EFECTIVO;
 
   const [values, setValues] = useState({
     recepcionista: empleado._id,
     sucursal: sucursal,
     forma_pago: efectivoMetodoPagoId,
+    tipo_egreso: '',
   });
+
+  const [previousTipoEgreso, setPreviousTipoEgreso] = useState();
+  const [openModalConfirmacion, setOpenModalConfirmacion] = useState(false);
 
   const [tipoEgresos, setTipoEgresos] = useState([]);
 
@@ -41,9 +45,14 @@ const ModalNuevoEgreso = (props) => {
   }
 
   const handleChangeTipoEgreso = (e) => {
+    setPreviousTipoEgreso(values.tipo_egreso);
+    const tipoEgreso = tipoEgresos.find(item => {
+      return item._id === e.target.value
+    });
+    setOpenModalConfirmacion(tipoEgreso.confirmacion);
     setValues({
       ...values,
-      tipo_egreso: e.target.value
+      tipo_egreso: tipoEgreso._id
     });
   }
 
@@ -53,12 +62,22 @@ const ModalNuevoEgreso = (props) => {
     values.create_date = create_date;
     values.hora_aplicacion = corte.hora_apertura;
     const response = await createEgreso(values);
-        if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-          setMessage("EGRESO AGREGADO CORRECTAMENTE");
-          setOpenAlert(true);
-          onClose();
-          onObtenerInformacion();
-        }
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+      setSeverity('success');
+      setMessage("EGRESO AGREGADO CORRECTAMENTE");
+      setOpenAlert(true);
+      onClose();
+      onObtenerInformacion();
+    }
+  }
+
+  const handleConfirmModalConfirmacion = () => {
+    setOpenModalConfirmacion(false);
+  }
+
+  const handleCloseModalConfirmacion = () => {
+    setOpenModalConfirmacion(false);
+    setValues({ ...values, tipo_egreso: previousTipoEgreso });
   }
 
   useEffect(() => {
@@ -81,7 +100,12 @@ const ModalNuevoEgreso = (props) => {
       onClickCancel={onClose}
       dataComplete={dataComplete}
       values={values}
+      empleado={empleado}
       tipoEgresos={tipoEgresos}
+      previousTipoEgreso={previousTipoEgreso}
+      openModalConfirmacion={openModalConfirmacion}
+      onCloseModalConfirmacion={handleCloseModalConfirmacion}
+      onConfirmModalConfirmacion={handleConfirmModalConfirmacion}
       onAgregarConceto={handleAgregarConceto}
       onChange={handleChange}
       onChangeTipoEgreso={(e) => handleChangeTipoEgreso(e)}

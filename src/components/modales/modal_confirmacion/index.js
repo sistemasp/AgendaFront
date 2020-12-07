@@ -42,22 +42,27 @@ const ModalConfirmacion = (props) => {
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       const supervisor = response.data;
       if (supervisor) {
-        const date = new Date();
-        const horaSalida = `${addZero(date.getHours())}:${addZero(date.getMinutes())}`
-        const cancelacion = {
-          supervisor: supervisor._id,
-          recepcionista: empleado._id,
-          tipo_servicio: cita.servicio,
-          servicio: cita._id,
-          hora_llegada: cita.hora_llegada,
-          hora_salida: horaSalida,
-          status: status,
-        }
+        if (cita) {
+          const date = new Date();
+          const horaSalida = `${addZero(date.getHours())}:${addZero(date.getMinutes())}`
+          const cancelacion = {
+            supervisor: supervisor._id,
+            recepcionista: empleado._id,
+            tipo_servicio: cita.servicio,
+            servicio: cita._id,
+            hora_llegada: cita.hora_llegada,
+            hora_salida: horaSalida,
+            status: status,
+          }
 
-        const cancleResponse = await createCancelacion(cancelacion);
-        if (`${cancleResponse.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+          const cancleResponse = await createCancelacion(cancelacion);
+          if (`${cancleResponse.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+            onConfirm();
+          }
+        } else {
           onConfirm();
         }
+
       } else {
         setSeverity('error');
         setMessage("ERROR AL INGRESAR LA CLAVE DE SUPERVISOR.");

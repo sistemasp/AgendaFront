@@ -57,7 +57,6 @@ const ModalFormConfirmacion = (props) => {
       aria-labelledby="simple-modal-title"
       aria-describedby="simple-modal-description"
       open={open} >
-      <form>
         <div style={modalStyle} className={classes.paper}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
@@ -103,7 +102,6 @@ const ModalFormConfirmacion = (props) => {
             </Grid>
           </Grid>
         </div>
-      </form>
     </Modal>
 
   );

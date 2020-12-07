@@ -59,6 +59,7 @@ const ModalNuevoIngreso = (props) => {
     values.hora_aplicacion = corte.hora_apertura;
     const response = await createIngreso(values);
         if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+          setSeverity('success');
           setMessage("INGRESO AGREGADO CORRECTAMENTE");
           setOpenAlert(true);
           onClose();
