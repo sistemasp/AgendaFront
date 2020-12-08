@@ -172,7 +172,7 @@ export const AgendarAparatologiaContainer = (props) => {
 					: ''
 			}
 			<Paper>
-				<h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}`: 'SELECCIONA UN PACIENTE'}</h1>
+				<h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'SELECCIONA UN PACIENTE'}</h1>
 				<Grid container spacing={3}>
 					{
 						false ?
@@ -220,12 +220,12 @@ export const AgendarAparatologiaContainer = (props) => {
 								error={Boolean(errors.dermatologo)}
 								onChange={onChangeDoctors}
 								label="DERMATÓLOGO" >
-								{dermatologos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+								{dermatologos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
 					</Grid>
 					{
-						dermatologoDirectoId !== values.dermatologo._id ?
+						dermatologoDirectoId !== values.dermatologo ?
 							<Grid item xs={12} sm={2}>
 								<FormControl variant="outlined" className={classes.formControl}>
 									<InputLabel id="simple-select-outlined-tipo-cita">TIPO CITA</InputLabel>
@@ -333,6 +333,9 @@ export const AgendarAparatologiaContainer = (props) => {
 							value={values.tiempo}
 							type='Number'
 							onChange={onChangeTiempo}
+							onInput={(e) => {
+								e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 3)
+							  }}
 							variant="outlined" />
 					</Grid>
 					<Grid item xs={12} sm={2}>

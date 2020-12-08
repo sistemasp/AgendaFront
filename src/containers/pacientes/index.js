@@ -238,7 +238,7 @@ const Pacientes = (props) => {
 						labelId="simple-select-outlined-actions"
 						id="simple-select-outlined-actions"
 						onChange={(e) => onChangeActions(e, props.data)}
-						label="Acciones">
+						label="ACCIONES">
 						{
 							props.actions.map((item, index) => {
 								return <MenuItem

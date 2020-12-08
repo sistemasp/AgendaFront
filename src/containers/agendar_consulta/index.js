@@ -61,6 +61,8 @@ const AgendarConsulta = (props) => {
 		onClickAgendarCirugia,
 		onClickAgendarEstetica,
 		onClickAgendarDermapen,
+		onClickAgendarFaciales,
+		onClickAgendarAparatologia,
 	} = props;
 
 	const date = new Date();
@@ -517,12 +519,12 @@ const AgendarConsulta = (props) => {
 		{
 			icon: LocalHospitalIcon,
 			tooltip: 'AGREGAR FACIAL',
-			onClick: onClickAgendarCirugia
+			onClick: onClickAgendarFaciales
 		},
 		{
 			icon: LocalHospitalIcon,
 			tooltip: 'AGREGAR APARATOLOGÍA',
-			onClick: onClickAgendarCirugia
+			onClick: onClickAgendarAparatologia
 		},
 		{
 			icon: FaceIcon,
@@ -593,10 +595,10 @@ const AgendarConsulta = (props) => {
 				onClickAgendarDermapen(e, rowData);
 				break;
 			case 'AGREGAR APARATOLOGÍA':
-				onClickAgendarDermapen(e, rowData);
+				onClickAgendarAparatologia(e, rowData);
 				break;
 			case 'AGREGAR FACIAL':
-				onClickAgendarDermapen(e, rowData);
+				onClickAgendarFaciales(e, rowData);
 				break;
 			case 'NUEVA CITA':
 				handleOnClickNuevaConsulta(e, rowData);

@@ -236,6 +236,9 @@ const ModalFormDermapen = (props) => {
                   value={values.tiempo}
                   type='Number'
                   onChange={onChangeTiempo}
+                  onInput={(e) => {
+                    e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 3)
+                  }}
                   variant="outlined" />
               </Grid>
 

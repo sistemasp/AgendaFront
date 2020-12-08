@@ -131,18 +131,20 @@ export const MenuContainer = props => {
 					onClickAgendarCirugia={onClickAgendarCirugia}
 					onClickAgendarEstetica={onClickAgendarEstetica}
 					onClickAgendarDermapen={onClickAgendarDermapen}
+					onClickAgendarFaciales={onClickAgendarFaciales}
+					onClickAgendarAparatologia={onClickAgendarAparatologia}
 					history={history} />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
 				<AgendarFacial
-					paciente={pacienteAgendado}
+					info={pacienteAgendado}
 					setPacienteAgendado={setPacienteAgendado}
 					empleado={empleado}
 					sucursal={sucursal._id} />
 			</TabPanel>
 			<TabPanel value={value} index={3}>
 				<AgendarAparatologia
-					paciente={pacienteAgendado}
+					info={pacienteAgendado}
 					setPacienteAgendado={setPacienteAgendado}
 					empleado={empleado}
 					sucursal={sucursal._id} />

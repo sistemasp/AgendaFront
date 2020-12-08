@@ -80,29 +80,29 @@ const TableComponent = props => {
 
     const localization = {
         pagination: {
-            labelDisplayedRows: '{from}-{to} de {count}',
-            labelRowsSelect: 'registros'
+            labelDisplayedRows: '{from}-{to} DE {count}',
+            labelRowsSelect: 'REGISTROS'
         },
         toolbar: {
             nRowsSelected: '{0} registro(s) seleccionados',
-            searchTooltip: 'Buscar registros',
-            searchPlaceholder: 'Buscar registros'
+            searchTooltip: 'BUSCAR REGISTROS',
+            searchPlaceholder: 'BUSCAR REGISTROS'
         },
         header: {
-            actions: 'Acciones'
+            actions: 'ACCIONES'
         },
         body: {
-            emptyDataSourceMessage: 'No hay registros para mostrar',
+            emptyDataSourceMessage: 'NO HAY REGISTROS PARA MOSTRAR',
             filterRow: {
-                filterTooltip: 'Filter'
+                filterTooltip: 'FILTRO'
             }
         },
         pagination: {
-            labelRowsSelect: 'Registros',
-            firstTooltip: 'Primer página',
-            previousTooltip: 'Página anterior',
-            nextTooltip: 'Página siguiente',
-            lastTooltip: 'Ultima página',
+            labelRowsSelect: 'REGISTROS',
+            firstTooltip: 'PRIMER PÁGINA',
+            previousTooltip: 'PÁGINA ANTERIOR',
+            nextTooltip: 'PÁGINA SIGUIENTE',
+            lastTooltip: 'ÚLTIMA PÁGINA',
         }
     };
 

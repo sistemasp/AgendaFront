@@ -55,11 +55,13 @@ const AgendarFacial = (props) => {
 	const classes = useStyles();
 
 	const {
-		paciente,
+		info,
 		empleado,
 		setPacienteAgendado,
 		sucursal,
 	} = props;
+
+	const paciente = info.paciente ? info.paciente : info;
 
 	const dermatologoRolId = process.env.REACT_APP_DERMATOLOGO_ROL_ID;
 	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
@@ -95,7 +97,8 @@ const AgendarFacial = (props) => {
 		tipo_cita: tipoCitaNoAplicaId,
 		tiempo: '',
 		observaciones: '',
-		dermatologo: { _id: dermatologoDirectoId },
+		dermatologo: info.dermatologo ? info.dermatologo._id : dermatologoDirectoId,
+		consulta: info.dermatologo ? info._id : undefined,
 	});
 	const [faciales, setFaciales] = useState([]);
 	const [areas, setAreas] = useState([]);

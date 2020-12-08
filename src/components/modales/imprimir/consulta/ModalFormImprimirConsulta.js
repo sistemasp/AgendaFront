@@ -66,16 +66,16 @@ const ModalFormImprimirConsulta = (props) => {
           <img src={bannerMePiel} alt='banner' width="360" height="85" />
           <Grid container>
             <Grid item xs={12} className={classes.label}>
-              <h2 className={classes.label} >"Al cuidado de tu Piel"</h2>
+              <h2 className={classes.label} >"AL CUIDADO DE TU PIEL"</h2>
             </Grid>
             <Grid item xs={12} className={classes.label}>
-              <h2 className={classes.label}>Sucursal: {datos.sucursal.nombre}</h2>
+              <h2 className={classes.label}>SUCURSAL: {datos.sucursal.nombre}</h2>
             </Grid>
             <Grid item xs={12} className={classes.label}>
-              <h3 className={classes.label}>Paciente: {datos.paciente_nombre}</h3>
+              <h3 className={classes.label}>PACIENTE: {datos.paciente_nombre}</h3>
             </Grid>
             <Grid item xs={12} className={classes.label}>
-              <h3 className={classes.label}>Folio: {datos.folio}</h3>
+              <h3 className={classes.label}>FOLIA: {datos.folio}</h3>
             </Grid>
             <br/>
             <Grid item xs={12} >

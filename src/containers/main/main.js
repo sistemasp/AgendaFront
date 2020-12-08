@@ -224,7 +224,7 @@ export const MainContainer = props => {
 						<MenuIcon />
 					</IconButton>
 					<Typography variant="h6" className={classes.title}>
-						{`Sucuarsal: ${sucursal.nombre} - ${empleado.nombre} ( ${empleado.rol.nombre} )`}
+						{`SUCURSAL: ${sucursal.nombre} - ${empleado.nombre} ( ${empleado.rol.nombre} )`}
 					</Typography>
 					<Button
 						color="default"
