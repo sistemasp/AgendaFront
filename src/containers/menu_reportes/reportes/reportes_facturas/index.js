@@ -39,14 +39,14 @@ const ReportesFacturas = (props) => {
 	});
 
 	const columns = [
-		{ title: 'Fecha', field: 'fecha_show' },
-		{ title: 'Hora', field: 'hora' },
-		{ title: 'Paciente', field: 'paciente_nombre' },
-		{ title: 'Razon Social', field: 'razon_social.nombre_completo' },
-		{ title: 'Cantidad', field: 'cantidad_moneda' },
-		{ title: 'Metodo pago', field: 'forma_pago.nombre' },
-		{ title: 'Sucursal', field: 'sucursal.nombre'},
-		{ title: 'Digitos', field: 'ultimos_4_digitos' },
+		{ title: 'FECHA', field: 'fecha_show' },
+		{ title: 'HORA', field: 'hora' },
+		{ title: 'PACIENTE', field: 'paciente_nombre' },
+		{ title: 'RAZÓN SOCIAL', field: 'razon_social.nombre_completo' },
+		{ title: 'CANTIDAD', field: 'cantidad_moneda' },
+		{ title: 'FORMA PAGO', field: 'forma_pago.nombre' },
+		{ title: 'SUCURSAL', field: 'sucursal.nombre'},
+		{ title: 'DÍGITOS', field: 'ultimos_4_digitos' },
 	];
 
 	const options = {

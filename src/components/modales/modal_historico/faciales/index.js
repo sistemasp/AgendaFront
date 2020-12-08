@@ -27,15 +27,15 @@ const TabFaciales = (props) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const columns = [
-    { title: 'Fecha', field: 'fecha_show' },
-    { title: 'Hora', field: 'hora' },
-    { title: 'Tipo Cita', field: 'tipo_cita.nombre' },
-    { title: 'Estado', field: 'status.nombre' },
-    { title: 'Sucursal', field: 'sucursal.nombre' },
-    { title: 'Preparo', field: 'quien_prepara' },
-    { title: 'Realiza', field: 'quien_realiza' },
-    { title: 'Acidos', field: 'acidos_show' },
-    { title: 'Precio', field: 'precio_moneda' },
+    { title: 'FECHA', field: 'fecha_show' },
+    { title: 'HORA', field: 'hora' },
+    { title: 'TIPO CITA', field: 'tipo_cita.nombre' },
+    { title: 'ESTADO', field: 'status.nombre' },
+    { title: 'SUCURSAL', field: 'sucursal.nombre' },
+    { title: 'PREPARÓ', field: 'quien_prepara' },
+    { title: 'REALIZA', field: 'quien_realiza' },
+    { title: 'ÁCIDOS', field: 'acidos_show' },
+    { title: 'PRECIO', field: 'precio_moneda' },
   ];
 
   const options = {

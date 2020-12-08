@@ -15,13 +15,13 @@ const ModHistoricoFacturas = (props) => {
   const [historial, setHistorial] = useState([]);
 
   const columns = [
-    { title: 'Fecha', field: 'fecha_show' },
-    { title: 'Hora', field: 'hora' },
-    { title: 'Paciente', field: 'paciente_nombre' },
-    { title: 'Metodo pago', field: 'forma_pago.nombre' },
-    { title: 'Cantidad', field: 'cantidad_moneda' },
-    { title: 'Uso CFDI', field: 'uso_cfdi_nombre' },
-    { title: 'Sucursal', field: 'sucursal.nombre' },
+    { title: 'FECHA', field: 'fecha_show' },
+    { title: 'HORA', field: 'hora' },
+    { title: 'PACIENTE', field: 'paciente_nombre' },
+    { title: 'FORMA PAGO', field: 'forma_pago.nombre' },
+    { title: 'CANTIDAD', field: 'cantidad_moneda' },
+    { title: 'USO CFDI', field: 'uso_cfdi_nombre' },
+    { title: 'SUCURSAL', field: 'sucursal.nombre' },
   ];
 
   const options = {

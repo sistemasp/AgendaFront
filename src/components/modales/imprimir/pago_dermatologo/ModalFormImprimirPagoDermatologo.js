@@ -507,10 +507,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                         faciales.map(facial => {
                           let comisionDermatologo = 0;
                           let pagoDermatologo = 0;
-                          {
-                            console.log("JFAOFOSDf", facial.pagos[0].descuento_dermatologo !== undefined);
-                          }
-                          if (facial.pagos[0].descuento_dermatologo === undefined || Number(facial.pagos[0].descuento_dermatologo) === 0) {
+                          if (facial.pagos[0] === undefined || Number(facial.pagos[0].descuento_dermatologo) === 0) {
                             facial.areas.map(area => {
                               switch (facial.tipo_cita._id) {
                                 case revisadoTipoCitaId:

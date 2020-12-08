@@ -27,13 +27,13 @@ const TabEstetica = (props) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const columns = [
-    { title: 'Fecha', field: 'fecha_show' },
-    { title: 'Hora', field: 'hora' },
-    { title: 'Consecutivo', field: 'consecutivo' },
-    { title: 'Dermatologo', field: 'dermatologo.nombre' },
-    { title: 'Sucursal', field: 'sucursal.nombre' },
-    { title: 'Precio', field: 'precio_moneda' },
-    { title: 'Total', field: 'precio_moneda' },
+    { title: 'FECHA', field: 'fecha_show' },
+    { title: 'HORA', field: 'hora' },
+    { title: 'CONSECUTIVO', field: 'consecutivo' },
+    { title: 'DERMATÓLOGO', field: 'dermatologo.nombre' },
+    { title: 'SUCURSAL', field: 'sucursal.nombre' },
+    { title: 'PRECIO', field: 'precio_moneda' },
+    { title: 'TOTAL', field: 'precio_moneda' },
   ];
 
   const options = {

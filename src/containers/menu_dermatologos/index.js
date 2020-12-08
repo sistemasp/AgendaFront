@@ -55,10 +55,10 @@ const Dermatologos = (props) => {
 	const [severity, setSeverity] = useState('success');
 
 	const columns = [
-		{ title: 'Nombre', field: 'nombre' },
-		{ title: 'Cedula Profesional', field: 'cedula' },
-		{ title: 'Fecha Ingreso', field: 'fecha_ingreso_show' },
-		{ title: 'Fecha Baja', field: 'fecha_baja_show' },
+		{ title: 'NOMBRE', field: 'nombre' },
+		{ title: 'CÉDULA PROFESIONAL', field: 'cedula' },
+		{ title: 'FECHA INGRESO', field: 'fecha_ingreso_show' },
+		{ title: 'FECHA BAJA', field: 'fecha_baja_show' },
 	];
 
 	const options = {

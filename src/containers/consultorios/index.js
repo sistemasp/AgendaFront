@@ -67,21 +67,21 @@ const Consultorios = (props) => {
 	} = props;
 
 	const columnsConsultorio = [
-		{ title: 'Nombre', field: 'nombre' },
-		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
-		{ title: 'Paciente', field: 'paciente_nombre' },
+		{ title: 'NOMBRE', field: 'nombre' },
+		{ title: 'DERMATÓLOGO', field: 'dermatologo_nombre' },
+		{ title: 'PACIENTE', field: 'paciente_nombre' },
 	];
 
 	const columnsCabina = [
-		{ title: 'Nombre', field: 'nombre' },
-		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
-		{ title: 'Paciente', field: 'paciente_nombre' },
+		{ title: 'NOMBRE', field: 'nombre' },
+		{ title: 'COSMETOLOGA', field: 'cosmetologa_nombre' },
+		{ title: 'PACIENTE', field: 'paciente_nombre' },
 	];
 
 	const columnsSalaCirugia = [
-		{ title: 'Nombre', field: 'nombre' },
-		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
-		{ title: 'Paciente', field: 'paciente_nombre' },
+		{ title: 'NOMBRE', field: 'nombre' },
+		{ title: 'DERMATÓLOGO', field: 'dermatologo_nombre' },
+		{ title: 'PACIENTE', field: 'paciente_nombre' },
 	];
 
 	const options = {

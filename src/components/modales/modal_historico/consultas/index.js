@@ -27,14 +27,14 @@ const TabConsultas = (props) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const columns = [
-    { title: 'Fecha', field: 'fecha_show' },
-    { title: 'Hora', field: 'hora' },
-    { title: 'Dermatologo', field: 'dermatologo.nombre' },
-    { title: 'Tipo Cita', field: 'tipo_cita.nombre' },
-    { title: 'Estado', field: 'status.nombre' },
-    { title: 'Sucursal', field: 'sucursal.nombre' },
-    { title: 'Precio', field: 'precio_moneda' },
-    { title: 'Observaciones', field: 'observaciones' },
+    { title: 'FECHA', field: 'fecha_show' },
+    { title: 'HORA', field: 'hora' },
+    { title: 'DERMATÓLOGO', field: 'dermatologo.nombre' },
+    { title: 'TIPO CITA', field: 'tipo_cita.nombre' },
+    { title: 'ESTADO', field: 'status.nombre' },
+    { title: 'SUCURSAL', field: 'sucursal.nombre' },
+    { title: 'PRECIO', field: 'precio_moneda' },
+    { title: 'OBSERVACIONES', field: 'observaciones' },
   ];
 
   const options = {

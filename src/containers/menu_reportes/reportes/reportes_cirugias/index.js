@@ -39,21 +39,21 @@ const ReportesCirugias = (props) => {
 	});
 
 	const columns = [
-		{ title: 'Fecha', field: 'fecha_show' },
-		{ title: 'Hora', field: 'hora' },
-		{ title: 'Consecutivo', field: 'consecutivo' },
-		{ title: 'Paciente', field: 'paciente_nombre' },
-		{ title: 'Folio consulta', field: 'folio_consulta' },
-		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
-		{ title: 'Materiales', field: 'materiales_show' },
-		{ title: 'Biopsias', field: 'biopsias_show' },
-		{ title: 'Costo biopsias', field: 'costo_biopsias_moneda' },
-		{ title: 'Patologo', field: 'patologo.nombre' },
-		{ title: 'Estado', field: 'status.nombre' },
-		{ title: 'Precio', field: 'precio_moneda' },
-		{ title: 'Total', field: 'total_moneda' },
-		{ title: 'Sucursal', field: 'sucursal.nombre' },
-		{ title: 'Observaciones', field: 'observaciones' },
+		{ title: 'FECHA', field: 'fecha_show' },
+		{ title: 'HORA', field: 'hora' },
+		{ title: 'CONSECUTIVO', field: 'consecutivo' },
+		{ title: 'PACIENTE', field: 'paciente_nombre' },
+		{ title: 'FOLIO CONSULTA', field: 'folio_consulta' },
+		{ title: 'DERMATÓLOGO', field: 'dermatologo_nombre' },
+		{ title: 'MATERIALES', field: 'materiales_show' },
+		{ title: 'BIOPSIAS', field: 'biopsias_show' },
+		{ title: 'COSTO BIOPSIAS', field: 'costo_biopsias_moneda' },
+		{ title: 'PATÓLOGO', field: 'patologo.nombre' },
+		{ title: 'ESTADO', field: 'status.nombre' },
+		{ title: 'PRECIO', field: 'precio_moneda' },
+		{ title: 'TOTAL', field: 'total_moneda' },
+		{ title: 'SUCURSAL', field: 'sucursal.nombre' },
+		{ title: 'OBSERVACIONES', field: 'observaciones' },
 
 	];
 

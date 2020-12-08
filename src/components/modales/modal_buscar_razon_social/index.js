@@ -48,13 +48,13 @@ const ModalBuscarRazonSocial = (props) => {
   } = props;
 
   const columns = [
-    { title: 'Nombre completo', field: 'nombre_completo' },
+    { title: 'NOMBRE COMPLETO', field: 'nombre_completo' },
     { title: 'RFC', field: 'rfc' },
-    { title: 'Email', field: 'email' },
-    { title: 'domicilio', field: 'domicilio_completo' },
-    { title: 'Codigo postal', field: 'codigo_postal' },
-    { title: 'Colonia', field: 'colonia' },
-    { title: 'Telefono', field: 'telefono' },
+    { title: 'EMAIL', field: 'email' },
+    { title: 'DOMICILIO', field: 'domicilio_completo' },
+    { title: 'CÓDIGO POSTAL', field: 'codigo_postal' },
+    { title: 'COLONIA', field: 'colonia' },
+    { title: 'TELÉFONO', field: 'telefono' },
   ];
 
   const options = {

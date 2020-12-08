@@ -515,6 +515,16 @@ const AgendarConsulta = (props) => {
 			onClick: onClickAgendarDermapen
 		},
 		{
+			icon: LocalHospitalIcon,
+			tooltip: 'AGREGAR FACIAL',
+			onClick: onClickAgendarCirugia
+		},
+		{
+			icon: LocalHospitalIcon,
+			tooltip: 'AGREGAR APARATOLOGÍA',
+			onClick: onClickAgendarCirugia
+		},
+		{
 			icon: FaceIcon,
 			tooltip: 'TOXINA Y RELLENOS',
 			onClick: onClickAgendarEstetica
@@ -580,6 +590,12 @@ const AgendarConsulta = (props) => {
 				onClickAgendarEstetica(e, rowData);
 				break;
 			case 'AGREGAR DERMAPEN':
+				onClickAgendarDermapen(e, rowData);
+				break;
+			case 'AGREGAR APARATOLOGÍA':
+				onClickAgendarDermapen(e, rowData);
+				break;
+			case 'AGREGAR FACIAL':
 				onClickAgendarDermapen(e, rowData);
 				break;
 			case 'NUEVA CITA':

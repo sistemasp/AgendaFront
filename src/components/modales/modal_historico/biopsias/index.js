@@ -27,20 +27,20 @@ const TabBiopsias = (props) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const columns = [
-    { title: 'Fecha', field: 'fecha_show' },
-    { title: 'Hora', field: 'hora' },
-    { title: 'Consecutivo', field: 'consecutivo' },
-    { title: 'Dermatologo', field: 'dermatologo.nombre' },
-    { title: 'Patologo', field: 'patoloo.nombre' },
-    { title: 'Sucursal', field: 'sucursal.nombre' },
-    { title: 'Fecha entrega', field: 'precio_moneda' },
-    { title: 'Quien entrega', field: 'precio_moneda' },
-    { title: 'Fecha resultado', field: 'precio_moneda' },
-    { title: 'Quien recibe', field: 'precio_moneda' },
-    { title: 'Diagnostico', field: 'precio_moneda' },
-    { title: 'A quien se entrega', field: 'precio_moneda' },
-    { title: 'Fecha entrega', field: 'precio_moneda' },
-    { title: 'Quien entrega', field: 'precio_moneda' },
+    { title: 'FECHA', field: 'fecha_show' },
+    { title: 'HORA', field: 'hora' },
+    { title: 'CONSECUTIVO', field: 'consecutivo' },
+    { title: 'DERMATÓLOGO', field: 'dermatologo.nombre' },
+    { title: 'PATÓLOGO', field: 'patoloo.nombre' },
+    { title: 'SUCURSAL', field: 'sucursal.nombre' },
+    { title: 'FECHA ENTREGA', field: 'precio_moneda' },
+    { title: 'QUIEN ENTREGA', field: 'precio_moneda' },
+    { title: 'FECHA RESULTADO', field: 'precio_moneda' },
+    { title: 'QUIEN RECIBE', field: 'precio_moneda' },
+    { title: 'DIAGNÓSTICO', field: 'precio_moneda' },
+    { title: 'A QUIEN SE ENTREGA', field: 'precio_moneda' },
+    { title: 'FECHA ENTREGA', field: 'precio_moneda' },
+    { title: 'QUIEN ENTREGA', field: 'precio_moneda' },
   ];
 
   const options = {

@@ -44,10 +44,10 @@ const PacientesForCosmetologas = (props) => {
 	} = props;
 
 	const columns = [
-		{ title: 'Nombres', field: 'nombres' },
-		{ title: 'Apellidos', field: 'apellidos' },
-		{ title: 'Telefono', field: 'telefono' },
-		{ title: 'Fecha de nacimiento', field: 'fecha_nacimiento' },
+		{ title: 'NOMBRES', field: 'nombres' },
+		{ title: 'APELLIDOS', field: 'apellidos' },
+		{ title: 'TELÉFONO', field: 'telefono' },
+		{ title: 'FECHA DE NACIMIENTO', field: 'fecha_nacimiento' },
 	];
 
 	const options = {

@@ -92,7 +92,7 @@ const AgendarFacial = (props) => {
 		areas: [],
 		paciente: `${paciente._id}`,
 		precio: 0,
-		tipo_cita: tipoCitaDerivadoId,
+		tipo_cita: tipoCitaNoAplicaId,
 		tiempo: '',
 		observaciones: '',
 		dermatologo: { _id: dermatologoDirectoId },
@@ -117,28 +117,28 @@ const AgendarFacial = (props) => {
 	});
 
 	const columns = [
-		{ title: 'Folio', field: 'folio' },
-		{ title: 'Hora', field: 'hora' },
-		{ title: 'Paciente', field: 'paciente_nombre' },
-		{ title: 'Telefono', field: 'paciente.telefono' },
-		{ title: 'Servicio', field: 'servicio.nombre' },
-		{ title: 'Tratamientos', field: 'show_tratamientos' },
-		{ title: 'Areas', field: 'show_areas' },
-		{ title: 'Quien agenda', field: 'quien_agenda.nombre' },
-		{ title: 'Medio', field: 'medio.nombre' },
-		{ title: 'Quien confirma llamada', field: 'quien_confirma_llamada.nombre' },
-		{ title: 'Quien confirma asistencia', field: 'quien_confirma_asistencia.nombre' },
-		{ title: 'Promovendedor', field: 'promovendedor_nombre' },
-		{ title: 'Dermatologo', field: 'dermatologo_nombre' },
-		{ title: 'Tipo Cita', field: 'tipo_cita.nombre' },
-		{ title: 'Cosmetologa', field: 'cosmetologa_nombre' },
-		{ title: 'Estado', field: 'status.nombre' },
-		{ title: 'Precio', field: 'precio_moneda' },
-		{ title: 'Tiempo (minutos)', field: 'tiempo' },
-		{ title: 'Observaciones', field: 'observaciones' },
-		{ title: 'Hora llegada', field: 'hora_llegada' },
-		{ title: 'Hora atendido', field: 'hora_atencion' },
-		{ title: 'Hora salida', field: 'hora_salida' },
+		{ title: 'FOLIO', field: 'folio' },
+		{ title: 'HORA', field: 'hora' },
+		{ title: 'PACIENTE', field: 'paciente_nombre' },
+		{ title: 'TELÉFONO', field: 'paciente.telefono' },
+		{ title: 'SERVICIO', field: 'servicio.nombre' },
+		{ title: 'TRATAMIENTOS', field: 'show_tratamientos' },
+		{ title: 'AREAS', field: 'show_areas' },
+		{ title: 'QUIEN AGENDA', field: 'quien_agenda.nombre' },
+		{ title: 'MEDIO', field: 'medio.nombre' },
+		{ title: 'QUIEN CONFIRMA LLAMADA', field: 'quien_confirma_llamada.nombre' },
+		{ title: 'QUIEN CONFIRMA ASISTENCIA', field: 'quien_confirma_asistencia.nombre' },
+		{ title: 'PROMOVENDEDOR', field: 'promovendedor_nombre' },
+		{ title: 'DERMATÓLOGO', field: 'dermatologo_nombre' },
+		{ title: 'TIPO CITA', field: 'tipo_cita.nombre' },
+		{ title: 'COSMETOLOGA', field: 'cosmetologa_nombre' },
+		{ title: 'ESTADO', field: 'status.nombre' },
+		{ title: 'PRECIO', field: 'precio_moneda' },
+		{ title: 'TIEMPO (MINUTOS)', field: 'tiempo' },
+		{ title: 'OBSERVACIONES', field: 'observaciones' },
+		{ title: 'HORA LLEGADA', field: 'hora_llegada' },
+		{ title: 'HORA ATENDIDO', field: 'hora_atencion' },
+		{ title: 'HORA SALIDA', field: 'hora_salida' },
 	];
 
 	const options = {
@@ -306,7 +306,7 @@ const AgendarFacial = (props) => {
 		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
-		data.tipo_cita = data.dermatologo._id === dermatologoDirectoId ? tipoCitaDerivadoId : data.tipo_cita;
+		data.tipo_cita = data.dermatologo._id === dermatologoDirectoId ? tipoCitaNoAplicaId : data.tipo_cita;
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 
 		const response = await createFacial(data);
@@ -433,13 +433,13 @@ const AgendarFacial = (props) => {
 	const actions = [
 		{
 			icon: PrintIcon,
-			tooltip: 'Imprimir',
+			tooltip: 'IMPRIMIR',
 			onClick: handlePrint
 		},
 		//new Date(anio, mes - 1, dia) < filterDate.fecha_hora  ? 
 		{
 			icon: EditIcon,
-			tooltip: 'Editar cita',
+			tooltip: 'EDITAR',
 			onClick: handleOnClickEditarCita
 		}, //: ''
 		rowData => (
