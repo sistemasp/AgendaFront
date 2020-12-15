@@ -5,6 +5,7 @@ import {
 	findEmployeesByRolId,
 	createConsecutivo,
 	showAllMaterials,
+	showAllFrecuencias,
 } from "../../services";
 import {
 	createCirugia,
@@ -21,6 +22,7 @@ import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
 import { AgendarCirugiaContainer } from "./agendar_cirugia";
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
+import { findProductoByServicio } from "../../services/productos";
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -66,6 +68,9 @@ const AgendarCirugia = (props) => {
 	const dermatologoDirectoId = process.env.REACT_APP_DERMATOLOGO_DIRECTO_ID;
 	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
 	const cirugiaServicioId = process.env.REACT_APP_CIRUGIA_SERVICIO_ID;
+	const frecuenciaPrimeraVezId = process.env.REACT_APP_FRECUENCIA_PRIMERA_VEZ_ID;
+	const frecuenciaReconsultaId = process.env.REACT_APP_FRECUENCIA_RECONSULTA_ID;
+	const productoCirugiaId = process.env.REACT_APP_PRODUCTO_CIRUGIA_ID;
 
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
@@ -73,6 +78,8 @@ const AgendarCirugia = (props) => {
 	const [dermatologos, setDermatologos] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [disableDate, setDisableDate] = useState(false);
+	const [frecuencias, setFrecuencias] = useState([]);
+	const [productos, setProductos] = useState([]);
 	const [values, setValues] = useState({
 		servicio: cirugiaServicioId,
 		fecha_hora: new Date(),
@@ -80,6 +87,7 @@ const AgendarCirugia = (props) => {
 		total: 0,
 		observaciones: '',
 		materiales: [],
+		producto: productoCirugiaId,
 	});
 	const [cirugias, setCirugias] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
@@ -374,6 +382,19 @@ const AgendarCirugia = (props) => {
 		});
 	};
 
+	const handleChangeProductos = (e) => {
+		setValues({ ...values, producto: e.target.value });
+	}
+
+	const handleChangeFrecuencia = (e) => {
+		const frecuencia = e.target.value._id;
+		setValues({
+			...values,
+			frecuencia: frecuencia,
+			producto: frecuencia === frecuenciaPrimeraVezId ? productoCirugiaId : values.producto,
+		});
+	}
+
 	useEffect(() => {
 		const loadCirugias = async () => {
 			const response = await findCirugiaByDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
@@ -408,8 +429,24 @@ const AgendarCirugia = (props) => {
 			}
 		}
 
+		const loadFrecuencias = async () => {
+			const response = await showAllFrecuencias();
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setFrecuencias(response.data);
+			}
+		}
+
+		const loadProductos = async () => {
+			const response = await findProductoByServicio(cirugiaServicioId);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setProductos(response.data);
+			}
+		}
+
 		setIsLoading(true);
 		loadCirugias();
+		loadFrecuencias();
+		loadProductos();
 		loadHorariosByServicio(new Date(), cirugiaServicioId);
 		loadDermatologos();
 		loadMateriales();
@@ -464,6 +501,11 @@ const AgendarCirugia = (props) => {
 								dermatologoDirectoId={dermatologoDirectoId}
 								onGuardarModalPagos={handleGuardarModalPagos}
 								materiales={materiales}
+								onChangeFrecuencia={(e) => handleChangeFrecuencia(e)}
+								frecuencias={frecuencias}
+								onChangeProductos={(e) => handleChangeProductos(e)}
+								productos={productos}
+								frecuenciaReconsultaId={frecuenciaReconsultaId}
 								{...props} />
 						}
 					</Formik> :

@@ -74,6 +74,11 @@ export const AgendarCirugiaContainer = (props) => {
 		materiales,
 		onChangeMateriales,
 		onChangeItemPrecio,
+		onChangeFrecuencia,
+		frecuencias,
+		onChangeProductos,
+		productos,
+		frecuenciaReconsultaId,
 		// TABLE DATES PROPERTIES
 		titulo,
 		columns,
@@ -194,6 +199,36 @@ export const AgendarCirugiaContainer = (props) => {
 							}}
 							variant="outlined" />
 					</Grid>
+					<Grid item xs={12} sm={2}>
+						<FormControl variant="outlined" className={classes.formControl}>
+							<InputLabel id="simple-select-outlined-frecuencia">FRECUENCIA</InputLabel>
+							<Select
+								labelId="simple-select-outlined-frecuencia"
+								id="simple-select-outlined-frecuencia"
+								value={values.frecuencia}
+								onChange={onChangeFrecuencia}
+								label="FRECUENCIA" >
+								{frecuencias.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+							</Select>
+						</FormControl>
+					</Grid>
+					{
+						values.frecuencia === frecuenciaReconsultaId
+							? <Grid item xs={12} sm={2}>
+								<FormControl variant="outlined" className={classes.formControl}>
+									<InputLabel id="simple-select-outlined-hora">PRODUCTO</InputLabel>
+									<Select
+										labelId="simple-select-outlined-producto"
+										id="simple-select-outlined-producto"
+										value={values.producto}
+										onChange={onChangeProductos}
+										label="PRODUCTO" >
+										{productos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
+									</Select>
+								</FormControl>
+							</Grid>
+							: ''
+					}
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
 							<InputLabel id="simple-select-outlined-hora">DERMATÓLOGO</InputLabel>

@@ -79,11 +79,11 @@ const AgendarConsulta = (props) => {
 	const dermatologoDirectoId = process.env.REACT_APP_DERMATOLOGO_DIRECTO_ID;
 	const promovendedorSinAsignarId = process.env.REACT_APP_PROMOVENDEDOR_SIN_ASIGNAR_ID;
 	const frecuenciaPrimeraVezId = process.env.REACT_APP_FRECUENCIA_PRIMERA_VEZ_ID;
-	const fercuenciaReconsultaId = process.env.REACT_APP_FRECUENCIA_RECONSULTA_ID;
+	const frecuenciaReconsultaId = process.env.REACT_APP_FRECUENCIA_RECONSULTA_ID;
 	const tipoCitaRevisionId = process.env.REACT_APP_TIPO_CITA_REVISADO_ID;
 	const tipoCitaDerivadaId = process.env.REACT_APP_TIPO_CITA_DERIVADO_ID;
 	const medioSinCitaId = process.env.REACT_APP_MEDIO_SIN_CITA_ID;
-	const productoConsulta = process.env.REACT_APP_PRODUCTO_CONSULTA_ID;
+	const productoConsultaId = process.env.REACT_APP_PRODUCTO_CONSULTA_ID;
 
 	const date = new Date();
 
@@ -102,7 +102,7 @@ const AgendarConsulta = (props) => {
 	const [values, setValues] = useState({
 		hora: '',
 		fecha_hora: new Date(),
-		producto: productoConsulta,
+		producto: productoConsultaId,
 		paciente: `${paciente._id}`,
 		precio: isHoliDay ? sucursal.precio_festivo : // Dia Festivo
 			date.getDay() === 6 ? (date.getHours() >= 13 ? sucursal.precio_sabado_vespertino : sucursal.precio_sabado_matutino) // SABADO
@@ -419,7 +419,8 @@ const AgendarConsulta = (props) => {
 			...values,
 			frecuencia: frecuencia,
 			dermatologo: frecuencia === frecuenciaPrimeraVezId ? dermatologo[0] : undefined,
-			promovendedor: frecuencia === fercuenciaReconsultaId ? promovendedor[0] : undefined,
+			promovendedor: frecuencia === frecuenciaReconsultaId ? promovendedor[0] : undefined,
+			producto: frecuencia === frecuenciaPrimeraVezId ? productoConsultaId : values.producto,
 		});
 	}
 
@@ -715,7 +716,7 @@ const AgendarConsulta = (props) => {
 						estetica={estetica}
 						tipoServicioId={consultaServicioId}
 						frecuenciaPrimeraVezId={frecuenciaPrimeraVezId}
-						fercuenciaReconsultaId={fercuenciaReconsultaId}
+						frecuenciaReconsultaId={frecuenciaReconsultaId}
 						onGuardarModalPagos={handleGuardarModalPagos} /> :
 					<Backdrop className={classes.backdrop} open={isLoading} >
 						<CircularProgress color="inherit" />
