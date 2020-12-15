@@ -72,9 +72,11 @@ const ModalPago = (props) => {
     descuento_clinica: pago.descuento_clinica ? pago.descuento_clinica : '0',
     total: pago.total ? pago.total : '0',
     pago_anticipado: pago.pago_anticipado,
-    has_descuento_dermatologo: false,
+    has_descuento_dermatologo: pago.descuento_dermatologo && pago.descuento_dermatologo !== '0',
+    descuento_dermatologo: pago.descuento_dermatologo || 0,
   });
 
+  
   const tarjetaMetodoPagoId = process.env.REACT_APP_FORMA_PAGO_TARJETA;
   const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
   const consultaTratamientoId = process.env.REACT_APP_CONSULTA_TRATAMIENTO_ID;

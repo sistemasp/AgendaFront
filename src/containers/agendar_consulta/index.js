@@ -30,6 +30,7 @@ import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import FaceIcon from '@material-ui/icons/Face';
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import moment from "moment";
+import { findProductoByServicio } from "../../services/productos";
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -65,6 +66,25 @@ const AgendarConsulta = (props) => {
 		onClickAgendarAparatologia,
 	} = props;
 
+	const dermatologoRolId = process.env.REACT_APP_DERMATOLOGO_ROL_ID;
+	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
+	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
+	const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
+	const enProcedimientoStatusId = process.env.REACT_APP_EN_PROCEDIMIENTO_STATUS_ID;
+	const enConsultorioStatusId = process.env.REACT_APP_EN_CONSULTORIO_STATUS_ID;
+	const enCabinaStatusId = process.env.REACT_APP_EN_CABINA_STATUS_ID;
+	const atendidoStatusId = process.env.REACT_APP_ATENDIDO_STATUS_ID;
+	const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
+	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
+	const dermatologoDirectoId = process.env.REACT_APP_DERMATOLOGO_DIRECTO_ID;
+	const promovendedorSinAsignarId = process.env.REACT_APP_PROMOVENDEDOR_SIN_ASIGNAR_ID;
+	const frecuenciaPrimeraVezId = process.env.REACT_APP_FRECUENCIA_PRIMERA_VEZ_ID;
+	const fercuenciaReconsultaId = process.env.REACT_APP_FRECUENCIA_RECONSULTA_ID;
+	const tipoCitaRevisionId = process.env.REACT_APP_TIPO_CITA_REVISADO_ID;
+	const tipoCitaDerivadaId = process.env.REACT_APP_TIPO_CITA_DERIVADO_ID;
+	const medioSinCitaId = process.env.REACT_APP_MEDIO_SIN_CITA_ID;
+	const productoConsulta = process.env.REACT_APP_PRODUCTO_CONSULTA_ID;
+
 	const date = new Date();
 
 	const [openAlert, setOpenAlert] = useState(false);
@@ -72,6 +92,7 @@ const AgendarConsulta = (props) => {
 	const [horarios, setHorarios] = useState([]);
 	const [dermatologos, setDermatologos] = useState([]);
 	const [frecuencias, setFrecuencias] = useState([]);
+	const [productos, setProductos] = useState([]);
 	const [tipoCitas, setTipoCitas] = useState([]);
 	const [medios, setMedios] = useState([]);
 	const [promovendedores, setPromovendedores] = useState([]);
@@ -81,6 +102,7 @@ const AgendarConsulta = (props) => {
 	const [values, setValues] = useState({
 		hora: '',
 		fecha_hora: new Date(),
+		producto: productoConsulta,
 		paciente: `${paciente._id}`,
 		precio: isHoliDay ? sucursal.precio_festivo : // Dia Festivo
 			date.getDay() === 6 ? (date.getHours() >= 13 ? sucursal.precio_sabado_vespertino : sucursal.precio_sabado_matutino) // SABADO
@@ -111,24 +133,6 @@ const AgendarConsulta = (props) => {
 		fecha_show: date,
 		fecha: `${dia}/${mes}/${anio}`,
 	});
-
-	const dermatologoRolId = process.env.REACT_APP_DERMATOLOGO_ROL_ID;
-	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
-	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
-	const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
-	const enProcedimientoStatusId = process.env.REACT_APP_EN_PROCEDIMIENTO_STATUS_ID;
-	const enConsultorioStatusId = process.env.REACT_APP_EN_CONSULTORIO_STATUS_ID;
-	const enCabinaStatusId = process.env.REACT_APP_EN_CABINA_STATUS_ID;
-	const atendidoStatusId = process.env.REACT_APP_ATENDIDO_STATUS_ID;
-	const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
-	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
-	const dermatologoDirectoId = process.env.REACT_APP_DERMATOLOGO_DIRECTO_ID;
-	const promovendedorSinAsignarId = process.env.REACT_APP_PROMOVENDEDOR_SIN_ASIGNAR_ID;
-	const frecuenciaPrimeraVezId = process.env.REACT_APP_FRECUENCIA_PRIMERA_VEZ_ID;
-	const fercuenciaReconsultaId = process.env.REACT_APP_FRECUENCIA_RECONSULTA_ID;
-	const tipoCitaRevisionId = process.env.REACT_APP_TIPO_CITA_REVISADO_ID;
-	const tipoCitaDerivadaId = process.env.REACT_APP_TIPO_CITA_DERIVADO_ID;
-	const medioSinCitaId = process.env.REACT_APP_MEDIO_SIN_CITA_ID;
 
 	const columns = [
 		{ title: 'FOLIO', field: 'consecutivo' },
@@ -224,15 +228,23 @@ const AgendarConsulta = (props) => {
 			}
 		}
 
+		const loadProductos = async () => {
+			const response = await findProductoByServicio(consultaServicioId);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setProductos(response.data);
+			}
+		}
+
 		setIsLoading(true);
 		loadConsultas();
+		loadProductos();
 		loadDermatologos();
 		loadPromovendedores();
 		loadTipoCitas();
 		loadFrecuencias();
 		loadMedios();
 		loadHorarios(values.fecha_hora);
-	}, [sucursal, dermatologoRolId, promovendedorRolId]);
+	}, [sucursal, dermatologoRolId, promovendedorRolId, consultaServicioId]);
 
 	const loadHorarios = async (date) => {
 		const dia = date ? date.getDate() : values.fecha_show.getDate();
@@ -313,6 +325,10 @@ const AgendarConsulta = (props) => {
 
 	const handleChangeMedio = (e) => {
 		setValues({ ...values, medio: e.target.value });
+	}
+
+	const handleChangeProductos = (e) => {
+		setValues({ ...values, producto: e.target.value });
 	}
 
 	const handleClickAgendar = async (data) => {
@@ -673,6 +689,7 @@ const AgendarConsulta = (props) => {
 						medios={medios}
 						onChangeTipoCita={(e) => handleChangeTipoCita(e)}
 						onChangeMedio={(e) => handleChangeMedio(e)}
+						onChangeProductos={(e) => handleChangeProductos(e)}
 						dermatologos={dermatologos}
 						promovendedores={promovendedores}
 						onChangeDermatologos={(e) => handleChangeDermatologos(e)}
@@ -689,6 +706,7 @@ const AgendarConsulta = (props) => {
 						datosImpresion={datosImpresion}
 						onCloseImprimirConsulta={handleCloseImprimirConsulta}
 						frecuencias={frecuencias}
+						productos={productos}
 						onChangeFrecuencia={(e) => handleChangeFrecuencia(e)}
 						dataComplete={dataComplete}
 						onCloseCirugia={handleCloseCirugia}

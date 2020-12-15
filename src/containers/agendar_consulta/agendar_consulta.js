@@ -52,10 +52,12 @@ export const AgendarConsultaContainer = (props) => {
     values,
     servicios,
     tratamientos,
+    productos,
     horarios,
     frecuencias,
     onChangeServicio,
     onChangeTratamientos,
+    onChangeProductos,
     onChangeFecha,
     onChangeHora,
     onChangeFilterDate,
@@ -270,6 +272,23 @@ export const AgendarConsultaContainer = (props) => {
               </Select>
             </FormControl>
           </Grid>
+          {
+            values.frecuencia === fercuenciaReconsultaId
+              ? <Grid item xs={12} sm={2}>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="simple-select-outlined-hora">PRODUCTO</InputLabel>
+                  <Select
+                    labelId="simple-select-outlined-producto"
+                    id="simple-select-outlined-producto"
+                    value={values.producto}
+                    onChange={onChangeProductos}
+                    label="PRODUCTO" >
+                    {productos.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
+                  </Select>
+                </FormControl>
+              </Grid>
+              : ''
+          }
           {
             values.frecuencia === frecuenciaPrimeraVezId
               ? <Grid item xs={12} sm={2}>

@@ -75,7 +75,7 @@ const ModalFormImprimirConsulta = (props) => {
               <h3 className={classes.label}>PACIENTE: {datos.paciente_nombre}</h3>
             </Grid>
             <Grid item xs={12} className={classes.label}>
-              <h3 className={classes.label}>FOLIA: {datos.folio}</h3>
+              <h3 className={classes.label}>FOLIO: {datos.folio}</h3>
             </Grid>
             <br/>
             <Grid item xs={12} >
