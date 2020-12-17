@@ -6,6 +6,7 @@ import {
 	createConsecutivo,
 	showAllMaterials,
 	showAllMaterialEsteticas,
+	showAllFrecuencias,
 } from "../../services";
 import {
 	createEstetica,
@@ -22,6 +23,7 @@ import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PrintIcon from '@material-ui/icons/Print';
 import { AgendarEsteticaContainer } from "./agendar_estetica";
 import EventAvailableIcon from '@material-ui/icons/EventAvailable';
+import { findProductoByServicio } from "../../services/productos";
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -67,6 +69,9 @@ const AgendarEstetica = (props) => {
 	const dermatologoDirectoId = process.env.REACT_APP_DERMATOLOGO_DIRECTO_ID;
 	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
 	const esteticaServicioId = process.env.REACT_APP_ESTETICA_SERVICIO_ID;
+	const frecuenciaPrimeraVezId = process.env.REACT_APP_FRECUENCIA_PRIMERA_VEZ_ID;
+	const frecuenciaReconsultaId = process.env.REACT_APP_FRECUENCIA_RECONSULTA_ID;
+	const productoAplicacionToxinaBotulinicaDituroxalId = process.env.REACT_APP_PRO_APL_TOX_BOT_DIT_ID;
 
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
@@ -74,6 +79,8 @@ const AgendarEstetica = (props) => {
 	const [dermatologos, setDermatologos] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [disableDate, setDisableDate] = useState(false);
+	const [frecuencias, setFrecuencias] = useState([]);
+	const [productos, setProductos] = useState([]);
 	const [toxinasRellenos, setToxinaRellenos] = useState([]);
 
 	const [values, setValues] = useState({
@@ -83,6 +90,7 @@ const AgendarEstetica = (props) => {
 		total: 0,
 		observaciones: '',
 		materiales: [],
+		producto: productoAplicacionToxinaBotulinicaDituroxalId,
 	});
 	const [esteticas, setEsteticas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
@@ -389,19 +397,32 @@ const AgendarEstetica = (props) => {
 		newToxinasRellenos[index].total = Number(newToxinasRellenos[index].precio) * Number(e.target.value)
 		let precio = values.total;
 		newToxinasRellenos.map((item) => {
-		  precio -= Number(item.precio) * Number(item.unidades);
+			precio -= Number(item.precio) * Number(item.unidades);
 		});
 		values.materiales.map(item => {
-		  precio -= Number(item.precio);
+			precio -= Number(item.precio);
 		});
-	
-		setValues({
-		  ...values,
-		  toxinas_rellenos: newToxinasRellenos,
-		  precio: precio,
-		});
-	  }
 
+		setValues({
+			...values,
+			toxinas_rellenos: newToxinasRellenos,
+			precio: precio,
+		});
+	}
+
+	const handleChangeProductos = (e) => {
+		setValues({ ...values, producto: e.target.value });
+	}
+
+	const handleChangeFrecuencia = (e) => {
+		const frecuencia = e.target.value._id;
+		setValues({
+			...values,
+			frecuencia: frecuencia,
+			producto: frecuencia === frecuenciaPrimeraVezId ? productoAplicacionToxinaBotulinicaDituroxalId : values.producto,
+		});
+	}
+console.log("DJASODJA", values);
 	useEffect(() => {
 		const loadToxinasRellenos = async () => {
 			const response = await showAllMaterialEsteticas();
@@ -443,9 +464,25 @@ const AgendarEstetica = (props) => {
 			}
 		}
 
+		const loadFrecuencias = async () => {
+			const response = await showAllFrecuencias();
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setFrecuencias(response.data);
+			}
+		}
+
+		const loadProductos = async () => {
+			const response = await findProductoByServicio(esteticaServicioId);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setProductos(response.data);
+			}
+		}
+
 		setIsLoading(true);
 		loadToxinasRellenos();
 		loadEsteticas();
+		loadFrecuencias();
+		loadProductos();
 		loadHorariosByServicio(new Date(), esteticaServicioId);
 		loadDermatologos();
 		loadMateriales();
@@ -503,6 +540,11 @@ const AgendarEstetica = (props) => {
 								dermatologoDirectoId={dermatologoDirectoId}
 								onGuardarModalPagos={handleGuardarModalPagos}
 								materiales={materiales}
+								onChangeFrecuencia={(e) => handleChangeFrecuencia(e)}
+								frecuencias={frecuencias}
+								onChangeProductos={(e) => handleChangeProductos(e)}
+								productos={productos}
+								frecuenciaReconsultaId={frecuenciaReconsultaId}
 								{...props} />
 						}
 					</Formik> :
