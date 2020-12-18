@@ -120,59 +120,51 @@ export const ListaEsperaContainer = (props) => {
       <h1>LISTA DE ESPERA</h1>
 
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={4}>
-          <TableComponent
-            titulo={tituloConsultorios}
-            columns={columnsConsultorios}
-            data={consultorios}
-            actions={actionsConsultorio}
-            options={optionsConsultorio} />
 
-          <br />
-
+        <Grid item xs={12} sm={6}>
           <TableComponent
             titulo={tituloEsperaConsultas}
             columns={columnsEsperaConsultas}
             data={listaEsperaConsultas}
             actions={actionsEsperaConsultorio}
             options={optionsEspera} />
-
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TableComponent
-            titulo={tituloCabinas}
-            columns={columnsCabinas}
-            data={cabinas}
-            actions={actionsCabina}
-            options={optionsConsultorio} />
-
           <br />
-
           <TableComponent
             titulo={tituloEsperaTratamientos}
             columns={columnsEspera}
             data={listaEsperaTratamientos}
             actions={actionsEsperaCabina}
             options={optionsEspera} />
-
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TableComponent
-            titulo={tituloSalaCirugia}
-            columns={columnsSalaCirugias}
-            data={salaCirugias}
-            actions={actionsSalaCirugia}
-            options={optionsConsultorio} />
-
           <br />
-
           <TableComponent
             titulo={tituloEsperaSalaCirugia}
             columns={columnsEspera}
             data={listaEsperaSalaCirugia}
             actions={actionsEsperaSalaCirugia}
             options={optionsEspera} />
+        </Grid>
 
+        <Grid item xs={12} sm={6}>
+          <TableComponent
+            titulo={tituloConsultorios}
+            columns={columnsConsultorios}
+            data={consultorios}
+            actions={actionsConsultorio}
+            options={optionsConsultorio} />
+          <br />
+          <TableComponent
+            titulo={tituloCabinas}
+            columns={columnsCabinas}
+            data={cabinas}
+            actions={actionsCabina}
+            options={optionsConsultorio} />
+          <br />
+          <TableComponent
+            titulo={tituloSalaCirugia}
+            columns={columnsSalaCirugias}
+            data={salaCirugias}
+            actions={actionsSalaCirugia}
+            options={optionsConsultorio} />
         </Grid>
       </Grid>
 

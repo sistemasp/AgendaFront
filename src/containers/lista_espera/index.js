@@ -180,7 +180,8 @@ const ListaEspera = (props) => {
 		},
 		exportAllData: true,
 		exportButton: false,
-		exportDelimiter: ';'
+		exportDelimiter: ';',
+		paging: false,
 	}
 
 	const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;

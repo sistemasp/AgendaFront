@@ -13,7 +13,7 @@ import {
 	updateDermapen
 } from "../../services/dermapens";
 import {
-	findAreaById,
+	findAreaById, findAreasByTreatmentServicio,
 } from "../../services/areas";
 import { Backdrop, CircularProgress, Snackbar } from "@material-ui/core";
 import MuiAlert from '@material-ui/lab/Alert';
@@ -428,6 +428,25 @@ const AgendarDermapen = (props) => {
 
 	}
 
+	const loadAreas = async () => {
+		const response = await findAreasByTreatmentServicio(dermapenServicioId, dermapenTratamientoId);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			setAreas(response.data);
+		}
+	}
+
+	const handleChangeAreas = async (items) => {
+		setIsLoading(true);
+		
+		setValues({
+			...values,
+			fecha_hora: '',
+			areas: items
+		});
+		setDisableDate(false);
+		setIsLoading(false);
+	}
+
 	useEffect(() => {
 		const loadDermapens = async () => {
 			const response = await findDermapenByDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
@@ -464,7 +483,6 @@ const AgendarDermapen = (props) => {
 								: 0)); // Error
 				setValues({
 					...values,
-					areas: [dermapen],
 					total: 0,
 					precio: 0 - Number(precio),
 					costo: precio,
@@ -503,6 +521,7 @@ const AgendarDermapen = (props) => {
 		setIsLoading(true);
 		findDermapen();
 		loadDermapens();
+		loadAreas();
 		loadHorariosByServicio(new Date(), dermapenServicioId);
 		loadPromovendedores();
 		loadDermatologos();
@@ -550,6 +569,7 @@ const AgendarDermapen = (props) => {
 								tipoCitas={tipoCitas}
 								medios={medios}
 								onChangeTipoCita={(e) => handleChangeTipoCita(e)}
+								onChangeAreas={(e) => handleChangeAreas(e)}
 								onChangeMedio={(e) => handleChangeMedio(e)}
 								onChangeDoctors={(e) => handleChangeDoctors(e)}
 								onChangePromovendedor={(e) => handleChangePromovendedor(e)}

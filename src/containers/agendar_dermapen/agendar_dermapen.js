@@ -213,6 +213,16 @@ export const AgendarDermapenContainer = (props) => {
 							variant="outlined" />
 					</Grid>
 					<Grid item xs={12} sm={2}>
+						<Multiselect
+							options={areas} // Options to display in the dropdown
+							displayValue="nombre" // Property name to display in the dropdown options
+							onSelect={(e) => onChangeAreas(e)} // Function will trigger on select event
+							onRemove={(e) => onChangeAreas(e)} // Function will trigger on remove event
+							placeholder={`AREAS`}
+							selectedValues={values.areas} // Preselected value to persist in dropdown
+						/>
+					</Grid>
+					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
 							<InputLabel id="simple-select-outlined-hora">Dermatologo</InputLabel>
 							<Select
