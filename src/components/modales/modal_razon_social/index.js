@@ -31,7 +31,8 @@ const ModalRazonSocial = (props) => {
     rfc: razonSocial.rfc,
     nombre_completo: razonSocial.nombre_completo,
     domicilio: razonSocial.domicilio,
-    numero: razonSocial.numero,
+    numero_exterior: razonSocial.numero_exterior,
+    numero_interior: razonSocial.numero_interior,
     colonia: razonSocial.colonia,
     ciudad: razonSocial.ciudad,
     municipio: razonSocial.municipio,
@@ -121,8 +122,12 @@ const ModalRazonSocial = (props) => {
     setValues({ ...values, nombre_completo: event.target.value });
   }
 
-  const handleChangeNumero = (event) => {
-    setValues({ ...values, numero: event.target.value });
+  const handleChangeNumeroExterior = (event) => {
+    setValues({ ...values, numero_exterior: event.target.value });
+  }
+
+  const handleChangeNumeroInterior = (event) => {
+    setValues({ ...values, numero_interior: event.target.value });
   }
 
   const handleChangeRfc = (event) => {
@@ -137,13 +142,13 @@ const ModalRazonSocial = (props) => {
     setValues({ ...values, ciudad: event.target.value.toUpperCase() });
   }
 
-  const handleClickGuardar = async(e) => {
+  const handleClickGuardar = async (e) => {
     const response = razonSocial._id ? await updateRazonSocial(razonSocial._id, values) : await createRazonSocial(values);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
-			|| `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-			setSeverity('success');
+      || `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+      setSeverity('success');
       setOpenAlert(true);
-			setMessage(`RAZON SOCIAL ${razonSocial._id ? 'ACTUALIZADA' : 'CREADA'} ORRECTAMENTE`);
+      setMessage(`RAZON SOCIAL ${razonSocial._id ? 'ACTUALIZADA' : 'CREADA'} ORRECTAMENTE`);
     }
     loadRazonSocial();
     onClose();
@@ -175,7 +180,8 @@ const ModalRazonSocial = (props) => {
             onChangeDomicilio={(e) => handleChangeDomicilio(e)}
             onChangeEmail={(e) => handleChangeEmail(e)}
             onChangeNombre={(e) => handleChangeNombre(e)}
-            onChangeNumero={(e) => handleChangeNumero(e)}
+            onChangeNumeroExterior={(e) => handleChangeNumeroExterior(e)}
+            onChangeNumeroInterior={(e) => handleChangeNumeroInterior(e)}
             onChangeRfc={(e) => handleChangeRfc(e)}
             onChangeCiudad={(e) => handleChangeCiudad(e)}
             onChangeTelefono={(e) => handleChangeTelefono(e)}

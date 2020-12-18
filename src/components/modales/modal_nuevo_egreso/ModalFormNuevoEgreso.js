@@ -101,6 +101,15 @@ const ModalFormNuevoEgreso = (props) => {
           <Grid item xs={12}>
             <TextField
               className={classes.textField}
+              name="descripcion"
+              label="DESCRIPCIÓN"
+              value={values.descripcion}
+              onChange={onChange}
+              variant="outlined" />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              className={classes.textField}
               name="cantidad"
               label="CANTIDAD"
               value={values.cantidad}

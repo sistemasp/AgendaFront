@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const baseUrl = process.env.REACT_APP_BASE_URL_LOCAL_HAMACHI;
+export const baseUrl = process.env.REACT_APP_BASE_URL_LOCAL;
 const urlSepomexGetEstados = 'https://api-sepomex.hckdrk.mx/query/get_estados';
 const urlSepomexGetMunicipos = 'https://api-sepomex.hckdrk.mx/query/get_municipio_por_estado/';
 const urlSepomexGetColonia = 'https://api-sepomex.hckdrk.mx/query/get_colonia_por_municipio/';

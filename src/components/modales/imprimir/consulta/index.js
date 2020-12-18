@@ -22,6 +22,8 @@ const ModalImprimirConsulta = (props) => {
 
   const [show, setShow] = useState(true);
 
+  console.log("DADAOSDAJ", datos);
+
   const handleClickImprimir = (e) => {
 
     setShow(false);

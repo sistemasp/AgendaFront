@@ -70,7 +70,8 @@ const ModalFormRazonSocial = (props) => {
     onChangeDomicilio,
     onChangeEmail,
     onChangeNombre,
-    onChangeNumero,
+    onChangeNumeroExterior,
+    onChangeNumeroInterior,
     onChangeRfc,
     onChangeTelefono,
     onChangeCiudad,
@@ -124,12 +125,23 @@ const ModalFormRazonSocial = (props) => {
               <Grid item xs={12}>
                 <TextField
                   className={classes.textField}
-                  name="numero"
-                  helperText={touched.numero ? errors.numero : ""}
-                  error={Boolean(errors.numero)}
-                  label="NUMERO"
-                  value={values.numero}
-                  onChange={onChangeNumero}
+                  name="numero_exterior"
+                  helperText={touched.numero_exterior ? errors.numero_exterior : ""}
+                  error={Boolean(errors.numero_exterior)}
+                  label="NUMERO EXTERIOR"
+                  value={values.numero_exterior}
+                  onChange={onChangeNumeroExterior}
+                  variant="outlined" />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  className={classes.textField}
+                  name="numero_interior"
+                  helperText={touched.numero_interior ? errors.numero_interior : ""}
+                  error={Boolean(errors.numero_interior)}
+                  label="NUMERO INTERIOR"
+                  value={values.numero_interior}
+                  onChange={onChangeNumeroInterior}
                   variant="outlined" />
               </Grid>
               <Grid item xs={12} sm={6} >

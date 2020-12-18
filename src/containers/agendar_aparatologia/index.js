@@ -91,7 +91,7 @@ const AgendarAparatologia = (props) => {
 		precio: 0,
 		tipo_cita: tipoCitaNoAplicaId,
 		observaciones: '',
-		dermatologo: info.dermatologo ? info.dermatologo._id : dermatologoDirectoId,
+		dermatologo: dermatologoDirectoId,
 		consulta: info.dermatologo ? info._id : undefined,
 	});
 	const [aparatologias, setAparatologia] = useState([]);

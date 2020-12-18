@@ -97,7 +97,7 @@ const AgendarFacial = (props) => {
 		tipo_cita: tipoCitaNoAplicaId,
 		tiempo: '',
 		observaciones: '',
-		dermatologo: info.dermatologo ? info.dermatologo._id : dermatologoDirectoId,
+		dermatologo: dermatologoDirectoId,
 		consulta: info.dermatologo ? info._id : undefined,
 	});
 	const [faciales, setFaciales] = useState([]);

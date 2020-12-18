@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid, Typography } from '@material-ui/core';
 import bannerMePiel from './../../../../bannerMePiel.PNG';
+import { addZero } from '../../../../utils/utils';
 
 function getModalStyle() {
   const top = 50;
@@ -56,6 +57,8 @@ const ModalFormImprimirConsulta = (props) => {
     show,
   } = props;
 
+  const fecha = new Date();
+
   return (
     <div>
       <Modal
@@ -71,8 +74,17 @@ const ModalFormImprimirConsulta = (props) => {
             <Grid item xs={12} className={classes.label}>
               <h2 className={classes.label}>SUCURSAL: {datos.sucursal.nombre}</h2>
             </Grid>
+            <Grid item xs={6} className={classes.label}>
+              <h3 className={classes.label}>{`FECHA: ${addZero(fecha.getDate())}/${addZero(fecha.getMonth())}/${addZero(fecha.getFullYear())}`}</h3>
+            </Grid>
+            <Grid item xs={6} className={classes.label}>
+              <h3 className={classes.label}>{`HORA: ${fecha.getHours()}:${fecha.getMinutes()} HRS`}</h3>
+            </Grid>
             <Grid item xs={12} className={classes.label}>
               <h3 className={classes.label}>PACIENTE: {datos.paciente_nombre}</h3>
+            </Grid>
+            <Grid item xs={12} className={classes.label}>
+              <h3 className={classes.label}>DERMATÓLOGO: {datos.dermatologo_nombre}</h3>
             </Grid>
             <Grid item xs={12} className={classes.label}>
               <h3 className={classes.label}>FOLIO: {datos.folio}</h3>
