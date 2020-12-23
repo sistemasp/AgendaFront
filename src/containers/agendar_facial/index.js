@@ -6,6 +6,7 @@ import {
 	showAllTipoCitas,
 	createConsecutivo,
 	showAllMedios,
+	showAllFrecuencias,
 } from "../../services";
 import {
 	findTreatmentByServicio,
@@ -86,6 +87,8 @@ const AgendarFacial = (props) => {
 	const [cosmetologas, setCosmetologas] = useState([]);
 	const [tipoCitas, setTipoCitas] = useState([]);
 	const [medios, setMedios] = useState([]);
+	const [frecuencias, setFrecuencias] = useState([]);
+	const [productos, setProductos] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [disableDate, setDisableDate] = useState(true);
 	const [values, setValues] = useState({
@@ -468,6 +471,14 @@ const AgendarFacial = (props) => {
 		setOpenModalPagos(false);
 	}
 
+	const handleChangeFrecuencia = (e) => {
+		setValues({
+			...values,
+			frecuencia: e.target.value._id,
+			//producto: frecuencia === frecuenciaPrimeraVezId ? productoConsultaId : values.producto,
+		});
+	}
+
 	useEffect(() => {
 		const loadFaciales = async () => {
 			const response = await findFacialByDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
@@ -528,6 +539,20 @@ const AgendarFacial = (props) => {
 			}
 		}
 
+		const loadFrecuencias = async () => {
+			const response = await showAllFrecuencias();
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setFrecuencias(response.data);
+			}
+		}
+	
+		const loadProductos = async () => {
+			/*const response = await findProductoByServicio(consultaServicioId);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setProductos(response.data);
+			}*/
+		}
+
 		setIsLoading(true);
 		loadTratamientos();
 		loadFaciales();
@@ -535,6 +560,7 @@ const AgendarFacial = (props) => {
 		loadCosmetologas();
 		loadDermatologos();
 		loadTipoCitas();
+		loadFrecuencias();
 		loadMedios();
 	}, [sucursal]);
 
@@ -570,6 +596,9 @@ const AgendarFacial = (props) => {
 								citas={faciales}
 								actions={actions}
 								cita={cita}
+								frecuencias={frecuencias}
+								productos={productos}
+								onChangeFrecuencia={(e) => handleChangeFrecuencia(e)}
 								openModal={openModal}
 								empleado={empleado}
 								onClickCancel={handleCloseModal}

@@ -13,9 +13,9 @@ import {
   createEgreso,
 } from '../../../../services/egresos';
 import { showCorteTodayBySucursalAndTurno } from '../../../../services/corte';
-import { findFacialesByPayOfDoctorHoraAplicacion } from '../../../../services/faciales';
+import { findFacialesByPayOfDoctorHoraAplicacion, findFacialesByPayOfDoctorHoraAplicacionPA } from '../../../../services/faciales';
 import { findLasersByPayOfDoctorHoraAplicacion } from '../../../../services/laser';
-import { findAparatologiasByPayOfDoctorHoraAplicacion } from '../../../../services/aparatolgia';
+import { findAparatologiasByPayOfDoctorHoraAplicacion, findAparatologiasByPayOfDoctorHoraAplicacionPA } from '../../../../services/aparatolgia';
 import { findCirugiasByPayOfDoctorHoraAplicacion } from '../../../../services/cirugias';
 import { findEsteticasByPayOfDoctorHoraAplicacion } from '../../../../services/esteticas';
 import { findDermapensByPayOfDoctorHoraAplicacion } from '../../../../services/dermapens';
@@ -44,19 +44,27 @@ const ModalImprimirPagoDermatologo = (props) => {
   const [show, setShow] = useState(true);
   const [consultas, setConsultas] = useState([]);
   const [consultasPrimeraVez, setConsultasPrimeraVez] = useState([]);
+  const [consultasPrimeraVezPA, setConsultasPrimeraVezPA] = useState([]);
   const [consultasReconsultas, setConsultasReconsultas] = useState([]);
+  const [consultasReconsultasPA, setConsultasReconsultasPA] = useState([]);
   const [cirugias, setCirugias] = useState([]);
+  const [cirugiasPA, setCirugiasPA] = useState([]);
   const [faciales, setFaciales] = useState([]);
+  const [facialesPA, setFacialesPA] = useState([]);
   const [dermapens, setDermapens] = useState([]);
+  const [dermapensPA, setDermapensPA] = useState([]);
   const [lasers, setLasers] = useState([]);
   const [aparatologias, setAparatologias] = useState([]);
+  const [aparatologiasPA, setAparatologiasPA] = useState([]);
   const [esteticas, setEsteticas] = useState([]);
+  const [esteticasPA, setEsteticasPa] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [turno, setTurno] = useState('m');
   const [pagoDermatologo, setPagoDermatologo] = useState();
   const [corte, setCorte] = useState();
 
   const atendidoId = process.env.REACT_APP_ATENDIDO_STATUS_ID;
+  const canceladoCPId = process.env.REACT_APP_CANCELO_CP_STATUS_ID;
   const primeraVezFrecuenciaId = process.env.REACT_APP_FRECUENCIA_PRIMERA_VEZ_ID;
   const reconsultaFrecuenciaId = process.env.REACT_APP_FRECUENCIA_RECONSULTA_ID;
   const revisadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_REVISADO_ID;
@@ -91,7 +99,7 @@ const ModalImprimirPagoDermatologo = (props) => {
           total += Number(pago.total);
         });
         return true;
-      }); 
+      });
       setConsultasReconsultas(newReconsultas);
     }
   }
@@ -107,6 +115,23 @@ const ModalImprimirPagoDermatologo = (props) => {
     const response = await findFacialesByPayOfDoctorHoraAplicacion(sucursal._id, dermatologo._id, atendidoId, hora_apertura, hora_cierre ? hora_cierre : new Date());
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setFaciales(response.data);
+    }
+  }
+
+  const loadFacialesCPA = async (hora_apertura, hora_cierre) => {
+    const response = await findFacialesByPayOfDoctorHoraAplicacionPA(sucursal._id, dermatologo._id, canceladoCPId, hora_apertura, hora_cierre ? hora_cierre : new Date());
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      response.data.forEach(item => {
+        item.areas.forEach(area => {
+          area.comision_derivado = 0;
+          area.comision_derivado_ma = 0;
+          area.comision_realizado = 0;
+          area.comision_realizado_ma = 0;
+          area.comision_revisado = 0;
+          area.comision_revisado_ma = 0;
+        });
+      });
+      setFacialesPA(response.data);
     }
   }
 
@@ -131,6 +156,23 @@ const ModalImprimirPagoDermatologo = (props) => {
     }
   }
 
+  const loadAparatologiasCPA = async (hora_apertura, hora_cierre) => {
+    const response = await findAparatologiasByPayOfDoctorHoraAplicacionPA(sucursal._id, dermatologo._id, canceladoCPId, hora_apertura, hora_cierre ? hora_cierre : new Date());
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      response.data.forEach(item => {
+        item.areas.forEach(area => {
+          area.comision_derivado = 0;
+          area.comision_derivado_ma = 0;
+          area.comision_realizado = 0;
+          area.comision_realizado_ma = 0;
+          area.comision_revisado = 0;
+          area.comision_revisado_ma = 0;
+        });
+      });
+      setAparatologiasPA(response.data);
+    }
+  }
+
   const loadEsteticas = async (hora_apertura, hora_cierre) => {
     const response = await findEsteticasByPayOfDoctorHoraAplicacion(sucursal._id, dermatologo._id, atendidoId, hora_apertura, hora_cierre ? hora_cierre : new Date());
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -150,9 +192,11 @@ const ModalImprimirPagoDermatologo = (props) => {
       }
       await loadCirugias(hora_apertura, hora_cierre);
       await loadFaciales(hora_apertura, hora_cierre);
+      await loadFacialesCPA(hora_apertura, hora_cierre);
       await loadDermapens(hora_apertura, hora_cierre);
       await loadLasers(hora_apertura, hora_cierre);
       await loadAparatologias(hora_apertura, hora_cierre);
+      await loadAparatologiasCPA(hora_apertura, hora_cierre);
       await loadEsteticas(hora_apertura, hora_cierre);
       await loadConsultasPrimeraVez(hora_apertura, hora_cierre);
       await loadConsultasReconsulta(hora_apertura, hora_cierre);
@@ -174,11 +218,12 @@ const ModalImprimirPagoDermatologo = (props) => {
 
     // TOTAL DE LAS CONSULTAS 
     consultas.forEach(consulta => {
+
       let totalPagos = 0;
       consulta.pagos.forEach(pago => {
         totalPagos += Number(pago.total);
       })
-      const pagoDermatologo = Number(totalPagos) * Number(dermatologo.porcentaje) / 100;
+      const pagoDermatologo = Number(totalPagos) * Number(consulta.frecuencia === reconsultaFrecuenciaId ? dermatologo.porcentaje_reconsulta : dermatologo.porcentaje) / 100;
       total += Number(pagoDermatologo);
     });
 
@@ -352,9 +397,11 @@ const ModalImprimirPagoDermatologo = (props) => {
             consultasReconsultas={consultasReconsultas}
             cirugias={cirugias}
             faciales={faciales}
+            facialesPA={facialesPA}
             dermapens={dermapens}
             lasers={lasers}
             aparatologias={aparatologias}
+            aparatologiasPA={aparatologiasPA}
             esteticas={esteticas}
             turno={turno}
             pagoDermatologo={pagoDermatologo}

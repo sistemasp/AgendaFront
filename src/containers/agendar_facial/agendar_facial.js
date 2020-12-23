@@ -50,6 +50,8 @@ export const AgendarFacialContainer = (props) => {
 		onChangeFecha,
 		onChangeHora,
 		onChangeFilterDate,
+		onChangeFrecuencia,
+		frecuencias,
 		filterDate,
 		paciente,
 		onClickAgendar,
@@ -176,6 +178,19 @@ export const AgendarFacialContainer = (props) => {
 			<Paper>
 				<h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'SELEECIONA UN PACIENTE'}</h1>
 				<Grid container spacing={3}>
+					<Grid item xs={12} sm={2}>
+						<FormControl variant="outlined" className={classes.formControl}>
+							<InputLabel id="simple-select-outlined-frecuencia">FRECUENCIA</InputLabel>
+							<Select
+								labelId="simple-select-outlined-frecuencia"
+								id="simple-select-outlined-frecuencia"
+								value={values.frecuencia}
+								onChange={onChangeFrecuencia}
+								label="FRECUENCIA" >
+								{frecuencias.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+							</Select>
+						</FormControl>
+					</Grid>
 					{
 						false ?
 							<Grid item xs={12} sm={2}>

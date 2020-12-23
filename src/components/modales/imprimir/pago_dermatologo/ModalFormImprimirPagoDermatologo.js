@@ -151,9 +151,11 @@ const ModalFormImprimirPagoDermatologo = (props) => {
     cirugias,
     esteticas,
     faciales,
+    facialesPA,
     dermapens,
     lasers,
     aparatologias,
+    aparatologiasPA,
     dermatologo,
     onClose,
     onClickImprimir,
@@ -175,6 +177,9 @@ const ModalFormImprimirPagoDermatologo = (props) => {
   const realizadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_REALIZADO_ID;
   const noAplicaTipoCitaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
   const manuelAcunaSucursalId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
+
+  const listaFaciales = [...faciales, ...facialesPA];
+  const listaAparatologias = [...aparatologias, ...aparatologiasPA];
 
   return (
     <div>
@@ -226,7 +231,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                       </Grid>
                       :
                       consultasPrimeraVez.length > 0 || consultasReconsultas.length > 0 || cirugias.length > 0 || esteticas.length > 0 ||
-                        faciales.length > 0 || dermapens.length > 0 || lasers.length > 0 || aparatologias.length > 0 ?
+                        listaFaciales.length > 0 || dermapens.length > 0 || lasers.length > 0 || listaAparatologias.length > 0 ?
                         <Grid item xs={12}>
                           <ButtonCustom
                             className={classes.button}
@@ -354,7 +359,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                         consulta.pagos.map(pago => {
                           totalPagos += Number(pago.total);
                         });
-                        const pagoDermatologo = Number(totalPagos) * Number(dermatologo.porcentaje) / 100;
+                        const pagoDermatologo = Number(totalPagos) * Number(dermatologo.porcentaje_reconsulta) / 100;
                         pagoTotal += Number(pagoDermatologo);
                         return <Grid container>
                           <Grid item xs={true} className={classes.label}>
@@ -478,7 +483,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
             }
 
             {
-              faciales.length > 0 ?
+              listaFaciales.length > 0 ?
                 <Fragment>
                   <Grid container className={classes.container}>
                     <Grid item xs={12}>
@@ -503,8 +508,8 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                       <hr className={classes.label} />
                     </Grid>
                     {
-                      faciales ?
-                        faciales.map(facial => {
+                      listaFaciales ?
+                        listaFaciales.map(facial => {
                           let comisionDermatologo = 0;
                           let pagoDermatologo = 0;
                           if (facial.pagos[0] === undefined || Number(facial.pagos[0].descuento_dermatologo) === 0) {
@@ -680,7 +685,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
             }
 
             {
-              aparatologias.length > 0 ?
+              listaAparatologias.length > 0 ?
                 <Fragment>
                   <Grid container className={classes.container}>
                     <Grid item xs={12} >
@@ -705,8 +710,8 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                       <hr className={classes.label} />
                     </Grid>
                     {
-                      aparatologias ?
-                        aparatologias.map(aparatologia => {
+                      listaAparatologias ?
+                        listaAparatologias.map(aparatologia => {
                           let comisionDermatologo = 0;
                           aparatologia.areas.map(area => {
                             switch (aparatologia.tipo_cita._id) {

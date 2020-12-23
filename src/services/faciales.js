@@ -184,6 +184,18 @@ export const findFacialesByPayOfDoctorHoraAplicacion = async (sucursalId, dermat
     }
 }
 
+export const findFacialesByPayOfDoctorHoraAplicacionPA = async (sucursalId, dermatologoId, canceladoCPId, hora_apertura, hora_cierre) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/facial/sucursal/${sucursalId}/dermatologo/${dermatologoId}/canceladocp/${canceladoCPId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findFacialesByPayOfDoctorHoraAplicacionPA', error);
+    }
+}
+
 export const showAllFacialBySucursalPendiente = async (sucursalId, pendienteId) => {
     try {
         const response = await axios({

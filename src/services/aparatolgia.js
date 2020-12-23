@@ -184,6 +184,18 @@ export const findAparatologiasByPayOfDoctorHoraAplicacion = async (sucursalId, d
     }
 }
 
+export const findAparatologiasByPayOfDoctorHoraAplicacionPA = async (sucursalId, dermatologoId, canceladoCPId, hora_apertura, hora_cierre) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/aparatologia/sucursal/${sucursalId}/dermatologo/${dermatologoId}/canceladocp/${canceladoCPId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findAparatologiasByPayOfDoctorHoraAplicacionPA', error);
+    }
+}
+
 export const showAllAparatologiasBySucursalPendiente = async (sucursalId, pendienteId) => {
     try {
         const response = await axios({
