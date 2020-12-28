@@ -3,7 +3,6 @@ import {
   findScheduleInConsultByDateAndSucursal,
   findEmployeesByRolId,
   showAllTipoCitas,
-  showAllStatus,
   updatePago,
   deletePago,
   createConsecutivo,
@@ -22,6 +21,7 @@ import { Formik } from 'formik';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import { addZero } from '../../../utils/utils';
 import ModalFormConsulta from './ModalFormConsulta';
+import { showAllStatus } from '../../../services/status';
 
 const validationSchema = Yup.object({
   fecha: Yup.string("Ingresa los nombres")

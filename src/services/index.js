@@ -700,20 +700,6 @@ export const showAllMedios = async () => {
     }
 }
 
-// STATUS
-
-export const showAllStatus = async () => {
-    try {
-        const response = await axios({
-            url: `${baseUrl}/status`,
-            method: 'GET'
-        });
-        return response;
-    } catch (error) {
-        console.log('showAllStatus', error);
-    }
-}
-
 // BANCOS
 
 export const showAllBanco = async () => {

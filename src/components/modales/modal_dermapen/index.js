@@ -5,7 +5,6 @@ import {
   updateDate,
   findEmployeesByRolId,
   showAllTipoCitas,
-  showAllStatus,
   createDate,
   updatePago,
   deletePago,
@@ -26,6 +25,7 @@ import { createAparatologia, updateAparatologia } from '../../../services/aparat
 import { createFacial, updateFacial } from '../../../services/faciales';
 import { createLaser, updateLaser } from '../../../services/laser';
 import { createDermapen, updateDermapen } from '../../../services/dermapens';
+import { showAllStatus } from '../../../services/status';
 
 const useStyles = makeStyles(theme => ({
   backdrop: {

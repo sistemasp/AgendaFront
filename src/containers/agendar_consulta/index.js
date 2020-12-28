@@ -114,6 +114,7 @@ const AgendarConsulta = (props) => {
 	const [openModalProxima, setOpenModalProxima] = useState(false);
 	const [openModalPagos, setOpenModalPagos] = useState(false);
 	const [openModalCirugias, setOpenModalCirugias] = useState(false);
+	const [openModalTraspaso, setOpenModalTraspaso] = useState(false);
 	const [openModalEstetica, setOpenModalEstetica] = useState(false);
 	const [consulta, setConsulta] = useState();
 	const [openModalImprimirConsultas, setOpenModalImprimirConsultas] = useState(false);
@@ -431,6 +432,7 @@ const AgendarConsulta = (props) => {
 	const handleCloseModal = () => {
 		setOpenModal(false);
 		setOpenModalProxima(false);
+		setOpenModalTraspaso(false);
 	};
 
 	const handleOnClickEditarConsulta = async (event, rowData) => {
@@ -453,6 +455,11 @@ const AgendarConsulta = (props) => {
 	const handleClickVerPagos = (event, rowData) => {
 		setConsulta(rowData);
 		setOpenModalPagos(true);
+	}
+
+	const handleClickTraspaso = (event, rowData) => {
+		setConsulta(rowData);
+		setOpenModalTraspaso(true);
 	}
 
 	const handleClickCirugia = async (event, rowData) => {
@@ -557,7 +564,12 @@ const AgendarConsulta = (props) => {
 			icon: AttachMoneyIcon,
 			tooltip: 'PAGOS',
 			onClick: handleClickVerPagos
-		}
+		},
+		{
+			icon: AttachMoneyIcon,
+			tooltip: 'TRASPASO',
+			onClick: handleClickTraspaso
+		},
 		//: ''
 		/*rowData => {
 			return (rowData.status._id === enProcedimientoStatusId || rowData.status._id === enConsultorioStatusId
@@ -622,6 +634,9 @@ const AgendarConsulta = (props) => {
 				break;
 			case 'PAGOS':
 				handleClickVerPagos(e, rowData);
+				break;
+			case 'TRASPASO':
+				handleClickTraspaso(e, rowData);
 				break;
 		}
 	}
@@ -703,6 +718,7 @@ const AgendarConsulta = (props) => {
 						openModalCirugias={openModalCirugias}
 						openModalEstetica={openModalEstetica}
 						openModalProxima={openModalProxima}
+						openModalTraspaso={openModalTraspaso}
 						openModalImprimirConsultas={openModalImprimirConsultas}
 						datosImpresion={datosImpresion}
 						onCloseImprimirConsulta={handleCloseImprimirConsulta}

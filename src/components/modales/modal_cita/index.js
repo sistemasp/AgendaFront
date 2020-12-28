@@ -5,7 +5,6 @@ import {
   updateDate,
   findEmployeesByRolId,
   showAllTipoCitas,
-  showAllStatus,
   createDate,
   updatePago,
   deletePago,
@@ -27,6 +26,7 @@ import { addZero } from '../../../utils/utils';
 import { createAparatologia, updateAparatologia } from '../../../services/aparatolgia';
 import { createFacial, updateFacial } from '../../../services/faciales';
 import { createLaser, updateLaser } from '../../../services/laser';
+import { showAllStatus } from '../../../services/status';
 
 const validationSchema = Yup.object({
   fecha: Yup.string("Ingresa los nombres")

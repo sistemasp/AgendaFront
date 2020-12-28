@@ -19,6 +19,7 @@ import ModalCirugia from '../../components/modales/modal_cirugia';
 import ModalEstetica from '../../components/modales/modal_estetica';
 import { ButtonCustom } from '../../components/basic/ButtonCustom';
 import ModalProximaConsulta from '../../components/modales/modal_proxima_consulta';
+import ModalTraspaso from '../../components/modales/traspaso';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -110,8 +111,9 @@ export const AgendarConsultaContainer = (props) => {
     onCloseEstetica,
     onGuardarModalPagos,
     openModalProxima,
+    openModalTraspaso,
   } = props;
-
+  console.log("DADKASD", citas);
   return (
     <Fragment>
       {
@@ -176,6 +178,20 @@ export const AgendarConsultaContainer = (props) => {
             setOpenAlert={setOpenAlert}
             tipoServicioId={tipoServicioId}
             onGuardarModalPagos={onGuardarModalPagos} />
+          : ''
+      }
+      {
+        openModalTraspaso ?
+          <ModalTraspaso
+            open={openModalTraspaso}
+            onClose={onClickCancel}
+            servicio={consulta}
+            empleado={empleado}
+            sucursal={sucursal._id}
+            setMessage={setMessage}
+            setOpenAlert={setOpenAlert}
+            tipoServicioId={tipoServicioId}
+            loadConsultas={loadConsultas}/>
           : ''
       }
       {
