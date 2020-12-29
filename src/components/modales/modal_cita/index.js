@@ -78,6 +78,7 @@ const ModalCita = (props) => {
     setMessage,
     setSeverity,
     setFilterDate,
+    tratamientos,
   } = props;
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
@@ -96,7 +97,6 @@ const ModalCita = (props) => {
   const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 
   const [isLoading, setIsLoading] = useState(true);
-  const [tratamientos, setTratamientos] = useState([]);
   const [areas, setAreas] = useState([]);
   const [horarios, setHorarios] = useState([]);
   const [promovendedores, setPromovendedores] = useState([]);

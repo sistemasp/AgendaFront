@@ -422,7 +422,7 @@ const AgendarEstetica = (props) => {
 			producto: frecuencia === frecuenciaPrimeraVezId ? productoAplicacionToxinaBotulinicaDituroxalId : values.producto,
 		});
 	}
-console.log("DJASODJA", values);
+
 	useEffect(() => {
 		const loadToxinasRellenos = async () => {
 			const response = await showAllMaterialEsteticas();

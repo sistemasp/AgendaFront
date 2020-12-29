@@ -623,7 +623,7 @@ const ListaEspera = (props) => {
 	useEffect(() => {
 		loadAll();
 	}, []);
-console.log("FSHFOJSDOFJS", listaEsperaAparatologias);
+
 	return (
 		<Fragment>
 			{

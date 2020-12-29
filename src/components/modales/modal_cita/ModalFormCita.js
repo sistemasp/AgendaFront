@@ -129,11 +129,31 @@ const ModalFormCita = (props) => {
                 <h2 className={classes.label}>{values.paciente_nombre} ({values.telefono})</h2>
               </Grid>
               <Grid item xs={12}>
-                <h3 className={classes.label}>Servicio: {values.servicio.nombre}</h3>
+                <h3 className={classes.label}>SERVICIO: {values.servicio.nombre}</h3>
               </Grid>
               <Grid item xs={12}>
-                <h3 className={classes.label}>Tratamientos: {values.tratamientos[0].nombre}</h3>
+                <Multiselect
+                  options={tratamientos} // Options to display in the dropdown
+                  displayValue="nombre" // Property name to display in the dropdown options
+                  onSelect={(e) => onChangeAreas(e)} // Function will trigger on select event
+                  onRemove={(e) => onChangeAreas(e)} // Function will trigger on remove event
+                  placeholder={`TRATAMIENTOS`}
+                  selectedValues={values.tratamientos} // Preselected value to persist in dropdown
+                />
               </Grid>
+              <Grid item xs={12} sm={2}>
+								<FormControl variant="outlined" className={classes.formControl}>
+									<InputLabel id="simple-select-outlined-tratamientos">TRATAMIENTOS</InputLabel>
+									<Select
+										labelId="simple-select-outlined-tratamientos"
+										id="simple-select-outlined-tratamientos"
+										value={values.tratamientos[0]}
+										//onChange={(e) => onChangeTratamientos(e)}
+										label="TRATAMIENTOS" >
+										{tratamientos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+									</Select>
+								</FormControl>
+							</Grid>
               <Grid item xs={12}>
                 <Multiselect
                   options={areas} // Options to display in the dropdown
@@ -145,7 +165,7 @@ const ModalFormCita = (props) => {
                 />
               </Grid>
               <Grid item xs={12} className={classes.label}>
-                <h1 className={classes.label}>Total: {toFormatterCurrency(values.precio)}</h1>
+                <h1 className={classes.label}>TOTAL: {toFormatterCurrency(values.precio)}</h1>
               </Grid>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
@@ -186,7 +206,7 @@ const ModalFormCita = (props) => {
 
                     <Grid item xs={12} sm={6}>
                       <FormControl variant="outlined" className={classes.formControl}>
-                        <InputLabel id="simple-select-outlined-hora">Hora</InputLabel>
+                        <InputLabel id="simple-select-outlined-hora">HORA</InputLabel>
                         <Select
                           labelId="simple-select-outlined-hora"
                           id="simple-select-outlined-hora"

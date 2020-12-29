@@ -113,7 +113,7 @@ export const AgendarConsultaContainer = (props) => {
     openModalProxima,
     openModalTraspaso,
   } = props;
-  console.log("DADKASD", citas);
+  
   return (
     <Fragment>
       {

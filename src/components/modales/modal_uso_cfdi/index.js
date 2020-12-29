@@ -46,7 +46,6 @@ const ModalUsoCfdi = (props) => {
     closeRazonSocial,
   } = props;
 
-
   const handleGenerarFactura = async (event, rowData) => {
     rowData.fecha_hora = new Date();
     const response = await createFactura(rowData);
