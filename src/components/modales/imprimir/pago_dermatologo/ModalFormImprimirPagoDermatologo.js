@@ -181,6 +181,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
   const listaFaciales = [...faciales, ...facialesPA];
   const listaAparatologias = [...aparatologias, ...aparatologiasPA];
 
+  console.log("FSDFSD", dermatologo);
   return (
     <div>
       <Modal
@@ -307,7 +308,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                         consulta.pagos.map(pago => {
                           totalPagos += Number(pago.total);
                         });
-                        const pagoDermatologo = Number(totalPagos) * Number(dermatologo.porcentaje) / 100;
+                        const pagoDermatologo = Number(totalPagos) * Number(dermatologo.esquema.porcentaje_consulta) / 100;
                         pagoTotal += Number(pagoDermatologo);
 
                         return <Grid container>
@@ -359,7 +360,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                         consulta.pagos.map(pago => {
                           totalPagos += Number(pago.total);
                         });
-                        const pagoDermatologo = Number(totalPagos) * Number(dermatologo.porcentaje_reconsulta) / 100;
+                        const pagoDermatologo = Number(totalPagos) * Number(dermatologo.esquema.porcentaje_reconsulta) / 100;
                         pagoTotal += Number(pagoDermatologo);
                         return <Grid container>
                           <Grid item xs={true} className={classes.label}>
@@ -407,7 +408,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                     {
                       cirugias ?
                         cirugias.map(cirugia => {
-                          const pagoDermatologo = Number(cirugia.precio) * Number(dermatologo.porcentaje) / 100;
+                          const pagoDermatologo = Number(cirugia.precio) * Number(dermatologo.esquema.porcentaje_cirugias) / 100;
                           pagoTotal += Number(pagoDermatologo);
                           const date = new Date(cirugia.hora_aplicacion);
                           return <Grid container>
@@ -457,7 +458,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                     {
                       esteticas ?
                         esteticas.map(estetica => {
-                          const pagoDermatologo = Number(estetica.precio) * Number(dermatologo.porcentaje_estetica) / 100;
+                          const pagoDermatologo = Number(estetica.precio) * Number(dermatologo.esquema.porcentaje_dermocosmetica) / 100;
                           pagoTotal += Number(pagoDermatologo);
                           const date = new Date(estetica.hora_aplicacion);
                           return <Grid container>

@@ -223,19 +223,19 @@ const ModalImprimirPagoDermatologo = (props) => {
       consulta.pagos.forEach(pago => {
         totalPagos += Number(pago.total);
       })
-      const pagoDermatologo = Number(totalPagos) * Number(consulta.frecuencia === reconsultaFrecuenciaId ? dermatologo.porcentaje_reconsulta : dermatologo.porcentaje) / 100;
+      const pagoDermatologo = Number(totalPagos) * Number(consulta.frecuencia === reconsultaFrecuenciaId ? dermatologo.esquema.porcentaje_reconsulta : dermatologo.esquema.porcentaje_consulta) / 100;
       total += Number(pagoDermatologo);
     });
 
     // TOTAL DE LAS CIRUGIAS
     cirugias.forEach(cirugia => {
-      const pagoDermatologo = Number(cirugia.precio) * Number(dermatologo.porcentaje) / 100;
+      const pagoDermatologo = Number(cirugia.precio) * Number(dermatologo.esquema.porcentaje_cirugias) / 100;
       total += Number(pagoDermatologo);
     });
 
     // TOTAL DERMAPENS
     dermapens.forEach(dermapen => {
-      const pagoDermatologo = Number(dermapen.precio) * Number(dermatologo.porcentaje) / 100;
+      const pagoDermatologo = Number(dermapen.precio) * Number(dermatologo.esquema.porcentaje_dermocosmetica) / 100;
       total += Number(pagoDermatologo);
     });
 
@@ -311,7 +311,7 @@ const ModalImprimirPagoDermatologo = (props) => {
 
     // TOTAL DE LAS ESTETICAS
     esteticas.map(estetica => {
-      const pagoDermatologo = Number(estetica.precio) * Number(dermatologo.porcentaje_estetica) / 100;
+      const pagoDermatologo = Number(estetica.precio) * Number(dermatologo.esquema.porcentaje_dermocosmetica) / 100;
       total += Number(pagoDermatologo);
     });
 
