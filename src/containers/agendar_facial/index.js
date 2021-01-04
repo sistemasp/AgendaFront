@@ -197,34 +197,43 @@ const AgendarFacial = (props) => {
 		}
 	}
 
-	const handleChangeTratamientos = async (e) => {
-		setIsLoading(true);
-		setValues({
-			...values,
-			fecha_hora: '',
-			precio: 0,
-			tratamientos: [e.target.value],
+	const handleChangeTratamientos = (e) => {
+		e.map(async (tratamiento) => {
+			setIsLoading(true);
+			const response = await findAreasByTreatmentServicio(tratamiento.servicio, tratamiento._id);
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				tratamiento.areas = response.data;
+				setIsLoading(false);
+				setValues({
+					...values,
+					fecha_hora: '',
+					precio: 0,
+					tratamientos: e,
+				});
+			}
 		});
-		loadAreas(e.target.value);
-		setIsLoading(false);
 	};
 
-	const handleChangeAreas = async (items) => {
+	const handleChangeAreas = async (items, tratamiento) => {
+		tratamiento.areasSeleccionadas = items;
 		setIsLoading(true);
 		let precio = 0;
-		items.map((item) => {
-			const itemPrecio =
-				sucursal === sucursalManuelAcunaId ? item.precio_ma // Precio Manuel Acuña
-					: (sucursal === sucursalOcciId ? item.precio_oc // Precio Occidental
-						: (sucursal === sucursalFedeId ? item.precio_fe // Precio Federalismo
-							: 0)); // Error
-			precio = Number(precio) + Number(itemPrecio);
+		values.tratamientos.forEach(tratam => {
+			if (tratam.areasSeleccionadas) {
+				tratam.areasSeleccionadas.map((item) => {
+					const itemPrecio =
+						sucursal === sucursalManuelAcunaId ? item.precio_ma // Precio Manuel Acuña
+							: (sucursal === sucursalOcciId ? item.precio_oc // Precio Occidental
+								: (sucursal === sucursalFedeId ? item.precio_fe // Precio Federalismo
+									: 0)); // Error
+					precio = Number(precio) + Number(itemPrecio);
+				});
+			}
 		});
 		setValues({
 			...values,
 			fecha_hora: '',
-			precio: precio,
-			areas: items
+			precio: precio
 		});
 		setDisableDate(false);
 		setIsLoading(false);
@@ -306,6 +315,9 @@ const AgendarFacial = (props) => {
 
 	const handleClickAgendar = async (data) => {
 		setIsLoading(true);
+		data.tratamientos.forEach(tratamiento => {
+			tratamiento.areas = undefined;
+		});
 		data.quien_agenda = empleado._id;
 		data.sucursal = sucursal;
 		data.status = pendienteStatusId;
@@ -545,7 +557,7 @@ const AgendarFacial = (props) => {
 				setFrecuencias(response.data);
 			}
 		}
-	
+
 		const loadProductos = async () => {
 			/*const response = await findProductoByServicio(consultaServicioId);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
@@ -578,7 +590,7 @@ const AgendarFacial = (props) => {
 								areas={areas}
 								horarios={horarios}
 								onChangeTratamientos={(e) => handleChangeTratamientos(e)}
-								onChangeAreas={(e) => handleChangeAreas(e)}
+								onChangeAreas={handleChangeAreas}
 								onChangeFecha={(e) => handleChangeFecha(e)}
 								onChangeFilterDate={(e) => handleChangeFilterDate(e)}
 								onChangeHora={(e) => handleChangeHora(e)}
