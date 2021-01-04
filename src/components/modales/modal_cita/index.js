@@ -154,22 +154,32 @@ const ModalCita = (props) => {
     }
   }
 
-  const loadAreas = async (tratamiento) => {
-    const response = await findAreasByTreatmentServicio(tratamiento.servicio, tratamiento._id);
-    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-      setAreas(response.data);
-    }
+  const loadAreas = () => {
+    cita.tratamientos.map(async (tratamiento) => {
+      setIsLoading(true);
+      const response = await findAreasByTreatmentServicio(tratamiento.servicio, tratamiento._id);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        tratamiento.areas = response.data;
+        setIsLoading(false);
+      }
+    });
+
   }
 
-  const handleChangeTratamientos = async (e) => {
-    setIsLoading(true);
-    setValues({
-      ...values,
-      tratamientos: [e.target.value],
-      areas: [],
+  const handleChangeTratamientos = (e) => {
+    e.map(async (tratamiento) => {
+      setIsLoading(true);
+      const response = await findAreasByTreatmentServicio(tratamiento.servicio, tratamiento._id);
+      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+        tratamiento.areas = response.data;
+        setIsLoading(false);
+        setValues({
+          ...values,
+          precio: 0,
+          tratamientos: e,
+        });
+      }
     });
-    await loadAreas(e.target.value);
-    setIsLoading(false);
   };
 
   const handleChangeFecha = async (date) => {
@@ -408,21 +418,25 @@ const ModalCita = (props) => {
     setOpenModalPagos(false);
   }
 
-  const handleChangeAreas = async (items) => {
+  const handleChangeAreas = async (items, tratamiento) => {
+    tratamiento.areasSeleccionadas = items;
     setIsLoading(true);
     let precio = 0;
-    items.map((item) => {
-      const itemPrecio =
-        sucursal === sucursalManuelAcunaId ? item.precio_ma // Precio Manuel Acuña
-          : (sucursal === sucursalOcciId ? item.precio_oc // Precio Occidental
-            : (sucursal === sucursalFedeId ? item.precio_fe // Precio Federalismo
-              : 0)); // Error
-      precio = Number(precio) + Number(itemPrecio);
+    values.tratamientos.forEach(tratam => {
+      if (tratam.areasSeleccionadas) {
+        tratam.areasSeleccionadas.map((item) => {
+          const itemPrecio =
+            sucursal === sucursalManuelAcunaId ? item.precio_ma // Precio Manuel Acuña
+              : (sucursal === sucursalOcciId ? item.precio_oc // Precio Occidental
+                : (sucursal === sucursalFedeId ? item.precio_fe // Precio Federalismo
+                  : 0)); // Error
+          precio = Number(precio) + Number(itemPrecio);
+        });
+      }
     });
     setValues({
       ...values,
-      precio: precio,
-      areas: items
+      precio: precio
     });
     setIsLoading(false);
   }
@@ -475,7 +489,7 @@ const ModalCita = (props) => {
     }
 
     setIsLoading(true);
-    loadAreas(cita.tratamientos[0]);
+    loadAreas(cita);
     loadHorariosByServicio();
     loadPromovendedores();
     loadCosmetologas();
@@ -502,7 +516,7 @@ const ModalCita = (props) => {
                 cita={cita}
                 onClickActualizarCita={handleOnClickActualizarCita}
                 onChangeTratamientos={(e) => handleChangeTratamientos(e)}
-                onChangeAreas={(e) => handleChangeAreas(e)}
+                onChangeAreas={handleChangeAreas}
                 onChangeFecha={(e) => handleChangeFecha(e)}
                 onChangeHora={(e) => handleChangeHora(e)}
                 onChangeTipoCita={(e) => handleChangeTipoCita(e)}

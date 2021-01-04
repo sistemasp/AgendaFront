@@ -88,7 +88,6 @@ const ModalFormCita = (props) => {
     onChangeMotivos,
     onChangeObservaciones,
     onChangeDermatologo,
-    openModalPagos,
     onCloseModalPagos,
     onGuardarModalPagos,
     cita,
@@ -135,35 +134,26 @@ const ModalFormCita = (props) => {
                 <Multiselect
                   options={tratamientos} // Options to display in the dropdown
                   displayValue="nombre" // Property name to display in the dropdown options
-                  onSelect={(e) => onChangeAreas(e)} // Function will trigger on select event
-                  onRemove={(e) => onChangeAreas(e)} // Function will trigger on remove event
+                  onSelect={(e) => onChangeTratamientos(e)} // Function will trigger on select event
+                  onRemove={(e) => onChangeTratamientos(e)} // Function will trigger on remove event
                   placeholder={`TRATAMIENTOS`}
                   selectedValues={values.tratamientos} // Preselected value to persist in dropdown
                 />
               </Grid>
-              <Grid item xs={12} sm={2}>
-								<FormControl variant="outlined" className={classes.formControl}>
-									<InputLabel id="simple-select-outlined-tratamientos">TRATAMIENTOS</InputLabel>
-									<Select
-										labelId="simple-select-outlined-tratamientos"
-										id="simple-select-outlined-tratamientos"
-										value={values.tratamientos[0]}
-										//onChange={(e) => onChangeTratamientos(e)}
-										label="TRATAMIENTOS" >
-										{tratamientos.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
-									</Select>
-								</FormControl>
-							</Grid>
-              <Grid item xs={12}>
-                <Multiselect
-                  options={areas} // Options to display in the dropdown
-                  displayValue="nombre" // Property name to display in the dropdown options
-                  onSelect={(e) => onChangeAreas(e)} // Function will trigger on select event
-                  onRemove={(e) => onChangeAreas(e)} // Function will trigger on remove event
-                  placeholder={`Areas`}
-                  selectedValues={values.areas} // Preselected value to persist in dropdown
-                />
-              </Grid>
+              {
+                values.tratamientos.map(tratamientoValue => {
+                  return <Grid item xs={12} sm={12}>
+                    <Multiselect
+                      options={tratamientoValue.areas} // Options to display in the dropdown
+                      displayValue="nombre" // Property name to display in the dropdown options
+                      onSelect={(e) => onChangeAreas(e, tratamientoValue)} // Function will trigger on select event
+                      onRemove={(e) => onChangeAreas(e, tratamientoValue)} // Function will trigger on remove event
+                      placeholder={`AREAS ${tratamientoValue.nombre}`}
+                      selectedValues={tratamientoValue.areasSeleccionadas} // Preselected value to persist in dropdown
+                    />
+                  </Grid>
+                })
+              }
               <Grid item xs={12} className={classes.label}>
                 <h1 className={classes.label}>TOTAL: {toFormatterCurrency(values.precio)}</h1>
               </Grid>
