@@ -176,21 +176,8 @@ export const AgendarAparatologiaContainer = (props) => {
 			<Paper>
 				<h1>{paciente.nombres ? `${paciente.nombres} ${paciente.apellidos}` : 'SELECCIONA UN PACIENTE'}</h1>
 				<Grid container spacing={3}>
-					<Grid item xs={12} sm={2}>
-						<FormControl variant="outlined" className={classes.formControl}>
-							<InputLabel id="simple-select-outlined-frecuencia">FRECUENCIA</InputLabel>
-							<Select
-								labelId="simple-select-outlined-frecuencia"
-								id="simple-select-outlined-frecuencia"
-								value={values.frecuencia}
-								onChange={onChangeFrecuencia}
-								label="FRECUENCIA" >
-								{frecuencias.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
-							</Select>
-						</FormControl>
-					</Grid>
 					{
-						false ?
+						true ?
 							<Grid item xs={12} sm={2}>
 								<Multiselect
 									options={tratamientos} // Options to display in the dropdown
@@ -215,15 +202,32 @@ export const AgendarAparatologiaContainer = (props) => {
 								</FormControl>
 							</Grid>
 					}
+					{
+						values.tratamientos.map(tratamientoValue => {
+							return <Grid item xs={12} sm={2}>
+								<Multiselect
+									options={tratamientoValue.areas} // Options to display in the dropdown
+									displayValue="nombre" // Property name to display in the dropdown options
+									onSelect={(e) => onChangeAreas(e, tratamientoValue)} // Function will trigger on select event
+									onRemove={(e) => onChangeAreas(e, tratamientoValue)} // Function will trigger on remove event
+									placeholder={`AREAS ${tratamientoValue.nombre}`}
+									selectedValues={tratamientoValue.areasSeleccionadas} // Preselected value to persist in dropdown
+								/>
+							</Grid>
+						})
+					}
 					<Grid item xs={12} sm={2}>
-						<Multiselect
-							options={areas} // Options to display in the dropdown
-							displayValue="nombre" // Property name to display in the dropdown options
-							onSelect={(e) => onChangeAreas(e)} // Function will trigger on select event
-							onRemove={(e) => onChangeAreas(e)} // Function will trigger on remove event
-							placeholder={`AREAS`}
-							selectedValues={values.areas} // Preselected value to persist in dropdown
-						/>
+						<FormControl variant="outlined" className={classes.formControl}>
+							<InputLabel id="simple-select-outlined-frecuencia">FRECUENCIA</InputLabel>
+							<Select
+								labelId="simple-select-outlined-frecuencia"
+								id="simple-select-outlined-frecuencia"
+								value={values.frecuencia}
+								onChange={onChangeFrecuencia}
+								label="FRECUENCIA" >
+								{frecuencias.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+							</Select>
+						</FormControl>
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
