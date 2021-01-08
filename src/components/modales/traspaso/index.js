@@ -1,12 +1,12 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { createConsecutivo, deletePago, findPagosByTipoServicioAndServicio, showAllOffices } from '../../../services';
-import { addZero, toFormatterCurrency } from '../../../utils/utils';
+import { createConsecutivo, createPago, deletePago, findPagosByTipoServicioAndServicio, showAllOffices } from '../../../services';
+import { addZero, generateFolio, toFormatterCurrency } from '../../../utils/utils';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import EditIcon from '@material-ui/icons/Edit';
 import ModalFormTraspaso from './ModalFormTraspaso';
 import { createConsult, updateConsult } from '../../../services/consultas';
 import { showAllStatus } from '../../../services/status';
-import { deleteIngreso } from '../../../services/ingresos';
+import { createIngreso, deleteIngreso, updateIngreso } from '../../../services/ingresos';
 
 const ModalTraspaso = (props) => {
   const {
@@ -25,6 +25,7 @@ const ModalTraspaso = (props) => {
   const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
   const canceladoSPStatusId = process.env.REACT_APP_CANCELO_SP_STATUS_ID;
   const asistioStatusId = process.env.REACT_APP_ASISTIO_STATUS_ID;
+  const tipoIngresoConsultaId = process.env.REACT_APP_TIPO_INGRESO_CONSULTA_ID;
 
   const [isLoading, setIsLoading] = useState(true);
   const [sucursales, setSucursales] = useState([]);
@@ -49,11 +50,14 @@ const ModalTraspaso = (props) => {
     setIsLoading(true);
     servicio.status = canceladoSPStatusId;
     const dateNow = new Date();
+    const pagos = [];
     servicio.pagos.forEach(async (pago) => {
+      pagos.push(pago);
       await deleteIngreso(pago.ingreso);
       await deletePago(pago._id);
     });
     servicio.pagado = false;
+    servicio.pagos = [];
     const consul = await updateConsult(servicio._id, servicio);
     if (`${consul.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       servicio._id = undefined;
@@ -67,21 +71,54 @@ const ModalTraspaso = (props) => {
       servicio.hora_salida = '--:--';
       servicio.observaciones = `CONSULTA TRASPASADA`;
       servicio.fecha_hora = dateNow.toString();
+      servicio.pagado = true;
       const response = await createConsult(servicio);
       if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-
+        const servicioRes = response.data;
         const consecutivo = {
           consecutivo: response.data.consecutivo,
           tipo_servicio: consultaServicioId,
           servicio: response.data._id,
-          sucursal: rowData.sucursal,
+          sucursal: servicioRes.sucursal,
           fecha_hora: dateNow,
           status: response.data.status,
         }
 
         const responseConsecutivo = await createConsecutivo(consecutivo);
         if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-          confirmacion();
+          pagos.forEach(async (pago) => {
+            pago.fecha_pago = dateNow;
+            pago.observaciones = "TRASPASO";
+            pago.sucursal = servicioRes.sucursal;
+            pago.servicio = servicioRes._id;
+            pago.hora_aplicacion = servicioRes.hora_aplicacion;
+
+            const ingreso = {
+              create_date: dateNow,
+              hora_aplicacion: servicioRes.hora_aplicacion,
+              recepcionista: empleado,
+              concepto: `TRASPASO FOLIO: ${generateFolio(servicioRes)}`,
+              cantidad: pago.total,
+              tipo_ingreso: tipoIngresoConsultaId,
+              sucursal: servicioRes.sucursal,
+              forma_pago: pago.forma_pago,
+              pago_anticipado: pago.pago_anticipado,
+            }
+
+            const response = await createIngreso(ingreso);
+
+            if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+              const resIngreso = response.data;
+              pago.ingreso = resIngreso._id;
+
+              const res = await createPago(pago);
+              if (`${res.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+                resIngreso.pago = res.data._id;
+                await updateIngreso(resIngreso._id, resIngreso);
+                confirmacion();
+              }
+            }
+          });
         }
       }
     }

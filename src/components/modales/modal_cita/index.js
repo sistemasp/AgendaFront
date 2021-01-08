@@ -250,6 +250,9 @@ const ModalCita = (props) => {
   }
 
   const handleOnClickActualizarCita = async (event, rowData) => {
+    rowData.tratamientos.forEach(tratamiento => {
+			tratamiento.areas = undefined;
+		});
     if (rowData.pagado) {
       if (rowData.status === canceloCPStatusId) {
         rowData.pagos.forEach(async (pago) => {

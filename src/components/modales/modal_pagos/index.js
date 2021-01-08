@@ -50,7 +50,7 @@ const ModalPagos = (props) => {
     { title: 'DESCUENTO', field: 'descuento_clinica_moneda' },
     { title: 'SUBTOTAL', field: 'subtotal_moneda' },
     { title: 'TOTAL', field: 'total_moneda' },
-    { title: 'BANDO', field: 'banco_nombre' },
+    { title: 'BANCO', field: 'banco_nombre' },
     { title: 'TIPO TARJETA', field: 'tipo_tarjeta_nombre' },
     { title: 'DIGITOS', field: 'digitos_show' },
     { title: 'PAGO CONFIRMADO', field: 'deposito_confirmado' },
@@ -86,24 +86,12 @@ const ModalPagos = (props) => {
 
   const loadPagos = async () => {
     let totalCE = 0;
-    /*if (tipoServicioId === consultaServicioId) { // SI ES CONSULTA BUSCA CIRUGIA Y ESTETICAS 
-      const resCirugias = await findCirugiaByConsultaId(servicio._id);
-      if (`${resCirugias.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) { // BUSCA CIRUGIAS
-        const cirugia = resCirugias.data;
-        totalCE += cirugia.total ? Number(cirugia.total) : 0;
-      }
-      const resEstetica = await findEsteticaByConsultaId(servicio._id);
-      if (`${resEstetica.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) { // BUSCA TOXINAS Y RELLENOS
-        const estetica = resEstetica.data;
-        totalCE += estetica.total ? Number(estetica.total) : 0;
-      }
-    }*/
     const response = await findPagosByTipoServicioAndServicio(tipoServicioId, servicio._id);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       let acomulado = 0;
       response.data.forEach(item => {
         const fecha = new Date(item.fecha_pago);
-        item.fecha = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth())}/${addZero(fecha.getFullYear())}`
+        item.fecha = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${addZero(fecha.getFullYear())}`
         item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
         item.cantidad_moneda = toFormatterCurrency(item.cantidad);
         item.descuento_clinica_moneda = toFormatterCurrency(item.descuento_clinica);

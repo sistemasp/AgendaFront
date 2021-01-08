@@ -128,8 +128,7 @@ const AgendarFacial = (props) => {
 		{ title: 'PACIENTE', field: 'paciente_nombre' },
 		{ title: 'TELÉFONO', field: 'paciente.telefono' },
 		{ title: 'SERVICIO', field: 'servicio.nombre' },
-		{ title: 'TRATAMIENTOS', field: 'show_tratamientos' },
-		{ title: 'AREAS', field: 'show_areas' },
+		{ title: 'TRATAMIENTOS (AREAS)', field: 'show_tratamientos' },
 		{ title: 'QUIEN AGENDA', field: 'quien_agenda.nombre' },
 		{ title: 'MEDIO', field: 'medio.nombre' },
 		{ title: 'QUIEN CONFIRMA LLAMADA', field: 'quien_confirma_llamada.nombre' },
@@ -290,11 +289,11 @@ const AgendarFacial = (props) => {
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 				item.show_tratamientos = item.tratamientos.map(tratamiento => {
-					return `${tratamiento.nombre}, `;
-				});
-				item.show_areas = item.areas.map(area => {
-					return `${area.nombre}, `;
-				});
+					const show_areas = tratamiento.areasSeleccionadas.map(area => {
+						return `${area.nombre}`;
+					});
+					return `*${tratamiento.nombre}(${show_areas}), `;
+				});				
 			});
 			setFaciales(response.data);
 		}
@@ -505,10 +504,10 @@ const AgendarFacial = (props) => {
 					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
 					item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 					item.show_tratamientos = item.tratamientos.map(tratamiento => {
-						return `${tratamiento.nombre}, `;
-					});
-					item.show_areas = item.areas.map(area => {
-						return `${area.nombre}, `;
+						const show_areas = tratamiento.areasSeleccionadas.map(area => {
+							return `${area.nombre}`;
+						});
+						return `►${tratamiento.nombre}(${show_areas})`;
 					});
 				});
 				setFaciales(response.data);

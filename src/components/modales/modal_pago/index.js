@@ -192,7 +192,6 @@ const ModalPago = (props) => {
     rowData.fecha_pago = new Date();
     rowData.paciente = servicio.paciente._id;
     rowData.dermatologo = servicio.dermatologo._id;
-    rowData.servicio = consultaServicioId;
     rowData.tratamientos = consultaTratamientoId;
     rowData.quien_recibe_pago = empleado._id;
     rowData.sucursal = sucursal;

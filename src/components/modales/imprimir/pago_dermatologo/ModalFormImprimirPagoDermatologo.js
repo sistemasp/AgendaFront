@@ -177,11 +177,14 @@ const ModalFormImprimirPagoDermatologo = (props) => {
   const realizadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_REALIZADO_ID;
   const noAplicaTipoCitaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
   const manuelAcunaSucursalId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
+  const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
+  const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
+  const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 
   const listaFaciales = [...faciales, ...facialesPA];
   const listaAparatologias = [...aparatologias, ...aparatologiasPA];
 
-  console.log("FSDFSD", dermatologo);
+  console.log("KAOZ", dermatologo);
   return (
     <div>
       <Modal
@@ -586,7 +589,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                     {
                       dermapens ?
                         dermapens.map(dermapen => {
-                          const pagoDermatologo = Number(dermapen.precio) * Number(dermatologo.porcentaje) / 100;
+                          const pagoDermatologo = Number(dermapen.precio) * Number(dermatologo.esquema.porcentaje_dermocosmetica) / 100;
                           pagoTotal += Number(pagoDermatologo);
                           return <Grid container>
                             <Grid item xs={true} className={classes.label}>
@@ -714,22 +717,33 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                       listaAparatologias ?
                         listaAparatologias.map(aparatologia => {
                           let comisionDermatologo = 0;
-                          aparatologia.areas.map(area => {
-                            switch (aparatologia.tipo_cita._id) {
-                              case revisadoTipoCitaId:
-                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
-                                break;
-                              case derivadoTipoCitaId:
-                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
-                                break;
-                              case realizadoTipoCitaId:
-                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
-                                break;
-                              case noAplicaTipoCitaId:
-                                comisionDermatologo += Number(0);
-                                break;
-                            }
+                          aparatologia.tratamientos.forEach(tratamiento => {
+                            
+                            tratamiento.areasSeleccionadas.map(area => {
+                              const itemPrecio =
+                                sucursal._id === sucursalManuelAcunaId ? area.precio_ma // Precio Manuel Acuña
+                                  : (sucursal._id === sucursalOcciId ? area.precio_oc // Precio Occidental
+                                    : (sucursal._id === sucursalFedeId ? area.precio_fe // Precio Federalismo
+                                      : 0)); // Error
+                              comisionDermatologo += (Number(itemPrecio) * Number(dermatologo.esquema.porcentaje_laser) / 100);
+
+                              /*switch (aparatologia.tipo_cita._id) {
+                                case revisadoTipoCitaId:
+                                  comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
+                                  break;
+                                case derivadoTipoCitaId:
+                                  comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
+                                  break;
+                                case realizadoTipoCitaId:
+                                  comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
+                                  break;
+                                case noAplicaTipoCitaId:
+                                  comisionDermatologo += Number(0);
+                                  break;
+                              }*/
+                            });
                           });
+
                           const pagoDermatologo = comisionDermatologo - ((comisionDermatologo * aparatologia.pagos[0].porcentaje_descuento_clinica) / 100);
                           pagoTotal += Number(pagoDermatologo);
                           return <Grid container>
