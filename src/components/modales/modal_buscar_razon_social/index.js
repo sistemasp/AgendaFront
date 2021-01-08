@@ -45,7 +45,10 @@ const ModalBuscarRazonSocial = (props) => {
     open,
     onClose,
     pago,
+    servicio,
   } = props;
+
+  console.log("KAOZ", servicio);
 
   const columns = [
     { title: 'NOMBRE COMPLETO', field: 'nombre_completo' },
@@ -73,11 +76,9 @@ const ModalBuscarRazonSocial = (props) => {
     const factura = {
       paciente: pago.paciente._id,
       razon_social: rowData._id,
-      pago: pago._id,
-      forma_pago: pago.forma_pago._id,
-      ultimos_4_digitos: pago.digitos,
       sucursal: pago.sucursal,
-      cantidad: pago.cantidad, // REVISAR SI ES CANTIDAD O TOTAL
+      tipo_servicio: servicio.servicio._id,
+      servicio: servicio._id,
     }
     setFactura(factura);
     setOpenModalUsoCfdi(true);
@@ -86,7 +87,7 @@ const ModalBuscarRazonSocial = (props) => {
   const actions = [
     {
       icon: CheckIcon,
-      tooltip: 'Seleccionar',
+      tooltip: 'SELECCIONAR',
       onClick: hanldeSelectRazonSocial
     }
   ];

@@ -102,6 +102,7 @@ const ModalFormPagos = (props) => {
             open={openModalFactura}
             onClose={onCloseBuscarRazonSocial}
             pago={pago}
+            servicio={servicio}
           /> : ''
       }
       <Modal
