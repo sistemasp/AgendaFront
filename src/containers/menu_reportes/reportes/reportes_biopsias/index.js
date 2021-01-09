@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import { ReportesBiopsiasContainer } from "./reportes_consultas";
-import { findBiopsiasByRangeDateAndSucursal } from "../../../../services";
 import { Backdrop, CircularProgress } from "@material-ui/core";
 import { toFormatterCurrency, addZero } from "../../../../utils/utils";
+import { findBiopsiasByRangeDateAndSucursal } from "../../../../services/biopsias";
 
 const useStyles = makeStyles(theme => ({
 	backdrop: {

@@ -18,7 +18,7 @@ export const ReportesFacturasContainer = (props) => {
         // TABLE DATES PROPERTIES
         titulo,
         columns,
-        citas,
+        facturas,
         actions,
         options,
 
@@ -88,7 +88,7 @@ export const ReportesFacturasContainer = (props) => {
             <TableComponent
                 titulo={titulo}
                 columns={columns}
-                data={citas}
+                data={facturas}
                 actions={actions}
                 options={options} />
 

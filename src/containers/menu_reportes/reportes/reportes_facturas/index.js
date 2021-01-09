@@ -4,6 +4,13 @@ import { findDatesByRangeDateAndSucursal, findFacturasByRangeDateAndSucursal } f
 import { Backdrop, CircularProgress } from "@material-ui/core";
 import { toFormatterCurrency, addZero } from "../../../../utils/utils";
 import { ReportesFacturasContainer } from "./reportes_facturas";
+import { findAparatologiaById } from "../../../../services/aparatolgia";
+import { findFacialById } from "../../../../services/faciales";
+import { findConsultById } from "../../../../services/consultas";
+import { findCirugiaById } from "../../../../services/cirugias";
+import { findBiopsiaById } from "../../../../services/biopsias";
+import { findEsteticaById } from "../../../../services/esteticas";
+import { findDermapenById } from "../../../../services/dermapens";
 
 const useStyles = makeStyles(theme => ({
 	backdrop: {
@@ -20,8 +27,16 @@ const ReportesFacturas = (props) => {
 		sucursal,
 	} = props;
 
+	const servicioFacialId = process.env.REACT_APP_FACIAL_SERVICIO_ID
+	const servicioAparatologiaId = process.env.REACT_APP_APARATOLOGIA_SERVICIO_ID
+	const servicioConsultaId = process.env.REACT_APP_CONSULTA_SERVICIO_ID
+	const servicioCirugiaId = process.env.REACT_APP_CIRUGIA_SERVICIO_ID
+	const servicioBiopsiaId = process.env.REACT_APP_BIOPSIA_SERVICIO_ID
+	const servicioEsteticaId = process.env.REACT_APP_ESTETICA_SERVICIO_ID
+	const servicioDermapenId = process.env.REACT_APP_DERMAPEN_SERVICIO_ID
+
 	const [isLoading, setIsLoading] = useState(true);
-	const [citas, setCitas] = useState([]);
+	const [facturas, setFacturas] = useState([]);
 
 	const date = new Date();
 	const dia = addZero(date.getDate());
@@ -44,9 +59,7 @@ const ReportesFacturas = (props) => {
 		{ title: 'PACIENTE', field: 'paciente_nombre' },
 		{ title: 'RAZÓN SOCIAL', field: 'razon_social.nombre_completo' },
 		{ title: 'CANTIDAD', field: 'cantidad_moneda' },
-		{ title: 'FORMA PAGO', field: 'forma_pago.nombre' },
-		{ title: 'SUCURSAL', field: 'sucursal.nombre'},
-		{ title: 'DÍGITOS', field: 'ultimos_4_digitos' },
+		{ title: 'SUCURSAL', field: 'sucursal.nombre' },
 	];
 
 	const options = {
@@ -73,23 +86,55 @@ const ReportesFacturas = (props) => {
 
 	useEffect(() => {
 
-		const loadCitas = async () => {
+		const loadFacturas = async () => {
 			const response = await findFacturasByRangeDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(),
 				date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
 
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				await response.data.forEach(item => {
-					const fecha = new Date(item.fecha_hora);
-					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
-					item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
-					item.cantidad_moneda = toFormatterCurrency(item.cantidad);
-					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
+				await response.data.forEach(async (item) => {
+					let servicioResponse = { data: '' };
+					switch (item.tipo_servicio._id) {
+						case servicioAparatologiaId:
+							servicioResponse = await findAparatologiaById(item.servicio);
+							break;
+						case servicioFacialId:
+							servicioResponse = await findFacialById(item.servicio);
+							break;
+						case servicioConsultaId:
+							servicioResponse = await findConsultById(item.servicio);
+							break;
+						case servicioCirugiaId:
+							servicioResponse = await findCirugiaById(item.servicio);
+							break;
+						case servicioBiopsiaId:
+							servicioResponse = await findBiopsiaById(item.servicio);
+							break;
+						case servicioEsteticaId:
+							servicioResponse = await findEsteticaById(item.servicio);
+							break;
+						case servicioDermapenId:
+							servicioResponse = await findDermapenById(item.servicio);
+							break;
+					}
+
+					if (`${servicioResponse.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+						item.servicio = servicioResponse.data;
+						const fecha = new Date(item.fecha_hora);
+						item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
+						item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
+
+						item.cantidad_moneda = toFormatterCurrency(item.cantidad);
+						item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
+						console.log("KAOZ", item);
+
+					}
+
 				});
-				setCitas(response.data);
+				setFacturas(response.data);
 			}
 		}
 		setIsLoading(true);
-		loadCitas();
+		loadFacturas();
 		setIsLoading(false);
 	}, [sucursal]);
 
@@ -133,7 +178,7 @@ const ReportesFacturas = (props) => {
 				item.cantidad_moneda = toFormatterCurrency(item.cantidad);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 			});
-			setCitas(response.data);
+			setFacturas(response.data);
 		}
 	}
 
@@ -152,7 +197,7 @@ const ReportesFacturas = (props) => {
 						titulo={`REPORTES FACTURAS(${startDate.fecha} - ${endDate.fecha})`}
 						columns={columns}
 						options={options}
-						citas={citas}
+						facturas={facturas}
 						actions={actions}
 						loadCitas={loadCitas}
 						onClickReportes={handleReportes}

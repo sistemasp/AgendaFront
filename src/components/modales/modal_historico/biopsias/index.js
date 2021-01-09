@@ -1,8 +1,8 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { findBiopsiasHistoricByPaciente } from "../../../../services";
 import Biopsias from './Biopsias';
 import { toFormatterCurrency, addZero } from '../../../../utils/utils';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
+import { findBiopsiasHistoricByPaciente } from '../../../../services/biopsias';
 
 const useStyles = makeStyles(theme => ({
   backdrop: {

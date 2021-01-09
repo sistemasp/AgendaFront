@@ -3,7 +3,6 @@ import {
   findEmployeesByRolId,
   showAllMaterials,
   createConsecutivo,
-  createBiopsia,
   findSchedulesBySucursalAndServicio,
 } from "../../../services";
 import {
@@ -14,6 +13,7 @@ import { updateConsult } from '../../../services/consultas';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import { addZero } from '../../../utils/utils';
 import ModalFormCirugia from './ModalFormCirugia';
+import { createBiopsia } from '../../../services/biopsias';
 
 const useStyles = makeStyles(theme => ({
   backdrop: {
