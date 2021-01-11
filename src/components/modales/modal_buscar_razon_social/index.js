@@ -48,8 +48,6 @@ const ModalBuscarRazonSocial = (props) => {
     servicio,
   } = props;
 
-  console.log("KAOZ", servicio);
-
   const columns = [
     { title: 'NOMBRE COMPLETO', field: 'nombre_completo' },
     { title: 'RFC', field: 'rfc' },

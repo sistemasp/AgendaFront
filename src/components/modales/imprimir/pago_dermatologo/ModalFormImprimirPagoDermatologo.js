@@ -184,7 +184,6 @@ const ModalFormImprimirPagoDermatologo = (props) => {
   const listaFaciales = [...faciales, ...facialesPA];
   const listaAparatologias = [...aparatologias, ...aparatologiasPA];
 
-  console.log("KAOZ", dermatologo);
   return (
     <div>
       <Modal

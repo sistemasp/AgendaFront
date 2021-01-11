@@ -87,6 +87,7 @@ const ReportesFacturas = (props) => {
 	useEffect(() => {
 
 		const loadFacturas = async () => {
+			setIsLoading(true);
 			const response = await findFacturasByRangeDateAndSucursal(date.getDate(), date.getMonth(), date.getFullYear(),
 				date.getDate(), date.getMonth(), date.getFullYear(), sucursal);
 
@@ -119,23 +120,28 @@ const ReportesFacturas = (props) => {
 
 					if (`${servicioResponse.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 						item.servicio = servicioResponse.data;
+
+						let cantidad = 0;
+						item.servicio.pagos.forEach(pago => {
+							cantidad += Number(pago.total);
+						});
 						const fecha = new Date(item.fecha_hora);
 						item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 						item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
 
-						item.cantidad_moneda = toFormatterCurrency(item.cantidad);
+						item.cantidad_moneda = toFormatterCurrency(cantidad);
 						item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
-						console.log("KAOZ", item);
-
 					}
 
+					setFacturas(response.data);
+					setIsLoading(false);
+
 				});
-				setFacturas(response.data);
+
 			}
 		}
-		setIsLoading(true);
 		loadFacturas();
-		setIsLoading(false);
+
 	}, [sucursal]);
 
 	const handleChangeStartDate = async (date) => {
@@ -164,22 +170,59 @@ const ReportesFacturas = (props) => {
 	};
 
 	const handleReportes = async () => {
-		await loadCitas(startDate.fecha_show, endDate.fecha_show);
+		await loadFacturas(startDate.fecha_show, endDate.fecha_show);
 	}
 
-	const loadCitas = async (startDate, endDate) => {
+	const loadFacturas = async (startDate, endDate) => {
+		setIsLoading(true);
 		const response = await findFacturasByRangeDateAndSucursal(startDate.getDate(), startDate.getMonth(), startDate.getFullYear(),
 			endDate.getDate(), (endDate.getMonth() + 1), endDate.getFullYear(), sucursal);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-			response.data.forEach(item => {
-				const fecha = new Date(item.fecha_hora);
-				item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
-				item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
-				item.cantidad_moneda = toFormatterCurrency(item.cantidad);
-				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
+			await response.data.forEach(async (item) => {
+				let servicioResponse = { data: '' };
+				switch (item.tipo_servicio._id) {
+					case servicioAparatologiaId:
+						servicioResponse = await findAparatologiaById(item.servicio);
+						break;
+					case servicioFacialId:
+						servicioResponse = await findFacialById(item.servicio);
+						break;
+					case servicioConsultaId:
+						servicioResponse = await findConsultById(item.servicio);
+						break;
+					case servicioCirugiaId:
+						servicioResponse = await findCirugiaById(item.servicio);
+						break;
+					case servicioBiopsiaId:
+						servicioResponse = await findBiopsiaById(item.servicio);
+						break;
+					case servicioEsteticaId:
+						servicioResponse = await findEsteticaById(item.servicio);
+						break;
+					case servicioDermapenId:
+						servicioResponse = await findDermapenById(item.servicio);
+						break;
+				}
+
+				if (`${servicioResponse.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+					item.servicio = servicioResponse.data;
+					let cantidad = 0;
+					item.servicio.pagos.forEach(pago => {
+						cantidad += Number(pago.total);
+					});
+					const fecha = new Date(item.fecha_hora);
+					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
+					item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
+
+					item.cantidad_moneda = toFormatterCurrency(cantidad);
+					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
+				}
+
+				setFacturas(response.data);
+				setIsLoading(false);
 			});
-			setFacturas(response.data);
 		}
+
 	}
 
 	const actions = [
@@ -199,7 +242,6 @@ const ReportesFacturas = (props) => {
 						options={options}
 						facturas={facturas}
 						actions={actions}
-						loadCitas={loadCitas}
 						onClickReportes={handleReportes}
 						{...props} />
 					: <Backdrop className={classes.backdrop} open={isLoading} >

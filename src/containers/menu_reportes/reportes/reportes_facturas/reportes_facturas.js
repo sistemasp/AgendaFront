@@ -21,9 +21,8 @@ export const ReportesFacturasContainer = (props) => {
         facturas,
         actions,
         options,
-
     } = props;
-
+	
     return (
         <Fragment>
             <Paper>
