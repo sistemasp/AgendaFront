@@ -220,3 +220,15 @@ export const findConsultsByPayOfDoctorHoraAplicacionFrecuencia = async (sucursal
         console.log('findConsultsByPayOfDoctorHoraAplicacionFrecuencia', error);
     }
 }
+
+export const findConsultsByPayOfDoctorHoraAplicacionFrecuenciaPA = async (sucursalId, dermatologoId, atendidoId, hora_apertura, hora_cierre, frecuenciaId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/consulta/sucursal/${sucursalId}/dermatologo/${dermatologoId}/canceladocp/${atendidoId}/apertura/${hora_apertura}/cierre/${hora_cierre}/frecuencia/${frecuenciaId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findConsultsByPayOfDoctorHoraAplicacionFrecuenciaPA', error);
+    }
+}

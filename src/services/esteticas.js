@@ -113,3 +113,15 @@ export const findEsteticasByPayOfDoctorHoraAplicacion = async (sucursalId, derma
         console.log('findEsteticasByPayOfDoctorHoraAplicacion', error);
     }
 }
+
+export const findEsteticasByPayOfDoctorHoraAplicacionPA = async (sucursalId, dermatologoId, canceladoCPId, hora_apertura, hora_cierre) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/estetica/sucursal/${sucursalId}/dermatologo/${dermatologoId}/canceladocp/${canceladoCPId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findEsteticasByPayOfDoctorHoraAplicacionPA', error);
+    }
+}

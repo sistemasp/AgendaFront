@@ -89,6 +89,7 @@ const AgendarConsulta = (props) => {
 
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
+	const [severity, setSeverity] = useState('success');
 	const [horarios, setHorarios] = useState([]);
 	const [dermatologos, setDermatologos] = useState([]);
 	const [frecuencias, setFrecuencias] = useState([]);
@@ -367,6 +368,7 @@ const AgendarConsulta = (props) => {
 			const responseConsecutivo = await createConsecutivo(consecutivo);
 			if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 				setOpenAlert(true);
+				setSeverity('success');
 				setMessage('LA CONSULTA SE AGENDO CORRECTAMENTE');
 				setValues({
 					servicio: '',
@@ -712,6 +714,7 @@ const AgendarConsulta = (props) => {
 						onChangePromovendedor={(e) => handleChangePromovendedor(e)}
 						setOpenAlert={setOpenAlert}
 						setMessage={setMessage}
+						setSeverity={setSeverity}
 						setFilterDate={setFilterDate}
 						OnCloseVerPagos={handleCloseVerPagos}
 						openModalPagos={openModalPagos}
@@ -739,7 +742,7 @@ const AgendarConsulta = (props) => {
 					</Backdrop>
 			}
 			<Snackbar open={openAlert} autoHideDuration={5000} onClose={handleCloseAlert}>
-				<Alert onClose={handleCloseAlert} severity="success">
+				<Alert onClose={handleCloseAlert} severity={severity}>
 					{message}
 				</Alert>
 			</Snackbar>

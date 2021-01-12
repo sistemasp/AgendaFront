@@ -64,6 +64,7 @@ const ModalConsulta = (props) => {
     sucursal,
     setOpenAlert,
     setMessage,
+    setSeverity,
     setFilterDate,
   } = props;
 
@@ -73,8 +74,10 @@ const ModalConsulta = (props) => {
   const [doctores, setDoctores] = useState([]);
   const [tipoCitas, setTipoCitas] = useState([]);
   const [statements, setStatements] = useState([]);
+  const [previousState, setPreviousState] = useState();
 
   const [openModalPagos, setOpenModalPagos] = useState(false);
+  const [openModalConfirmacion, setOpenModalConfirmacion] = useState(false);
 
   const fecha_cita = new Date(consulta.fecha_hora);
   const fecha = `${addZero(fecha_cita.getDate())}/${addZero(Number(fecha_cita.getMonth() + 1))}/${addZero(fecha_cita.getFullYear())}`;
@@ -215,13 +218,35 @@ const ModalConsulta = (props) => {
   }
 
   const handleChangeStatus = e => {
+    setPreviousState(values.status);
+    const estado = statements.find(statement => {
+      return statement._id === e.target.value;
+    });
     if (e.target.value === asistioStatusId) {
       const hora_aplicacion = values.hora_aplicacion ? values.hora_aplicacion : new Date();
       setValues({ ...values, hora_aplicacion: hora_aplicacion });
     }
+    setOpenModalConfirmacion(estado.confirmacion);
     setValues({ ...values, status: e.target.value });
   }
 
+  const handleCloseModalConfirmacion = () => {
+    setOpenModalConfirmacion(false);
+    setValues({ ...values, status: previousState });
+  }
+
+  const handleConfirmModalConfirmacion = () => {
+    setOpenModalConfirmacion(false);
+  }
+  /*
+    const handleChangeStatus = e => {
+      if (e.target.value === asistioStatusId) {
+        const hora_aplicacion = values.hora_aplicacion ? values.hora_aplicacion : new Date();
+        setValues({ ...values, hora_aplicacion: hora_aplicacion });
+      }
+      setValues({ ...values, status: e.target.value });
+    }
+  */
   const handleChangeObservaciones = e => {
     setValues({ ...values, observaciones: e.target.value });
   }
@@ -375,6 +400,12 @@ const ModalConsulta = (props) => {
             openModalPagos={openModalPagos}
             onCloseModalPagos={handleCloseModalPagos}
             onGuardarModalPagos={handleGuardarModalPagos}
+            onCloseModalConfirmacion={handleCloseModalConfirmacion}
+            onConfirmModalConfirmacion={handleConfirmModalConfirmacion}
+            openModalConfirmacion={openModalConfirmacion}
+            setOpenAlert={setOpenAlert}
+            setMessage={setMessage}
+            setSeverity={setSeverity}
             sucursal={sucursal}
             tipoServicioId={consultaServicioId} /> :
           <Backdrop className={classes.backdrop} open={isLoading} >

@@ -111,3 +111,15 @@ export const findCirugiasByPayOfDoctorHoraAplicacion = async (sucursalId, dermat
         console.log('findCirugiasByPayOfDoctorHoraAplicacion', error);
     }
 }
+
+export const findCirugiasByPayOfDoctorHoraAplicacionPA = async (sucursalId, dermatologoId, canceladoCPId, hora_apertura, hora_cierre) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cirugia/sucursal/${sucursalId}/dermatologo/${dermatologoId}/canceladocp/${canceladoCPId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('finCirugiasByPayOfDoctorHoraAplicacionPA', error);
+    }
+}

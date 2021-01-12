@@ -116,7 +116,7 @@ const ModalFormCita = (props) => {
                   onClose={onCloseModalConfirmacion}
                   onConfirm={onConfirmModalConfirmacion}
                   empleado={empleado}
-                  cita={cita}
+                  servicio={cita}
                   status={values.status}
                   setMessage={setMessage}
                   setSeverity={setSeverity}

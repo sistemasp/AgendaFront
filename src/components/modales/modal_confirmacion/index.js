@@ -14,7 +14,7 @@ const ModalConfirmacion = (props) => {
     setMessage,
     setSeverity,
     setOpenAlert,
-    cita,
+    servicio,
     status,
   } = props;
 
@@ -42,15 +42,15 @@ const ModalConfirmacion = (props) => {
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       const supervisor = response.data;
       if (supervisor) {
-        if (cita) {
+        if (servicio) {
           const date = new Date();
           const horaSalida = `${addZero(date.getHours())}:${addZero(date.getMinutes())}`
           const cancelacion = {
             supervisor: supervisor._id,
             recepcionista: empleado._id,
-            tipo_servicio: cita.servicio,
-            servicio: cita._id,
-            hora_llegada: cita.hora_llegada,
+            tipo_servicio: servicio.servicio,
+            servicio: servicio._id,
+            hora_llegada: servicio.hora_llegada,
             hora_salida: horaSalida,
             status: status,
           }

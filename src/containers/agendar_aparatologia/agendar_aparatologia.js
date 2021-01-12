@@ -93,6 +93,7 @@ export const AgendarAparatologiaContainer = (props) => {
 		openModalPagos,
 		sucursal,
 		setMessage,
+		setSeverity,
 		setOpenAlert,
 		onGuardarModalPagos,
 		// MODAL IMPRIMIR
@@ -125,6 +126,7 @@ export const AgendarAparatologiaContainer = (props) => {
 						sucursal={sucursal}
 						setOpenAlert={setOpenAlert}
 						setMessage={setMessage}
+						setSeverity={setSeverity}
 						setFilterDate={setFilterDate} /> : ''
 			}
 			{
@@ -149,6 +151,7 @@ export const AgendarAparatologiaContainer = (props) => {
 						sucursal={sucursal}
 						setOpenAlert={setOpenAlert}
 						setMessage={setMessage}
+						setSeverity={setSeverity}
 						setFilterDate={setFilterDate} /> : ''
 			}
 			{
@@ -160,6 +163,7 @@ export const AgendarAparatologiaContainer = (props) => {
 						empleado={empleado}
 						sucursal={sucursal}
 						setMessage={setMessage}
+						setSeverity={setSeverity}
 						setOpenAlert={setOpenAlert}
 						tipoServicioId={cita.servicio._id}
 						onGuardarModalPagos={onGuardarModalPagos} />

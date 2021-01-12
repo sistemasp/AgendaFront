@@ -6,6 +6,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { CheckCustom } from '../../basic/CheckCustom';
 import ModalPagos from '../modal_pagos';
+import ModalConfirmacion from '../modal_confirmacion';
 
 function getModalStyle() {
   const top = 50;
@@ -67,6 +68,8 @@ const ModalFormConsulta = (props) => {
     onClose,
     onClickActualizarCita,
     open,
+    empleado,
+    consulta,
     horarios,
     promovendedores,
     doctores,
@@ -76,8 +79,14 @@ const ModalFormConsulta = (props) => {
     onChangeMotivos,
     onChangeObservaciones,
     onChangeDermatologo,
+    onCloseModalConfirmacion,
+    onConfirmModalConfirmacion,
+    openModalConfirmacion,
+    setOpenAlert,
+    setMessage,
+    setSeverity,
   } = props;
-  
+
   return (
     <div>
       <Modal
@@ -86,6 +95,20 @@ const ModalFormConsulta = (props) => {
         open={open} >
         <div style={modalStyle} className={classes.paper}>
           <form onSubmit={handleSubmit}>
+            {
+              openModalConfirmacion ?
+                <ModalConfirmacion
+                  open={openModalConfirmacion}
+                  onClose={onCloseModalConfirmacion}
+                  onConfirm={onConfirmModalConfirmacion}
+                  empleado={empleado}
+                  servicio={consulta}
+                  status={values.status}
+                  setMessage={setMessage}
+                  setSeverity={setSeverity}
+                  setOpenAlert={setOpenAlert} />
+                : ''
+            }
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <h2 className={classes.label}>{values.paciente_nombre} ({values.telefono})</h2>
@@ -94,14 +117,14 @@ const ModalFormConsulta = (props) => {
                 <h2 className={classes.label}>{values.fecha_actual} - {values.hora_actual} hrs</h2>
               </Grid>
               <Grid item xs={12}>
-                <h3 className={classes.label}>Frecuencia: {values.frecuencia.nombre}</h3>
+                <h3 className={classes.label}>FRECUENCIA: {values.frecuencia.nombre}</h3>
               </Grid>
               <Grid item xs={12}>
                 {
                   /* values.dermatologo*/ false ?
-                    <h3 className={classes.label}>Dermatologo : {values.dermatologo.nombre}</h3> :
+                    <h3 className={classes.label}>DERMATÓLOGO : {values.dermatologo.nombre}</h3> :
                     <FormControl variant="outlined" className={classes.formControl}>
-                      <InputLabel id="simple-select-outlined-hora">Dermatologo</InputLabel>
+                      <InputLabel id="simple-select-outlined-hora">DERMATÓLOGO</InputLabel>
                       <Select
                         labelId="simple-select-outlined-dermatologo"
                         id="simple-select-outlined-dermatologo"

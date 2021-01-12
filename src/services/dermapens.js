@@ -184,6 +184,18 @@ export const findDermapensByPayOfDoctorHoraAplicacion = async (sucursalId, derma
     }
 }
 
+export const findDermapensByPayOfDoctorHoraAplicacionPA = async (sucursalId, dermatologoId, canceladoCPId, hora_apertura, hora_cierre) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/dermapen/sucursal/${sucursalId}/dermatologo/${dermatologoId}/canceladocp/${canceladoCPId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findDermapensByPayOfDoctorHoraAplicacionPA', error);
+    }
+}
+
 export const showAllDermapenBySucursalPendiente = async (sucursalId, pendienteId) => {
     try {
         const response = await axios({

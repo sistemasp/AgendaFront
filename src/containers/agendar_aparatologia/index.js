@@ -69,11 +69,12 @@ const AgendarAparatologia = (props) => {
 	const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
 	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 	const dermatologoDirectoId = process.env.REACT_APP_DERMATOLOGO_DIRECTO_ID;
-	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
+	const directoTipoCitaId = process.env.REACT_APP_TIPO_CITA_DIRECTO_ID;
 	const servicioAparatologiaId = process.env.REACT_APP_APARATOLOGIA_SERVICIO_ID;
 
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
+	const [severity, setSeverity] = useState('success');
 	const [servicios, setServicios] = useState([]);
 	const [tratamientos, setTratamientos] = useState([]);
 	const [horarios, setHorarios] = useState([]);
@@ -92,7 +93,7 @@ const AgendarAparatologia = (props) => {
 		areas: [],
 		paciente: `${paciente._id}`,
 		precio: 0,
-		tipo_cita: tipoCitaNoAplicaId,
+		tipo_cita: directoTipoCitaId,
 		observaciones: '',
 		dermatologo: dermatologoDirectoId,
 		consulta: info.dermatologo ? info._id : undefined,
@@ -316,7 +317,7 @@ const AgendarAparatologia = (props) => {
 		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
-		data.tipo_cita = data.dermatologo._id === dermatologoDirectoId ? tipoCitaNoAplicaId : data.tipo_cita;
+		data.tipo_cita = data.dermatologo._id === dermatologoDirectoId ? directoTipoCitaId : data.tipo_cita;
 		const response = await createAparatologia(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			const consecutivo = {
@@ -330,6 +331,7 @@ const AgendarAparatologia = (props) => {
 			const responseConsecutivo = await createConsecutivo(consecutivo);
 			if (`${responseConsecutivo.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 				setOpenAlert(true);
+				setSeverity('success');
 				setMessage('APARATOLOGIA AGREGADA CORRECTAMENTE');
 				setValues({
 					servicio: '',
@@ -621,6 +623,7 @@ const AgendarAparatologia = (props) => {
 								onChangeItemPrecio={handleChangeItemPrecio}
 								setOpenAlert={setOpenAlert}
 								setMessage={setMessage}
+								setSeverity={setSeverity}
 								setFilterDate={setFilterDate}
 								dermatologoDirectoId={dermatologoDirectoId}
 								onGuardarModalPagos={handleGuardarModalPagos}
@@ -632,7 +635,7 @@ const AgendarAparatologia = (props) => {
 					</Backdrop>
 			}
 			<Snackbar open={openAlert} autoHideDuration={5000} onClose={handleCloseAlert}>
-				<Alert onClose={handleCloseAlert} severity="success">
+				<Alert onClose={handleCloseAlert} severity={severity}>
 					{message}
 				</Alert>
 			</Snackbar>

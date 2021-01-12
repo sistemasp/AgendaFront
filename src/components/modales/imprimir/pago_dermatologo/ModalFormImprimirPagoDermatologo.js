@@ -147,13 +147,17 @@ const ModalFormImprimirPagoDermatologo = (props) => {
     sucursal,
     corte,
     consultasPrimeraVez,
+    consultasPrimeraVezPA,
     consultasReconsultas,
+    consultasReconsultasPA,
     cirugias,
+    cirugiasPA,
     esteticas,
+    esteticasPA,
     faciales,
     facialesPA,
     dermapens,
-    lasers,
+    dermapensPA,
     aparatologias,
     aparatologiasPA,
     dermatologo,
@@ -175,6 +179,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
   const revisadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_REVISADO_ID;
   const derivadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_DERIVADO_ID;
   const realizadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_REALIZADO_ID;
+  const directoTipoCitaId = process.env.REACT_APP_TIPO_CITA_DIRECTO_ID;
   const noAplicaTipoCitaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
   const manuelAcunaSucursalId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
   const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
@@ -234,7 +239,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                       </Grid>
                       :
                       consultasPrimeraVez.length > 0 || consultasReconsultas.length > 0 || cirugias.length > 0 || esteticas.length > 0 ||
-                        listaFaciales.length > 0 || dermapens.length > 0 || lasers.length > 0 || listaAparatologias.length > 0 ?
+                        listaFaciales.length > 0 || dermapens.length > 0 || listaAparatologias.length > 0 ?
                         <Grid item xs={12}>
                           <ButtonCustom
                             className={classes.button}
@@ -335,6 +340,46 @@ const ModalFormImprimirPagoDermatologo = (props) => {
             }
 
             {
+              consultasPrimeraVezPA.length > 0 ?
+                <Grid container className={classes.container}>
+                  <Grid item xs={12}>
+                    <p className={classes.label_title_descripcion}> {`${consultasPrimeraVezPA.length} CONSULTAS DE PRIMERA VEZ PAGO ANTICIPADO`}</p>
+                  </Grid>
+                  <Grid item xs={true} className={classes.label}>
+                    <p className={classes.label_cells_totales}>HORA</p>
+                  </Grid>
+                  <Grid item xs={true} className={classes.label}>
+                    <p className={classes.label_cells_totales}>PACIENTE</p>
+                  </Grid>
+                  <Grid item xs={true} className={classes.label}>
+                    <p className={classes.label_cells_totales}>CONSECUTIVO</p>
+                  </Grid>
+                  <Grid item xs={12} className={classes.label}>
+                    <hr className={classes.label} />
+                  </Grid>
+
+                  {
+                    consultasPrimeraVezPA ?
+                      consultasPrimeraVezPA.map(consulta => {
+                        return <Grid container>
+                          <Grid item xs={true} className={classes.label}>
+                            <p className={classes.label_cells}>{consulta.hora_llegada}</p>
+                          </Grid>
+                          <Grid item xs={true} className={classes.label}>
+                            <p className={classes.label_cells}>{`${consulta.paciente.nombres} ${consulta.paciente.apellidos}`}</p>
+                          </Grid>
+                          <Grid item xs={true} className={classes.label}>
+                            <p className={classes.label_cells}>{`${consulta.consecutivo}`}</p>
+                          </Grid>
+                        </Grid>
+                      })
+                      : ''
+                  }
+                </Grid>
+                : ''
+            }
+
+            {
               consultasReconsultas.length > 0 ?
                 <Grid container className={classes.container}>
                   <Grid item xs={12}>
@@ -386,6 +431,45 @@ const ModalFormImprimirPagoDermatologo = (props) => {
             }
 
             {
+              consultasReconsultasPA.length > 0 ?
+                <Grid container className={classes.container}>
+                  <Grid item xs={12}>
+                    <p className={classes.label_title_descripcion}> {`${consultasReconsultasPA.length} RECONSULTAS PAGO ANTICIPADO`}</p>
+                  </Grid>
+                  <Grid item xs={true} className={classes.label}>
+                    <p className={classes.label_cells_totales}>HORA</p>
+                  </Grid>
+                  <Grid item xs={true} className={classes.label}>
+                    <p className={classes.label_cells_totales}>PACIENTE</p>
+                  </Grid>
+                  <Grid item xs={true} className={classes.label}>
+                    <p className={classes.label_cells_totales}>CONSECUTIVO</p>
+                  </Grid>
+                  <Grid item xs={12} className={classes.label}>
+                    <hr className={classes.label} />
+                  </Grid>
+                  {
+                    consultasReconsultasPA ?
+                      consultasReconsultasPA.map(consulta => {
+                        return <Grid container>
+                          <Grid item xs={true} className={classes.label}>
+                            <p className={classes.label_cells}>{consulta.hora_llegada}</p>
+                          </Grid>
+                          <Grid item xs={true} className={classes.label}>
+                            <p className={classes.label_cells}>{`${consulta.paciente.nombres} ${consulta.paciente.apellidos}`}</p>
+                          </Grid>
+                          <Grid item xs={true} className={classes.label}>
+                            <p className={classes.label_cells}>{`${consulta.consecutivo}`}</p>
+                          </Grid>
+                        </Grid>
+                      })
+                      : ''
+                  }
+                </Grid>
+                : ''
+            }
+
+            {
               cirugias.length > 0 ?
                 <Fragment>
                   <Grid container className={classes.container}>
@@ -425,6 +509,48 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                             </Grid>
                             <Grid item xs={true} className={classes.label}>
                               <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoDermatologo)}`} </p>
+                            </Grid>
+                          </Grid>
+                        })
+                        : ''
+                    }
+                  </Grid>
+                </Fragment>
+                : ''
+            }
+
+            {
+              cirugiasPA.length > 0 ?
+                <Fragment>
+                  <Grid container className={classes.container}>
+                    <Grid item xs={12}>
+                      <p className={classes.label_title_descripcion}> {`${cirugiasPA.length} CIRUGIAS PAGO ANTICIPADO`}</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>HORA</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>PACIENTE</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>CONSECUTIVO</p>
+                    </Grid>
+                    <Grid item xs={12} className={classes.label}>
+                      <hr className={classes.label} />
+                    </Grid>
+                    {
+                      cirugiasPA ?
+                        cirugiasPA.map(cirugia => {
+                          const date = new Date(cirugia.hora_aplicacion);
+                          return <Grid container>
+                            <Grid item xs={true} className={classes.label}>
+                              <p className={classes.label_cells}>{`${addZero(date.getHours())}:${addZero(date.getMinutes())}`}</p>
+                            </Grid>
+                            <Grid item xs={true} className={classes.label}>
+                              <p className={classes.label_cells}>{`${cirugia.paciente.nombres} ${cirugia.paciente.apellidos}`}</p>
+                            </Grid>
+                            <Grid item xs={true} className={classes.label}>
+                              <p className={classes.label_cells}>{`${cirugia.consecutivo}`}</p>
                             </Grid>
                           </Grid>
                         })
@@ -486,7 +612,49 @@ const ModalFormImprimirPagoDermatologo = (props) => {
             }
 
             {
-              listaFaciales.length > 0 ?
+              esteticasPA.length > 0 ?
+                <Fragment>
+                  <Grid container className={classes.container}>
+                    <Grid item xs={12}>
+                      <p className={classes.label_title_descripcion}> {`${esteticasPA.length} TOXINAS Y RELLENOS PAGO ANTICIPADO`}</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>HORA</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>PACIENTE</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>CONSECUTIVO</p>
+                    </Grid>
+                    <Grid item xs={12} className={classes.label}>
+                      <hr className={classes.label} />
+                    </Grid>
+                    {
+                      esteticas ?
+                        esteticas.map(estetica => {
+                          const date = new Date(estetica.hora_aplicacion);
+                          return <Grid container>
+                            <Grid item xs={true} className={classes.label}>
+                              <p className={classes.label_cells}>{`${addZero(date.getHours())}:${addZero(date.getMinutes())}`}</p>
+                            </Grid>
+                            <Grid item xs={true} className={classes.label}>
+                              <p className={classes.label_cells}>{`${estetica.paciente.nombres} ${estetica.paciente.apellidos}`}</p>
+                            </Grid>
+                            <Grid item xs={true} className={classes.label}>
+                              <p className={classes.label_cells}>{`${estetica.consecutivo}`}</p>
+                            </Grid>
+                          </Grid>
+                        })
+                        : ''
+                    }
+                  </Grid>
+                </Fragment>
+                : ''
+            }
+
+            {
+              faciales.length > 0 ?
                 <Fragment>
                   <Grid container className={classes.container}>
                     <Grid item xs={12}>
@@ -511,26 +679,31 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                       <hr className={classes.label} />
                     </Grid>
                     {
-                      listaFaciales ?
-                        listaFaciales.map(facial => {
+                      faciales ?
+                        faciales.map(facial => {
                           let comisionDermatologo = 0;
                           let pagoDermatologo = 0;
                           if (facial.pagos[0] === undefined || Number(facial.pagos[0].descuento_dermatologo) === 0) {
-                            facial.areas.map(area => {
-                              switch (facial.tipo_cita._id) {
-                                case revisadoTipoCitaId:
-                                  comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
-                                  break;
-                                case derivadoTipoCitaId:
-                                  comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
-                                  break;
-                                case realizadoTipoCitaId:
-                                  comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
-                                  break;
-                                case noAplicaTipoCitaId:
-                                  comisionDermatologo += Number(0);
-                                  break;
-                              }
+                            facial.tratamientos.map(tratamiento => {
+                              tratamiento.areasSeleccionadas.map(areaSeleccionada => {
+                                switch (facial.tipo_cita._id) {
+                                  case revisadoTipoCitaId:
+                                    comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? areaSeleccionada.comision_revisado : areaSeleccionada.comision_revisado_ma);
+                                    break;
+                                  case derivadoTipoCitaId:
+                                    comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? areaSeleccionada.comision_derivado : areaSeleccionada.comision_derivado_ma);
+                                    break;
+                                  case realizadoTipoCitaId:
+                                    comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? areaSeleccionada.comision_realizado : areaSeleccionada.comision_realizado_ma);
+                                    break;
+                                  case directoTipoCitaId: // TOMA EL 100%
+                                    comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? areaSeleccionada.precio_fe : areaSeleccionada.precio_ma);
+                                    break;
+                                  case noAplicaTipoCitaId:
+                                    comisionDermatologo += Number(0);
+                                    break;
+                                }
+                              });
                             });
                             pagoDermatologo = comisionDermatologo - ((comisionDermatologo * facial.pagos[0].porcentaje_descuento_clinica) / 100);
                             pagoTotal += Number(pagoDermatologo);
@@ -550,6 +723,53 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                             </Grid>
                             <Grid item xs={true} >
                               <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoDermatologo)}`} </p>
+                            </Grid>
+                          </Grid>
+                        })
+                        : ''
+                    }
+                  </Grid>
+                </Fragment>
+                : ''
+            }
+
+            {
+              facialesPA.length > 0 ?
+                <Fragment>
+                  <Grid container className={classes.container}>
+                    <Grid item xs={12}>
+                      <p className={classes.label_title_descripcion}> {`${facialesPA.length} FACIALES PAGO ANTICIPADO`}</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>HORA</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>TIPO DE CITA</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>PACIENTE</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>CONSECUTIVO</p>
+                    </Grid>
+                    <Grid item xs={12} className={classes.label}>
+                      <hr className={classes.label} />
+                    </Grid>
+                    {
+                      facialesPA ?
+                        facialesPA.map(facial => {
+                          return <Grid container>
+                            <Grid item xs={true} className={classes.label}>
+                              <p className={classes.label_cells}>{facial.hora_llegada}</p>
+                            </Grid>
+                            <Grid item xs={true} className={classes.label}>
+                              <p className={classes.label_cells}>{facial.tipo_cita.nombre}</p>
+                            </Grid>
+                            <Grid item xs={true} >
+                              <p className={classes.label_cells}>{`${facial.paciente.nombres} ${facial.paciente.apellidos}`}</p>
+                            </Grid>
+                            <Grid item xs={true} >
+                              <p className={classes.label_cells}>{`${facial.consecutivo}`}</p>
                             </Grid>
                           </Grid>
                         })
@@ -616,11 +836,11 @@ const ModalFormImprimirPagoDermatologo = (props) => {
             }
 
             {
-              lasers.length > 0 ?
+              dermapensPA.length > 0 ?
                 <Fragment>
                   <Grid container className={classes.container}>
-                    <Grid item xs={12} >
-                      <p className={classes.label_title_descripcion}> {`${lasers.length} LASER`}</p>
+                    <Grid item xs={12}>
+                      <p className={classes.label_title_descripcion}> {`${dermapensPA.length} DERMAPENS PAGO ANTICIPADO`}</p>
                     </Grid>
                     <Grid item xs={true} className={classes.label}>
                       <p className={classes.label_cells_totales}>HORA</p>
@@ -634,49 +854,24 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                     <Grid item xs={true} className={classes.label}>
                       <p className={classes.label_cells_totales}>CONSECUTIVO</p>
                     </Grid>
-                    <Grid item xs={true} className={classes.label}>
-                      <p className={classes.label_cells_totales}>CANTIDAD</p>
-                    </Grid>
                     <Grid item xs={12} className={classes.label}>
                       <hr className={classes.label} />
                     </Grid>
                     {
-                      lasers ?
-                        lasers.map(laser => {
-                          let comisionDermatologo = 0;
-                          laser.areas.map(area => {
-                            switch (laser.tipo_cita._id) {
-                              case revisadoTipoCitaId:
-                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
-                                break;
-                              case derivadoTipoCitaId:
-                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
-                                break;
-                              case realizadoTipoCitaId:
-                                comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
-                                break;
-                              case noAplicaTipoCitaId:
-                                comisionDermatologo += Number(0);
-                                break;
-                            }
-                          });
-                          const pagoDermatologo = comisionDermatologo - ((comisionDermatologo * laser.pagos[0].porcentaje_descuento_clinica) / 100);
-                          pagoTotal += Number(pagoDermatologo);
+                      dermapensPA ?
+                        dermapensPA.map(dermapen => {
                           return <Grid container>
                             <Grid item xs={true} className={classes.label}>
-                              <p className={classes.label_cells}>{laser.hora_llegada}</p>
+                              <p className={classes.label_cells}>{dermapen.hora_llegada}</p>
                             </Grid>
                             <Grid item xs={true} className={classes.label}>
-                              <p className={classes.label_cells}>{laser.tipo_cita.nombre}</p>
+                              <p className={classes.label_cells}>{dermapen.tipo_cita.nombre}</p>
                             </Grid>
                             <Grid item xs={true} >
-                              <p className={classes.label_cells}>{`${laser.paciente.nombres} ${laser.paciente.apellidos}`}</p>
+                              <p className={classes.label_cells}>{`${dermapen.paciente.nombres} ${dermapen.paciente.apellidos}`}</p>
                             </Grid>
                             <Grid item xs={true} >
-                              <p className={classes.label_cells}>{`${laser.consecutivo}`}</p>
-                            </Grid>
-                            <Grid item xs={true} >
-                              <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoDermatologo)}`} </p>
+                              <p className={classes.label_cells}>{`${dermapen.consecutivo}`}</p>
                             </Grid>
                           </Grid>
                         })
@@ -688,7 +883,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
             }
 
             {
-              listaAparatologias.length > 0 ?
+              aparatologias.length > 0 ?
                 <Fragment>
                   <Grid container className={classes.container}>
                     <Grid item xs={12} >
@@ -713,11 +908,11 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                       <hr className={classes.label} />
                     </Grid>
                     {
-                      listaAparatologias ?
-                        listaAparatologias.map(aparatologia => {
+                      aparatologias ?
+                        aparatologias.map(aparatologia => {
                           let comisionDermatologo = 0;
                           aparatologia.tratamientos.forEach(tratamiento => {
-                            
+
                             tratamiento.areasSeleccionadas.map(area => {
                               const itemPrecio =
                                 sucursal._id === sucursalManuelAcunaId ? area.precio_ma // Precio Manuel Acuña
@@ -760,6 +955,54 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                             </Grid>
                             <Grid item xs={true} >
                               <p className={classes.label_cells_total}> {`${toFormatterCurrency(pagoDermatologo)}`} </p>
+                            </Grid>
+                          </Grid>
+                        })
+                        : ''
+                    }
+                  </Grid>
+                </Fragment>
+                : ''
+            }
+
+            {
+              aparatologiasPA.length > 0 ?
+                <Fragment>
+                  <Grid container className={classes.container}>
+                    <Grid item xs={12} >
+                      <p className={classes.label_title_descripcion}> {`${aparatologiasPA.length} APARATOLOGIA PAGO ANTICIPADO`}</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>HORA</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>TIPO DE CITA</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>PACIENTE</p>
+                    </Grid>
+                    <Grid item xs={true} className={classes.label}>
+                      <p className={classes.label_cells_totales}>CONSECUTIVO</p>
+                    </Grid>
+                    <Grid item xs={12} className={classes.label}>
+                      <hr className={classes.label} />
+                    </Grid>
+                    {
+                      aparatologiasPA ?
+                        aparatologiasPA.map(aparatologia => {
+
+                          return <Grid container>
+                            <Grid item xs={true} className={classes.label}>
+                              <p className={classes.label_cells}>{aparatologia.hora_llegada}</p>
+                            </Grid>
+                            <Grid item xs={true} className={classes.label}>
+                              <p className={classes.label_cells}>{aparatologia.tipo_cita.nombre}</p>
+                            </Grid>
+                            <Grid item xs={true} >
+                              <p className={classes.label_cells}>{`${aparatologia.paciente.nombres} ${aparatologia.paciente.apellidos}`}</p>
+                            </Grid>
+                            <Grid item xs={true} >
+                              <p className={classes.label_cells}>{`${aparatologia.consecutivo}`}</p>
                             </Grid>
                           </Grid>
                         })

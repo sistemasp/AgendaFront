@@ -95,6 +95,7 @@ export const AgendarConsultaContainer = (props) => {
     loadConsultas,
     sucursal,
     setMessage,
+    setSeverity,
     setOpenAlert,
     setFilterDate,
     OnCloseVerPagos,
@@ -138,6 +139,7 @@ export const AgendarConsultaContainer = (props) => {
             loadConsultas={loadConsultas}
             setOpenAlert={setOpenAlert}
             setMessage={setMessage}
+            setSeverity={setSeverity}
             setFilterDate={setFilterDate}
           /> : ''
       }
