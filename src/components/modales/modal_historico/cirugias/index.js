@@ -33,7 +33,7 @@ const TabCirugias = (props) => {
     { title: 'DERMATÓLOGO', field: 'dermatologo.nombre' },
     { title: 'SUCURSAL', field: 'sucursal.nombre' },
     { title: 'PRECIO', field: 'precio_moneda' },
-    { title: 'TOTAL', field: 'precio_moneda' },
+    { title: 'TOTAL', field: 'total_moneda' },
   ];
 
   const options = {
@@ -52,6 +52,7 @@ const TabCirugias = (props) => {
         if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
           response.data.forEach(item => {
             item.precio_moneda = toFormatterCurrency(item.precio);
+            item.total_moneda = toFormatterCurrency(item.total);
             const date = new Date(item.fecha_hora);
             const dia = addZero(date.getDate());
             const mes = addZero(date.getMonth());

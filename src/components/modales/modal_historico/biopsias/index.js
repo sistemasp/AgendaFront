@@ -29,7 +29,6 @@ const TabBiopsias = (props) => {
   const columns = [
     { title: 'FECHA', field: 'fecha_show' },
     { title: 'HORA', field: 'hora' },
-    { title: 'CONSECUTIVO', field: 'consecutivo' },
     { title: 'DERMATÓLOGO', field: 'dermatologo.nombre' },
     { title: 'PATÓLOGO', field: 'patoloo.nombre' },
     { title: 'SUCURSAL', field: 'sucursal.nombre' },

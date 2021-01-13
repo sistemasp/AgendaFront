@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { findHistoricByPacienteAndService } from "../../../../services";
+import { findHistoricFacialByPaciente } from "../../../../services/faciales";
 import Faciales from './Faciales';
 import { toFormatterCurrency, addZero } from '../../../../utils/utils';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
@@ -56,7 +56,7 @@ const TabFaciales = (props) => {
   useEffect(() => {
     const loadHistorial = async () => {
       if (servicio) {
-        const response = await findHistoricByPacienteAndService(paciente._id, servicio._id);
+        const response = await findHistoricFacialByPaciente(paciente._id);
         if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
           response.data.forEach(item => {
             item.precio_moneda = toFormatterCurrency(item.precio);

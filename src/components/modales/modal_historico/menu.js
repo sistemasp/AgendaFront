@@ -15,6 +15,7 @@ import TabLaser from './laser';
 import TabBiopsias from './biopsias';
 import TabCirugias from './cirugias';
 import TabEstetica from './estetica';
+import TabDermapen from './dermapen';
 
 function getModalStyle() {
 	const top = 50;
@@ -148,22 +149,28 @@ export const MenuHistoricoContainer = props => {
 								servicio={servicios[3]} />
 						</TabPanel>
 						<TabPanel value={value} index={4}>
-							<TabEstetica
+							<TabDermapen
 								paciente={paciente}
 								sucursal={sucursal}
 								servicio={servicios[4]} />
 						</TabPanel>
 						<TabPanel value={value} index={5}>
-							<TabFaciales
+							<TabEstetica
 								paciente={paciente}
 								sucursal={sucursal}
 								servicio={servicios[5]} />
 						</TabPanel>
 						<TabPanel value={value} index={6}>
-							<TabLaser
+							<TabFaciales
 								paciente={paciente}
 								sucursal={sucursal}
 								servicio={servicios[6]} />
+						</TabPanel>
+						<TabPanel value={value} index={7}>
+							<TabLaser
+								paciente={paciente}
+								sucursal={sucursal}
+								servicio={servicios[7]} />
 						</TabPanel>
 					</div>
 					<Grid item xs={12} sm={12}>

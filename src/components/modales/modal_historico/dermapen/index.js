@@ -1,8 +1,9 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { findHistoricAparatologiaByPaciente } from "./../../../../services/aparatolgia";
-import Aparatologia from './Aparatologia';
+import { findEsteticasHistoricByPaciente } from "../../../../services/esteticas";
+import Dermapen from './dermapen';
 import { toFormatterCurrency, addZero } from '../../../../utils/utils';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
+import { findHistoricDermapenByPaciente } from '../../../../services/dermapens';
 
 const useStyles = makeStyles(theme => ({
   backdrop: {
@@ -11,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const TabAparatologia = (props) => {
+const TabDermapen = (props) => {
 
   const classes = useStyles();
 
@@ -29,19 +30,14 @@ const TabAparatologia = (props) => {
   const columns = [
     { title: 'FECHA', field: 'fecha_show' },
     { title: 'HORA', field: 'hora' },
-    { title: 'TIPO CITA', field: 'tipo_cita.nombre' },
-    { title: 'ESTADO', field: 'status.nombre' },
+    { title: 'CONSECUTIVO', field: 'consecutivo' },
+    { title: 'DERMATÓLOGO', field: 'dermatologo.nombre' },
     { title: 'SUCURSAL', field: 'sucursal.nombre' },
     { title: 'PRECIO', field: 'precio_moneda' },
+    { title: 'TOTAL', field: 'total_moneda' },
   ];
 
   const options = {
-    rowStyle: rowData => {
-      return {
-        color: rowData.status.color,
-        backgroundColor: rowData.pagado ? process.env.REACT_APP_PAGADO_COLOR : ''
-      };
-    },
     headerStyle: {
       backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
       color: '#FFF',
@@ -53,13 +49,11 @@ const TabAparatologia = (props) => {
   useEffect(() => {
     const loadHistorial = async () => {
       if (servicio) {
-        const response = await findHistoricAparatologiaByPaciente(paciente._id, servicio._id);
+        const response = await findHistoricDermapenByPaciente(paciente._id);
         if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
           response.data.forEach(item => {
             item.precio_moneda = toFormatterCurrency(item.precio);
-            item.show_tratamientos = item.tratamientos.map(tratamiento => {
-              return `${tratamiento.nombre}, `;
-            });
+            item.total_moneda = toFormatterCurrency(item.total);
             const date = new Date(item.fecha_hora);
             const dia = addZero(date.getDate());
             const mes = addZero(date.getMonth() + 1);
@@ -82,7 +76,7 @@ const TabAparatologia = (props) => {
     <Fragment>
       {
         !isLoading ?
-          <Aparatologia
+          <Dermapen
             open={open}
             onClickCancel={onClose}
             historial={historial}
@@ -98,4 +92,4 @@ const TabAparatologia = (props) => {
   );
 }
 
-export default TabAparatologia;
+export default TabDermapen;

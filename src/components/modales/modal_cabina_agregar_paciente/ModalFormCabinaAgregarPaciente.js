@@ -74,14 +74,14 @@ const ModalFormCabinaAgregarPaciente = (props) => {
           <form onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <h2 className={classes.label}>{cambio ? 'Cambiar de ' : 'Asignar a '}cabina</h2>
+                <h2 className={classes.label}>{cambio ? 'CAMBIAR DE ' : ' ASIGNAR A '}CABINA</h2>
               </Grid>
               <Grid item xs={12}>
                 <h2 className={classes.label}>{`${paciente.nombres}`}</h2>
               </Grid>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="simple-select-outlined-asignar">Cabina disponible</InputLabel>
+                  <InputLabel id="simple-select-outlined-asignar">CABINA DISPONIBLE</InputLabel>
                   <Select
                     labelId="simple-select-outlined-asignar"
                     id="simple-select-outlined-asignar"
