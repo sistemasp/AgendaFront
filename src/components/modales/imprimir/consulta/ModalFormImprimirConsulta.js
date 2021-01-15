@@ -4,6 +4,7 @@ import Modal from '@material-ui/core/Modal';
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid, Typography } from '@material-ui/core';
 import bannerMePiel from './../../../../bannerMePiel.PNG';
 import { addZero } from '../../../../utils/utils';
+import { ButtonCustom } from '../../../basic/ButtonCustom';
 
 function getModalStyle() {
   const top = 50;
@@ -40,6 +41,26 @@ const useStyles = makeStyles(theme => ({
     marginTop: '0px',
     marginBottom: '0px',
     textAlign: 'center',
+  },
+  label_left: {
+    marginTop: '0px',
+    marginBottom: '0px',
+    marginLeft: '10px',
+    textAlign: 'left',
+  },
+  label_right: {
+    marginTop: '0px',
+    marginBottom: '0px',
+    marginRight: '10px',
+    textAlign: 'right',
+  },
+  label_foot: {
+    fontSize: '11px',
+    marginTop: '0px',
+    marginRight: '10px',
+    marginBottom: '10px',
+    textAlign: 'right',
+    fontWeight: 'bold',
   }
 }));
 
@@ -69,52 +90,44 @@ const ModalFormImprimirConsulta = (props) => {
           <img src={bannerMePiel} alt='banner' width="360" height="85" />
           <Grid container>
             <Grid item xs={12} className={classes.label}>
-              <h2 className={classes.label} >"AL CUIDADO DE TU PIEL"</h2>
+              <h2 className={classes.label}>{datos.sucursal.nombre}</h2>
             </Grid>
-            <Grid item xs={12} className={classes.label}>
-              <h2 className={classes.label}>SUCURSAL: {datos.sucursal.nombre}</h2>
+            <Grid item xs={true} className={classes.label_left}>
+              <h2 className={classes.label_left}>FOLIO: {datos.folio}</h2>
             </Grid>
-            <Grid item xs={6} className={classes.label}>
-              <h3 className={classes.label}>{`FECHA: ${addZero(fecha.getDate())}/${addZero(fecha.getMonth())}/${addZero(fecha.getFullYear())}`}</h3>
+            <Grid item xs={true} className={classes.label_right}>
+              <h3 className={classes.label_right}>{`${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${addZero(fecha.getFullYear())}`}</h3>
             </Grid>
-            <Grid item xs={6} className={classes.label}>
-              <h3 className={classes.label}>{`HORA: ${fecha.getHours()}:${fecha.getMinutes()} HRS`}</h3>
+            <Grid item xs={12} className={classes.label_left}>
+              <h4 className={classes.label_left}>PACIENTE: {datos.paciente_nombre}</h4>
             </Grid>
-            <Grid item xs={12} className={classes.label}>
-              <h3 className={classes.label}>PACIENTE: {datos.paciente_nombre}</h3>
+            <br />
+            <Grid item xs={12} className={classes.label_left}>
+              <h2 className={classes.label_left}>1 CONSULTA {datos.precio_moneda}</h2>
             </Grid>
-            <Grid item xs={12} className={classes.label}>
-              <h3 className={classes.label}>DERMATÓLOGO: {datos.dermatologo_nombre}</h3>
+            <br />
+            <Grid item xs={12}>
+              <p className={classes.label_foot}>*ESTE TICKET NO REPRESENTA UN COMPROBANTE FISCAL.*</p>
             </Grid>
-            <Grid item xs={12} className={classes.label}>
-              <h3 className={classes.label}>FOLIO: {datos.folio}</h3>
-            </Grid>
-            <br/>
-            <Grid item xs={12} >
-              <h2>1 CONSULTA {datos.precio_moneda}</h2>
-            </Grid>
-
             {
               show ?
                 <Fragment>
                   <Grid item xs={12}>
-                    <Button
+                    <ButtonCustom
                       className={classes.button}
                       color="primary"
                       variant="contained"
-                      onClick={onClickImprimir} >
-                      Imprimir
-                </Button>
+                      onClick={onClickImprimir}
+                      text='IMPRIMIR' />
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Button
+                    <ButtonCustom
                       className={classes.button}
                       color="secondary"
                       variant="contained"
-                      onClick={onClose} >
-                      Cerrar
-              </Button>
+                      onClick={onClose}
+                      text='CERRAR' />
                   </Grid>
                 </Fragment> : ''
 

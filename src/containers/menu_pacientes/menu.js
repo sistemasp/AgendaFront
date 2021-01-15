@@ -109,10 +109,14 @@ export const MenuContainer = props => {
 					<Tab className={classes.tabs} label="DERMAPEN" {...a11yProps(4)} />
 					<Tab className={classes.tabs} label="CIRUGIA" {...a11yProps(5)} />
 					<Tab className={classes.tabs} label="ESTETICA" {...a11yProps(6)} />
+					{
+					/*
 					<Tab className={classes.tabs} label="VER CONSULTAS" {...a11yProps(7)} />
 					<Tab className={classes.tabs} label="VER FACIALES" {...a11yProps(8)} />
 					<Tab className={classes.tabs} label="VER APARATOLOGÍA" {...a11yProps(9)} />
 					<Tab className={classes.tabs} label="VER DERMAPEN" {...a11yProps(10)} />
+					*/
+					}
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>
