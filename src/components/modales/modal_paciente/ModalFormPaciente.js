@@ -146,13 +146,12 @@ const ModalFormPaciente = (props) => {
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Button
+                <ButtonCustom
                   className={classes.button}
                   color="secondary"
                   variant="contained"
-                  onClick={onClickCancel} >
-                  CAANCELAR
-                </Button>
+                  onClick={onClickCancel}
+                  text='CANCELAR' />
               </Grid>
             </Grid>
 

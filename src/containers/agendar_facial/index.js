@@ -77,6 +77,7 @@ const AgendarFacial = (props) => {
 	const directoTipoCitaId = process.env.REACT_APP_TIPO_CITA_DIRECTO_ID;
 	const tipoCitaDerivadoId = process.env.REACT_APP_TIPO_CITA_DERIVADO_ID;
 	const servicioFacialId = process.env.REACT_APP_FACIAL_SERVICIO_ID;
+	const sucursalRubenDarioId = process.env.REACT_APP_SUCURSAL_RUBEN_DARIO_ID;
 
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
@@ -225,7 +226,8 @@ const AgendarFacial = (props) => {
 						sucursal === sucursalManuelAcunaId ? item.precio_ma // Precio Manuel Acuña
 							: (sucursal === sucursalOcciId ? item.precio_oc // Precio Occidental
 								: (sucursal === sucursalFedeId ? item.precio_fe // Precio Federalismo
-									: 0)); // Error
+									: (sucursal._id === sucursalRubenDarioId ? item.precio_rd // PRECIO RUBEN DARIO
+									: 0))); // Error
 					precio = Number(precio) + Number(itemPrecio);
 				});
 			}
@@ -445,6 +447,7 @@ const AgendarFacial = (props) => {
 	}
 
 	const handlePrint = async (event, rowData) => {
+		console.log("KAOZ", rowData);
 		setDatosImpresion(rowData);
 		setOpenModalImprimirCita(true);
 	}

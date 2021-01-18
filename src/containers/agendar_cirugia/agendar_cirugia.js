@@ -19,6 +19,7 @@ import { ButtonCustom } from '../../components/basic/ButtonCustom';
 import ModalProximaCita from '../../components/modales/modal_proxima_cita';
 import ModalCirugia from '../../components/modales/modal_cirugia';
 import Pacientes from '../pacientes';
+import ModalImprimirConsulta from '../../components/modales/imprimir/consulta';
 
 const useStyles = makeStyles(theme => ({
 	formControl: {
@@ -176,9 +177,10 @@ export const AgendarCirugiaContainer = (props) => {
 			}
 			{
 				openModalImprimirCita ?
-					<ModalImprimirTratamiento
+					<ModalImprimirConsulta
 						open={openModalImprimirCita}
 						onClose={onCloseImprimirConsulta}
+						servicio="CIRUGÍA"
 						datos={datosImpresion} />
 					: ''
 			}

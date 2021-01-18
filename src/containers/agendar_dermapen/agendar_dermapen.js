@@ -18,6 +18,7 @@ import ModalImprimirTratamiento from '../../components/modales/imprimir/tratamie
 import { ButtonCustom } from '../../components/basic/ButtonCustom';
 import ModalProximaCita from '../../components/modales/modal_proxima_cita';
 import ModalDermapen from '../../components/modales/modal_dermapen';
+import ModalImprimirDermapen from '../../components/modales/imprimir/dermapen';
 
 const useStyles = makeStyles(theme => ({
 	formControl: {
@@ -175,7 +176,7 @@ export const AgendarDermapenContainer = (props) => {
 			}
 			{
 				openModalImprimirCita ?
-					<ModalImprimirTratamiento
+					<ModalImprimirDermapen
 						open={openModalImprimirCita}
 						onClose={onCloseImprimirConsulta}
 						datos={datosImpresion} />

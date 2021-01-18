@@ -67,6 +67,7 @@ const AgendarDermapen = (props) => {
 	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
 	const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
 	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
+	const sucursalRubenDarioId = process.env.REACT_APP_SUCURSAL_RUBEN_DARIO_ID;
 	const dermatologoDirectoId = process.env.REACT_APP_DERMATOLOGO_DIRECTO_ID;
 	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
 	const dermapenServicioId = process.env.REACT_APP_DERMAPEN_SERVICIO_ID;
@@ -425,7 +426,13 @@ const AgendarDermapen = (props) => {
 	}
 
 	const handleChangeCosto = (event) => {
-
+		const costo = event.target.value;
+		const precio = Number(values.total) - Number(costo); 
+		setValues({
+			...values,
+			precio: precio,
+			costo: costo,
+		});
 	}
 
 	const loadAreas = async () => {
@@ -437,11 +444,16 @@ const AgendarDermapen = (props) => {
 
 	const handleChangeAreas = async (items) => {
 		setIsLoading(true);
-		
 		setValues({
 			...values,
+			tratamientos: [
+				{
+					_id: dermapenTratamientoId,
+					nombre: "DERMAPEN",
+					areasSeleccionadas: items,
+				}
+			],
 			fecha_hora: '',
-			areas: items
 		});
 		setDisableDate(false);
 		setIsLoading(false);

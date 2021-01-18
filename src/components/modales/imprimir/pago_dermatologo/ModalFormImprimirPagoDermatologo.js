@@ -994,7 +994,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                                 sucursal._id === sucursalManuelAcunaId ? area.precio_ma // Precio Manuel Acuña
                                   : (sucursal._id === sucursalOcciId ? area.precio_oc // Precio Occidental
                                     : (sucursal._id === sucursalFedeId ? area.precio_fe // Precio Federalismo
-                                      : (sucursal._id === sucursalRubenDarioId ? area.precio_rd // Precio RUBEN DARIO
+                                      : (sucursal._id === sucursalRubenDarioId ? area.precio_rd // PRECIO RUBEN DARIO
                                         : 0))); // Error
                               comisionDermatologo += (Number(itemPrecio) * Number(dermatologo.esquema.porcentaje_laser) / 100);
                             });

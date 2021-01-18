@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
-import { addZero } from '../../../../utils/utils';
-import ModalFormImprimirConsulta from './ModalFormImprimirConsulta';
+import ModalFormImprimirDermapen from './ModalFormImprimirDermapen';
 
 const useStyles = makeStyles(theme => ({
   backdrop: {
@@ -10,7 +9,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ModalImprimirConsulta = (props) => {
+const ModalImprimirDermapen = (props) => {
 
   const classes = useStyles();
 
@@ -18,7 +17,6 @@ const ModalImprimirConsulta = (props) => {
     open,
     onClose,
     datos,
-    servicio,
   } = props;
 
   const [show, setShow] = useState(true);
@@ -34,13 +32,12 @@ const ModalImprimirConsulta = (props) => {
 
   return (
     <Fragment>
-      <ModalFormImprimirConsulta
+      <ModalFormImprimirDermapen
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
         open={open}
         onClose={onClose}
         datos={datos}
-        servicio={servicio}
         onClickImprimir={handleClickImprimir}
         show={show} />
     </Fragment>
@@ -48,4 +45,4 @@ const ModalImprimirConsulta = (props) => {
   );
 }
 
-export default ModalImprimirConsulta;
+export default ModalImprimirDermapen;
