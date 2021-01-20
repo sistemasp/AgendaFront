@@ -136,10 +136,10 @@ export const createConsult = async (consulta) => {
     }
 }
 
-export const updateConsult = async (dateId, consulta) => {
+export const updateConsult = async (consultaId, consulta) => {
     try {
         const response = await axios({
-            url: `${baseUrl}/consulta/${dateId}`,
+            url: `${baseUrl}/consulta/${consultaId}`,
             method: 'PUT',
             data: consulta
         });

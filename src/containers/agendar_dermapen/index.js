@@ -6,6 +6,7 @@ import {
 	createConsecutivo,
 	showAllMedios,
 	showAllMaterials,
+	showAllFrecuencias,
 } from "../../services";
 import {
 	createDermapen,
@@ -69,10 +70,11 @@ const AgendarDermapen = (props) => {
 	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 	const sucursalRubenDarioId = process.env.REACT_APP_SUCURSAL_RUBEN_DARIO_ID;
 	const dermatologoDirectoId = process.env.REACT_APP_DERMATOLOGO_DIRECTO_ID;
-	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
+	const tipoCitaRealizadoId = process.env.REACT_APP_TIPO_CITA_REALIZADO_ID;
 	const dermapenServicioId = process.env.REACT_APP_DERMAPEN_SERVICIO_ID;
 	const dermapenTratamientoId = process.env.REACT_APP_DERMAPEN_TRATAMIENTO_ID;
 	const dermapenAreaId = process.env.REACT_APP_DERMAPEN_AREA_ID;
+	const productoMicropuncionId = process.env.REACT_APP_PRODUCTO_MICROPUNCION_ID;
 
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
@@ -80,6 +82,7 @@ const AgendarDermapen = (props) => {
 	const [horarios, setHorarios] = useState([]);
 	const [dermatologos, setDermatologos] = useState([]);
 	const [promovendedores, setPromovendedores] = useState([]);
+	const [frecuencias, setFrecuencias] = useState([]);
 	const [cosmetologas, setCosmetologas] = useState([]);
 	const [tipoCitas, setTipoCitas] = useState([]);
 	const [medios, setMedios] = useState([]);
@@ -92,7 +95,8 @@ const AgendarDermapen = (props) => {
 		areas: [],
 		paciente: `${paciente._id}`,
 		precio: 0,
-		tipo_cita: tipoCitaNoAplicaId,
+		tipo_cita: tipoCitaRealizadoId,
+		producto: productoMicropuncionId,
 		tiempo: '',
 		observaciones: '',
 		materiales: [],
@@ -249,7 +253,6 @@ const AgendarDermapen = (props) => {
 		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
-		data.tipo_cita = data.dermatologo._id === dermatologoDirectoId ? tipoCitaNoAplicaId : data.tipo_cita;
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 
 		const response = await createDermapen(data);
@@ -427,7 +430,7 @@ const AgendarDermapen = (props) => {
 
 	const handleChangeCosto = (event) => {
 		const costo = event.target.value;
-		const precio = Number(values.total) - Number(costo); 
+		const precio = Number(values.total) - Number(costo);
 		setValues({
 			...values,
 			precio: precio,
@@ -457,6 +460,13 @@ const AgendarDermapen = (props) => {
 		});
 		setDisableDate(false);
 		setIsLoading(false);
+	}
+	const handleChangeFrecuencia = (e) => {
+		const frecuencia = e.target.value._id;
+		setValues({
+			...values,
+			frecuencia: frecuencia,
+		});
 	}
 
 	useEffect(() => {
@@ -491,8 +501,9 @@ const AgendarDermapen = (props) => {
 				const precio =
 					sucursal === sucursalManuelAcunaId ? dermapen.precio_ma // Precio Manuel Acuña
 						: (sucursal === sucursalOcciId ? dermapen.precio_oc // Precio Occidental
-							: (sucursal === sucursalFedeId ? dermapen.precio_fe // Precio Federalismo
-								: 0)); // Error
+							: (sucursal === sucursalFedeId ? dermapen.precio_fe // Precio Federalismo}
+								: (sucursal === sucursalRubenDarioId ? dermapen.precio_rd // PRECIO RUBEN DARIO
+									: 0))); // Error
 				setValues({
 					...values,
 					total: 0,
@@ -506,6 +517,13 @@ const AgendarDermapen = (props) => {
 			const response = await findEmployeesByRolId(promovendedorRolId);
 			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 				setPromovendedores(response.data);
+			}
+		}
+
+		const loadFrecuencias = async () => {
+			const response = await showAllFrecuencias();
+			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+				setFrecuencias(response.data);
 			}
 		}
 
@@ -533,6 +551,7 @@ const AgendarDermapen = (props) => {
 		setIsLoading(true);
 		findDermapen();
 		loadDermapens();
+		loadFrecuencias();
 		loadAreas();
 		loadHorariosByServicio(new Date(), dermapenServicioId);
 		loadPromovendedores();
@@ -580,6 +599,8 @@ const AgendarDermapen = (props) => {
 								dermatologos={dermatologos}
 								tipoCitas={tipoCitas}
 								medios={medios}
+								onChangeFrecuencia={(e) => handleChangeFrecuencia(e)}
+								frecuencias={frecuencias}
 								onChangeTipoCita={(e) => handleChangeTipoCita(e)}
 								onChangeAreas={(e) => handleChangeAreas(e)}
 								onChangeMedio={(e) => handleChangeMedio(e)}

@@ -59,15 +59,9 @@ const AgendarEstetica = (props) => {
 	const paciente = consultaAgendada.paciente ? consultaAgendada.paciente : {};
 
 	const dermatologoRolId = process.env.REACT_APP_DERMATOLOGO_ROL_ID;
-	const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
-	const cosmetologaRolId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
 	const pendienteStatusId = process.env.REACT_APP_PENDIENTE_STATUS_ID;
-	const atendidoStatusId = process.env.REACT_APP_ATENDIDO_STATUS_ID;
-	const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
-	const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
-	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 	const dermatologoDirectoId = process.env.REACT_APP_DERMATOLOGO_DIRECTO_ID;
-	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
+	const tipoCitaRealizadoId = process.env.REACT_APP_TIPO_CITA_REALIZADO_ID;
 	const esteticaServicioId = process.env.REACT_APP_ESTETICA_SERVICIO_ID;
 	const frecuenciaPrimeraVezId = process.env.REACT_APP_FRECUENCIA_PRIMERA_VEZ_ID;
 	const frecuenciaReconsultaId = process.env.REACT_APP_FRECUENCIA_RECONSULTA_ID;
@@ -91,6 +85,7 @@ const AgendarEstetica = (props) => {
 		observaciones: '',
 		materiales: [],
 		producto: productoAplicacionToxinaBotulinicaDituroxalId,
+		tipo_cita: tipoCitaRealizadoId,
 	});
 	const [esteticas, setEsteticas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);

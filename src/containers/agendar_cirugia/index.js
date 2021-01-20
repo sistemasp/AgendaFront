@@ -66,7 +66,7 @@ const AgendarCirugia = (props) => {
 	const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
 	const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
 	const dermatologoDirectoId = process.env.REACT_APP_DERMATOLOGO_DIRECTO_ID;
-	const tipoCitaNoAplicaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
+	const tipoCitaRealizadoId = process.env.REACT_APP_TIPO_CITA_REALIZADO_ID;
 	const cirugiaServicioId = process.env.REACT_APP_CIRUGIA_SERVICIO_ID;
 	const frecuenciaPrimeraVezId = process.env.REACT_APP_FRECUENCIA_PRIMERA_VEZ_ID;
 	const frecuenciaReconsultaId = process.env.REACT_APP_FRECUENCIA_RECONSULTA_ID;
@@ -88,6 +88,7 @@ const AgendarCirugia = (props) => {
 		observaciones: '',
 		materiales: [],
 		producto: productoCirugiaId,
+		tipo_cita: tipoCitaRealizadoId,
 	});
 	const [cirugias, setCirugias] = useState([]);
 	const [openModal, setOpenModal] = useState(false);

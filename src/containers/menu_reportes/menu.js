@@ -15,6 +15,7 @@ import ReportesBiopsias from './reportes/reportes_biopsias';
 import ReportesFaciales from './reportes/reportes_faciales';
 import ReportesLaser from './reportes/reportes_laser';
 import ReportesAparatologia from './reportes/reportes_aparatologia';
+import ReportesDetallesGeneral from './reportes/detalles_general';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -97,7 +98,7 @@ export const MenuContainer = props => {
 				</Tabs>
 			</AppBar>
 			<TabPanel value={value} index={0}>
-				<ReportesConsultas
+				<ReportesDetallesGeneral
 					sucursal={sucursal} />
 			</TabPanel>
 			<TabPanel value={value} index={1}>

@@ -9,6 +9,7 @@ import {
   findConsultsByPayOfDoctorHoraAplicacion,
   findConsultsByPayOfDoctorHoraAplicacionFrecuencia,
   findConsultsByPayOfDoctorHoraAplicacionFrecuenciaPA,
+  updateConsult,
 } from '../../../../services/consultas';
 import {
   createEgreso,
@@ -19,6 +20,7 @@ import { findAparatologiasByPayOfDoctorHoraAplicacion, findAparatologiasByPayOfD
 import { findCirugiasByPayOfDoctorHoraAplicacion, findCirugiasByPayOfDoctorHoraAplicacionPA } from '../../../../services/cirugias';
 import { findEsteticasByPayOfDoctorHoraAplicacion, findEsteticasByPayOfDoctorHoraAplicacionPA } from '../../../../services/esteticas';
 import { findDermapensByPayOfDoctorHoraAplicacion, findDermapensByPayOfDoctorHoraAplicacionPA } from '../../../../services/dermapens';
+import { toFormatterCurrency } from '../../../../utils/utils';
 
 const useStyles = makeStyles(theme => ({
   backdrop: {
@@ -234,13 +236,14 @@ const ModalImprimirPagoDermatologo = (props) => {
     let total = 0;
 
     // TOTAL DE LAS CONSULTAS 
-    consultas.forEach(consulta => {
-
+    consultas.forEach(async (consulta) => {
       let totalPagos = 0;
       consulta.pagos.forEach(pago => {
         totalPagos += Number(pago.total);
       })
       const pagoDermatologo = Number(totalPagos) * Number(consulta.frecuencia === reconsultaFrecuenciaId ? dermatologo.esquema.porcentaje_reconsulta : dermatologo.esquema.porcentaje_consulta) / 100;
+      consulta.pago_dermatologo = pagoDermatologo;
+      await updateConsult(consulta._id, consulta);
       total += Number(pagoDermatologo);
     });
 

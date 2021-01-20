@@ -79,6 +79,8 @@ export const AgendarDermapenContainer = (props) => {
 		onChangeMateriales,
 		onChangeItemPrecio,
 		onChangeTotal,
+		onChangeFrecuencia,
+		frecuencias,
 		onChangeCosto,
 		// TABLE DATES PROPERTIES
 		titulo,
@@ -222,6 +224,19 @@ export const AgendarDermapenContainer = (props) => {
 							placeholder={`AREAS`}
 							selectedValues={values.areas} // Preselected value to persist in dropdown
 						/>
+					</Grid>
+					<Grid item xs={12} sm={2}>
+						<FormControl variant="outlined" className={classes.formControl}>
+							<InputLabel id="simple-select-outlined-frecuencia">FRECUENCIA</InputLabel>
+							<Select
+								labelId="simple-select-outlined-frecuencia"
+								id="simple-select-outlined-frecuencia"
+								value={values.frecuencia}
+								onChange={onChangeFrecuencia}
+								label="FRECUENCIA" >
+								{frecuencias.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+							</Select>
+						</FormControl>
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
