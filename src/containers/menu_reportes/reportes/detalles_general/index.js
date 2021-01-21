@@ -10,6 +10,7 @@ import { findEsteticasByRangeDateAndSucursal } from "../../../../services/esteti
 import { findCirugiasByRangeDateAndSucursal } from "../../../../services/cirugias";
 import { findDermapenByRangeDateAndSucursal } from "../../../../services/dermapens";
 import { showAllBanco, showAllMetodoPago, showAllTipoTarjeta } from "../../../../services";
+import { findRazonSocialById } from "../../../../services/razones_sociales";
 
 const useStyles = makeStyles(theme => ({
 	backdrop: {
@@ -117,8 +118,7 @@ const ReportesDetallesGeneral = (props) => {
 
 	const procesarDatos = async () => {
 		const datosCompletos = [...consultas, ...faciales, ...dermapens, ...cirugias, ...esteticas, ...aparatologias];
-		datosCompletos.forEach(item => {
-			//console.log("KAOZ", item);
+		datosCompletos.forEach(async (item) => {
 			const fecha = new Date(item.fecha_hora);
 
 			item.fecha_show = `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`;
@@ -130,7 +130,12 @@ const ReportesDetallesGeneral = (props) => {
 			item.cantidad_servicios = 1;
 			item.observaciones = item.observaciones ? item.observaciones : "*";
 			if (item.factura) {
+				const fechaFactura = new Date(item.factura.fecha_hora);
 				item.requiere_factura = "SI";
+				item.fecha_facturacion = `${addZero(fechaFactura.getDate())}/${addZero(fechaFactura.getMonth() + 1)}/${fechaFactura.getFullYear()}`;
+				item.razon_social_nombre = item.factura.razon_social.nombre_completo;
+				item.rfc = item.factura.razon_social.rfc;
+				item.no_factura = item.factura.no_factura;
 			} else {
 				item.requiere_factura = "NO";
 				item.razon_social_nombre = "NO APLICA";
@@ -169,9 +174,9 @@ const ReportesDetallesGeneral = (props) => {
 					importe1 += Number(pago.total);
 					total += Number(pago.total - pago.descuento_clinica);
 				});
-				
+
 				const impuestoPorcentaje = 0;
-				
+
 				item.impuesto_porcentaje = `${impuestoPorcentaje}%`;
 				item.importe_1 = toFormatterCurrency(importe1);
 				item.total_moneda = toFormatterCurrency(total);

@@ -41,6 +41,11 @@ const ModalPagos = (props) => {
     setOpenModalPago(true);
   }
 
+  const handleChangeFactura = () => {
+    servicio.factura = !servicio.factura;
+    setOpenModalFactura(true);
+  }
+
   const columns = [
     { title: 'FECHA', field: 'fecha' },
     { title: 'HORA', field: 'hora' },
@@ -71,12 +76,6 @@ const ModalPagos = (props) => {
   };
 
   const actions = [
-    rowData => ({
-      disabled: rowData.factura,
-      icon: AssignmentIcon,
-      tooltip: rowData.factura ? 'YA SE GENERO FACTURA' : 'GENERAR FACTURA',
-      onClick: handleClickBuscarRazonSocial
-    }),
     {
       icon: EditIcon,
       tooltip: 'EDITAR PAGO',
@@ -124,7 +123,8 @@ const ModalPagos = (props) => {
     setOpenModalPago(false);
   }
 
-  const handleCloseBuscarRazonSocial = () => {
+  const handleCloseBuscarRazonSocial = (val) => {
+    servicio.factura = val;
     setOpenModalFactura(false);
   }
 
@@ -159,6 +159,7 @@ const ModalPagos = (props) => {
         titulo={`PAGOS: ${servicio.paciente.nombres} ${servicio.paciente.apellidos}`}
         openModalFactura={openModalFactura}
         onCloseBuscarRazonSocial={handleCloseBuscarRazonSocial}
+        onChangeFactura={handleChangeFactura}
         loadPagos={loadPagos}
         restante={restante}
         tipoServicioId={tipoServicioId} />

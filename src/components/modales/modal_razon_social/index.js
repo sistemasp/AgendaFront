@@ -1,9 +1,15 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import ModalFormRazonSocial from './ModalFormRazonSocial';
-import { sepomexGetEstados, sepomexGetMunicipos, sepomexGetColonia, sepomexGetAllInfoByCP, createRazonSocial, updateRazonSocial } from '../../../services';
+import { 
+  sepomexGetEstados,
+  sepomexGetMunicipos,
+  sepomexGetColonia,
+  sepomexGetAllInfoByCP,
+} from '../../../services';
 import { Formik } from 'formik';
 import { Snackbar } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
+import { createRazonSocial, updateRazonSocial } from '../../../services/razones_sociales';
 
 const Alert = (props) => {
   return <MuiAlert elevation={6} variant="filled" {...props} />;

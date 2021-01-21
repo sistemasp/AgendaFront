@@ -78,6 +78,7 @@ const ModalFormPagos = (props) => {
     actions,
     restante,
     tipoServicioId,
+    onChangeFactura,
   } = props;
 
   return (
@@ -111,17 +112,24 @@ const ModalFormPagos = (props) => {
         open={open} >
         <div style={modalStyle} className={classes.paper}>
 
-          {
-           // !servicio.pagado ?
-              <Grid item xs={12} sm={12}>
-                <ButtonCustom
-                  className={classes.button}
-                  color="primary"
-                  variant="contained"
-                  onClick={onClickNewPago}
-                  text='AGREGAR PAGO' />
-              </Grid> //: ''
-          }
+          <Grid item xs={12} sm={true}>
+            <ButtonCustom
+              className={classes.button}
+              color="primary"
+              variant="contained"
+              onClick={onClickNewPago}
+              text='AGREGAR PAGO' />
+          </Grid>
+
+          <Grid item xs={12} sm={true}>
+            <CheckCustom
+              checked={servicio.factura}
+              onChange={onChangeFactura}
+              disabled={servicio.factura}
+              name="checkedC"
+              label="REQUIERE FACTURA"
+            />
+          </Grid>
 
           <TableComponent
             titulo={titulo}
@@ -144,15 +152,15 @@ const ModalFormPagos = (props) => {
           <Grid container xs={12}>
             {
               //!servicio.pagado ?
-                <Grid item xs={12} sm={6}>
-                  <ButtonCustom
-                    className={classes.button}
-                    color="primary"
-                    variant="contained"
-                    onClick={() => onGuardarModalPagos(servicio)}
-                    disabled={pagos == ![]}
-                    text='Guardar' />
-                </Grid> //: ''
+              <Grid item xs={12} sm={6}>
+                <ButtonCustom
+                  className={classes.button}
+                  color="primary"
+                  variant="contained"
+                  onClick={() => onGuardarModalPagos(servicio)}
+                  disabled={pagos == ![]}
+                  text='Guardar' />
+              </Grid> //: ''
             }
             <Grid item xs={12} sm={6}>
               <Button

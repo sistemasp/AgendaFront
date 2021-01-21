@@ -15,11 +15,11 @@ import {
   createEgreso,
 } from '../../../../services/egresos';
 import { showCorteTodayBySucursalAndTurno } from '../../../../services/corte';
-import { findFacialesByPayOfDoctorHoraAplicacion, findFacialesByPayOfDoctorHoraAplicacionPA } from '../../../../services/faciales';
-import { findAparatologiasByPayOfDoctorHoraAplicacion, findAparatologiasByPayOfDoctorHoraAplicacionPA } from '../../../../services/aparatolgia';
-import { findCirugiasByPayOfDoctorHoraAplicacion, findCirugiasByPayOfDoctorHoraAplicacionPA } from '../../../../services/cirugias';
-import { findEsteticasByPayOfDoctorHoraAplicacion, findEsteticasByPayOfDoctorHoraAplicacionPA } from '../../../../services/esteticas';
-import { findDermapensByPayOfDoctorHoraAplicacion, findDermapensByPayOfDoctorHoraAplicacionPA } from '../../../../services/dermapens';
+import { findFacialesByPayOfDoctorHoraAplicacion, findFacialesByPayOfDoctorHoraAplicacionPA, updateFacial } from '../../../../services/faciales';
+import { findAparatologiasByPayOfDoctorHoraAplicacion, findAparatologiasByPayOfDoctorHoraAplicacionPA, updateAparatologia } from '../../../../services/aparatolgia';
+import { findCirugiasByPayOfDoctorHoraAplicacion, findCirugiasByPayOfDoctorHoraAplicacionPA, updateCirugia } from '../../../../services/cirugias';
+import { findEsteticasByPayOfDoctorHoraAplicacion, findEsteticasByPayOfDoctorHoraAplicacionPA, updateEstetica } from '../../../../services/esteticas';
+import { findDermapensByPayOfDoctorHoraAplicacion, findDermapensByPayOfDoctorHoraAplicacionPA, updateDermapen } from '../../../../services/dermapens';
 import { toFormatterCurrency } from '../../../../utils/utils';
 
 const useStyles = makeStyles(theme => ({
@@ -248,19 +248,23 @@ const ModalImprimirPagoDermatologo = (props) => {
     });
 
     // TOTAL DE LAS CIRUGIAS
-    cirugias.forEach(cirugia => {
+    cirugias.forEach(async(cirugia) => {
       const pagoDermatologo = Number(cirugia.precio) * Number(dermatologo.esquema.porcentaje_cirugias) / 100;
+      cirugia.pago_dermatologo = pagoDermatologo;
+      await updateCirugia(cirugia._id, cirugia)
       total += Number(pagoDermatologo);
     });
 
     // TOTAL DERMAPENS
-    dermapens.forEach(dermapen => {
+    dermapens.forEach(async(dermapen) => {
       const pagoDermatologo = Number(dermapen.precio) * Number(dermatologo.esquema.porcentaje_dermocosmetica) / 100;
+      dermapen.pago_dermatologo = pagoDermatologo;
+      await updateDermapen(dermapen._id, dermapen);
       total += Number(pagoDermatologo);
     });
 
     // TOTAL DE LOS FACIALES
-    faciales.forEach(facial => {
+    faciales.forEach(async(facial) => {
       let comisionDermatologo = 0;
       facial.areas.forEach(area => {
         switch (facial.tipo_cita._id) {
@@ -279,12 +283,13 @@ const ModalImprimirPagoDermatologo = (props) => {
         }
       });
       const pagoDermatologo = comisionDermatologo - ((comisionDermatologo * facial.pagos[0].porcentaje_descuento_clinica) / 100);
-
+      facial.pago_dermatologo = pagoDermatologo;
+      await updateFacial(facial._id, facial);
       total += Number(pagoDermatologo);
     });
 
     // TOTAL DE LAS APARATOLOGIAS
-    aparatologias.forEach(aparatologia => {
+    aparatologias.forEach(async(aparatologia) => {
       let comisionDermatologo = 0;
       aparatologia.areas.forEach(area => {
         switch (aparatologia.tipo_cita._id) {
@@ -303,12 +308,16 @@ const ModalImprimirPagoDermatologo = (props) => {
         }
       });
       const pagoDermatologo = comisionDermatologo - ((comisionDermatologo * aparatologia.pagos[0].porcentaje_descuento_clinica) / 100);;
+      aparatologia.pago_dermatologo = pagoDermatologo;
+      await updateAparatologia(aparatologia._id, aparatologia);
       total += Number(pagoDermatologo);
     });
 
     // TOTAL DE LAS ESTETICAS
-    esteticas.map(estetica => {
+    esteticas.map(async(estetica) => {
       const pagoDermatologo = Number(estetica.precio) * Number(dermatologo.esquema.porcentaje_dermocosmetica) / 100;
+      estetica.pago_dermatologo = pagoDermatologo;
+      await updateEstetica(estetica._id, estetica);
       total += Number(pagoDermatologo);
     });
 

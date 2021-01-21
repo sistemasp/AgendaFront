@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ModalHistoricoFacturas from './ModalHistoricoFacturas';
 import { addZero, toFormatterCurrency } from '../../../../utils/utils';
-import { findFacturaByRazonSocialId } from '../../../../services';
 import RazonSocial from '../../../../containers/razon_social';
+import { findFacturaByRazonSocialId } from '../../../../services/facturas';
 
 const ModHistoricoFacturas = (props) => {
 

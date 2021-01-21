@@ -830,46 +830,6 @@ export const deletePago = async (pagoId) => {
     }
 }
 
-// RAZON SOCIAL
-
-export const showAllRazonSocials = async () => {
-    try {
-        const response = await axios({
-            url: `${baseUrl}/razonsocial`,
-            method: 'GET'
-        });
-        return response;
-    } catch (error) {
-        console.log('showAllRazonSocials', error);
-    }
-}
-
-export const updateRazonSocial = async (razonSocialId, razonSocial) => {
-    try {
-        const response = await axios({
-            url: `${baseUrl}/razonsocial/${razonSocialId}`,
-            method: 'PUT',
-            data: razonSocial
-        });
-        return response;
-    } catch (error) {
-        console.log('updateRazonSocial', error);
-    }
-}
-
-export const createRazonSocial = async (razonSocial) => {
-    try {
-        const response = await axios({
-            url: `${baseUrl}/razonsocial`,
-            method: 'POST',
-            data: razonSocial
-        });
-        return response;
-    } catch (error) {
-        console.log('createRazonSocial', error);
-    }
-}
-
 // SEPOMEX
 
 export const sepomexGetEstados = async () => {
@@ -947,45 +907,6 @@ export const showAllUsoCfdis = async () => {
         return response;
     } catch (error) {
         console.log('showAllUsoCfdis', error);
-    }
-}
-
-// FACTURAS 
-
-export const createFactura = async (factura) => {
-    try {
-        const response = await axios({
-            url: `${baseUrl}/factura`,
-            method: 'POST',
-            data: factura
-        });
-        return response;
-    } catch (error) {
-        console.log('createFactura', error);
-    }
-}
-
-export const findFacturasByRangeDateAndSucursal = async (diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
-    try {
-        const response = await axios({
-            url: `${baseUrl}/factura/fecha_inicio/${diai}/${mesi}/${anioi}/fecha_fin/${diaf}/${mesf}/${aniof}/sucursal/${sucursalId}`,
-            method: 'GET'
-        });
-        return response;
-    } catch (error) {
-        console.log('findFacturasByRangeDateAndSucursal', error);
-    }
-}
-
-export const findFacturaByRazonSocialId = async (razonSocialId) => {
-    try {
-        const response = await axios({
-            url: `${baseUrl}/factura/razonsocial/${razonSocialId}`,
-            method: 'GET'
-        });
-        return response;
-    } catch (error) {
-        console.log('findFacturaByRazonSocialId', error);
     }
 }
 

@@ -4,6 +4,7 @@ import Modal from '@material-ui/core/Modal';
 import { TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import TableComponent from '../../table/TableComponent';
 import { ButtonCustom } from '../../basic/ButtonCustom';
+import myStyles from '../../../css';
 
 function getModalStyle() {
   const top = 50;
@@ -16,34 +17,8 @@ function getModalStyle() {
   };
 }
 
-const useStyles = makeStyles(theme => ({
-  paper: {
-    position: 'absolute',
-    width: 400,
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-  textField: {
-    width: '100%',
-  },
-  button: {
-    width: '100%',
-  },
-  formControl: {
-    minWidth: 120,
-    width: '100%',
-    marginBottom: '20px',
-  },
-  label: {
-    marginTop: '0px',
-    marginBottom: '0px',
-  },
-}));
-
 const ModalFormUsoCfdi = (props) => {
-  const classes = useStyles();
+  const classes = myStyles();
 
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);

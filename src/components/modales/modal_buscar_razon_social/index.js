@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import ModalFormBuscarRazonSocial from './ModalFormBuscarRazonSocial';
-import { sepomexGetEstados, sepomexGetMunicipos, sepomexGetColonia, sepomexGetAllInfoByCP, createRazonSocial, updateRazonSocial, showAllRazonSocials } from '../../../services';
+import { showAllRazonSocials } from '../../../services/razones_sociales';
 import { Formik } from 'formik';
 import { Snackbar, Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
@@ -72,9 +72,9 @@ const ModalBuscarRazonSocial = (props) => {
 
   const hanldeSelectRazonSocial = (event, rowData) => {
     const factura = {
-      paciente: pago.paciente._id,
+      paciente: servicio.paciente._id,
       razon_social: rowData._id,
-      sucursal: pago.sucursal,
+      sucursal: servicio.sucursal,
       tipo_servicio: servicio.servicio._id,
       servicio: servicio._id,
     }
@@ -141,6 +141,7 @@ const ModalBuscarRazonSocial = (props) => {
             actions={actions}
             options={options}
             factura={factura}
+            servicio={servicio}
             openModalUsoCfdi={openModalUsoCfdi}
             onCloseUsoCfdi={handleCloseUsoCfdi}
             handleOpenNuevaRazonSocial={handleOpenNuevaRazonSocial}
