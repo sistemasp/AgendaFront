@@ -351,6 +351,7 @@ const ModalImprimirPagoDermatologo = (props) => {
         hora_aplicacion: corte.create_date,
         tipo_egreso: pagoDermatologoTipoEgresoId,
         recepcionista: empleado,
+        turno: corte.turno === 'm' ? 'MATUTINO' : 'VESPERTINO',
         concepto: dermatologo.nombre,
         cantidad: data.retencion,
         sucursal: sucursal._id,

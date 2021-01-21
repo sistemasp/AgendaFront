@@ -27,6 +27,7 @@ const ModalNuevoEgreso = (props) => {
     recepcionista: empleado._id,
     sucursal: sucursal,
     forma_pago: efectivoMetodoPagoId,
+    turno: corte.turno === 'm' ? 'MATUTINO' : 'VESPERTINO',
     tipo_egreso: '',
   });
 
@@ -56,7 +57,7 @@ const ModalNuevoEgreso = (props) => {
     });
   }
 
-  const handleAgregarConceto = async () => {
+  const handleAgregarEgreso = async () => {
     const create_date = new Date();
     create_date.setHours(create_date.getHours());
     values.create_date = create_date;
@@ -106,7 +107,7 @@ const ModalNuevoEgreso = (props) => {
       openModalConfirmacion={openModalConfirmacion}
       onCloseModalConfirmacion={handleCloseModalConfirmacion}
       onConfirmModalConfirmacion={handleConfirmModalConfirmacion}
-      onAgregarConceto={handleAgregarConceto}
+      onAgregarEgreso={handleAgregarEgreso}
       onChange={handleChange}
       onChangeTipoEgreso={(e) => handleChangeTipoEgreso(e)}
       {...props} />

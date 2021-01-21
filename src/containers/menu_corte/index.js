@@ -104,6 +104,8 @@ const Corte = (props) => {
 
   ];
 
+  console.log("KAOZ", corte);
+
   const options = {
     headerStyle: {
       backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,

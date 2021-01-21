@@ -55,7 +55,7 @@ const ModalFormNuevoEgreso = (props) => {
     onChangeTipoEgreso,
     tipoEgresos,
     onChange,
-    onAgregarConceto,
+    onAgregarEgreso,
     empleado,
     previousTipoEgreso,
     openModalConfirmacion,
@@ -138,7 +138,7 @@ const ModalFormNuevoEgreso = (props) => {
               className={classes.button}
               color="primary"
               variant="contained"
-              onClick={onAgregarConceto}
+              onClick={onAgregarEgreso}
               disabled={dataComplete}
               text='AGREGAR' />
           </Grid>

@@ -40,3 +40,15 @@ export const showEgresosTodayBySucursalAndHoraAplicacion = async (sucursalId, ho
         console.log('showEgresosTodayBySucursalAndHoraAplicacion', error);
     }
 }
+
+export const findEgresosByRangeDateAndSucursal = async (diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/egreso/fecha_inicio/${diai}/${mesi}/${anioi}/fecha_fin/${diaf}/${mesf}/${aniof}/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findEgresosByRangeDateAndSucursal', error);
+    }
+}

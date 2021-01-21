@@ -24,6 +24,7 @@ const ModalNuevoIngreso = (props) => {
   const [values, setValues] = useState({
     recepcionista: empleado._id,
     sucursal: sucursal,
+    turno: corte.turno === 'm' ? 'MATUTINO' : 'VESPERTINO',
   });
 
   const [tipoIngresos, setTipoIngresos] = useState([]);

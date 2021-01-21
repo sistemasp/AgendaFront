@@ -16,6 +16,7 @@ import ReportesFaciales from './reportes/reportes_faciales';
 import ReportesLaser from './reportes/reportes_laser';
 import ReportesAparatologia from './reportes/reportes_aparatologia';
 import ReportesDetallesGeneral from './reportes/detalles_general';
+import ReportesGastos from './reportes/detalles_gastos';
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -106,7 +107,7 @@ export const MenuContainer = props => {
 					sucursal={sucursal} />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
-				<ReportesLaser
+				<ReportesGastos
 					sucursal={sucursal} />
 			</TabPanel>
 			<TabPanel value={value} index={3}>

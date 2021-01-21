@@ -6,15 +6,7 @@ import ModalPaciente from '../../components/modales/modal_paciente';
 import ModHistorico from '../../components/modales/modal_historico';
 import ModalImprimirPagoDermatologo from '../../components/modales/imprimir/pago_dermatologo';
 
-const useStyles = makeStyles(theme => ({
-	button: {
-		color: '#FFFFFF'
-	}
-}));
-
 export const DermatologosContainer = (props) => {
-
-  const classes = useStyles();
 
   const {
     titulo,

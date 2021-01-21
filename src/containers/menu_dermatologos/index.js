@@ -3,9 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Backdrop, CircularProgress } from '@material-ui/core';
 import { DermatologosContainer } from './dermatologos';
 import { findEmployeesByRolId } from '../../services';
-import EditIcon from '@material-ui/icons/Edit';
-import EventAvailableIcon from '@material-ui/icons/EventAvailable';
-import HistoryIcon from '@material-ui/icons/History';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import PaymentIcon from '@material-ui/icons/Payment';
@@ -113,22 +110,23 @@ const Dermatologos = (props) => {
 		}*/
 	];
 
-	useEffect(() => {
-		const loadDermatologos = async () => {
-			const response = await findEmployeesByRolId(dermatologoRolId);
-			if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-				response.data.forEach(item => {
-					const fecha_ingreso = new Date(item.fecha_ingreso);
-					const fecha_ingreso_show = `${addZero(fecha_ingreso.getDate())}/${addZero(Number(fecha_ingreso.getMonth() + 1))}/${fecha_ingreso.getFullYear()}`;
-					const fecha_baja = new Date(item.fecha_baja);
-					const fecha_baja_show = `${addZero(fecha_baja.getDate())}/${addZero(Number(fecha_baja.getMonth() + 1))}/${fecha_baja.getFullYear()}`;
-					item.fecha_ingreso_show = fecha_ingreso_show;
-					item.fecha_baja_show = item.fecha_baja ? fecha_baja_show : 'VIGENTE';
-				});
-				setDermatologos(response.data);
-			}
-			setIsLoading(false);
+	const loadDermatologos = async () => {
+		const response = await findEmployeesByRolId(dermatologoRolId);
+		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+			response.data.forEach(item => {
+				const fecha_ingreso = new Date(item.fecha_ingreso);
+				const fecha_ingreso_show = `${addZero(fecha_ingreso.getDate())}/${addZero(Number(fecha_ingreso.getMonth() + 1))}/${fecha_ingreso.getFullYear()}`;
+				const fecha_baja = new Date(item.fecha_baja);
+				const fecha_baja_show = `${addZero(fecha_baja.getDate())}/${addZero(Number(fecha_baja.getMonth() + 1))}/${fecha_baja.getFullYear()}`;
+				item.fecha_ingreso_show = fecha_ingreso_show;
+				item.fecha_baja_show = item.fecha_baja ? fecha_baja_show : 'VIGENTE';
+			});
+			setDermatologos(response.data);
 		}
+		setIsLoading(false);
+	}
+
+	useEffect(() => {
 		loadDermatologos();
 	}, []);
 
