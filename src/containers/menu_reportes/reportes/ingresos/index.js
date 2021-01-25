@@ -164,7 +164,7 @@ const ReportesIngresos = (props) => {
 				gastos: toFormatterCurrency(gastos),
 				retiros_parciales: toFormatterCurrency(retirosParciales),
 				utilidad_o_perdida: toFormatterCurrency(
-					(retirosParciales + pagoDermatologoEfectivo + pagoDermatologoRetencion + gastos) - efectivo
+					(retirosParciales + pagoDermatologoEfectivo + gastos) - efectivo
 				),
 			});
 		});
