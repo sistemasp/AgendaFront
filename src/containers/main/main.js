@@ -164,6 +164,7 @@ export const MainContainer = props => {
 	const generateCorteMatutino = async () => {
 		const create_date = new Date();
 		const newCorte = {
+			recepcionista: empleado._id,
 			create_date: create_date,
 			hora_apertura: create_date,
 			turno: 'm',

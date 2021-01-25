@@ -104,8 +104,6 @@ const Corte = (props) => {
 
   ];
 
-  console.log("KAOZ", corte);
-
   const options = {
     headerStyle: {
       backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
@@ -448,7 +446,7 @@ const Corte = (props) => {
       ingresos: ingresos,
       pagos_anticipados: pagosAnticipados,
       egresos: egresos,
-      recepcionista: empleado,
+      recepcionista: empleado._id,
       sucursal: sucursal._id,
     }
     const response = await createCorte(newCorte);
@@ -471,6 +469,7 @@ const Corte = (props) => {
       return pagoAnticipado._id;
     });
     corte.generado = true;
+    corte.recepcionista = empleado._id;
     const response = await updateCorte(corte._id, corte);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setSeverity('success');
@@ -483,6 +482,7 @@ const Corte = (props) => {
   const handleCerrarCorte = async () => {
     const date = new Date();
     corte.hora_cierre = date;
+    corte.recepcionista = empleado._id;
     const response = await updateCorte(corte._id, corte);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       setSeverity('success');
@@ -495,6 +495,7 @@ const Corte = (props) => {
           hora_apertura: date,
           turno: 'v',
           sucursal: sucursal,
+          recepcionista: empleado._id,
         }
         await createCorte(newCorte);
       }

@@ -20,6 +20,7 @@ import ModalProximaCita from '../../components/modales/modal_proxima_cita';
 import ModalEstetica from '../../components/modales/modal_estetica';
 import Pacientes from '../pacientes';
 import ModalImprimirConsulta from '../../components/modales/imprimir/consulta';
+import ModalImprimirCirugia from '../../components/modales/imprimir/cirugia';
 
 const useStyles = makeStyles(theme => ({
 	formControl: {
@@ -201,7 +202,7 @@ export const AgendarEsteticaContainer = (props) => {
 			}
 			{
 				openModalImprimirCita ?
-					<ModalImprimirConsulta
+					<ModalImprimirCirugia
 						open={openModalImprimirCita}
 						onClose={onCloseImprimirConsulta}
 						servicio="TOXINAS Y RELLENOS"

@@ -53,3 +53,15 @@ export const updateCorte = async (corteId, corte) => {
         console.log('updateCorte', error);
     }
 }
+
+export const findCortesByRangeDateAndSucursal = async (diai, mesi, anioi, diaf, mesf, aniof, sucursalId) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/corte/fecha_inicio/${diai}/${mesi}/${anioi}/fecha_fin/${diaf}/${mesf}/${aniof}/sucursal/${sucursalId}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findCortesByRangeDateAndSucursal', error);
+    }
+}

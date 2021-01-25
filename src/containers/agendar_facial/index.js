@@ -447,7 +447,6 @@ const AgendarFacial = (props) => {
 	}
 
 	const handlePrint = async (event, rowData) => {
-		console.log("KAOZ", rowData);
 		setDatosImpresion(rowData);
 		setOpenModalImprimirCita(true);
 	}

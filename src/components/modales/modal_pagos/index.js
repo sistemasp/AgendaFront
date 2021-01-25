@@ -124,7 +124,7 @@ const ModalPagos = (props) => {
   }
 
   const handleCloseBuscarRazonSocial = (val) => {
-    servicio.factura = val;
+    //servicio.factura = val;
     setOpenModalFactura(false);
   }
 

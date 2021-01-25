@@ -1064,7 +1064,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                                   : (sucursal._id === sucursalOcciId ? area.precio_oc // Precio Occidental
                                     : (sucursal._id === sucursalFedeId ? area.precio_fe // Precio Federalismo
                                       : (sucursal._id === sucursalRubenDarioId ? area.precio_rd // Precio RUBEN DARIO
-                                      : 0))); // Error
+                                        : 0))); // Error
                               pagoDermatologoDirecto += Number(itemPrecio);
                             });
                           });
@@ -1122,7 +1122,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                 <h2 className={classes.labelItemRight}>TOTAL: {toFormatterCurrency(pagoTotal)}</h2>
                 {
                   dermatologo._id !== dermatologoDirectoId
-                    ? <h1 className={classes.labelItemRight}>RETENCIÓN: {toFormatterCurrency(pagoTotal / (dermatologo.pago_completo ? 1 : 2))}</h1>
+                    ? <h1 className={classes.labelItemRight}>RETENCIÓN: {toFormatterCurrency(dermatologo.pago_completo ? 0 : (pagoTotal / 2))}</h1>
                     : ''
                 }
               </Grid>
