@@ -379,7 +379,6 @@ const ModalImprimirPagoDermatologo = (props) => {
       pagado: true,
     }
 
-    console.log("KAOZ", pagoDermatologo);
     const response = await createPagoDermatologo(pagoDermatologo);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
       || `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
@@ -397,6 +396,7 @@ const ModalImprimirPagoDermatologo = (props) => {
         turno: corte.turno === 'm' ? 'MATUTINO' : 'VESPERTINO',
         concepto: dermatologo.nombre,
         cantidad: dermatologo.pago_completo ? data.total : data.retencion,
+        retencion: data.retencion,
         sucursal: sucursal._id,
         forma_pago: efectivoMetodoPagoId,
       }

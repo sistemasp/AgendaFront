@@ -25,7 +25,8 @@ const ReportesIngresos = (props) => {
 	const formaPagoTarjeta = process.env.REACT_APP_FORMA_PAGO_TARJETA;
 	const formaPagoTransferencia = process.env.REACT_APP_FORMA_PAGO_TRANSFERENCIA;
 	const formaPagoDeposito = process.env.REACT_APP_FORMA_PAGO_DEPOSITO;
-	
+	const tipoEgresoPagoDermatologo = process.env.REACT_APP_TIPO_EGRESO_PAGO_DERMATOLOGO_ID;
+	const tipoEgresoRetiroParcial = process.env.REACT_APP_TIPO_EGRESO_RETIRO_PARCIAL_ID;
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [cortes, setCortes] = useState([]);
@@ -58,11 +59,11 @@ const ReportesIngresos = (props) => {
 		{ title: 'TRANSFERENCIA', field: 'transferencia' },
 		{ title: 'EFECTIVO', field: 'efectivo' },
 		{ title: 'DEPÓSITO', field: 'deposito' },
-		{ title: 'PAGO DERMATÓLOGO EFECTIVO', field: 'cantidad_moneda' },
-		{ title: 'PAGO DERMATÓLOGO RETENCIÓN', field: 'cantidad_moneda' },
-		{ title: 'GASTOS ', field: 'cantidad_moneda' },
-		{ title: 'RETIROS PARCIALES', field: 'cantidad_moneda' },
-		{ title: 'UTILIDAD O PÉRDIDA ', field: 'cantidad_moneda' },
+		{ title: 'PAGO DERMATÓLOGO EFECTIVO', field: 'pago_dermatologo_efectivo' },
+		{ title: 'PAGO DERMATÓLOGO RETENCIÓN', field: 'pago_dermatologo_retencion' },
+		{ title: 'GASTOS ', field: 'gastos' },
+		{ title: 'RETIROS PARCIALES', field: 'retiros_parciales' },
+		{ title: 'UTILIDAD O PÉRDIDA ', field: 'utilidad_o_perdida' },
 	];
 
 	const options = {
@@ -127,6 +128,25 @@ const ReportesIngresos = (props) => {
 			const ingresosTotales = pagosAnticipados + efectivo + tarjeta + transferencia + deposito;
 			const ingresosTotalesReales = ingresosTotales - pagosAnticipados;
 
+			// EGRESOS 
+			let retirosParciales = 0;
+			let pagoDermatologoEfectivo = 0;
+			let pagoDermatologoRetencion = 0;
+			let gastos = 0;
+			item.egresos.forEach(egreso => {
+				switch (egreso.tipo_egreso) {
+					case tipoEgresoRetiroParcial:
+						retirosParciales += Number(egreso.cantidad);
+						break;
+					case tipoEgresoPagoDermatologo:
+						pagoDermatologoEfectivo += Number(egreso.cantidad);
+						pagoDermatologoRetencion += Number(egreso.retencion ? egreso.retencion : 0);
+						break;
+					default:
+						gastos += Number(egreso.cantidad);
+				}
+			});
+
 			datos.push({
 				fecha_show: `${addZero(fecha.getDate())}/${addZero(fecha.getMonth() + 1)}/${fecha.getFullYear()}`,
 				turno: item.turno === 'm' ? 'MATUTINO' : 'VESPERTINO',
@@ -139,7 +159,13 @@ const ReportesIngresos = (props) => {
 				deposito: toFormatterCurrency(deposito),
 				ingresos_totales_reales: toFormatterCurrency(ingresosTotalesReales),
 				ingresos_totales: toFormatterCurrency(ingresosTotales),
-
+				pago_dermatologo_efectivo: toFormatterCurrency(pagoDermatologoEfectivo),
+				pago_dermatologo_retencion: toFormatterCurrency(pagoDermatologoRetencion),
+				gastos: toFormatterCurrency(gastos),
+				retiros_parciales: toFormatterCurrency(retirosParciales),
+				utilidad_o_perdida: toFormatterCurrency(
+					(retirosParciales + pagoDermatologoEfectivo + pagoDermatologoRetencion + gastos) - efectivo
+				),
 			});
 		});
 		setDatos(datos);
