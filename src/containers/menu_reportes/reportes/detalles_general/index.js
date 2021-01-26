@@ -29,7 +29,12 @@ const ReportesDetallesGeneral = (props) => {
 
 	const servicioAparatologiaId = process.env.REACT_APP_APARATOLOGIA_SERVICIO_ID;
 	const servicioFacialId = process.env.REACT_APP_FACIAL_SERVICIO_ID;
+	const servicioConsultaId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
+	const servicioCirugiaId = process.env.REACT_APP_CIRUGIA_SERVICIO_ID;
+	const servicioEsteticaId = process.env.REACT_APP_ESTETICA_SERVICIO_ID;
+	const servicioDermapenId = process.env.REACT_APP_DERMAPEN_SERVICIO_ID;
 	const formaPagoTarjetaId = process.env.REACT_APP_FORMA_PAGO_TARJETA;
+	const iva = process.env.REACT_APP_IVA;
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [consultas, setConsultas] = useState([]);
@@ -116,8 +121,61 @@ const ReportesDetallesGeneral = (props) => {
 		exportDelimiter: ';'
 	}
 
+	const procesarConsulta = (consulta, datos) => {
+		consulta.iva = false;
+		consulta.pagos.forEach(pago => {
+			const metodoPago = metodosPago.find(metodoPago => {
+				return metodoPago._id === pago.forma_pago;
+			});
+			if (pago.forma_pago === formaPagoTarjetaId) {
+				const banco = bancos.find(banco => {
+					return banco._id === pago.banco;
+				});
+				const tipoTarjeta = tiposTarjeta.find(tipoTarjeta => {
+					return tipoTarjeta._id === pago.tipo_tarjeta;
+				});
+				pago.tipo_tarjeta = banco ? banco.nombre : 'ERROR';
+				pago.banco_nombre = tipoTarjeta ? tipoTarjeta.nombre : 'ERROR';
+				pago.digitos = pago.digitos;
+			} else {
+				pago.tipo_tarjeta = 'NO APLICA';
+				pago.banco_nombre = 'NO APLICA';
+				pago.digitos = 'NO APLICA';
+			}
+
+			const impuestoPorcentaje = consulta.iva ? 16 : 0;
+			const importe2 = pago.total / (1 + (impuestoPorcentaje / 100));
+			const impuesto = importe2 * (impuestoPorcentaje / 100);
+			const descuentoPorcentaje = 100 - (pago.total * 100 / consulta.precio);
+			const descuentoCantidad = (consulta.precio * descuentoPorcentaje / 100);
+			const pagoDermatologo = pago.total * consulta.pago_dermatologo / consulta.precio;
+			const pagoClinica = pago.total - pagoDermatologo;
+			const dato = {
+				...consulta,
+				metodo_pago_nombre: metodoPago.nombre,
+				tipo_tarjeta: pago.tipo_tarjeta,
+				banco_nombre: pago.banco_nombre,
+				digitos: pago.digitos,
+				importe_1: consulta.precio_moneda,
+				area: "NO APLICA",
+				descuento_porcentaje: `${descuentoPorcentaje}%`,
+				descuento_cantidad: toFormatterCurrency(descuentoCantidad),
+				impuesto_porcentaje: `${impuestoPorcentaje}%`,
+				importe_2: toFormatterCurrency(importe2),
+				impuesto_cantidad: toFormatterCurrency(impuesto),
+				cantidad_servicios: 1 / consulta.pagos.length,
+				total_moneda: toFormatterCurrency(pago.total),
+				total_doctor: toFormatterCurrency(pagoDermatologo),
+				total_clinica: toFormatterCurrency(pagoClinica),
+			}
+			datos.push(dato);
+		});
+
+	}
+
 	const procesarDatos = async () => {
 		const datosCompletos = [...consultas, ...faciales, ...dermapens, ...cirugias, ...esteticas, ...aparatologias];
+		const datos = [];
 		datosCompletos.forEach(async (item) => {
 			const fecha = new Date(item.fecha_hora);
 
@@ -127,8 +185,8 @@ const ReportesDetallesGeneral = (props) => {
 			item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 			item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 			item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
-			item.cantidad_servicios = 1;
 			item.observaciones = item.observaciones ? item.observaciones : "*";
+
 			if (item.factura) {
 				const fechaFactura = new Date(item.factura.fecha_hora);
 				item.requiere_factura = "SI";
@@ -144,6 +202,22 @@ const ReportesDetallesGeneral = (props) => {
 				item.fecha_facturacion = "NO APLICA";
 			}
 
+			switch (item.servicio._id) {
+				case servicioAparatologiaId:
+					break;
+				case servicioFacialId:
+					break;
+				case servicioConsultaId:
+					procesarConsulta(item, datos);
+					break;
+				case servicioCirugiaId:
+					break;
+				case servicioEsteticaId:
+					break;
+				case servicioDermapenId:
+					break;
+			}
+			/*
 			if (item.pagos.length > 0) {
 				let total = 0;
 				let importe1 = 0;
@@ -210,12 +284,12 @@ const ReportesDetallesGeneral = (props) => {
 			if (item.tratamientos) {
 				// REMOVER ITEM DE DATOSCOMPLETOS
 
-				/*item.show_tratamientos = item.tratamientos.map(tratamiento => {
-					const show_areas = tratamiento.areasSeleccionadas.map(area => {
-						return `${area.nombre}`;
-					});
-					return `►${tratamiento.nombre}(${show_areas})`;
-				});*/
+				///*item.show_tratamientos = item.tratamientos.map(tratamiento => {
+				//	const show_areas = tratamiento.areasSeleccionadas.map(area => {
+				//		return `${area.nombre}`;
+				//	});
+				//	return `►${tratamiento.nombre}(${show_areas})`;
+				//});
 
 				item.tratamientos.forEach(tratamiento => {
 					if (item.servicio._id === servicioAparatologiaId || item.servicio._id === servicioFacialId) {
@@ -228,14 +302,14 @@ const ReportesDetallesGeneral = (props) => {
 			} else {
 				item.area = "NO APLICA";
 			}
-
+*/
 		});
-		datosCompletos.sort((a, b) => {
+		datos.sort((a, b) => {
 			if (a.consecutivo > b.consecutivo) return 1;
 			if (a.consecutivo < b.consecutivo) return -1;
 			return 0;
 		});
-		setDatos(datosCompletos);
+		setDatos(datos);
 		setIsLoading(false);
 	}
 

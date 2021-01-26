@@ -308,22 +308,6 @@ const ModalImprimirPagoDermatologo = (props) => {
           }
         });
       });
-      /*facial.areas.forEach(area => {
-        switch (facial.tipo_cita._id) {
-          case revisadoTipoCitaId:
-            comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
-            break;
-          case derivadoTipoCitaId:
-            comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
-            break;
-          case realizadoTipoCitaId:
-            comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
-            break;
-          case noAplicaTipoCitaId:
-            comisionDermatologo += Number(0);
-            break;
-        }
-      });*/
       const pagoDermatologo = comisionDermatologo - ((comisionDermatologo * facial.pagos[0].porcentaje_descuento_clinica) / 100);
       facial.pago_dermatologo = pagoDermatologo;
       updateFacial(facial._id, facial);
@@ -333,21 +317,17 @@ const ModalImprimirPagoDermatologo = (props) => {
     // TOTAL DE LAS APARATOLOGIAS
     aparatologias.forEach(async (aparatologia) => {
       let comisionDermatologo = 0;
-      aparatologia.areas.forEach(area => {
-        switch (aparatologia.tipo_cita._id) {
-          case revisadoTipoCitaId:
-            comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_revisado : area.comision_revisado_ma);
-            break;
-          case derivadoTipoCitaId:
-            comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_derivado : area.comision_derivado_ma);
-            break;
-          case realizadoTipoCitaId:
-            comisionDermatologo += Number(sucursal._id !== manuelAcunaSucursalId ? area.comision_realizado : area.comision_realizado_ma);
-            break;
-          case noAplicaTipoCitaId:
-            comisionDermatologo += Number(0);
-            break;
-        }
+      aparatologia.tratamientos.forEach(tratamiento => {
+
+        tratamiento.areasSeleccionadas.map(area => {
+          const itemPrecio =
+            sucursal._id === sucursalManuelAcunaId ? area.precio_ma // Precio Manuel Acuña
+              : (sucursal._id === sucursalOcciId ? area.precio_oc // Precio Occidental
+                : (sucursal._id === sucursalFedeId ? area.precio_fe // Precio Federalismo
+                  : (sucursal._id === sucursalRubenDarioId ? area.precio_rd // PRECIO RUBEN DARIO
+                    : 0))); // Error
+          comisionDermatologo += (Number(itemPrecio) * Number(dermatologo.esquema.porcentaje_laser) / 100);
+        });
       });
       const pagoDermatologo = comisionDermatologo - ((comisionDermatologo * aparatologia.pagos[0].porcentaje_descuento_clinica) / 100);;
       aparatologia.pago_dermatologo = pagoDermatologo;
