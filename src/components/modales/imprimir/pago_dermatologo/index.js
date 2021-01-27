@@ -75,7 +75,6 @@ const ModalImprimirPagoDermatologo = (props) => {
   const directoTipoCitaId = process.env.REACT_APP_TIPO_CITA_DIRECTO_ID;
   const pagoDermatologoTipoEgresoId = process.env.REACT_APP_TIPO_EGRESO_PAGO_DERMATOLOGO_ID;
   const efectivoMetodoPagoId = process.env.REACT_APP_FORMA_PAGO_EFECTIVO;
-  const manuelAcunaSucursalId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
   const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
   const sucursalRubenDarioId = process.env.REACT_APP_SUCURSAL_RUBEN_DARIO_ID;
   const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
@@ -272,41 +271,44 @@ const ModalImprimirPagoDermatologo = (props) => {
     faciales.forEach(async (facial) => {
       let comisionDermatologo = 0;
       facial.tratamientos.map(tratamiento => {
+        let importe1 = 0;
         tratamiento.areasSeleccionadas.map(areaSeleccionada => {
+          let comisionReal = 0;
+          const precioReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.precio_ma
+          : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.precio_rd
+            : (sucursal._id === sucursalOcciId ? areaSeleccionada.precio_oc
+              : (sucursal._id === sucursalFedeId ? areaSeleccionada.precio_fe : '0')));
+          importe1 += Number(precioReal);
           switch (facial.tipo_cita._id) {
             case revisadoTipoCitaId:
-              comisionDermatologo += Number(
-                sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_revisado_ma
-                  : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_revisado_rd
-                    : areaSeleccionada.comision_revisado)
-              );
+              comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_revisado_ma
+              : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_revisado_rd
+                : areaSeleccionada.comision_revisado);
               break;
             case derivadoTipoCitaId:
-              comisionDermatologo += Number(
-                sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_derivado_ma
+              comisionReal= sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_derivado_ma
                   : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_derivado_rd
-                    : areaSeleccionada.comision_derivado)
-              );
+                    : areaSeleccionada.comision_derivado);
               break;
             case realizadoTipoCitaId:
-              comisionDermatologo += Number(
-                sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_realizado_ma
+              comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_realizado_ma
                   : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_realizado_rd
-                    : areaSeleccionada.comision_realizado)
-              );
+                    : areaSeleccionada.comision_realizado);
               break;
             case directoTipoCitaId: // TOMA EL 100%
-              comisionDermatologo += Number(
-                sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.precio_ma
+            comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.precio_ma
                   : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.precio_rd
-                    : areaSeleccionada.precio_fe)
-              );
+                    : areaSeleccionada.precio_fe);
               break;
             case noAplicaTipoCitaId:
-              comisionDermatologo += Number(0);
+              comisionReal = 0;
               break;
           }
+          areaSeleccionada.comision_real = comisionReal;
+          areaSeleccionada.precio_real = precioReal;
+          comisionDermatologo += Number(comisionReal);
         });
+        tratamiento.importe1 = importe1;
       });
       const pagoDermatologo = comisionDermatologo - ((comisionDermatologo * facial.pagos[0].porcentaje_descuento_clinica) / 100);
       facial.pago_dermatologo = pagoDermatologo;

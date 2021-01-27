@@ -134,12 +134,12 @@ const ReportesDetallesGeneral = (props) => {
 				const tipoTarjeta = tiposTarjeta.find(tipoTarjeta => {
 					return tipoTarjeta._id === pago.tipo_tarjeta;
 				});
-				pago.tipo_tarjeta = banco ? banco.nombre : 'ERROR';
-				pago.banco_nombre = tipoTarjeta ? tipoTarjeta.nombre : 'ERROR';
+				pago.banco_nombre = banco ? banco.nombre : 'ERROR';
+				pago.tipo_tarjeta_nombre = tipoTarjeta ? tipoTarjeta.nombre : 'ERROR';
 				pago.digitos = pago.digitos;
 			} else {
-				pago.tipo_tarjeta = 'NO APLICA';
 				pago.banco_nombre = 'NO APLICA';
+				pago.tipo_tarjeta_nombre = 'NO APLICA';
 				pago.digitos = 'NO APLICA';
 			}
 
@@ -153,7 +153,7 @@ const ReportesDetallesGeneral = (props) => {
 			const dato = {
 				...consulta,
 				metodo_pago_nombre: metodoPago.nombre,
-				tipo_tarjeta: pago.tipo_tarjeta,
+				tipo_tarjeta: pago.tipo_tarjeta_nombre,
 				banco_nombre: pago.banco_nombre,
 				digitos: pago.digitos,
 				importe_1: consulta.precio_moneda,
@@ -170,12 +170,85 @@ const ReportesDetallesGeneral = (props) => {
 			}
 			datos.push(dato);
 		});
+	}
 
+	const procesarFacial = (facial, datos) => {
+		//console.log("KAOZ", facial);
+		facial.tratamientos.forEach(tratamiento => {
+			const producto = tratamiento;
+			let totalPagos = 0;
+			facial.pagos.forEach(pago => {
+				const metodoPago = metodosPago.find(metodoPago => {
+					return metodoPago._id === pago.forma_pago;
+				});
+				if (pago.forma_pago === formaPagoTarjetaId) {
+					const banco = bancos.find(banco => {
+						return banco._id === pago.banco;
+					});
+					const tipoTarjeta = tiposTarjeta.find(tipoTarjeta => {
+						return tipoTarjeta._id === pago.tipo_tarjeta;
+					});
+					pago.banco_nombre = banco ? banco.nombre : 'ERROR';
+					pago.tipo_tarjeta_nombre = tipoTarjeta ? tipoTarjeta.nombre : 'ERROR';
+					pago.digitos = pago.digitos;
+				} else {
+					pago.banco_nombre = 'NO APLICA';
+					pago.tipo_tarjeta_nombre = 'NO APLICA';
+					pago.digitos = 'NO APLICA';
+				}
+				producto.areasSeleccionadas.forEach(areaSeleccionada => {
+					const impuestoPorcentaje = areaSeleccionada.iva ? 16 : 0;
+					pago.cantidad = Number(pago.cantidad);
+					areaSeleccionada.precio_real = Number(areaSeleccionada.precio_real);
+					while (pago.cantidad !== 0 && areaSeleccionada.precio_real !== 0) {
+						totalPagos++;
+						let total = 0;
+						if (pago.cantidad > areaSeleccionada.precio_real) {
+							total = areaSeleccionada.precio_real;
+							pago.cantidad -= areaSeleccionada.precio_real;
+							areaSeleccionada.precio_real = 0;
+						} else if (pago.cantidad < areaSeleccionada.precio_real) {
+							total = pago.cantidad;
+							areaSeleccionada.precio_real -= pago.cantidad;
+							pago.cantidad = 0;
+						} else {
+							total = areaSeleccionada.precio_real;
+							areaSeleccionada.precio_real = 0;
+							pago.cantidad = 0;
+						}
+
+						const dato = {
+							...facial,
+							metodo_pago_nombre: metodoPago.nombre,
+							producto: producto,
+							impuesto_porcentaje: `${impuestoPorcentaje}%`,
+							importe_1: toFormatterCurrency(producto.importe1),
+							area: areaSeleccionada.nombre,
+							tipo_tarjeta: pago.tipo_tarjeta_nombre,
+							banco_nombre: pago.banco_nombre,
+							digitos: pago.digitos,
+							//cantidad_servicios: 1 / producto.areasSeleccionadas.length / facial.pagos.length,
+							total_pagos: totalPagos,
+							total_moneda: toFormatterCurrency(total),
+						}
+						datos.push(dato);
+					}
+
+				});
+
+			});
+		});
 	}
 
 	const procesarDatos = async () => {
 		const datosCompletos = [...consultas, ...faciales, ...dermapens, ...cirugias, ...esteticas, ...aparatologias];
-		const datos = [];
+		const consultasProcesadas = [];
+		const facialesProcesadas = [];
+		const dermapensProcesadas = [];
+		const cirugiasProcesadas = [];
+		const esteticasProcesadas = [];
+		const aparatologiasProcesadas = [];
+
 		datosCompletos.forEach(async (item) => {
 			const fecha = new Date(item.fecha_hora);
 
@@ -206,9 +279,10 @@ const ReportesDetallesGeneral = (props) => {
 				case servicioAparatologiaId:
 					break;
 				case servicioFacialId:
+					procesarFacial(item, facialesProcesadas);
 					break;
 				case servicioConsultaId:
-					procesarConsulta(item, datos);
+					procesarConsulta(item, consultasProcesadas);
 					break;
 				case servicioCirugiaId:
 					break;
@@ -217,93 +291,17 @@ const ReportesDetallesGeneral = (props) => {
 				case servicioDermapenId:
 					break;
 			}
-			/*
-			if (item.pagos.length > 0) {
-				let total = 0;
-				let importe1 = 0;
-
-				item.pagos.forEach(async (pago) => {
-
-					const metodoPago = metodosPago.find(metodoPago => {
-						return metodoPago._id === pago.forma_pago;
-					});
-					if (pago.forma_pago === formaPagoTarjetaId) {
-						const banco = bancos.find(banco => {
-							return banco._id === pago.banco;
-						});
-						const tipoTarjeta = tiposTarjeta.find(tipoTarjeta => {
-							return tipoTarjeta._id === pago.tipo_tarjeta;
-						});
-						item.tipo_tarjeta = banco ? banco.nombre : 'ERROR';
-						item.banco_nombre = tipoTarjeta ? tipoTarjeta.nombre : 'ERROR';
-						item.digitos = pago.digitos;
-					} else {
-						item.tipo_tarjeta = 'NO APLICA';
-						item.banco_nombre = 'NO APLICA';
-						item.digitos = 'NO APLICA';
-					}
-					item.metodo_pago_nombre = metodoPago ? metodoPago.nombre : 'ERROR';
-					item.descuento_porcentaje = `${pago.porcentaje_descuento_clinica}%`;
-					item.descuento_cantidad = toFormatterCurrency(pago.descuento_clinica);
-					importe1 += Number(pago.total);
-					total += Number(pago.total - pago.descuento_clinica);
-				});
-
-				const impuestoPorcentaje = 0;
-
-				item.impuesto_porcentaje = `${impuestoPorcentaje}%`;
-				item.importe_1 = toFormatterCurrency(importe1);
-				item.total_moneda = toFormatterCurrency(total);
-				item.importe_2 = Number(total) / (1 + Number());
-				item.impuesto_cantidad = toFormatterCurrency(item.importe_2 * impuestoPorcentaje / 100);
-				item.importe_2 = toFormatterCurrency(item.importe_2);
-				item.total_doctor = toFormatterCurrency(item.pago_dermatologo);
-				item.total_clinica = toFormatterCurrency(Number(total - item.pago_dermatologo));
-			} else {
-				item.importe_1 = "NO APLICA";
-				item.descuento_porcentaje = "NO APLICA";
-				item.descuento_cantidad = "NO APLICA";
-				item.importe_2 = "NO APLICA";
-				item.impuesto_porcentaje = "NO APLICA";
-				item.impuesto_cantidad = "NO APLICA";
-				item.total_moneda = "NO APLICA";
-				item.total_doctor = "NO APLICA";
-				item.total_clinica = "NO APLICA";
-				item.metodo_pago_nombre = "NO APLICA";
-				item.requiere_factura = "NO APLICA";
-				item.tipo_tarjeta = "NO APLICA";
-				item.banco_nombre = "NO APLICA";
-				item.digitos = "NO APLICA";
-				item.razon_social_nombre = "NO APLICA";
-				item.rfc = "NO APLICA";
-				item.no_factura = "NO APLICA";
-				item.fecha_facturacion = "NO APLICA";
-
-			}
-
-			if (item.tratamientos) {
-				// REMOVER ITEM DE DATOSCOMPLETOS
-
-				///*item.show_tratamientos = item.tratamientos.map(tratamiento => {
-				//	const show_areas = tratamiento.areasSeleccionadas.map(area => {
-				//		return `${area.nombre}`;
-				//	});
-				//	return `►${tratamiento.nombre}(${show_areas})`;
-				//});
-
-				item.tratamientos.forEach(tratamiento => {
-					if (item.servicio._id === servicioAparatologiaId || item.servicio._id === servicioFacialId) {
-						item.producto = { nombre: tratamiento.nombre };
-					}
-					tratamiento.areasSeleccionadas.forEach(area => {
-						item.area = area.nombre;
-					});
-				});
-			} else {
-				item.area = "NO APLICA";
-			}
-*/
 		});
+		facialesProcesadas.forEach(falcial => {
+			//console.log("KAOZ", falcial);
+			const coincidencias = facialesProcesadas.filter( facialProcesada => {
+				return falcial._id === facialProcesada._id && falcial.producto === facialProcesada.producto;
+			});
+			falcial.cantidad_servicios = 1 / coincidencias.length;
+			console.log("KAOZ", coincidencias.length);
+
+		});
+		const datos = [...consultasProcesadas, ...facialesProcesadas, ...dermapensProcesadas, ...cirugiasProcesadas, ...esteticasProcesadas, ...aparatologiasProcesadas];
 		datos.sort((a, b) => {
 			if (a.consecutivo > b.consecutivo) return 1;
 			if (a.consecutivo < b.consecutivo) return -1;
