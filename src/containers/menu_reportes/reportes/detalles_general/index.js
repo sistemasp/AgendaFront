@@ -173,7 +173,7 @@ const ReportesDetallesGeneral = (props) => {
 	}
 
 	const procesarFacial = (facial, datos) => {
-		//console.log("KAOZ", facial);
+		console.log("KAOZ", facial);
 		facial.tratamientos.forEach(tratamiento => {
 			const producto = tratamiento;
 			let totalPagos = 0;
@@ -197,10 +197,10 @@ const ReportesDetallesGeneral = (props) => {
 					pago.digitos = 'NO APLICA';
 				}
 				producto.areasSeleccionadas.forEach(areaSeleccionada => {
-					const impuestoPorcentaje = areaSeleccionada.iva ? 16 : 0;
 					pago.cantidad = Number(pago.cantidad);
 					areaSeleccionada.precio_real = Number(areaSeleccionada.precio_real);
 					while (pago.cantidad !== 0 && areaSeleccionada.precio_real !== 0) {
+
 						totalPagos++;
 						let total = 0;
 						if (pago.cantidad > areaSeleccionada.precio_real) {
@@ -217,19 +217,32 @@ const ReportesDetallesGeneral = (props) => {
 							pago.cantidad = 0;
 						}
 
+						const impuestoPorcentaje = areaSeleccionada.iva ? 16 : 0;
+						const importe2 = total / (1 + (impuestoPorcentaje / 100));
+						const impuesto = importe2 * (impuestoPorcentaje / 100);
+						const descuentoPorcentaje = 100 - (total * 100 / producto.importe1);
+						const descuentoCantidad = (producto.importe1 * descuentoPorcentaje / 100);
+						const pagoDermatologo = total * areaSeleccionada.comision_real / producto.importe1;
+						const pagoClinica = total - pagoDermatologo;
+
 						const dato = {
 							...facial,
 							metodo_pago_nombre: metodoPago.nombre,
 							producto: producto,
 							impuesto_porcentaje: `${impuestoPorcentaje}%`,
+							impuesto_cantidad: toFormatterCurrency(impuesto),
 							importe_1: toFormatterCurrency(producto.importe1),
+							importe_2: toFormatterCurrency(importe2),
+							descuento_porcentaje: `${descuentoPorcentaje}%`,
+							descuento_cantidad: toFormatterCurrency(descuentoCantidad),
 							area: areaSeleccionada.nombre,
 							tipo_tarjeta: pago.tipo_tarjeta_nombre,
 							banco_nombre: pago.banco_nombre,
 							digitos: pago.digitos,
-							//cantidad_servicios: 1 / producto.areasSeleccionadas.length / facial.pagos.length,
 							total_pagos: totalPagos,
 							total_moneda: toFormatterCurrency(total),
+							total_doctor: toFormatterCurrency(pagoDermatologo),
+							total_clinica: toFormatterCurrency(pagoClinica),
 						}
 						datos.push(dato);
 					}
@@ -294,11 +307,10 @@ const ReportesDetallesGeneral = (props) => {
 		});
 		facialesProcesadas.forEach(falcial => {
 			//console.log("KAOZ", falcial);
-			const coincidencias = facialesProcesadas.filter( facialProcesada => {
+			const coincidencias = facialesProcesadas.filter(facialProcesada => {
 				return falcial._id === facialProcesada._id && falcial.producto === facialProcesada.producto;
 			});
 			falcial.cantidad_servicios = 1 / coincidencias.length;
-			console.log("KAOZ", coincidencias.length);
 
 		});
 		const datos = [...consultasProcesadas, ...facialesProcesadas, ...dermapensProcesadas, ...cirugiasProcesadas, ...esteticasProcesadas, ...aparatologiasProcesadas];
