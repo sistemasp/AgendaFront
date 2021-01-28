@@ -135,6 +135,7 @@ const ModalCita = (props) => {
     cosmetologa: cita.cosmetologa ? cita.cosmetologa._id : '',
     status: cita.status ? cita.status._id : '',
     precio: cita.precio,
+    total: cita.total,
     motivos: cita.motivos,
     observaciones: cita.observaciones,
     dermatologo: cita.dermatologo ? cita.dermatologo._id : '',

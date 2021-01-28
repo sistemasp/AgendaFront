@@ -155,7 +155,10 @@ const ModalFormCita = (props) => {
                 })
               }
               <Grid item xs={12} className={classes.label}>
-                <h1 className={classes.label}>TOTAL: {toFormatterCurrency(values.precio)}</h1>
+                <h1 className={classes.label}>PRECIO: {toFormatterCurrency(values.precio)}</h1>
+              </Grid>
+              <Grid item xs={12} className={classes.label}>
+                <h1 className={classes.label}>TOTAL: {toFormatterCurrency(values.total)}</h1>
               </Grid>
               <Grid item xs={12}>
                 <FormControl variant="outlined" className={classes.formControl}>

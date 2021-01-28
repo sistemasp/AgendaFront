@@ -242,10 +242,13 @@ const ModalImprimirPagoDermatologo = (props) => {
     // TOTAL DE LAS CONSULTAS 
     consultas.forEach(async (consulta) => {
       let totalPagos = 0;
+      let hasDescuentoDermatologo;
       consulta.pagos.forEach(pago => {
+        hasDescuentoDermatologo = Number(pago.descuento_dermatologo) > 0;
         totalPagos += Number(pago.total);
       })
-      const pagoDermatologo = Number(totalPagos) * Number(consulta.frecuencia === reconsultaFrecuenciaId ? dermatologo.esquema.porcentaje_reconsulta : dermatologo.esquema.porcentaje_consulta) / 100;
+
+      let pagoDermatologo = hasDescuentoDermatologo ? 0 : Number(totalPagos) * Number(consulta.frecuencia === reconsultaFrecuenciaId ? dermatologo.esquema.porcentaje_reconsulta : dermatologo.esquema.porcentaje_consulta) / 100;
       consulta.pago_dermatologo = pagoDermatologo;
       updateConsult(consulta._id, consulta);
       total += Number(pagoDermatologo);
@@ -275,30 +278,30 @@ const ModalImprimirPagoDermatologo = (props) => {
         tratamiento.areasSeleccionadas.map(areaSeleccionada => {
           let comisionReal = 0;
           const precioReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.precio_ma
-          : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.precio_rd
-            : (sucursal._id === sucursalOcciId ? areaSeleccionada.precio_oc
-              : (sucursal._id === sucursalFedeId ? areaSeleccionada.precio_fe : '0')));
+            : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.precio_rd
+              : (sucursal._id === sucursalOcciId ? areaSeleccionada.precio_oc
+                : (sucursal._id === sucursalFedeId ? areaSeleccionada.precio_fe : '0')));
           importe1 += Number(precioReal);
           switch (facial.tipo_cita._id) {
             case revisadoTipoCitaId:
               comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_revisado_ma
-              : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_revisado_rd
-                : areaSeleccionada.comision_revisado);
+                : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_revisado_rd
+                  : areaSeleccionada.comision_revisado);
               break;
             case derivadoTipoCitaId:
-              comisionReal= sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_derivado_ma
-                  : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_derivado_rd
-                    : areaSeleccionada.comision_derivado);
+              comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_derivado_ma
+                : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_derivado_rd
+                  : areaSeleccionada.comision_derivado);
               break;
             case realizadoTipoCitaId:
               comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_realizado_ma
-                  : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_realizado_rd
-                    : areaSeleccionada.comision_realizado);
+                : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_realizado_rd
+                  : areaSeleccionada.comision_realizado);
               break;
             case directoTipoCitaId: // TOMA EL 100%
-            comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.precio_ma
-                  : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.precio_rd
-                    : areaSeleccionada.precio_fe);
+              comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.precio_ma
+                : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.precio_rd
+                  : areaSeleccionada.precio_fe);
               break;
             case noAplicaTipoCitaId:
               comisionReal = 0;
@@ -319,8 +322,12 @@ const ModalImprimirPagoDermatologo = (props) => {
     // TOTAL DE LAS APARATOLOGIAS
     aparatologias.forEach(async (aparatologia) => {
       let comisionDermatologo = 0;
+      let descuentoDermatologo = 0;
+      aparatologia.pagos.forEach(pago => {
+        descuentoDermatologo += Number(pago.descuento_dermatologo);
+      });
       aparatologia.tratamientos.forEach(tratamiento => {
-
+        let importe1 = 0;
         tratamiento.areasSeleccionadas.map(area => {
           const itemPrecio =
             sucursal._id === sucursalManuelAcunaId ? area.precio_ma // Precio Manuel Acuña
@@ -328,10 +335,16 @@ const ModalImprimirPagoDermatologo = (props) => {
                 : (sucursal._id === sucursalFedeId ? area.precio_fe // Precio Federalismo
                   : (sucursal._id === sucursalRubenDarioId ? area.precio_rd // PRECIO RUBEN DARIO
                     : 0))); // Error
-          comisionDermatologo += (Number(itemPrecio) * Number(dermatologo.esquema.porcentaje_laser) / 100);
+          importe1 += Number(itemPrecio);
+          const comisionReal = Number(itemPrecio) * Number(dermatologo.esquema.porcentaje_laser) / 100;
+          comisionDermatologo += comisionReal;
+          area.comision_real = descuentoDermatologo > 0 ? 0 : comisionReal;
+          area.precio_real = itemPrecio;
         });
+        tratamiento.importe1 = importe1;
       });
-      const pagoDermatologo = comisionDermatologo - ((comisionDermatologo * aparatologia.pagos[0].porcentaje_descuento_clinica) / 100);;
+      let pagoDermatologo = comisionDermatologo - ((comisionDermatologo * aparatologia.pagos[0].porcentaje_descuento_clinica) / 100);
+      pagoDermatologo -= descuentoDermatologo;
       aparatologia.pago_dermatologo = pagoDermatologo;
       updateAparatologia(aparatologia._id, aparatologia);
       total += Number(pagoDermatologo);

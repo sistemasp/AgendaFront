@@ -172,7 +172,7 @@ const ModalFormPago = (props) => {
                   }}
                   variant="outlined" />
               </Grid>
-
+{/*
               <Grid item xs={12}>
                 <TextField
                   className={classes.textField}
@@ -205,7 +205,7 @@ const ModalFormPago = (props) => {
               <Grid item xs={12}>
                 <h3 className={classes.label}>{`DESCUENTO DERMATÓLOGO: ${toFormatterCurrency(values.descuento_dermatologo)}`}</h3>
               </Grid>
-
+                */}
               <Grid item xs={12}>
                 <h2 className={classes.label}>{`TOTAL: ${toFormatterCurrency(values.total)}`}</h2>
               </Grid>

@@ -13,6 +13,7 @@ import {
 } from '../../../services/ingresos';
 import { addZero, generateFolio } from '../../../utils/utils';
 import ModalFormPago from './ModalFormPago';
+import { findEsquemaById } from '../../../services/esquemas';
 
 const validationSchema = Yup.object({
   nombre: Yup.string("Ingresa los nombres")
@@ -58,11 +59,13 @@ const ModalPago = (props) => {
   const tipoCitaRevisadoId = process.env.REACT_APP_TIPO_CITA_REVISADO_ID;
   const tipoCitaDerivadoId = process.env.REACT_APP_TIPO_CITA_DERIVADO_ID;
   const tipoCitaRealizadoId = process.env.REACT_APP_TIPO_CITA_REALIZADO_ID;
+  const frecuenciaReconsultaId = process.env.REACT_APP_FRECUENCIA_RECONSULTA_ID;
 
   const [isLoading, setIsLoading] = useState(true);
   const [bancos, setBancos] = useState([]);
   const [metodosPago, setMetodosPago] = useState([]);
   const [tiposTarjeta, setTiposTarjeta] = useState([]);
+  const [esquema, setEsquema] = useState({});
 
   const [values, setValues] = useState({
     forma_pago: pago.forma_pago ? pago.forma_pago._id : '',
@@ -76,7 +79,7 @@ const ModalPago = (props) => {
     descuento_dermatologo: pago.descuento_dermatologo || 0,
   });
 
-  
+
   const tarjetaMetodoPagoId = process.env.REACT_APP_FORMA_PAGO_TARJETA;
   const consultaServicioId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
   const consultaTratamientoId = process.env.REACT_APP_CONSULTA_TRATAMIENTO_ID;
@@ -98,22 +101,23 @@ const ModalPago = (props) => {
   }
 
   const getMayorDescuento = () => {
-    let cantidadDescuento = 0;
-    servicio.areas.forEach(area => {
-      switch (servicio.tipo_cita._id) {
-        case tipoCitaRevisadoId:
-          cantidadDescuento += sucursal === sucursalManuelAcunaId ? Number(area.comision_revisado_ma) : Number(area.comision_revisado);
-          break;
-        case tipoCitaDerivadoId:
-          cantidadDescuento += sucursal === sucursalManuelAcunaId ? Number(area.comision_derivado_ma) : Number(area.comision_derivado);
-          break;
-        case tipoCitaRealizadoId:
-          cantidadDescuento += sucursal === sucursalManuelAcunaId ? Number(area.comision_realizado_ma) : Number(area.comision_realizado);
-          break;
-      }
-    });
+    let porcentajeDescuento = 0;
+    switch (servicio.servicio._id) {
+      case servicioCirugiaId:
+        porcentajeDescuento = esquema.porcentaje_cirugias;
+        break;
+      case servicioConsultaId:
+        porcentajeDescuento = servicio.frecuencia._id === frecuenciaReconsultaId ? esquema.porcentaje_reconsulta : esquema.porcentaje_consulta;
+        break;
+      case servicioEsteticaId:
+        porcentajeDescuento = esquema.porcentaje_dermocosmetica;
+        break;
+      case servicioAparatologiaId:
+        porcentajeDescuento = esquema.porcentaje_laser;
+        break;
+    }
 
-    return cantidadDescuento;
+    return porcentajeDescuento;
   }
 
   const calcularTotal = (datos) => {
@@ -125,8 +129,7 @@ const ModalPago = (props) => {
         ? (getMayorDescuento())
         : 0)
       : 0;
-
-    const descuento_dermatologo_final = descuento_dermatologo - (descuento_dermatologo * datos.porcentaje_descuento_clinica / 100);
+    const descuento_dermatologo_final = (descuento_dermatologo * (cantidad - descuento_clinica) / 100);
     let total = cantidad - descuento_clinica - descuento_dermatologo_final;
     setValues({
       ...values,
@@ -170,7 +173,6 @@ const ModalPago = (props) => {
       has_descuento_dermatologo: !values.has_descuento_dermatologo,
     }
     calcularTotal(datos);
-
   }
 
   const handleChangeObservaciones = (event) => {
@@ -272,31 +274,40 @@ const ModalPago = (props) => {
     }
   }
 
+  const loadBancos = async () => {
+    const response = await showAllBanco();
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setBancos(response.data);
+    }
+  }
+
+  const loadMetodosPago = async () => {
+    const response = await showAllMetodoPago();
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setMetodosPago(response.data);
+    }
+  }
+
+  const loadTipoTarjeta = async () => {
+    const response = await showAllTipoTarjeta();
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setTiposTarjeta(response.data);
+    }
+  }
+
+  const loadEsquema = async () => {
+    const response = await findEsquemaById(servicio.dermatologo.esquema);
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
+      setEsquema(response.data);
+    }
+  }
+
   useEffect(() => {
-    const loadBancos = async () => {
-      const response = await showAllBanco();
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setBancos(response.data);
-      }
-    }
-
-    const loadMetodosPago = async () => {
-      const response = await showAllMetodoPago();
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setMetodosPago(response.data);
-      }
-    }
-
-    const loadTipoTarjeta = async () => {
-      const response = await showAllTipoTarjeta();
-      if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-        setTiposTarjeta(response.data);
-      }
-    }
 
     loadBancos();
     loadMetodosPago();
     loadTipoTarjeta();
+    loadEsquema();
     setIsLoading(false);
 
   }, [sucursal]);

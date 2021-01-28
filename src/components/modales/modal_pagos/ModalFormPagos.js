@@ -79,6 +79,9 @@ const ModalFormPagos = (props) => {
     restante,
     tipoServicioId,
     onChangeFactura,
+    onChangeDescuento,
+    onChangDescuentoDermatologo,
+    values,
   } = props;
 
   return (
@@ -111,26 +114,50 @@ const ModalFormPagos = (props) => {
         aria-describedby="simple-modal-description"
         open={open} >
         <div style={modalStyle} className={classes.paper}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={true}>
+              <ButtonCustom
+                className={classes.button}
+                color="primary"
+                variant="contained"
+                onClick={onClickNewPago}
+                text='AGREGAR PAGO' />
+            </Grid>
 
-          <Grid item xs={12} sm={true}>
-            <ButtonCustom
-              className={classes.button}
-              color="primary"
-              variant="contained"
-              onClick={onClickNewPago}
-              text='AGREGAR PAGO' />
+            <Grid item xs={true} sm={true}>
+              <TextField
+                className={classes.textField}
+                name="porcentaje_descuento_clinica"
+                label="% DESCUENTO"
+                value={values.porcentaje_descuento_clinica}
+                onChange={onChangeDescuento}
+                type='Number'
+
+                onInput={(e) => {
+                  e.target.value = e.target.value > 100 ? 100 : e.target.value;
+                  e.target.value = Math.max(0, parseFloat(e.target.value)).toString().slice(0, 5)
+                }}
+                variant="outlined" />
+            </Grid>
+
+            <Grid item xs={true} sm={true}>
+              <CheckCustom
+                checked={values.has_descuento_dermatologo}
+                onChange={onChangDescuentoDermatologo}
+                name="checkedC"
+                label="DESCUENTO DERMATÓLOGO" />
+            </Grid>
+
+            <Grid item xs={true} sm={true}>
+              <CheckCustom
+                checked={servicio.factura}
+                onChange={onChangeFactura}
+                disabled={servicio.factura}
+                name="checkedF"
+                label="REQUIERE FACTURA"
+              />
+            </Grid>
           </Grid>
-
-          <Grid item xs={12} sm={true}>
-            <CheckCustom
-              checked={servicio.factura}
-              onChange={onChangeFactura}
-              disabled={servicio.factura}
-              name="checkedC"
-              label="REQUIERE FACTURA"
-            />
-          </Grid>
-
           <TableComponent
             titulo={titulo}
             columns={columns}
@@ -146,7 +173,15 @@ const ModalFormPagos = (props) => {
             } />
 
           <Grid container xs={12}>
-            <h1>{`MONTO PARA LIQUIDAR PAGO: ${toFormatterCurrency(restante)}`}</h1>
+            <Grid item xs={true} sm={true}>
+              <h1>{`PRECIO: ${toFormatterCurrency(servicio.precio)}`}</h1>
+            </Grid>
+            <Grid item xs={true} sm={true}>
+              <h1>{`TOTAL: ${toFormatterCurrency(values.total)}`}</h1>
+            </Grid>
+            <Grid item xs={true} sm={true}>
+              <h1>{`RESTANTE: ${toFormatterCurrency(restante)}`}</h1>
+            </Grid>
           </Grid>
 
           <Grid container xs={12}>

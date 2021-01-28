@@ -93,6 +93,7 @@ const AgendarAparatologia = (props) => {
 		areas: [],
 		paciente: `${paciente._id}`,
 		precio: 0,
+		total: 0,
 		tipo_cita: directoTipoCitaId,
 		observaciones: '',
 		dermatologo: dermatologoDirectoId,
@@ -134,6 +135,7 @@ const AgendarAparatologia = (props) => {
 		{ title: 'COSMETOLOGA', field: 'cosmetologa_nombre' },
 		{ title: 'ESTADO', field: 'status.nombre' },
 		{ title: 'PRECIO', field: 'precio_moneda' },
+		{ title: 'TOTAL', field: 'total_moneda' },
 		{ title: 'OBSERVACIONES', field: 'observaciones' },
 		{ title: 'HORA LLEGADA', field: 'hora_llegada' },
 		{ title: 'HORA ATENDIDO', field: 'hora_atencion' },
@@ -198,6 +200,7 @@ const AgendarAparatologia = (props) => {
 			servicio: e.target.value,
 			fecha_hora: '',
 			precio: 0,
+			total: 0,
 			tratamientos: []
 		});
 		loadTratamientos(e.target.value);
@@ -215,6 +218,7 @@ const AgendarAparatologia = (props) => {
 					...values,
 					fecha_hora: '',
 					precio: 0,
+					total: 0,
 					tratamientos: e,
 				});
 			}
@@ -240,7 +244,8 @@ const AgendarAparatologia = (props) => {
 		setValues({
 			...values,
 			fecha_hora: '',
-			precio: precio
+			precio: precio,
+			total: precio,
 		});
 		setDisableDate(false);
 		setIsLoading(false);
@@ -291,6 +296,7 @@ const AgendarAparatologia = (props) => {
 				const fecha = new Date(item.fecha_hora);
 				item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);
+				item.total_moneda = toFormatterCurrency(item.total);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
@@ -340,7 +346,8 @@ const AgendarAparatologia = (props) => {
 					promovendedor: '',
 					cosmetologa: '',
 					paciente: `${paciente._id}`,
-					precio: '',
+					precio: 0,
+					total: 0,
 					tipo_cita: {},
 					tiempo: '30',
 				});
@@ -366,6 +373,7 @@ const AgendarAparatologia = (props) => {
 			...values,
 			tratamientos: newTratamientos,
 			precio: precio,
+			total: precio,
 		});
 	}
 
@@ -466,6 +474,7 @@ const AgendarAparatologia = (props) => {
 	];
 
 	const handleGuardarModalPagos = async (servicio) => {
+		console.log("KAOZ", servicio);
 		servicio.pagado = servicio.pagos.length > 0;
 		await updateAparatologia(servicio._id, servicio);
 		await loadAparatologias(new Date(servicio.fecha_hora));
@@ -490,6 +499,7 @@ const AgendarAparatologia = (props) => {
 					const fecha = new Date(item.fecha_hora);
 					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
+					item.total_moneda = toFormatterCurrency(item.total);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
