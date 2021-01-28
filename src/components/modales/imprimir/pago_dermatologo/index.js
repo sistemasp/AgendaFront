@@ -322,10 +322,6 @@ const ModalImprimirPagoDermatologo = (props) => {
     // TOTAL DE LAS APARATOLOGIAS
     aparatologias.forEach(async (aparatologia) => {
       let comisionDermatologo = 0;
-      let descuentoDermatologo = 0;
-      aparatologia.pagos.forEach(pago => {
-        descuentoDermatologo += Number(pago.descuento_dermatologo);
-      });
       aparatologia.tratamientos.forEach(tratamiento => {
         let importe1 = 0;
         tratamiento.areasSeleccionadas.map(area => {
@@ -336,18 +332,20 @@ const ModalImprimirPagoDermatologo = (props) => {
                   : (sucursal._id === sucursalRubenDarioId ? area.precio_rd // PRECIO RUBEN DARIO
                     : 0))); // Error
           importe1 += Number(itemPrecio);
-          const comisionReal = Number(itemPrecio) * Number(dermatologo.esquema.porcentaje_laser) / 100;
+          const precioReal = (itemPrecio - (itemPrecio * aparatologia.porcentaje_descuento_clinica / 100)) * 
+          (aparatologia.has_descuento_dermatologo ? (1 - (dermatologo.esquema.porcentaje_laser / 100)) : 1);
+          const comisionReal = Number(precioReal) * Number(dermatologo.esquema.porcentaje_laser) / 100;
           comisionDermatologo += comisionReal;
-          area.comision_real = descuentoDermatologo > 0 ? 0 : comisionReal;
-          area.precio_real = itemPrecio;
+          area.comision_real = aparatologia.has_descuento_dermatologo ? 0 : comisionReal;
+          area.precio_real = precioReal;
         });
         tratamiento.importe1 = importe1;
       });
-      let pagoDermatologo = comisionDermatologo - ((comisionDermatologo * aparatologia.pagos[0].porcentaje_descuento_clinica) / 100);
-      pagoDermatologo -= descuentoDermatologo;
+      let pagoDermatologo = aparatologia.has_descuento_dermatologo ? 0 : comisionDermatologo;
       aparatologia.pago_dermatologo = pagoDermatologo;
       updateAparatologia(aparatologia._id, aparatologia);
       total += Number(pagoDermatologo);
+      console.log("KAOZ", aparatologia);
     });
 
     // TOTAL DE LAS ESTETICAS
@@ -373,6 +371,7 @@ const ModalImprimirPagoDermatologo = (props) => {
       total: total,
       pagado: true,
     }
+
 
     const response = await createPagoDermatologo(pagoDermatologo);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK

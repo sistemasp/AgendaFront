@@ -84,8 +84,10 @@ const ReportesDetallesGeneral = (props) => {
 		{ title: 'PRODUCTO', field: 'producto.nombre' },
 		{ title: 'ZONA', field: 'area' },
 		{ title: 'IMPORTE 1', field: 'importe_1' },
-		{ title: '% DESCUENTO R', field: 'descuento_porcentaje_real' },
-		{ title: '$ DESCUENTO R', field: 'descuento_cantidad_real' },
+		{ title: '% DESCUENTO CLINICA', field: 'descuento_porcentaje_clinica' },
+		{ title: '$ DESCUENTO CLINICA', field: 'descuento_cantidad_clinica' },
+		{ title: '% DESCUENTO DERMATÓLOGO', field: 'descuento_porcentaje_dermatologo' },
+		{ title: '$ DESCUENTO DERMATÓLOGO', field: 'descuento_cantidad_dermatologo' },
 		{ title: '% DESCUENTO', field: 'descuento_porcentaje' },
 		{ title: '$ DESCUENTO', field: 'descuento_cantidad' },
 		{ title: 'IMPORTE 2', field: 'importe_2' },
@@ -162,8 +164,8 @@ const ReportesDetallesGeneral = (props) => {
 				digitos: pago.digitos,
 				importe_1: consulta.precio_moneda,
 				area: "NO APLICA",
-				descuento_porcentaje_real: `${pago.porcentaje_descuento_clinica}%`,
-				descuento_cantidad_real: toFormatterCurrency(pago.descuento_clinica),
+				descuento_porcentaje_clinica: `${pago.porcentaje_descuento_clinica}%`,
+				descuento_cantidad_clinica: toFormatterCurrency(pago.descuento_clinica),
 				descuento_porcentaje: `${descuentoPorcentaje}%`,
 				descuento_cantidad: toFormatterCurrency(descuentoCantidad),
 				impuesto_porcentaje: `${impuestoPorcentaje}%`,
@@ -312,7 +314,8 @@ const ReportesDetallesGeneral = (props) => {
 							? (total * areaSeleccionada.comision_real / producto.importe1)
 							: 0;
 						const pagoClinica = total - pagoDermatologo;
-
+						const descuentoClinica = aparatologia.porcentaje_descuento_clinica * producto.importe1 / 100;
+						const descuentoDermatologo = aparatologia.descuento_dermatologo * (producto.importe1 - descuentoClinica) / 100;
 						const dato = {
 							...aparatologia,
 							metodo_pago_nombre: metodoPago.nombre,
@@ -323,6 +326,10 @@ const ReportesDetallesGeneral = (props) => {
 							importe_2: toFormatterCurrency(importe2),
 							descuento_porcentaje: `${descuentoPorcentaje}%`,
 							descuento_cantidad: toFormatterCurrency(descuentoCantidad),
+							descuento_porcentaje_clinica: `${aparatologia.porcentaje_descuento_clinica}%`,
+							descuento_porcentaje_dermatologo: `${aparatologia.descuento_dermatologo}%`,
+							descuento_cantidad_dermatologo: toFormatterCurrency(descuentoDermatologo),
+							descuento_cantidad_clinica: toFormatterCurrency(descuentoClinica),
 							area: areaSeleccionada.nombre,
 							tipo_tarjeta: pago.tipo_tarjeta_nombre,
 							banco_nombre: pago.banco_nombre,

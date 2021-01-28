@@ -990,10 +990,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                       aparatologias ?
                         aparatologias.map(aparatologia => {
                           let comisionDermatologo = 0;
-                          let descuentoDermatologo = 0;
-                          aparatologia.pagos.forEach(pago => {
-                            descuentoDermatologo += Number(pago.descuento_dermatologo);
-                          });
+                          //console.log("KAOZ", aparatologia);
                           aparatologia.tratamientos.forEach(tratamiento => {
 
                             tratamiento.areasSeleccionadas.map(area => {
@@ -1006,8 +1003,8 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                               comisionDermatologo += (Number(itemPrecio) * Number(dermatologo.esquema.porcentaje_laser) / 100);
                             });
                           });
-                          let pagoDermatologo = comisionDermatologo - ((comisionDermatologo * aparatologia.pagos[0].porcentaje_descuento_clinica) / 100);
-                          pagoDermatologo -= descuentoDermatologo;
+                          let pagoDermatologo = comisionDermatologo - ((comisionDermatologo * aparatologia.porcentaje_descuento_clinica) / 100);
+                          pagoDermatologo = aparatologia.has_descuento_dermatologo ? 0 : pagoDermatologo;
                           pagoTotal += Number(pagoDermatologo);
                           return <Grid container>
                             <Grid item xs={true} className={classes.label}>
