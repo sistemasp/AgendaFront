@@ -272,7 +272,7 @@ const ModalFormCirugia = (props) => {
                   </Grid> : ''
               }
               <Grid item xs={12}>
-                <h2 className={classes.labelItemRight}>PRECIO DE LA APLICACIÓN: {toFormatterCurrency(values.precio)}</h2>
+                <h2 className={classes.labelItemRight}>PRECIO DE LA APLICACIÓN: {toFormatterCurrency(values.total_aplicacion)}</h2>
               </Grid>
               <Grid item xs={12}>
                 <h1 className={classes.labelItemRight}>TOTAL DE LA CIRUGIA: {toFormatterCurrency(values.total)}</h1>

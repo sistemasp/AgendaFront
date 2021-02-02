@@ -82,6 +82,7 @@ const AgendarEstetica = (props) => {
 		fecha_hora: new Date(),
 		precio: 0,
 		total: 0,
+		total_aplicacion: 0,
 		observaciones: '',
 		materiales: [],
 		producto: productoAplicacionToxinaBotulinicaDituroxalId,
@@ -205,6 +206,7 @@ const AgendarEstetica = (props) => {
 	const handleClickAgendar = async (data) => {
 		setIsLoading(true);
 		const dateNow = new Date();
+		data.total = data.precio;
 		data.consulta = consultaAgendada._id;
 		data.quien_agenda = empleado._id;
 		data.sucursal = sucursal;
@@ -352,28 +354,28 @@ const AgendarEstetica = (props) => {
 	const handleChangeItemPrecio = (e, index) => {
 		const newMateriales = values.materiales;
 		newMateriales[index].precio = e.target.value;
-		let precio = Number(values.total);
+		let total_aplicacion = Number(values.precio);
 
 		newMateriales.map((item) => {
-			precio -= Number(item.precio);
+			total_aplicacion -= Number(item.precio);
 		});
 
 		setValues({
 			...values,
 			materiales: newMateriales,
-			precio: precio,
+			total_aplicacion: total_aplicacion,
 		});
 	}
 
 	const handleChangeTotal = e => {
-		let precio = Number(e.target.value);
+		let total_aplicacion = Number(e.target.value);
 		values.materiales.map(item => {
-			precio -= Number(item.precio);
+			total_aplicacion -= Number(item.precio);
 		});
 		setValues({
 			...values,
-			total: e.target.value,
-			precio: precio,
+			precio: e.target.value,
+			total_aplicacion: total_aplicacion,
 		});
 	};
 
@@ -390,18 +392,18 @@ const AgendarEstetica = (props) => {
 		const newToxinasRellenos = values.toxinas_rellenos;
 		newToxinasRellenos[index].unidades = e.target.value;
 		newToxinasRellenos[index].total = Number(newToxinasRellenos[index].precio) * Number(e.target.value)
-		let precio = values.total;
+		let total_aplicacion = values.precio;
 		newToxinasRellenos.map((item) => {
-			precio -= Number(item.precio) * Number(item.unidades);
+			total_aplicacion -= Number(item.precio) * Number(item.unidades);
 		});
 		values.materiales.map(item => {
-			precio -= Number(item.precio);
+			total_aplicacion -= Number(item.precio);
 		});
 
 		setValues({
 			...values,
 			toxinas_rellenos: newToxinasRellenos,
-			precio: precio,
+			total_aplicacion: total_aplicacion,
 		});
 	}
 

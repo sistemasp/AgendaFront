@@ -253,6 +253,7 @@ const AgendarDermapen = (props) => {
 		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
+		data.total = data.precio;
 		// data.tiempo = getTimeToTratamiento(data.tratamientos);
 
 		const response = await createDermapen(data);
@@ -407,33 +408,33 @@ const AgendarDermapen = (props) => {
 	const handleChangeItemPrecio = (e, index) => {
 		const newMateriales = values.materiales;
 		newMateriales[index].precio = e.target.value;
-		let precio = Number(values.total) - Number(values.costo);
+		let total_aplicacion = Number(values.precio) - Number(values.costo);
 		newMateriales.map((item) => {
-			precio -= Number(item.precio);
+			total_aplicacion -= Number(item.precio);
 		});
 		setValues({
 			...values,
 			materiales: newMateriales,
-			precio: precio,
+			total_aplicacion: total_aplicacion,
 		});
 	}
 
 	const handleChangeTotal = (event) => {
-		const total = event.target.value;
-		let precio = total - values.costo;
+		const precio = event.target.value;
+		let total_aplicacion = precio - values.costo;
 		setValues({
 			...values,
-			total: event.target.value,
-			precio: precio,
+			precio: event.target.value,
+			total_aplicacion: total_aplicacion,
 		})
 	}
 
 	const handleChangeCosto = (event) => {
 		const costo = event.target.value;
-		const precio = Number(values.total) - Number(costo);
+		const total_aplicacion = Number(values.precio) - Number(costo);
 		setValues({
 			...values,
-			precio: precio,
+			total_aplicacion: total_aplicacion,
 			costo: costo,
 		});
 	}

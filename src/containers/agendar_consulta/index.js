@@ -154,6 +154,7 @@ const AgendarConsulta = (props) => {
 		{ title: 'PROMOVENDEDOR', field: 'promovendedor_nombre' },
 		{ title: 'ESTADO', field: 'status.nombre' },
 		{ title: 'PRECIO', field: 'precio_moneda' },
+		{ title: 'TOTAL', field: 'total_moneda' },
 		{ title: 'OBSERVACIONES', field: 'observaciones' },
 	];
 
@@ -186,6 +187,7 @@ const AgendarConsulta = (props) => {
 					item.folio = generateFolio(item);
 					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
+					item.total_moneda = toFormatterCurrency(item.total);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 					item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
@@ -300,6 +302,7 @@ const AgendarConsulta = (props) => {
 				item.folio = generateFolio(item);
 				item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);
+				item.total_moneda = toFormatterCurrency(item.total);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
@@ -341,6 +344,7 @@ const AgendarConsulta = (props) => {
 		data.hora_llegada = '--:--';
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
+		data.total = data.precio;
 		data.servicio = consultaServicioId;
 		data.tipo_cita = data.frecuencia === frecuenciaPrimeraVezId ? tipoCitaRevisionId : tipoCitaDerivadaId;
 		if (sucursal._id !== sucursalManuelAcunaId) {

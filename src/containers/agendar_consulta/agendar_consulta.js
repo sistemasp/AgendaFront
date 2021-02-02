@@ -384,7 +384,7 @@ export const AgendarConsultaContainer = (props) => {
               variant="contained"
               disabled={dataComplete}
               onClick={() => onClickAgendar(values)}
-              text='AGENDAR' />
+              text='GUARDAR' />
           </Grid>
         </Grid>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>

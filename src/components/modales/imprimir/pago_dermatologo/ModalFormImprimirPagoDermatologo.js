@@ -990,7 +990,6 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                       aparatologias ?
                         aparatologias.map(aparatologia => {
                           let comisionDermatologo = 0;
-                          //console.log("KAOZ", aparatologia);
                           aparatologia.tratamientos.forEach(tratamiento => {
 
                             tratamiento.areasSeleccionadas.map(area => {

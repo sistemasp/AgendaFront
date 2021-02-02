@@ -345,7 +345,6 @@ const ModalImprimirPagoDermatologo = (props) => {
       aparatologia.pago_dermatologo = pagoDermatologo;
       updateAparatologia(aparatologia._id, aparatologia);
       total += Number(pagoDermatologo);
-      console.log("KAOZ", aparatologia);
     });
 
     // TOTAL DE LAS ESTETICAS

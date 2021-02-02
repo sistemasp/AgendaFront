@@ -83,6 +83,7 @@ const AgendarCirugia = (props) => {
 	const [values, setValues] = useState({
 		servicio: cirugiaServicioId,
 		fecha_hora: new Date(),
+		total_aplicacion: 0,
 		precio: 0,
 		total: 0,
 		observaciones: '',
@@ -118,6 +119,7 @@ const AgendarCirugia = (props) => {
 		{ title: 'QUIEN AGENDA', field: 'quien_agenda.nombre' },
 		{ title: 'DERMATÓLOGO', field: 'dermatologo_nombre' },
 		{ title: 'ESTADO', field: 'status.nombre' },
+		{ title: 'PRECIO', field: 'precio_moneda' },
 		{ title: 'TOTAL', field: 'total_moneda' },
 		{ title: 'OBSERVACIONES', field: 'observaciones' },
 		{ title: 'HORA LLEGADA', field: 'hora_llegada' },
@@ -197,7 +199,7 @@ const AgendarCirugia = (props) => {
 				const fecha = new Date(item.fecha_hora);
 				item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);
-				item.total_moneda = toFormatterCurrency(item.total);
+				item.total_moneda = toFormatterCurrency(item.total);				
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
@@ -210,6 +212,7 @@ const AgendarCirugia = (props) => {
 	const handleClickAgendar = async (data) => {
 		setIsLoading(true);
 		const dateNow = new Date();
+		data.total = data.precio;
 		data.consulta = consultaAgendada._id;
 		data.quien_agenda = empleado._id;
 		data.sucursal = sucursal;
@@ -220,7 +223,6 @@ const AgendarCirugia = (props) => {
 		data.hora_llegada = `${addZero(dateNow.getHours())}:${addZero(dateNow.getMinutes())}`;;
 		data.hora_atencion = '--:--';
 		data.hora_salida = '--:--';
-
 		const response = await createCirugia(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			const consecutivo = {
@@ -241,6 +243,7 @@ const AgendarCirugia = (props) => {
 					promovendedor: '',
 					cosmetologa: '',
 					paciente: `${paciente._id}`,
+					total_aplicacion: '',
 					precio: '',
 					total: '',
 					tipo_cita: {},
@@ -358,28 +361,28 @@ const AgendarCirugia = (props) => {
 	const handleChangeItemPrecio = (e, index) => {
 		const newMateriales = values.materiales;
 		newMateriales[index].precio = e.target.value;
-		let precio = Number(values.total);
+		let total_aplicacion = Number(values.precio);
 
 		newMateriales.map((item) => {
-			precio -= Number(item.precio);
+			total_aplicacion -= Number(item.precio);
 		});
 
 		setValues({
 			...values,
 			materiales: newMateriales,
-			precio: precio,
+			total_aplicacion: total_aplicacion,
 		});
 	}
 
 	const handleChangeTotal = e => {
-		let precio = Number(e.target.value);
+		let total_aplicacion = Number(e.target.value);
 		values.materiales.map(item => {
-			precio -= Number(item.precio);
+			total_aplicacion -= Number(item.precio);
 		});
 		setValues({
 			...values,
-			total: e.target.value,
-			precio: precio,
+			precio: e.target.value,
+			total_aplicacion: total_aplicacion,
 		});
 	};
 

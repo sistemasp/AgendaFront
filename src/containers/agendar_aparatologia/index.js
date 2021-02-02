@@ -474,7 +474,6 @@ const AgendarAparatologia = (props) => {
 	];
 
 	const handleGuardarModalPagos = async (servicio) => {
-		console.log("KAOZ", servicio);
 		servicio.pagado = servicio.pagos.length > 0;
 		await updateAparatologia(servicio._id, servicio);
 		await loadAparatologias(new Date(servicio.fecha_hora));

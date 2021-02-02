@@ -63,6 +63,7 @@ const ModalCirugia = (props) => {
     costo_biopsias: cirugia.costo_biopsias ? cirugia.costo_biopsias : 0,
     patologo: cirugia.patologo ? cirugia.patologo._id : undefined,
     hora_aplicacion: cirugia.hora_aplicacion,
+    total_aplicacion: cirugia.total_aplicacion,
   });
 
   const promovendedorRolId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
@@ -152,28 +153,28 @@ const ModalCirugia = (props) => {
   }
 
   const handleChangeTotal = e => {
-    let precio = Number(e.target.value);
+    let total_aplicacion = Number(e.target.value);
     values.materiales.map(item => {
-      precio -= Number(item.precio);
+      total_aplicacion -= Number(item.precio);
     });
-    precio -= Number(values.costo_biopsias);
+    total_aplicacion -= Number(values.costo_biopsias);
     setValues({
       ...values,
       total: e.target.value,
-      precio: precio,
+      total_aplicacion: total_aplicacion,
     });
   };
 
   const handleChangeCostoBiopsias = e => {
-    let precio = Number(values.total);
+    let total_aplicacion = Number(values.total);
     values.materiales.map(item => {
-      precio -= Number(item.precio);
+      total_aplicacion -= Number(item.precio);
     });
-    precio -= Number(e.target.value);
+    total_aplicacion -= Number(e.target.value);
     setValues({
       ...values,
       costo_biopsias: e.target.value,
-      precio: precio
+      total_aplicacion: total_aplicacion
     });
   }
 
@@ -220,15 +221,15 @@ const ModalCirugia = (props) => {
   const handleChangeItemPrecio = (e, index) => {
     const newMateriales = values.materiales;
     newMateriales[index].precio = e.target.value;
-    let precio = Number(values.total);
+    let total_aplicacion = Number(values.total);
     newMateriales.map((item) => {
-      precio -= Number(item.precio);
+      total_aplicacion -= Number(item.precio);
     });
-    precio -= Number(values.costo_biopsias);
+    total_aplicacion -= Number(values.costo_biopsias);
     setValues({
       ...values,
       materiales: newMateriales,
-      precio: precio,
+      total_aplicacion: total_aplicacion,
     });
   }
 

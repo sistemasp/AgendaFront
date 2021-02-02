@@ -88,8 +88,8 @@ const ReportesDetallesGeneral = (props) => {
 		{ title: '$ DESCUENTO CLINICA', field: 'descuento_cantidad_clinica' },
 		{ title: '% DESCUENTO DERMATÓLOGO', field: 'descuento_porcentaje_dermatologo' },
 		{ title: '$ DESCUENTO DERMATÓLOGO', field: 'descuento_cantidad_dermatologo' },
-		{ title: '% DESCUENTO', field: 'descuento_porcentaje' },
-		{ title: '$ DESCUENTO', field: 'descuento_cantidad' },
+		//{ title: '% DESCUENTO', field: 'descuento_porcentaje' },
+		//{ title: '$ DESCUENTO', field: 'descuento_cantidad' },
 		{ title: 'IMPORTE 2', field: 'importe_2' },
 		{ title: '% IMPUESTO', field: 'impuesto_porcentaje' },
 		{ title: '$ IMPUESTO', field: 'impuesto_cantidad' },
@@ -129,6 +129,7 @@ const ReportesDetallesGeneral = (props) => {
 
 	const procesarConsulta = (consulta, datos) => {
 		consulta.iva = false;
+
 		consulta.pagos.forEach(pago => {
 			const metodoPago = metodosPago.find(metodoPago => {
 				return metodoPago._id === pago.forma_pago;
@@ -154,8 +155,10 @@ const ReportesDetallesGeneral = (props) => {
 			const impuesto = importe2 * (impuestoPorcentaje / 100);
 			const descuentoPorcentaje = 100 - (pago.total * 100 / consulta.precio);
 			const descuentoCantidad = (consulta.precio * descuentoPorcentaje / 100);
-			const pagoDermatologo = pago.total * consulta.pago_dermatologo / consulta.precio;
+			const pagoDermatologo = pago.total * consulta.pago_dermatologo / consulta.total;
 			const pagoClinica = pago.total - pagoDermatologo;
+			const descuentoClinica = consulta.porcentaje_descuento_clinica * consulta.precio / 100;
+			const descuentoDermatologo = consulta.descuento_dermatologo * (consulta.precio - descuentoClinica) / 100;
 			const dato = {
 				...consulta,
 				metodo_pago_nombre: metodoPago.nombre,
@@ -164,8 +167,10 @@ const ReportesDetallesGeneral = (props) => {
 				digitos: pago.digitos,
 				importe_1: consulta.precio_moneda,
 				area: "NO APLICA",
-				descuento_porcentaje_clinica: `${pago.porcentaje_descuento_clinica}%`,
-				descuento_cantidad_clinica: toFormatterCurrency(pago.descuento_clinica),
+				descuento_porcentaje_clinica: `${consulta.porcentaje_descuento_clinica}%`,
+				descuento_cantidad_clinica: toFormatterCurrency(consulta.descuento_clinica),
+				descuento_porcentaje_dermatologo: `${consulta.descuento_dermatologo}%`,
+				descuento_cantidad_dermatologo: toFormatterCurrency(descuentoDermatologo),
 				descuento_porcentaje: `${descuentoPorcentaje}%`,
 				descuento_cantidad: toFormatterCurrency(descuentoCantidad),
 				impuesto_porcentaje: `${impuestoPorcentaje}%`,
@@ -261,7 +266,6 @@ const ReportesDetallesGeneral = (props) => {
 	}
 
 	const procesarAparatologia = (aparatologia, datos) => {
-		console.log("KAOZ", aparatologia);
 		aparatologia.tratamientos.forEach(tratamiento => {
 			const producto = tratamiento;
 			let totalPagos = 0;

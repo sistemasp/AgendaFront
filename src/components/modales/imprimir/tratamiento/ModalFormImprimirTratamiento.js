@@ -68,6 +68,12 @@ const ModalFormImprimirTratamiento = (props) => {
 
   const fecha = new Date();
 
+  const calcularDescuento = (datos) => {
+    const descuentoClinica = datos.descuento_clinica;
+    const descuentoDermatologo = (datos.precio - descuentoClinica) * datos.descuento_dermatologo / 100;
+    const descuentoTotal = descuentoClinica - descuentoDermatologo;
+    return descuentoTotal;
+  }
   return (
     <div>
       <Modal
@@ -111,12 +117,7 @@ const ModalFormImprimirTratamiento = (props) => {
                           <h4 className={classes.labelSubItemLeft}>{`${area.nombre}`}</h4>
                         </Grid>
                         <Grid item xs={3}>
-                          <h4 className={classes.labelItemRight}> {`${toFormatterCurrency(
-                            datos.sucursal._id === sucursalManuelAcunaId ? area.precio_ma // Precio Manuel Acuña
-                              : (datos.sucursal._id === sucursalOcciId ? area.precio_oc // Precio Occidental
-                                : (datos.sucursal._id === sucursalFedeId ? area.precio_fe // Precio Federalismo
-                                  : 0)) // Error
-                          )}`} </h4>
+                          <h4 className={classes.labelItemRight}> {toFormatterCurrency(area.precio_real)} </h4>
                         </Grid>
                       </Fragment>
                     })
@@ -125,8 +126,21 @@ const ModalFormImprimirTratamiento = (props) => {
               })
             }
             <br />
+            {
+              datos.has_descuento_dermatologo || (datos.descuento_clinica && datos.descuento_clinica !== "0")
+                ? <Fragment>
+                  <Grid item xs={12} className={classes.labelItemRight}>
+                    <h2 className={classes.labelItemRight}>PRECIO NORMAL: {datos.precio_moneda}</h2>
+                  </Grid>
+                  <Grid item xs={12} className={classes.labelItemRight}>
+                    <h2 className={classes.labelItemRight}>DESCUENTO: {toFormatterCurrency(calcularDescuento(datos))}</h2>
+                  </Grid>
+                </Fragment>
+                : ''
+            }
+
             <Grid item xs={12} className={classes.labelItemRight}>
-              <h1 className={classes.labelItemRight}>TOTAL: {datos.precio_moneda}</h1>
+              <h1 className={classes.labelItemRight}>TOTAL A PAGAR: {datos.total_moneda}</h1>
             </Grid>
 
             <Grid item xs={12}>

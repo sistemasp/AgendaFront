@@ -377,7 +377,7 @@ export const AgendarFacialContainer = (props) => {
 								|| values.tratamientos.length === 0 || !values.fecha_hora || !values.precio
 								|| !values.tiempo}
 							onClick={() => onClickAgendar(values)}
-							text='AGENDAR' />
+							text='GUARDAR' />
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<h1>Total: {toFormatterCurrency(values.precio)}</h1>

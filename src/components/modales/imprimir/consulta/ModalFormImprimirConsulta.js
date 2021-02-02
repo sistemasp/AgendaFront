@@ -104,7 +104,7 @@ const ModalFormImprimirConsulta = (props) => {
             </Grid>
             <br />
             <Grid item xs={12} className={classes.label_left}>
-              <h2 className={classes.label_left}>1 {`${servicio} ${datos.precio_moneda}`}</h2>
+              <h2 className={classes.label_left}>1 {`${servicio} ${datos.total_moneda}`}</h2>
             </Grid>
             <br />
             <Grid item xs={12}>

@@ -28,7 +28,18 @@ const ModalPagos = (props) => {
   const servicioConsultaId = process.env.REACT_APP_CONSULTA_SERVICIO_ID;
   const servicioCirugiaId = process.env.REACT_APP_CIRUGIA_SERVICIO_ID;
   const servicioEsteticaId = process.env.REACT_APP_ESTETICA_SERVICIO_ID;
+  const servicioFacialId = process.env.REACT_APP_FACIAL_SERVICIO_ID;
+  const servicioDermapenId = process.env.REACT_APP_DERMAPEN_SERVICIO_ID;
   const frecuenciaReconsultaId = process.env.REACT_APP_FRECUENCIA_RECONSULTA_ID;
+  const sucursalManuelAcunaId = process.env.REACT_APP_SUCURSAL_MANUEL_ACUNA_ID;
+  const sucursalRubenDarioId = process.env.REACT_APP_SUCURSAL_RUBEN_DARIO_ID;
+  const sucursalOcciId = process.env.REACT_APP_SUCURSAL_OCCI_ID;
+  const sucursalFedeId = process.env.REACT_APP_SUCURSAL_FEDE_ID;
+  const revisadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_REVISADO_ID;
+  const derivadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_DERIVADO_ID;
+  const realizadoTipoCitaId = process.env.REACT_APP_TIPO_CITA_REALIZADO_ID;
+  const noAplicaTipoCitaId = process.env.REACT_APP_TIPO_CITA_NO_APLICA_ID;
+  const directoTipoCitaId = process.env.REACT_APP_TIPO_CITA_DIRECTO_ID;
 
   const [isLoading, setIsLoading] = useState(true);
   const [pagos, setPagos] = useState([]);
@@ -96,7 +107,6 @@ const ModalPagos = (props) => {
   ];
 
   const loadPagos = async () => {
-    let totalCE = 0;
     const response = await findPagosByTipoServicioAndServicio(tipoServicioId, servicio._id);
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       let acomulado = 0;
@@ -142,26 +152,69 @@ const ModalPagos = (props) => {
     let porcentajeDescuento = 0;
     switch (servicio.servicio._id) {
       case servicioCirugiaId:
-        porcentajeDescuento = esquema.porcentaje_cirugias;
+        const descuentoCirugia = (servicio.total_aplicacion * esquema.porcentaje_cirugias / 100);
+        porcentajeDescuento = (descuentoCirugia * 100 / values.total);
         break;
       case servicioConsultaId:
         porcentajeDescuento = servicio.frecuencia._id === frecuenciaReconsultaId ? esquema.porcentaje_reconsulta : esquema.porcentaje_consulta;
         break;
       case servicioEsteticaId:
-        porcentajeDescuento = esquema.porcentaje_dermocosmetica;
+        const descuentoEstetica = (servicio.total_aplicacion * esquema.porcentaje_dermocosmetica / 100);
+        porcentajeDescuento = (descuentoEstetica * 100 / values.total);
+        break;
+      case servicioDermapenId:
+        const descuentoDermapen = (servicio.total_aplicacion * esquema.porcentaje_dermocosmetica / 100);
+        porcentajeDescuento = (descuentoDermapen * 100 / values.total);
         break;
       case servicioAparatologiaId:
         porcentajeDescuento = esquema.porcentaje_laser;
         break;
-    }
+      case servicioFacialId:
+        let comisionDermatologo = 0;
+        servicio.tratamientos.map(tratamiento => {
+          tratamiento.areasSeleccionadas.map(areaSeleccionada => {
+            let comisionReal = 0;
+            switch (servicio.tipo_cita._id) {
+              case revisadoTipoCitaId:
+                comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_revisado_ma
+                  : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_revisado_rd
+                    : areaSeleccionada.comision_revisado);
+                break;
+              case derivadoTipoCitaId:
+                comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_derivado_ma
+                  : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_derivado_rd
+                    : areaSeleccionada.comision_derivado);
+                break;
+              case realizadoTipoCitaId:
+                comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_realizado_ma
+                  : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_realizado_rd
+                    : areaSeleccionada.comision_realizado);
+                break;
+              case directoTipoCitaId: // TOMA EL 100%
+                comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.precio_ma
+                  : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.precio_rd
+                    : areaSeleccionada.precio_fe);
+                break;
+              case noAplicaTipoCitaId:
+                comisionReal = 0;
+                break;
+            }
+            comisionReal -= comisionReal * (servicio.porcentaje_descuento_clinica ? servicio.porcentaje_descuento_clinica : 0) / 100;
 
+            areaSeleccionada.comision_real = comisionReal;
+            comisionDermatologo += Number(comisionReal);
+          });
+        });
+
+        porcentajeDescuento = comisionDermatologo * 100 / values.total;
+        break;
+    }
     return porcentajeDescuento;
   }
 
   const calcularTotal = (datos) => {
     const cantidad = Number(datos.cantidad);
     const descuento_clinica = cantidad * Number(datos.porcentaje_descuento_clinica) / 100;
-
     const descuento_dermatologo = datos.has_descuento_dermatologo
       ? (servicio.dermatologo._id !== dermatologoDirectoId
         ? (getMayorDescuento())

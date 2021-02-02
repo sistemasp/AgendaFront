@@ -379,7 +379,7 @@ export const AgendarAparatologiaContainer = (props) => {
 							disabled={!isValid || isSubmitting || !paciente.nombres
 								|| values.tratamientos.length === 0 || !values.fecha_hora || !values.precio}
 							onClick={() => onClickAgendar(values)}
-							text='AGENDAR' />
+							text='GUARDAR' />
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<h1>TOTAL: {toFormatterCurrency(values.precio)}</h1>

@@ -192,7 +192,7 @@ export const AgendarDermapenContainer = (props) => {
 							className={classes.textField}
 							name="total"
 							label="TOTAL DERMAPEN"
-							value={values.total}
+							value={values.precio}
 							type='Number'
 							onChange={onChangeTotal}
 							onInput={(e) => {
@@ -309,7 +309,7 @@ export const AgendarDermapenContainer = (props) => {
 					</Grid>
 					<Grid item xs={12} sm={2}>
 						<FormControl variant="outlined" className={classes.formControl}>
-							<InputLabel id="simple-select-outlined-tipo-dermapen">Medio</InputLabel>
+							<InputLabel id="simple-select-outlined-tipo-dermapen">MEDIO</InputLabel>
 							<Select
 								labelId="simple-select-outlined-tipo-dermapen"
 								id="simple-select-outlined-tipo-dermapen"
@@ -376,13 +376,13 @@ export const AgendarDermapenContainer = (props) => {
 							disabled={!isValid || isSubmitting || !paciente.nombres || !values.dermatologo
 								|| !values.fecha_hora || !values.tiempo}
 							onClick={() => onClickAgendar(values)}
-							text='AGENDAR' />
+							text='GUARDAR' />
 					</Grid>
 					<Grid item xs={12} sm={2}>
-						<h2>APLICACIÓN: {toFormatterCurrency(values.precio)}</h2>
+						<h2>APLICACIÓN: {toFormatterCurrency(values.total_aplicacion)}</h2>
 					</Grid>
 					<Grid item xs={12} sm={2}>
-						<h1>Total: {toFormatterCurrency(values.total)}</h1>
+						<h1>TOTAL: {toFormatterCurrency(values.precio)}</h1>
 					</Grid>
 				</Grid>
 				<MuiPickersUtilsProvider utils={DateFnsUtils}>

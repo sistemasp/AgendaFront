@@ -141,6 +141,7 @@ const AgendarFacial = (props) => {
 		{ title: 'COSMETOLOGA', field: 'cosmetologa_nombre' },
 		{ title: 'ESTADO', field: 'status.nombre' },
 		{ title: 'PRECIO', field: 'precio_moneda' },
+		{ title: 'TOTAL', field: 'total_moneda' },
 		{ title: 'TIEMPO (MINUTOS)', field: 'tiempo' },
 		{ title: 'OBSERVACIONES', field: 'observaciones' },
 		{ title: 'HORA LLEGADA', field: 'hora_llegada' },
@@ -229,6 +230,7 @@ const AgendarFacial = (props) => {
 									: (sucursal._id === sucursalRubenDarioId ? item.precio_rd // PRECIO RUBEN DARIO
 									: 0))); // Error
 					precio = Number(precio) + Number(itemPrecio);
+					item.precio_real = itemPrecio;
 				});
 			}
 		});
@@ -287,6 +289,7 @@ const AgendarFacial = (props) => {
 				const fecha = new Date(item.fecha_hora);
 				item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 				item.precio_moneda = toFormatterCurrency(item.precio);
+				item.total_moneda = toFormatterCurrency(item.total);
 				item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 				item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
@@ -320,6 +323,7 @@ const AgendarFacial = (props) => {
 		data.tratamientos.forEach(tratamiento => {
 			tratamiento.areas = undefined;
 		});
+		data.total = data.precio;
 		data.quien_agenda = empleado._id;
 		data.sucursal = sucursal;
 		data.status = pendienteStatusId;
@@ -503,6 +507,7 @@ const AgendarFacial = (props) => {
 					const fecha = new Date(item.fecha_hora);
 					item.hora = `${addZero(fecha.getHours())}:${addZero(fecha.getMinutes())}`;
 					item.precio_moneda = toFormatterCurrency(item.precio);
+					item.total_moneda = toFormatterCurrency(item.total);
 					item.paciente_nombre = `${item.paciente.nombres} ${item.paciente.apellidos}`;
 					item.promovendedor_nombre = item.promovendedor ? item.promovendedor.nombre : 'SIN ASIGNAR';
 					item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';

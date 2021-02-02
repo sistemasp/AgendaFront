@@ -218,7 +218,7 @@ export const AgendarEsteticaContainer = (props) => {
 								className={classes.textField}
 								name="total"
 								label="TOTAL DE LA ESTETICA"
-								value={values.total}
+								value={values.precio}
 								type='Number'
 								onChange={onChangeTotal}
 								onInput={(e) => {
@@ -364,13 +364,13 @@ export const AgendarEsteticaContainer = (props) => {
 								disabled={!isValid || isSubmitting || !paciente.nombres || !values.dermatologo
 									|| !values.fecha_hora}
 								onClick={() => onClickAgendar(values)}
-								text='AGENDAR' />
+								text='GUARDAR' />
 						</Grid>
 						<Grid item xs={12} sm={6}>
-							<h2>APLICACIÓN: {toFormatterCurrency(values.precio)}</h2>
+							<h2>APLICACIÓN: {toFormatterCurrency(values.total_aplicacion)}</h2>
 						</Grid>
 						<Grid item xs={12} sm={6}>
-							<h1>TOTAL: {toFormatterCurrency(values.total)}</h1>
+							<h1>TOTAL: {toFormatterCurrency(values.precio)}</h1>
 						</Grid>
 					</Grid>
 					<Grid container spacing={2} xs={12} sm={6}>

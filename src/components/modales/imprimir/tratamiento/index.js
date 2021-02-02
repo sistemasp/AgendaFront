@@ -18,7 +18,7 @@ const ModalImprimirTratamiento = (props) => {
     onClose,
     datos,
   } = props;
-
+  
   const [show, setShow] = useState(true);
 
   const handleClickImprimir = (e) => {
