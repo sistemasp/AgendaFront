@@ -313,9 +313,11 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                     consultasPrimeraVez ?
                       consultasPrimeraVez.map(consulta => {
                         let totalPagos = 0;
-                        consulta.pagos.map(pago => {
-                          totalPagos += Number(pago.total);
-                        });
+                        if (!consulta.has_descuento_dermatologo) {
+                          consulta.pagos.map(pago => {
+                            totalPagos += Number(pago.total);
+                          });
+                        }
                         const pagoDermatologo = Number(totalPagos) * Number(dermatologo.esquema.porcentaje_consulta) / 100;
                         pagoTotal += Number(pagoDermatologo);
 
@@ -415,12 +417,12 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                     consultasReconsultas ?
                       consultasReconsultas.map(consulta => {
                         let totalPagos = 0;
-                        let hasDescuentoDermatologo;
-                        consulta.pagos.map(pago => {
-                          hasDescuentoDermatologo = Number(pago.descuento_dermatologo) > 0;
-                          totalPagos += Number(pago.total);
-                        });
-                        const pagoDermatologo = hasDescuentoDermatologo ? 0 : Number(totalPagos) * Number(dermatologo.esquema.porcentaje_reconsulta) / 100;
+                        if (!consulta.has_descuento_dermatologo) {
+                          consulta.pagos.map(pago => {
+                            totalPagos += Number(pago.total);
+                          });
+                        }
+                        const pagoDermatologo = Number(totalPagos) * Number(dermatologo.esquema.porcentaje_reconsulta) / 100;
 
                         pagoTotal += Number(pagoDermatologo);
                         return <Grid container>
@@ -518,7 +520,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                     {
                       cirugias ?
                         cirugias.map(cirugia => {
-                          const pagoDermatologo = Number(cirugia.precio) * Number(dermatologo.esquema.porcentaje_cirugias) / 100;
+                          const pagoDermatologo = cirugia.has_descuento_dermatologo ? 0 : Number(cirugia.total_aplicacion) * Number(dermatologo.esquema.porcentaje_cirugias) / 100;
                           pagoTotal += Number(pagoDermatologo);
                           const date = new Date(cirugia.hora_aplicacion);
                           return <Grid container>
@@ -616,7 +618,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                     {
                       esteticas ?
                         esteticas.map(estetica => {
-                          const pagoDermatologo = Number(estetica.precio) * Number(dermatologo.esquema.porcentaje_dermocosmetica) / 100;
+                          const pagoDermatologo = estetica.has_descuento_dermatologo ? 0 : Number(estetica.total_aplicacion) * Number(dermatologo.esquema.porcentaje_dermocosmetica) / 100;
                           pagoTotal += Number(pagoDermatologo);
                           const date = new Date(estetica.hora_aplicacion);
                           return <Grid container>
@@ -719,7 +721,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                         faciales.map(facial => {
                           let comisionDermatologo = 0;
                           let pagoDermatologo = 0;
-                          if (facial.pagos[0] === undefined || Number(facial.pagos[0].descuento_dermatologo) === 0) {
+                          if (!facial.has_descuento_dermatologo) {
                             facial.tratamientos.map(tratamiento => {
                               tratamiento.areasSeleccionadas.map(areaSeleccionada => {
                                 switch (facial.tipo_cita._id) {
@@ -757,7 +759,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                                 }
                               });
                             });
-                            pagoDermatologo = comisionDermatologo - ((comisionDermatologo * facial.pagos[0].porcentaje_descuento_clinica) / 100);
+                            pagoDermatologo = comisionDermatologo - ((comisionDermatologo * facial.porcentaje_descuento_clinica ? facial.porcentaje_descuento_clinica : 0) / 100);
                             pagoTotal += Number(pagoDermatologo);
                           }
                           return <Grid container>
@@ -881,7 +883,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                     {
                       dermapens ?
                         dermapens.map(dermapen => {
-                          const pagoDermatologo = Number(dermapen.precio) * Number(dermatologo.esquema.porcentaje_dermocosmetica) / 100;
+                          const pagoDermatologo = dermapen.has_descuento_dermatologo ? 0 : Number(dermapen.total_aplicacion) * Number(dermatologo.esquema.porcentaje_dermocosmetica) / 100;
                           pagoTotal += Number(pagoDermatologo);
                           return <Grid container>
                             <Grid item xs={true} className={classes.label}>
@@ -1002,7 +1004,8 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                               comisionDermatologo += (Number(itemPrecio) * Number(dermatologo.esquema.porcentaje_laser) / 100);
                             });
                           });
-                          let pagoDermatologo = comisionDermatologo - ((comisionDermatologo * aparatologia.porcentaje_descuento_clinica) / 100);
+                          let pagoDermatologo = comisionDermatologo - ((comisionDermatologo * (aparatologia.porcentaje_descuento_clinica ? aparatologia.porcentaje_descuento_clinica : 0)) / 100);
+
                           pagoDermatologo = aparatologia.has_descuento_dermatologo ? 0 : pagoDermatologo;
                           pagoTotal += Number(pagoDermatologo);
                           return <Grid container>
