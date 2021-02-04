@@ -83,13 +83,16 @@ const ReportesDetallesGeneral = (props) => {
 		{ title: 'SERVICIO', field: 'servicio.nombre' },
 		{ title: 'PRODUCTO', field: 'producto.nombre' },
 		{ title: 'ZONA', field: 'area' },
+		{ title: 'IMPORTE REAL', field: 'precio_real' },
+		//{ title: 'IMPORTE PRODUCTO', field: 'importe_producto' },
+		//{ title: 'IMPORTE ZONA', field: 'importe_zona' },
 		{ title: 'IMPORTE 1', field: 'importe_1' },
 		{ title: '% DESCUENTO CLINICA', field: 'descuento_porcentaje_clinica' },
 		{ title: '$ DESCUENTO CLINICA', field: 'descuento_cantidad_clinica' },
 		{ title: '% DESCUENTO DERMATÓLOGO', field: 'descuento_porcentaje_dermatologo' },
 		{ title: '$ DESCUENTO DERMATÓLOGO', field: 'descuento_cantidad_dermatologo' },
-		//{ title: '% DESCUENTO', field: 'descuento_porcentaje' },
-		//{ title: '$ DESCUENTO', field: 'descuento_cantidad' },
+		{ title: '% DESCUENTO', field: 'descuento_porcentaje' },
+		{ title: '$ DESCUENTO', field: 'descuento_cantidad' },
 		{ title: 'IMPORTE 2', field: 'importe_2' },
 		{ title: '% IMPUESTO', field: 'impuesto_porcentaje' },
 		{ title: '$ IMPUESTO', field: 'impuesto_cantidad' },
@@ -266,6 +269,7 @@ const ReportesDetallesGeneral = (props) => {
 	}
 
 	const procesarAparatologia = (aparatologia, datos) => {
+		console.log("KAOZ", aparatologia);
 		aparatologia.tratamientos.forEach(tratamiento => {
 			const producto = tratamiento;
 			let totalPagos = 0;
@@ -318,20 +322,25 @@ const ReportesDetallesGeneral = (props) => {
 							? (total * areaSeleccionada.comision_real / producto.importe1)
 							: 0;
 						const pagoClinica = total - pagoDermatologo;
-						const descuentoClinica = aparatologia.porcentaje_descuento_clinica * producto.importe1 / 100;
-						const descuentoDermatologo = aparatologia.descuento_dermatologo * (producto.importe1 - descuentoClinica) / 100;
+						const descuentoClinicaPorcentaje = aparatologia.porcentaje_descuento_clinica ? aparatologia.porcentaje_descuento_clinica : 0;
+						const descuentoDermatologoPorcentaje = aparatologia.descuento_dermatologo ? aparatologia.descuento_dermatologo : 0;
+						const descuentoClinica = descuentoClinicaPorcentaje * producto.importe1 / 100;
+						const descuentoDermatologo = descuentoDermatologoPorcentaje * (producto.importe1 - descuentoClinica) / 100;
 						const dato = {
 							...aparatologia,
 							metodo_pago_nombre: metodoPago.nombre,
 							producto: producto,
 							impuesto_porcentaje: `${impuestoPorcentaje}%`,
 							impuesto_cantidad: toFormatterCurrency(impuesto),
+							//importe_servicio: aparatologia.precio_moneda,
+							//importe_producto: toFormatterCurrency(producto.importe1),
+							//precio_real: toFormatterCurrency(areaSeleccionada.precio_real),
 							importe_1: toFormatterCurrency(producto.importe1),
 							importe_2: toFormatterCurrency(importe2),
 							descuento_porcentaje: `${descuentoPorcentaje}%`,
 							descuento_cantidad: toFormatterCurrency(descuentoCantidad),
-							descuento_porcentaje_clinica: `${aparatologia.porcentaje_descuento_clinica}%`,
-							descuento_porcentaje_dermatologo: `${aparatologia.descuento_dermatologo}%`,
+							descuento_porcentaje_clinica: `${descuentoClinicaPorcentaje}%`,
+							descuento_porcentaje_dermatologo: `${descuentoDermatologoPorcentaje}%`,
 							descuento_cantidad_dermatologo: toFormatterCurrency(descuentoDermatologo),
 							descuento_cantidad_clinica: toFormatterCurrency(descuentoClinica),
 							area: areaSeleccionada.nombre,

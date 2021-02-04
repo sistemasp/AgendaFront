@@ -81,7 +81,6 @@ const ModalPagos = (props) => {
     { title: 'BANCO', field: 'banco_nombre' },
     { title: 'TIPO TARJETA', field: 'tipo_tarjeta_nombre' },
     { title: 'DIGITOS', field: 'digitos_show' },
-    { title: 'PAGO CONFIRMADO', field: 'deposito_confirmado' },
     { title: 'OBSERVACIONES', field: 'observaciones' },
   ];
 
