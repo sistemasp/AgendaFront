@@ -98,6 +98,9 @@ const AgendarAparatologia = (props) => {
 		observaciones: '',
 		dermatologo: dermatologoDirectoId,
 		consulta: info.dermatologo ? info._id : undefined,
+		porcentaje_descuento_clinica: 0,
+		descuento_clinica: 0,
+		descuento_dermatologo: 0,
 	});
 	const [aparatologias, setAparatologia] = useState([]);
 	const [areas, setAreas] = useState([]);
@@ -305,7 +308,7 @@ const AgendarAparatologia = (props) => {
 					const show_areas = tratamiento.areasSeleccionadas.map(area => {
 						return `${area.nombre}`;
 					});
-					return `►${tratamiento.nombre}(${show_areas})`;
+					return `►${tratamiento.nombre}(${show_areas}) `;
 				});
 			});
 			setAparatologia(response.data);
@@ -507,7 +510,7 @@ const AgendarAparatologia = (props) => {
 						const show_areas = tratamiento.areasSeleccionadas.map(area => {
 							return `${area.nombre}`;
 						});
-						return `►${tratamiento.nombre}(${show_areas})`;
+						return `►${tratamiento.nombre}(${show_areas}) `;
 					});
 				});
 				setAparatologia(response.data);

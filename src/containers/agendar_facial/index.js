@@ -104,6 +104,9 @@ const AgendarFacial = (props) => {
 		observaciones: '',
 		dermatologo: dermatologoDirectoId,
 		consulta: info.dermatologo ? info._id : undefined,
+		porcentaje_descuento_clinica: 0,
+		descuento_clinica: 0,
+		descuento_dermatologo: 0,
 	});
 	const [faciales, setFaciales] = useState([]);
 	const [areas, setAreas] = useState([]);
@@ -228,7 +231,7 @@ const AgendarFacial = (props) => {
 							: (sucursal === sucursalOcciId ? item.precio_oc // Precio Occidental
 								: (sucursal === sucursalFedeId ? item.precio_fe // Precio Federalismo
 									: (sucursal._id === sucursalRubenDarioId ? item.precio_rd // PRECIO RUBEN DARIO
-									: 0))); // Error
+										: 0))); // Error
 					precio = Number(precio) + Number(itemPrecio);
 					item.precio_real = itemPrecio;
 				});
@@ -298,8 +301,8 @@ const AgendarFacial = (props) => {
 					const show_areas = tratamiento.areasSeleccionadas.map(area => {
 						return `${area.nombre}`;
 					});
-					return `►${tratamiento.nombre}(${show_areas})`;
-				});				
+					return `►${tratamiento.nombre}(${show_areas}) `;
+				});
 			});
 			setFaciales(response.data);
 		}
@@ -516,7 +519,7 @@ const AgendarFacial = (props) => {
 						const show_areas = tratamiento.areasSeleccionadas.map(area => {
 							return `${area.nombre}`;
 						});
-						return `►${tratamiento.nombre}(${show_areas})`;
+						return `►${tratamiento.nombre}(${show_areas}) `;
 					});
 				});
 				setFaciales(response.data);

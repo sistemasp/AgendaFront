@@ -90,6 +90,9 @@ const AgendarCirugia = (props) => {
 		materiales: [],
 		producto: productoCirugiaId,
 		tipo_cita: tipoCitaRealizadoId,
+		porcentaje_descuento_clinica: 0,
+		descuento_clinica: 0,
+		descuento_dermatologo: 0,
 	});
 	const [cirugias, setCirugias] = useState([]);
 	const [openModal, setOpenModal] = useState(false);

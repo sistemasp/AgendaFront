@@ -89,6 +89,9 @@ const AgendarLaser = (props) => {
 		tiempo: '',
 		observaciones: '',
 		dermatologo: { _id: dermatologoDirectoId },
+		porcentaje_descuento_clinica: 0,
+		descuento_clinica: 0,
+		descuento_dermatologo: 0,
 	});
 	const [citas, setCitas] = useState([]);
 	const [areas, setAreas] = useState([]);

@@ -273,48 +273,48 @@ const ModalImprimirPagoDermatologo = (props) => {
     // TOTAL DE LOS FACIALES
     faciales.forEach(async (facial) => {
       let comisionDermatologo = 0;
-      if (!facial.has_descuento_dermatologo) {
-        facial.tratamientos.map(tratamiento => {
-          let importe1 = 0;
-          tratamiento.areasSeleccionadas.map(areaSeleccionada => {
-            let comisionReal = 0;
-            const precioReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.precio_ma
-              : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.precio_rd
-                : (sucursal._id === sucursalOcciId ? areaSeleccionada.precio_oc
-                  : (sucursal._id === sucursalFedeId ? areaSeleccionada.precio_fe : '0')));
-            importe1 += Number(precioReal);
-            switch (facial.tipo_cita._id) {
-              case revisadoTipoCitaId:
-                comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_revisado_ma
-                  : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_revisado_rd
-                    : areaSeleccionada.comision_revisado);
-                break;
-              case derivadoTipoCitaId:
-                comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_derivado_ma
-                  : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_derivado_rd
-                    : areaSeleccionada.comision_derivado);
-                break;
-              case realizadoTipoCitaId:
-                comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_realizado_ma
-                  : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_realizado_rd
-                    : areaSeleccionada.comision_realizado);
-                break;
-              case directoTipoCitaId: // TOMA EL 100%
-                comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.precio_ma
-                  : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.precio_rd
-                    : areaSeleccionada.precio_fe);
-                break;
-              case noAplicaTipoCitaId:
-                comisionReal = 0;
-                break;
-            }
-            areaSeleccionada.comision_real = comisionReal;
-            areaSeleccionada.precio_real = precioReal;
-            comisionDermatologo += Number(comisionReal);
-          });
-          tratamiento.importe1 = importe1;
+      facial.tratamientos.map(tratamiento => {
+        let importe1 = 0;
+        tratamiento.areasSeleccionadas.map(areaSeleccionada => {
+          let comisionReal = 0;
+          const itemPrecio = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.precio_ma
+          : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.precio_rd
+            : (sucursal._id === sucursalOcciId ? areaSeleccionada.precio_oc
+              : (sucursal._id === sucursalFedeId ? areaSeleccionada.precio_fe : '0')));
+          
+          importe1 += Number(itemPrecio);
+          switch (facial.tipo_cita._id) {
+            case revisadoTipoCitaId:
+              comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_revisado_ma
+                : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_revisado_rd
+                  : areaSeleccionada.comision_revisado);
+              break;
+            case derivadoTipoCitaId:
+              comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_derivado_ma
+                : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_derivado_rd
+                  : areaSeleccionada.comision_derivado);
+              break;
+            case realizadoTipoCitaId:
+              comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.comision_realizado_ma
+                : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.comision_realizado_rd
+                  : areaSeleccionada.comision_realizado);
+              break;
+            case directoTipoCitaId: // TOMA EL 100%
+              comisionReal = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.precio_ma
+                : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.precio_rd
+                  : areaSeleccionada.precio_fe);
+              break;
+            case noAplicaTipoCitaId:
+              comisionReal = 0;
+              break;
+          }
+          const precioReal = (itemPrecio - (itemPrecio * (facial.porcentaje_descuento_clinica ? facial.porcentaje_descuento_clinica : 0) / 100));
+          areaSeleccionada.comision_real = !facial.has_descuento_dermatologo ? comisionReal : 0;
+          areaSeleccionada.precio_real = precioReal;
+          comisionDermatologo += Number(comisionReal);
         });
-      }
+        tratamiento.importe1 = importe1;
+      });
       const pagoDermatologo = comisionDermatologo - ((comisionDermatologo * facial.pagos[0].porcentaje_descuento_clinica) / 100);
       facial.pago_dermatologo = pagoDermatologo;
       updateFacial(facial._id, facial);
@@ -372,30 +372,30 @@ const ModalImprimirPagoDermatologo = (props) => {
       total: total,
       pagado: true,
     }
-    
-        const response = await createPagoDermatologo(pagoDermatologo);
-        if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
-          || `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-          const data = response.data;
-    
-          const egreso = {
-            create_date: new Date(),
-            hora_aplicacion: corte.create_date,
-            tipo_egreso: pagoDermatologoTipoEgresoId,
-            recepcionista: empleado,
-            turno: corte.turno === 'm' ? 'MATUTINO' : 'VESPERTINO',
-            concepto: dermatologo.nombre,
-            cantidad: dermatologo.pago_completo ? data.total : data.retencion,
-            retencion: data.retencion,
-            sucursal: sucursal._id,
-            forma_pago: efectivoMetodoPagoId,
-          }
-    
-          const resp = await createEgreso(egreso);
-          if (`${resp.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
-            setIsLoading(false);
-          }
-        }
+
+    const response = await createPagoDermatologo(pagoDermatologo);
+    if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK
+      || `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+      const data = response.data;
+
+      const egreso = {
+        create_date: new Date(),
+        hora_aplicacion: corte.create_date,
+        tipo_egreso: pagoDermatologoTipoEgresoId,
+        recepcionista: empleado,
+        turno: corte.turno === 'm' ? 'MATUTINO' : 'VESPERTINO',
+        concepto: dermatologo.nombre,
+        cantidad: dermatologo.pago_completo ? data.total : data.retencion,
+        retencion: data.retencion,
+        sucursal: sucursal._id,
+        forma_pago: efectivoMetodoPagoId,
+      }
+
+      const resp = await createEgreso(egreso);
+      if (`${resp.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
+        setIsLoading(false);
+      }
+    }
 
     findCorte();
   };

@@ -8,6 +8,7 @@ import { CheckCustom } from '../../basic/CheckCustom';
 import ModalPagos from '../modal_pagos';
 import { Multiselect } from 'multiselect-react-dropdown';
 import { toFormatterCurrency } from '../../../utils/utils';
+import { ButtonCustom } from '../../basic/ButtonCustom';
 
 function getModalStyle() {
   const top = 50;
@@ -279,25 +280,21 @@ const ModalFormCirugia = (props) => {
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Button
+                <ButtonCustom
                   className={classes.button}
                   color="primary"
                   variant="contained"
                   onClick={(e) => onClickCrearCirugia(e, values)}
-                //disabled={!dataComplete} 
-                >
-                  GUARDAR
-                </Button>
+                  text="GUARDAR" />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Button
+                <ButtonCustom
                   className={classes.button}
                   color="secondary"
                   variant="contained"
-                  onClick={onClose} >
-                  CANCELAR
-              </Button>
+                  onClick={onClose}
+                  text="CANCELAR" />
               </Grid>
             </Grid>
           </form>

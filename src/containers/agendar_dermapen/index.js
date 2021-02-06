@@ -100,6 +100,9 @@ const AgendarDermapen = (props) => {
 		tiempo: '',
 		observaciones: '',
 		materiales: [],
+		porcentaje_descuento_clinica: 0,
+		descuento_clinica: 0,
+		descuento_dermatologo: 0,
 	});
 	const [dermapens, setDermapens] = useState([]);
 	const [areas, setAreas] = useState([]);

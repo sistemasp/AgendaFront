@@ -87,6 +87,9 @@ const AgendarEstetica = (props) => {
 		materiales: [],
 		producto: productoAplicacionToxinaBotulinicaDituroxalId,
 		tipo_cita: tipoCitaRealizadoId,
+		porcentaje_descuento_clinica: 0,
+		descuento_clinica: 0,
+		descuento_dermatologo: 0,
 	});
 	const [esteticas, setEsteticas] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
