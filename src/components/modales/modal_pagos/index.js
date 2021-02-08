@@ -148,7 +148,6 @@ const ModalPagos = (props) => {
   }
 
   const getMayorDescuento = () => {
-    console.log("KAOZ", servicio);
     let porcentajeDescuento = 0;
     switch (servicio.servicio._id) {
       case servicioCirugiaId:
