@@ -491,10 +491,63 @@ const ReportesDetallesGeneral = (props) => {
 						impuesto_porcentaje: `${impuestoPorcentaje}%`,
 						importe_2: toFormatterCurrency(importe2),
 						impuesto_cantidad: toFormatterCurrency(impuesto),
-						cantidad_servicios: 1 / cirugia.pagos.length,
+						cantidad_servicios: 1,
 						total_moneda: toFormatterCurrency(total),
 						total_doctor: "NO APLICA",
 						total_clinica: toFormatterCurrency(total),
+					}
+					datos.push(dato);
+				}
+			});
+
+			cirugia.biopsias.forEach(biopsia => {
+				let precioBiopsias = Number(cirugia.costo_biopsias);
+				while (totalPago !== 0 && precioBiopsias !== 0) {
+
+					let total = 0;
+					if (totalPago > precioBiopsias) {
+						total = precioBiopsias;
+						totalPago -= precioBiopsias;
+						precioBiopsias = 0;
+					} else if (totalPago < precioBiopsias) {
+						total = totalPago;
+						precioBiopsias -= totalPago;
+						totalPago = 0;
+					} else {
+						total = precioBiopsias;
+						precioBiopsias = 0;
+						totalPago = 0;
+					}
+
+					const impuestoPorcentaje = 0;
+					const descuentoPorcentaje = 100 - (total * 100 / cirugia.total);
+					const descuentoCantidad = (cirugia.total * descuentoPorcentaje / 100);
+					const importe2 = total / (1 + (impuestoPorcentaje / 100));
+					const impuesto = importe2 * (impuestoPorcentaje / 100);
+
+					const dato = {
+						...cirugia,
+						servicio: { nombre: "BIOPSIA" },
+						producto: { nombre: cirugia.patologo.nombre },
+						metodo_pago_nombre: metodoPago.nombre,
+						tipo_tarjeta: pago.tipo_tarjeta_nombre,
+						banco_nombre: pago.banco_nombre,
+						digitos: pago.digitos,
+						importe_1: toFormatterCurrency(cirugia.total),
+						area: "NO APLICA",
+						descuento_porcentaje_clinica: "NO APLICA",
+						descuento_cantidad_clinica: "NO APLICA",
+						descuento_porcentaje_dermatologo: "NO APLICA",
+						descuento_cantidad_dermatologo: "NO APLICA",
+						descuento_porcentaje: `${descuentoPorcentaje}%`,
+						descuento_cantidad: toFormatterCurrency(descuentoCantidad),
+						impuesto_porcentaje: `${impuestoPorcentaje}%`,
+						importe_2: toFormatterCurrency(importe2),
+						impuesto_cantidad: toFormatterCurrency(impuesto),
+						cantidad_servicios: 1 / cirugia.biopsias.length,
+						total_moneda: toFormatterCurrency(total),
+						total_doctor: "NO APLICA",
+						total_clinica: "NO APLICA",
 					}
 					datos.push(dato);
 				}

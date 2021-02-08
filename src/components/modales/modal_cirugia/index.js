@@ -178,7 +178,6 @@ const ModalCirugia = (props) => {
     });
   }
 
-
   const handleCloseModalPagos = () => {
     setOpenModalPagos(false);
     setValues({ ...values, pagado: false });

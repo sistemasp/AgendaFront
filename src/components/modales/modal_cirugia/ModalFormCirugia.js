@@ -262,6 +262,7 @@ const ModalFormCirugia = (props) => {
               }
 
               {
+                /*
                 values._id ?
                   <Grid item xs={12}>
                     <CheckCustom
@@ -270,7 +271,7 @@ const ModalFormCirugia = (props) => {
                       disabled={values.pagado}
                       name="checkedG"
                       label="PAGADO" />
-                  </Grid> : ''
+                  </Grid> : ''*/
               }
               <Grid item xs={12}>
                 <h2 className={classes.labelItemRight}>PRECIO DE LA APLICACIÓN: {toFormatterCurrency(values.total_aplicacion)}</h2>
