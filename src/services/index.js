@@ -1048,33 +1048,6 @@ export const showAllMaterialEsteticas = async () => {
     }
 }
 
-// PAGO DERMATÓLOGO
-
-export const createPagoDermatologo = async (pagoDermatologo) => {
-    try {
-        const response = await axios({
-            url: `${baseUrl}/pagoDermatologo`,
-            method: 'POST',
-            data: pagoDermatologo
-        });
-        return response;
-    } catch (error) {
-        console.log('createPagoDermatologo', error);
-    }
-}
-
-export const showTodayPagoDermatologoBySucursalTurno = async (dermatologoId, sucursalId, turno) => {
-    try {
-        const response = await axios({
-            url: `${baseUrl}/pagoDermatologo/${dermatologoId}/sucursal/${sucursalId}/turno/${turno}`,
-            method: 'GET'
-        });
-        return response;
-    } catch (error) {
-        console.log('showTodayPagoDermatologoBySucursalTurno', error);
-    }
-}
-
 // TIPO INGRESO
 
 export const showAllTipoIngresos = async () => {

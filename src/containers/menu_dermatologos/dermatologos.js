@@ -5,19 +5,26 @@ import { makeStyles } from '@material-ui/core';
 import ModalPaciente from '../../components/modales/modal_paciente';
 import ModHistorico from '../../components/modales/modal_historico';
 import ModalImprimirPagoDermatologo from '../../components/modales/imprimir/pago_dermatologo';
+import ModalImprimirPagoPatologo from '../../components/modales/imprimir/pago_patologo';
 
 export const DermatologosContainer = (props) => {
 
   const {
-    titulo,
-    columns,
+    tituloDermatologos,
+    tituloPatologos,
+    columnsDermatologos,
     dermatologos,
+    patologos,
     dermatologo,
-    actions,
-    options,
+    patologo,
+    actionsDermatologo,
+    optionsDermatologos,
     openPagoDermatologo,
+    openPagoPatologo,
+    columnsPatologos,
+    actionsPatologos,
+    optionsPatologos,
     openHistoric,
-    handleOpen,
     handleClose,
     sucursal,
     empleado,
@@ -26,27 +33,44 @@ export const DermatologosContainer = (props) => {
   return (
     <Fragment>
       {
-        openPagoDermatologo ? 
-        <ModalImprimirPagoDermatologo
-          open={openPagoDermatologo}
-          onClose={handleClose}
-          dermatologo={dermatologo}
-          sucursal={sucursal}
-          empleado={empleado} /> : ''
+        openPagoDermatologo ?
+          <ModalImprimirPagoDermatologo
+            open={openPagoDermatologo}
+            onClose={handleClose}
+            dermatologo={dermatologo}
+            sucursal={sucursal}
+            empleado={empleado} /> : ''
       }
       {
-        openHistoric ? 
-        <ModHistorico
-          open={openHistoric}
-          onClose={handleClose} /> : ''
+        openPagoPatologo ?
+          <ModalImprimirPagoPatologo
+            open={openPagoPatologo}
+            onClose={handleClose}
+            patologo={patologo}
+            sucursal={sucursal}
+            empleado={empleado} /> : ''
+      }
+      {
+        openHistoric ?
+          <ModHistorico
+            open={openHistoric}
+            onClose={handleClose} /> : ''
       }
 
       <TableComponent
-        titulo={titulo}
-        columns={columns}
+        titulo={tituloDermatologos}
+        columns={columnsDermatologos}
         data={dermatologos}
-        actions={actions}
-        options={options} />
+        actions={actionsDermatologo}
+        options={optionsDermatologos} />
+
+      <TableComponent
+        titulo={tituloPatologos}
+        columns={columnsPatologos}
+        data={patologos}
+        actions={actionsPatologos}
+        options={optionsPatologos} />
+
     </Fragment>
   );
 }

@@ -369,7 +369,7 @@ const ReportesDetallesGeneral = (props) => {
 
 	const procesarCirugia = (cirugia, datos) => {
 		cirugia.iva = false;
-		let totalMateriales = 0;
+		let totalMateriales = 0; // FALTA BIOPSIAS 
 		console.log("KAOZ", cirugia);
 		cirugia.pagos.forEach(pago => {
 			let totalPago = Number(pago.total);

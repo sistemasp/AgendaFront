@@ -123,3 +123,15 @@ export const findCirugiasByPayOfDoctorHoraAplicacionPA = async (sucursalId, derm
         console.log('finCirugiasByPayOfDoctorHoraAplicacionPA', error);
     }
 }
+
+export const findCirugiasByPayOfPatologoHoraAplicacion = async (sucursalId, patologoId, hora_apertura, hora_cierre) => {
+    try {
+        const response = await axios({
+            url: `${baseUrl}/cirugia/sucursal/${sucursalId}/patologo/${patologoId}/apertura/${hora_apertura}/cierre/${hora_cierre}`,
+            method: 'GET'
+        });
+        return response;
+    } catch (error) {
+        console.log('findCirugiasByPayOfPatologoHoraAplicacion', error);
+    }
+}

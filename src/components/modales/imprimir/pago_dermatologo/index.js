@@ -2,10 +2,6 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import ModalFormImprimirPagoDermatologo from './ModalFormImprimirPagoDermatologo';
 import {
-  createPagoDermatologo,
-  showTodayPagoDermatologoBySucursalTurno,
-} from '../../../../services';
-import {
   findConsultsByPayOfDoctorHoraAplicacion,
   findConsultsByPayOfDoctorHoraAplicacionFrecuencia,
   findConsultsByPayOfDoctorHoraAplicacionFrecuenciaPA,
@@ -21,6 +17,7 @@ import { findCirugiasByPayOfDoctorHoraAplicacion, findCirugiasByPayOfDoctorHoraA
 import { findEsteticasByPayOfDoctorHoraAplicacion, findEsteticasByPayOfDoctorHoraAplicacionPA, updateEstetica } from '../../../../services/esteticas';
 import { findDermapensByPayOfDoctorHoraAplicacion, findDermapensByPayOfDoctorHoraAplicacionPA, updateDermapen } from '../../../../services/dermapens';
 import { toFormatterCurrency } from '../../../../utils/utils';
+import { createPagoDermatologo, showTodayPagoDermatologoBySucursalTurno } from '../../../../services/pago_dermatologos';
 
 const useStyles = makeStyles(theme => ({
   backdrop: {
