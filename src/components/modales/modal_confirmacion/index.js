@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import ModalFormConfirmacion from './ModalFormConfirmacion';
-import { updateEmployee } from "../../../services";
 import { findSupervisorByClave } from '../../../services/clave_supervisor';
 import { addZero } from '../../../utils/utils';
 import { createCancelacion } from '../../../services/cancelaciones';

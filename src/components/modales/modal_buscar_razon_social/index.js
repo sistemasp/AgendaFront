@@ -1,8 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import ModalFormBuscarRazonSocial from './ModalFormBuscarRazonSocial';
 import { showAllRazonSocials } from '../../../services/razones_sociales';
-import { Formik } from 'formik';
-import { Snackbar, Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
+import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import MuiAlert from '@material-ui/lab/Alert';
 

@@ -1,10 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
-import { Button, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { ButtonCustom } from '../../../basic/ButtonCustom';
 import bannerMePiel from './../../../../bannerMePiel.PNG';
-import { addZero, dateToString, toFormatterCurrency } from '../../../../utils/utils';
+import { dateToString, toFormatterCurrency } from '../../../../utils/utils';
 
 function getModalStyle() {
   return {

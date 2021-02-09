@@ -1,6 +1,5 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
-import { addZero } from '../../../../utils/utils';
+import React, { useState, Fragment } from 'react';
+import { makeStyles } from '@material-ui/core';
 import ModalFormImprimirCirugia from './ModalFormImprimirCirugia';
 
 const useStyles = makeStyles(theme => ({

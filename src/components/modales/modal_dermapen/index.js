@@ -2,10 +2,8 @@ import React, { useState, useEffect, Fragment } from 'react';
 import {
   getAllSchedules,
   findScheduleByDateAndSucursalAndService,
-  updateDate,
   findEmployeesByRolId,
   showAllTipoCitas,
-  createDate,
   updatePago,
   deletePago,
   createConsecutivo,
@@ -16,14 +14,9 @@ import {
   deleteIngreso,
   findIngresoById,
 } from "../../../services/ingresos";
-import * as Yup from "yup";
 import ModalFormDermapen from './ModalFormDermapen';
-import { Formik } from 'formik';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import { addZero } from '../../../utils/utils';
-import { createAparatologia, updateAparatologia } from '../../../services/aparatolgia';
-import { createFacial, updateFacial } from '../../../services/faciales';
-import { createLaser, updateLaser } from '../../../services/laser';
 import { createDermapen, updateDermapen } from '../../../services/dermapens';
 import { showAllStatus } from '../../../services/status';
 

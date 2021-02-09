@@ -1,5 +1,4 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { findEsteticasHistoricByPaciente } from "../../../../services/esteticas";
 import Dermapen from './dermapen';
 import { toFormatterCurrency, addZero } from '../../../../utils/utils';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';

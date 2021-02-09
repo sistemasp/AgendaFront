@@ -7,9 +7,9 @@ import {
 import {
   findAreasByTreatmentServicio,
 } from "../../../services/areas";
-import { createAparatologia, updateAparatologia } from '../../../services/aparatolgia';
+import { createAparatologia } from '../../../services/aparatolgia';
 import { createFacial } from '../../../services/faciales';
-import { createLaser, updateLaser } from '../../../services/laser';
+import { createLaser } from '../../../services/laser';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import { addZero } from '../../../utils/utils';
 import ModalFormProximaCita from './ModalFormProximaCita';

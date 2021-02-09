@@ -1,8 +1,6 @@
-import React, { Fragment } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import { TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
-import TableComponent from '../../table/TableComponent';
+import { Grid, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import { ButtonCustom } from '../../basic/ButtonCustom';
 import myStyles from '../../../css';
 

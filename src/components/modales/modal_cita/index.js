@@ -2,10 +2,8 @@ import React, { useState, useEffect, Fragment } from 'react';
 import {
   getAllSchedules,
   findScheduleByDateAndSucursalAndService,
-  updateDate,
   findEmployeesByRolId,
   showAllTipoCitas,
-  createDate,
   updatePago,
   deletePago,
   createConsecutivo,

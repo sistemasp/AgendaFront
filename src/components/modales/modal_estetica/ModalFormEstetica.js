@@ -1,14 +1,12 @@
 import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid } from '@material-ui/core';
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import { CheckCustom } from '../../basic/CheckCustom';
-import ModalPagos from '../modal_pagos';
+import { TextField, Grid } from '@material-ui/core';
 import { Multiselect } from 'multiselect-react-dropdown';
 import { toFormatterCurrency } from '../../../utils/utils';
 import { ButtonCustom } from '../../basic/ButtonCustom';
+import ModalPagos from '../modal_pagos';
+import { CheckCustom } from '../../basic/CheckCustom';
 
 function getModalStyle() {
   const top = 50;

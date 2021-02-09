@@ -4,7 +4,6 @@ import {
   findScheduleInConsultByDateAndSucursal,
 } from "../../../services";
 import {
-  updateConsult,
   createConsult,
 } from "../../../services/consultas";
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';

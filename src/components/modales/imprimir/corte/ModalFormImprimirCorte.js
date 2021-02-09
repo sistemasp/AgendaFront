@@ -1,12 +1,9 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Grid, Typography } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import bannerMePiel from './../../../../bannerMePiel.PNG';
-import { EventNote } from '@material-ui/icons';
-import Corte from '../../../../containers/menu_corte';
 import { dateToString, toFormatterCurrency } from '../../../../utils/utils';
-import { number } from 'yup';
 
 function getModalStyle() {
   const top = 50;

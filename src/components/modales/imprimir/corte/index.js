@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
-import { addZero } from '../../../../utils/utils';
+import { makeStyles } from '@material-ui/core';
 import ModalFormImprimirCorte from './ModalFormImprimirCorte';
 import {
   showAllTipoIngresos,

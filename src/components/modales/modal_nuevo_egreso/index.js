@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import ModalFormNuevoEgreso from './ModalFormNuevoEgreso';
 import {
   showAllTipoEgresos,
-  showAllMetodoPago,
 } from "../../../services";
 import {
   createEgreso,

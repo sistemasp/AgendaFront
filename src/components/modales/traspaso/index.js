@@ -1,8 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { createConsecutivo, createPago, deletePago, findPagosByTipoServicioAndServicio, showAllOffices } from '../../../services';
-import { addZero, generateFolio, toFormatterCurrency } from '../../../utils/utils';
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import EditIcon from '@material-ui/icons/Edit';
+import { createConsecutivo, createPago, deletePago, showAllOffices } from '../../../services';
+import { addZero, generateFolio } from '../../../utils/utils';
 import ModalFormTraspaso from './ModalFormTraspaso';
 import { createConsult, updateConsult } from '../../../services/consultas';
 import { showAllStatus } from '../../../services/status';

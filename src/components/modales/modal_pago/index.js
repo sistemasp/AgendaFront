@@ -9,9 +9,9 @@ import {
   updatePago,
 } from '../../../services';
 import {
-  createIngreso, findIngresoById, findIngresoByPago, updateIngreso,
+  createIngreso, findIngresoByPago, updateIngreso,
 } from '../../../services/ingresos';
-import { addZero, generateFolio } from '../../../utils/utils';
+import { generateFolio } from '../../../utils/utils';
 import ModalFormPago from './ModalFormPago';
 import { findEsquemaById } from '../../../services/esquemas';
 

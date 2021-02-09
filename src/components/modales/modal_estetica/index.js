@@ -9,32 +9,8 @@ import {
   updateEstetica,
   createEstetica,
 } from "../../../services/esteticas";
-import * as Yup from "yup";
-import { Formik } from 'formik';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
-import { addZero } from '../../../utils/utils';
 import ModalFormEstetica from './ModalFormEstetica';
-
-const validationSchema = Yup.object({
-  fecha: Yup.string("Ingresa los nombres")
-    .required("Los nombres del pacientes son requeridos"),
-  hora: Yup.string("Ingresa los apellidos")
-    .required("Los nombres del pacientes son requeridos"),
-  paciente: Yup.string("Ingresa la fecha de nacimiento")
-    .required("Los nombres del pacientes son requeridos"),
-  numero_sesion: Yup.string("Ingresa los nombres")
-    .required("Los nombres del pacientes son requeridos"),
-  recepcionista: Yup.string("Ingresa los apellidos")
-    .required("Los nombres del pacientes son requeridos"),
-  confirmo: Yup.string("Ingresa la fecha de nacimiento")
-    .required("Los nombres del pacientes son requeridos"),
-  quien_confirma_asistencia: Yup.string("Ingresa la direccion")
-    .required("Los nombres del pacientes son requeridos"),
-  asistio: Yup.string("Ingresa el telefono")
-    .required("Los nombres del pacientes son requeridos"),
-  precio: Yup.string("Ingresa el telefono")
-    .required("Los nombres del pacientes son requeridos"),
-});
 
 const useStyles = makeStyles(theme => ({
   backdrop: {

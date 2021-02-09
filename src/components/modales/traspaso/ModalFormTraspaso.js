@@ -1,13 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
-import { TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { Grid, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import { ButtonCustom } from "../../basic/ButtonCustom";
-import { CheckCustom } from '../../basic/CheckCustom';
-import TableComponent from '../../table/TableComponent';
-import ModalPago from '../modal_pago';
-import ModalBuscarRazonSocial from '../modal_buscar_razon_social';
-import { toFormatterCurrency } from '../../../utils/utils';
 
 function getModalStyle() {
   const top = 50;

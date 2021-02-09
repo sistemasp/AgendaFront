@@ -2,10 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { findPagosByTipoServicioAndServicio } from '../../../services';
 import { addZero, toFormatterCurrency } from '../../../utils/utils';
 import ModalFormPagos from './ModalFormPagos';
-import AssignmentIcon from '@material-ui/icons/Assignment';
 import EditIcon from '@material-ui/icons/Edit';
-import { findCirugiaByConsultaId } from '../../../services/cirugias';
-import { findEsteticaByConsultaId } from '../../../services/esteticas';
 import { findEsquemaById } from '../../../services/esquemas';
 
 const ModalPagos = (props) => {

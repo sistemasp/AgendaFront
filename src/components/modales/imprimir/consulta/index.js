@@ -1,6 +1,5 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
-import { addZero } from '../../../../utils/utils';
+import React, { useState, Fragment } from 'react';
+import { makeStyles } from '@material-ui/core';
 import ModalFormImprimirConsulta from './ModalFormImprimirConsulta';
 
 const useStyles = makeStyles(theme => ({
@@ -26,8 +25,8 @@ const ModalImprimirConsulta = (props) => {
   const handleClickImprimir = (e) => {
 
     setShow(false);
-    setTimeout(() => { 
-      window.print(); 
+    setTimeout(() => {
+      window.print();
     }, 0);
     setTimeout(() => { setShow(true); }, 15);
   }

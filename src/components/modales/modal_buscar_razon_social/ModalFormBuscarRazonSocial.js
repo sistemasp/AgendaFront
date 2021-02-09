@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import TableComponent from '../../table/TableComponent';
 import { ButtonCustom } from '../../basic/ButtonCustom';

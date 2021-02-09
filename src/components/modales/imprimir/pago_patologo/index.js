@@ -9,7 +9,6 @@ import {
   findCirugiasByPayOfPatologoHoraAplicacion,
   updateCirugia
 } from '../../../../services/cirugias';
-import { toFormatterCurrency } from '../../../../utils/utils';
 import ModalFormImprimirPagoPatologo from './ModalFormImprimirPagoPatologo';
 import { createPagoPatologo, showTodayPagoPatologoBySucursalTurno } from '../../../../services/pago_patologo';
 

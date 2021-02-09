@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
+import React, { useState, Fragment } from 'react';
+import { makeStyles } from '@material-ui/core';
 import ModalFormImprimirTratamiento from './ModalFormImprimirTratamiento';
 
 const useStyles = makeStyles(theme => ({

@@ -9,7 +9,6 @@ import {
   createCirugia,
   updateCirugia,
 } from "../../../services/cirugias";
-import { updateConsult } from '../../../services/consultas';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import { addZero } from '../../../utils/utils';
 import ModalFormCirugia from './ModalFormCirugia';
