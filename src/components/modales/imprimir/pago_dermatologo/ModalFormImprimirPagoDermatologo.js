@@ -618,6 +618,7 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                     {
                       esteticas ?
                         esteticas.map(estetica => {
+                          console.log("KAOZ", estetica);
                           const pagoDermatologo = estetica.has_descuento_dermatologo ? 0 : Number(estetica.total_aplicacion) * Number(dermatologo.esquema.porcentaje_dermocosmetica) / 100;
                           pagoTotal += Number(pagoDermatologo);
                           const date = new Date(estetica.hora_aplicacion);

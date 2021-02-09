@@ -69,7 +69,7 @@ const ModalEstetica = (props) => {
     consulta: estetica.consulta,
     consecutivo: estetica.consecutivo,
     sucursal: estetica.sucursal,
-    precio: estetica.precio ? estetica.precio : 0,
+    total_aplicacion: estetica.total_aplicacion ? estetica.total_aplicacion : 0,
     total: estetica.total ? estetica.total : 0,
     toxinas_rellenos: estetica.toxinas_rellenos ? estetica.toxinas_rellenos : [],
     materiales: estetica.materiales ? estetica.materiales : [],
@@ -166,16 +166,16 @@ const ModalEstetica = (props) => {
   }
 
   const handleChangeTotal = e => {
-    let precio = e.target.value;
+    let total_aplicacion = e.target.value;
     values.toxinas_rellenos.map(item => {
-      precio -= Number(item.total);
+      total_aplicacion -= Number(item.total);
     });
     values.materiales.map(item => {
-      precio -= Number(item.precio);
+      total_aplicacion -= Number(item.precio);
     });
     setValues({
       ...values,
-      precio: precio,
+      total_aplicacion: total_aplicacion,
       total: e.target.value,
     });
   };
@@ -203,35 +203,35 @@ const ModalEstetica = (props) => {
     const newToxinasRellenos = values.toxinas_rellenos;
     newToxinasRellenos[index].unidades = e.target.value;
     newToxinasRellenos[index].total = Number(newToxinasRellenos[index].precio) * Number(e.target.value)
-    let precio = values.total;
+    let total_aplicacion = values.total;
     newToxinasRellenos.map((item) => {
-      precio -= Number(item.precio) * Number(item.unidades);
+      total_aplicacion -= Number(item.precio) * Number(item.unidades);
     });
     values.materiales.map(item => {
-      precio -= Number(item.precio);
+      total_aplicacion -= Number(item.precio);
     });
 
     setValues({
       ...values,
       toxinas_rellenos: newToxinasRellenos,
-      precio: precio,
+      total_aplicacion: total_aplicacion,
     });
   }
 
   const handleChangeItemPrecio = (e, index) => {
     const newMateriales = values.materiales;
     newMateriales[index].precio = e.target.value;
-    let precio = Number(values.total);
+    let total_aplicacion = Number(values.total);
     newMateriales.map((item) => {
-      precio -= Number(item.precio);
+      total_aplicacion -= Number(item.precio);
     });
     values.toxinas_rellenos.map(item => {
-      precio -= Number(item.total);
+      total_aplicacion -= Number(item.total);
     });
     setValues({
       ...values,
       materiales: newMateriales,
-      precio: precio,
+      total_aplicacion: total_aplicacion,
     });
   }
 

@@ -686,6 +686,190 @@ const ReportesDetallesGeneral = (props) => {
 		});
 	}
 
+	const procesarEstetica = (estetica, datos) => {
+		let totalAplicacion = Number(estetica.total_aplicacion);
+		estetica.pagos.forEach(pago => {
+			let totalPago = Number(pago.total);
+			const metodoPago = metodosPago.find(metodoPago => {
+				return metodoPago._id === pago.forma_pago;
+			});
+			if (pago.forma_pago === formaPagoTarjetaId) {
+				const banco = bancos.find(banco => {
+					return banco._id === pago.banco;
+				});
+				const tipoTarjeta = tiposTarjeta.find(tipoTarjeta => {
+					return tipoTarjeta._id === pago.tipo_tarjeta;
+				});
+				pago.banco_nombre = banco ? banco.nombre : 'ERROR';
+				pago.tipo_tarjeta_nombre = tipoTarjeta ? tipoTarjeta.nombre : 'ERROR';
+				pago.digitos = pago.digitos;
+			} else {
+				pago.banco_nombre = 'NO APLICA';
+				pago.tipo_tarjeta_nombre = 'NO APLICA';
+				pago.digitos = 'NO APLICA';
+			}
+
+			while (totalPago !== 0 && totalAplicacion !== 0) {
+
+				let total = 0;
+				if (totalPago > totalAplicacion) {
+					total = totalAplicacion;
+					totalPago -= totalAplicacion;
+					totalAplicacion = 0;
+				} else if (totalPago < totalAplicacion) {
+					total = totalPago;
+					totalAplicacion -= totalPago;
+					totalPago = 0;
+				} else {
+					total = totalAplicacion;
+					totalAplicacion = 0;
+					totalPago = 0;
+				}
+
+				const impuestoPorcentaje = estetica.iva ? iva : 0;
+				const importe2 = total / (1 + (impuestoPorcentaje / 100));
+				const impuesto = importe2 * (impuestoPorcentaje / 100);
+				const descuentoPorcentaje = 100 - (total * 100 / estetica.total);
+				const descuentoCantidad = (estetica.total * descuentoPorcentaje / 100);
+				const pagoDermatologo = total / estetica.total * estetica.pago_dermatologo;
+				const pagoClinica = total - pagoDermatologo;
+				const descuentoClinicaPorcentaje = estetica.porcentaje_descuento_clinica ? estetica.porcentaje_descuento_clinica : 0;
+				const descuentoDermatologoPorcentaje = estetica.descuento_dermatologo ? estetica.descuento_dermatologo : 0;
+				const descuentoClinica = descuentoClinicaPorcentaje * estetica.total_aplicacion / 100;
+				const descuentoDermatologo = descuentoDermatologoPorcentaje * (estetica.total_aplicacion - descuentoClinica) / 100;
+
+				const dato = {
+					...estetica,
+					metodo_pago_nombre: metodoPago.nombre,
+					tipo_tarjeta: pago.tipo_tarjeta_nombre,
+					banco_nombre: pago.banco_nombre,
+					digitos: pago.digitos,
+					importe_1: toFormatterCurrency(estetica.total),
+					area: "NO APLICA",
+					descuento_porcentaje_clinica: `${descuentoClinicaPorcentaje}%`,
+					descuento_cantidad_clinica: toFormatterCurrency(descuentoClinica),
+					descuento_porcentaje_dermatologo: `${descuentoDermatologoPorcentaje}%`,
+					descuento_cantidad_dermatologo: toFormatterCurrency(descuentoDermatologo),
+					descuento_porcentaje: `${descuentoPorcentaje}%`,
+					descuento_cantidad: toFormatterCurrency(descuentoCantidad),
+					impuesto_porcentaje: `${impuestoPorcentaje}%`,
+					importe_2: toFormatterCurrency(importe2),
+					impuesto_cantidad: toFormatterCurrency(impuesto),
+					total_moneda: toFormatterCurrency(total),
+					total_doctor: toFormatterCurrency(pagoDermatologo),
+					total_clinica: toFormatterCurrency(pagoClinica),
+				}
+				datos.push(dato);
+			}
+
+			estetica.materiales.forEach(material => {
+				let precioMaterial = Number(material.precio);
+				while (totalPago !== 0 && precioMaterial !== 0) {
+
+					let total = 0;
+					if (totalPago > precioMaterial) {
+						total = precioMaterial;
+						totalPago -= precioMaterial;
+						precioMaterial = 0;
+					} else if (totalPago < precioMaterial) {
+						total = totalPago;
+						precioMaterial -= totalPago;
+						totalPago = 0;
+					} else {
+						total = precioMaterial;
+						precioMaterial = 0;
+						totalPago = 0;
+					}
+
+					const impuestoPorcentaje = iva;
+					const descuentoPorcentaje = 100 - (total * 100 / estetica.total);
+					const descuentoCantidad = (estetica.total * descuentoPorcentaje / 100);
+					const importe2 = total / (1 + (impuestoPorcentaje / 100));
+					const impuesto = importe2 * (impuestoPorcentaje / 100);
+
+					const dato = {
+						...estetica,
+						servicio: { nombre: "MATERIAL" },
+						producto: { nombre: material.nombre },
+						metodo_pago_nombre: metodoPago.nombre,
+						tipo_tarjeta: pago.tipo_tarjeta_nombre,
+						banco_nombre: pago.banco_nombre,
+						digitos: pago.digitos,
+						importe_1: toFormatterCurrency(estetica.total),
+						area: "NO APLICA",
+						descuento_porcentaje_clinica: "NO APLICA",
+						descuento_cantidad_clinica: "NO APLICA",
+						descuento_porcentaje_dermatologo: "NO APLICA",
+						descuento_cantidad_dermatologo: "NO APLICA",
+						descuento_porcentaje: `${descuentoPorcentaje}%`,
+						descuento_cantidad: toFormatterCurrency(descuentoCantidad),
+						impuesto_porcentaje: `${impuestoPorcentaje}%`,
+						importe_2: toFormatterCurrency(importe2),
+						impuesto_cantidad: toFormatterCurrency(impuesto),
+						cantidad_servicios: 1,
+						total_moneda: toFormatterCurrency(total),
+						total_doctor: "NO APLICA",
+						total_clinica: toFormatterCurrency(total),
+					}
+					datos.push(dato);
+				}
+			});
+
+			estetica.toxinas_rellenos.forEach(toxina_relleno => {
+				let totalToxinaRelleno = Number(toxina_relleno.precio) * Number(toxina_relleno.unidades);
+				while (totalPago !== 0 && totalToxinaRelleno !== 0) {
+
+					let total = 0;
+					if (totalPago > totalToxinaRelleno) {
+						total = totalToxinaRelleno;
+						totalPago -= totalToxinaRelleno;
+						totalToxinaRelleno = 0;
+					} else if (totalPago < totalToxinaRelleno) {
+						total = totalPago;
+						totalToxinaRelleno -= totalPago;
+						totalPago = 0;
+					} else {
+						total = totalToxinaRelleno;
+						totalToxinaRelleno = 0;
+						totalPago = 0;
+					}
+
+					const impuestoPorcentaje = toxina_relleno.iva ? iva : 0;
+					const descuentoPorcentaje = 100 - (total * 100 / estetica.total);
+					const descuentoCantidad = (estetica.total * descuentoPorcentaje / 100);
+					const importe2 = total / (1 + (impuestoPorcentaje / 100));
+					const impuesto = importe2 * (impuestoPorcentaje / 100);
+
+					const dato = {
+						...estetica,
+						servicio: { nombre: "TOXINAS Y RELLENOS" },
+						producto: { nombre: toxina_relleno.nombre },
+						metodo_pago_nombre: metodoPago.nombre,
+						tipo_tarjeta: pago.tipo_tarjeta_nombre,
+						banco_nombre: pago.banco_nombre,
+						digitos: pago.digitos,
+						importe_1: toFormatterCurrency(estetica.total),
+						area: "NO APLICA",
+						descuento_porcentaje_clinica: "NO APLICA",
+						descuento_cantidad_clinica: "NO APLICA",
+						descuento_porcentaje_dermatologo: "NO APLICA",
+						descuento_cantidad_dermatologo: "NO APLICA",
+						descuento_porcentaje: `${descuentoPorcentaje}%`,
+						descuento_cantidad: toFormatterCurrency(descuentoCantidad),
+						impuesto_porcentaje: `${impuestoPorcentaje}%`,
+						importe_2: toFormatterCurrency(importe2),
+						impuesto_cantidad: toFormatterCurrency(impuesto),
+						cantidad_servicios: toxina_relleno.unidades,
+						total_moneda: toFormatterCurrency(total),
+						total_doctor: "NO APLICA",
+						total_clinica: toFormatterCurrency(total),
+					}
+					datos.push(dato);
+				}
+			});
+		});
+	}
+
 	const procesarDatos = async () => {
 		const datosCompletos = [...consultas, ...faciales, ...dermapens, ...cirugias, ...esteticas, ...aparatologias];
 		const consultasProcesadas = [];
@@ -735,6 +919,7 @@ const ReportesDetallesGeneral = (props) => {
 					procesarCirugia(item, cirugiasProcesadas);
 					break;
 				case servicioEsteticaId:
+					procesarEstetica(item, esteticasProcesadas);
 					break;
 				case servicioDermapenId:
 					procesarDermapen(item, dermapensProcesadas);
@@ -752,6 +937,30 @@ const ReportesDetallesGeneral = (props) => {
 				return aparatologia._id === aparatologiaProcesada._id && aparatologia.producto === aparatologiaProcesada.producto;
 			});
 			aparatologia.cantidad_servicios = 1 / coincidencias.length;
+		});
+		consultasProcesadas.forEach(consulta => {
+			const coincidencias = consultasProcesadas.filter(consultaProcesada => {
+				return consulta._id === consultaProcesada._id && consulta.producto === consultaProcesada.producto;
+			});
+			consulta.cantidad_servicios = 1 / coincidencias.length;
+		});
+		dermapensProcesadas.forEach(dermapen => {
+			const coincidencias = dermapensProcesadas.filter(dermapenProcesada => {
+				return dermapen._id === dermapenProcesada._id && dermapen.producto === dermapenProcesada.producto;
+			});
+			dermapen.cantidad_servicios = 1 / coincidencias.length;
+		});
+		cirugiasProcesadas.forEach(cirugia => {
+			const coincidencias = cirugiasProcesadas.filter(cirugiaProcesada => {
+				return cirugia._id === cirugiaProcesada._id && cirugia.producto === cirugiaProcesada.producto;
+			});
+			cirugia.cantidad_servicios = 1 / coincidencias.length;
+		});
+		esteticasProcesadas.forEach(estetica => {
+			const coincidencias = esteticasProcesadas.filter(esteticaProcesada => {
+				return estetica._id === esteticaProcesada._id && estetica.producto === esteticaProcesada.producto;
+			});
+			estetica.cantidad_servicios = 1 / coincidencias.length;
 		});
 		const datos = [...consultasProcesadas, ...facialesProcesadas, ...dermapensProcesadas, ...cirugiasProcesadas, ...esteticasProcesadas, ...aparatologiasProcesadas];
 		datos.sort((a, b) => {
