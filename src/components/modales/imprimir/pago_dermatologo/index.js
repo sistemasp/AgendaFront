@@ -274,10 +274,10 @@ const ModalImprimirPagoDermatologo = (props) => {
         tratamiento.areasSeleccionadas.map(areaSeleccionada => {
           let comisionReal = 0;
           const itemPrecio = sucursal._id === sucursalManuelAcunaId ? areaSeleccionada.precio_ma
-          : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.precio_rd
-            : (sucursal._id === sucursalOcciId ? areaSeleccionada.precio_oc
-              : (sucursal._id === sucursalFedeId ? areaSeleccionada.precio_fe : '0')));
-          
+            : (sucursal._id === sucursalRubenDarioId ? areaSeleccionada.precio_rd
+              : (sucursal._id === sucursalOcciId ? areaSeleccionada.precio_oc
+                : (sucursal._id === sucursalFedeId ? areaSeleccionada.precio_fe : '0')));
+
           importe1 += Number(itemPrecio);
           switch (facial.tipo_cita._id) {
             case revisadoTipoCitaId:
@@ -331,8 +331,8 @@ const ModalImprimirPagoDermatologo = (props) => {
                     : 0))); // Error
           importe1 += Number(itemPrecio);
           const precioReal = (itemPrecio - (itemPrecio * aparatologia.porcentaje_descuento_clinica ? aparatologia.porcentaje_descuento_clinica : 0 / 100)) *
-            (aparatologia.has_descuento_dermatologo ? (1 - (dermatologo.esquema.porcentaje_laser / 100)) : 1);
-          const comisionReal = Number(precioReal) * Number(dermatologo.esquema.porcentaje_laser) / 100;
+            (aparatologia.has_descuento_dermatologo ? (1 - ((aparatologia.frecuencia === primeraVezFrecuenciaId ? dermatologo.esquema.porcentaje_laser : 0) / 100)) : 1);
+          const comisionReal = Number(precioReal) * Number(aparatologia.frecuencia === primeraVezFrecuenciaId ? dermatologo.esquema.porcentaje_laser : 0) / 100;
           comisionDermatologo += comisionReal;
           area.comision_real = aparatologia.has_descuento_dermatologo ? 0 : comisionReal;
           area.precio_real = precioReal;

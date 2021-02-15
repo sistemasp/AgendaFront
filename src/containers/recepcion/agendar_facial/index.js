@@ -78,7 +78,10 @@ const AgendarFacial = (props) => {
 	const tipoCitaDerivadoId = process.env.REACT_APP_TIPO_CITA_DERIVADO_ID;
 	const servicioFacialId = process.env.REACT_APP_FACIAL_SERVICIO_ID;
 	const sucursalRubenDarioId = process.env.REACT_APP_SUCURSAL_RUBEN_DARIO_ID;
-
+	const cosmetologaSinAsignarId = process.env.REACT_APP_COSMETOLOGA_SIN_ASIGNAR_ID;
+	const promovendedorSinAsignarId = process.env.REACT_APP_PROMOVENDEDOR_SIN_ASIGNAR_ID;
+	const frecuenciaPrimeraVezId = process.env.REACT_APP_FRECUENCIA_PRIMERA_VEZ_ID;
+	
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
 	const [severity, setSeverity] = useState('success');
@@ -107,6 +110,9 @@ const AgendarFacial = (props) => {
 		porcentaje_descuento_clinica: 0,
 		descuento_clinica: 0,
 		descuento_dermatologo: 0,
+		cosmetologa: cosmetologaSinAsignarId,
+		promovendedor: promovendedorSinAsignarId,
+		frecuencia: frecuenciaPrimeraVezId,
 	});
 	const [faciales, setFaciales] = useState([]);
 	const [areas, setAreas] = useState([]);
@@ -496,7 +502,7 @@ const AgendarFacial = (props) => {
 	const handleChangeFrecuencia = (e) => {
 		setValues({
 			...values,
-			frecuencia: e.target.value._id,
+			frecuencia: e.target.value,
 			//producto: frecuencia === frecuenciaPrimeraVezId ? productoConsultaId : values.producto,
 		});
 	}

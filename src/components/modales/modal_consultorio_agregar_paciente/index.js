@@ -3,14 +3,11 @@ import * as Yup from "yup";
 import { Formik } from 'formik';
 import ModalFormConsultorioAgregarPaciente from './ModalFormConsultorioAgregarPaciente';
 import {
-  updateSurgery,
-  findSurgeryBySucursalIdAndFree,
-} from '../../../services';
-import {
   findConsultById,
   updateConsult,
 } from '../../../services/consultas';
 import { addZero } from '../../../utils/utils';
+import { findSurgeryBySucursalIdAndFree, updateSurgery } from '../../../services/consultorios';
 
 const validationSchema = Yup.object({
   nombre: Yup.string("Ingresa los nombres")

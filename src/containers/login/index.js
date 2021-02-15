@@ -48,6 +48,19 @@ const LoginForm = (props) => {
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
 
+	const rolPromovendedorId = process.env.REACT_APP_PROMOVENDEDOR_ROL_ID;
+	const rolCosmetologaId = process.env.REACT_APP_COSMETOLOGA_ROL_ID;
+	const rolDermatologoId = process.env.REACT_APP_DERMATOLOGO_ROL_ID;
+	const rolPatologoId = process.env.REACT_APP_PATOLOGO_ROL_ID;
+	const rolGerenteId = process.env.REACT_APP_GERENTE_ROL_ID;
+	const rolEncargadoSucursalId = process.env.REACT_APP_ENCARGADO_SUCURSAL_ROL_ID;
+	const rolEncargadoCosmetologasId = process.env.REACT_APP_ENCARGADO_COSMETOLOGAS_ROL_ID;
+	const rolRecepcionistaId = process.env.REACT_APP_RECEPCIONISTA_ROL_ID;
+  const rolEnfermeraId = process.env.REACT_APP_ENFERMERA_ROL_ID;
+	const rolAdministacionId = process.env.REACT_APP_ADMINISTRACION_ROL_ID;
+	const rolDiosSupremoId = process.env.REACT_APP_DIOS_SUPREMO_ROL_ID;
+	const rolSistemas = process.env.REACT_APP_SISTEMAS_ROL_ID;
+
   useEffect(() => {
     const loadSucursales = async() => {
         const response = await showAllOffices();
@@ -89,8 +102,15 @@ const LoginForm = (props) => {
   const submit = async(data) => {
     const response = await loginEmployee(data.employee_number, data.password);
     if ( `${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK && response.data !== '' ) {
-      if (response.data ) {
-        history.push('/main', { empleado: response.data, sucursal: data.sucursal });
+      const empleado = response.data;
+      if (empleado.rol._id === rolGerenteId
+        || empleado.rol._id ===rolEncargadoSucursalId
+        || empleado.rol._id ===rolRecepcionistaId
+        || empleado.rol._id ===rolDiosSupremoId
+        || empleado.rol._id ===rolSistemas ) {
+        history.push('/recepcion', { empleado: empleado, sucursal: data.sucursal });
+      } else if (empleado.rol._id === rolDermatologoId) {
+        history.push('/dermatologos', { dermatologo: empleado, sucursal: data.sucursal });
       }
     } else {
       setOpenAlert(true);

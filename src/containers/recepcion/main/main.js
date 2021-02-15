@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 import MenuPatient from '../menu_pacientes/index';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -37,6 +37,7 @@ import {
 	createCorte,
 	showCorteTodayBySucursalAndTurno
 } from '../../../services/corte';
+import myStyles from '../../../css';
 
 const TabPanel = (props) => {
 	const { children, value, index, ...other } = props;
@@ -61,75 +62,6 @@ TabPanel.propTypes = {
 	value: PropTypes.any.isRequired,
 };
 
-const drawerWidth = 250;
-
-const useStyles = makeStyles((theme) => ({
-	root: {
-		display: 'flex',
-	},
-	appBar: {
-		backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
-		transition: theme.transitions.create(['margin', 'width'], {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.leavingScreen,
-		}),
-	},
-	appBarShift: {
-		width: `calc(100% - ${drawerWidth}px)`,
-		marginLeft: drawerWidth,
-		transition: theme.transitions.create(['margin', 'width'], {
-			easing: theme.transitions.easing.easeOut,
-			duration: theme.transitions.duration.enteringScreen,
-		}),
-	},
-	menuButton: {
-		marginRight: theme.spacing(2),
-	},
-	hide: {
-		display: 'none',
-	},
-	drawer: {
-		width: drawerWidth,
-		flexShrink: 0,
-	},
-	drawerPaper: {
-		width: drawerWidth,
-	},
-	drawerHeader: {
-		display: 'flex',
-		alignItems: 'center',
-		// necessary for content to be below app bar
-		...theme.mixins.toolbar,
-		justifyContent: 'flex-end',
-	},
-	content: {
-		flexGrow: 1,
-		width: `calc(100% - ${drawerWidth}px)`,
-		transition: theme.transitions.create('margin', {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.leavingScreen,
-		}),
-		marginLeft: -drawerWidth,
-		padding: '0px',
-	},
-	contentShift: {
-		width: `calc(100% - ${drawerWidth}px)`,
-		transition: theme.transitions.create('margin', {
-			easing: theme.transitions.easing.easeOut,
-			duration: theme.transitions.duration.enteringScreen,
-		}),
-		marginLeft: 0,
-		padding: '0px',
-	},
-	title: {
-		flexGrow: 1,
-	},
-	fragment: {
-		width: '100%',
-		padding: '0px',
-	}
-}));
-
 export const MainContainer = props => {
 
 	const {
@@ -149,7 +81,7 @@ export const MainContainer = props => {
 		history,
 	} = props;
 
-	const classes = useStyles();
+	const classes = myStyles();
 	const theme = useTheme();
 	const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -225,7 +157,7 @@ export const MainContainer = props => {
 						<MenuIcon />
 					</IconButton>
 					<Typography variant="h6" className={classes.title}>
-						{`SUCURSAL: ${sucursal.nombre} - ${empleado.nombre ? empleado.nombre : ''} ( ${empleado.rol ? empleado.rol.nombre : ''} )`}
+						{`SUCURSAL: ${sucursal.nombre} - ${empleado.numero_empleado} : ${empleado.nombre ? empleado.nombre : ''} ( ${empleado.rol ? empleado.rol.nombre : ''} )`}
 					</Typography>
 					<Button
 						color="default"

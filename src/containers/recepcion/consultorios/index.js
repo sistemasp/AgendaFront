@@ -3,9 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Backdrop, CircularProgress } from '@material-ui/core';
 import { ConsultorioContainer } from './consultorios';
 import {
-	findSurgeryBySucursalId,
-	createSurgery,
-	breakFreeSurgeryByIdDermatologo,
 	findCabinaBySucursalId,
 	createCabina,
 	breakFreeCabinaByIdDermatologo,
@@ -17,6 +14,11 @@ import AirlineSeatReclineExtraIcon from '@material-ui/icons/AirlineSeatReclineEx
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import DirectionsWalkIcon from '@material-ui/icons/DirectionsWalk';
+import { 
+	breakFreeSurgeryByIdDermatologo,
+	createSurgery,
+	findSurgeryBySucursalId
+} from "../../../services/consultorios";
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -164,7 +166,7 @@ const Consultorios = (props) => {
 		const response = await breakFreeSurgeryByIdDermatologo(rowData._id);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
 			setOpenAlert(true);
-			setMessage('Salio el dermatologo');
+			setMessage('SALIO EL DERMATÓLOGO');
 			await loadConsultorios();
 		}
 	}
@@ -175,7 +177,7 @@ const Consultorios = (props) => {
 		const response = await createSurgery(data);
 		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED) {
 			setOpenAlert(true);
-			setMessage('El consultorio se guardo correctamente');
+			setMessage('EL CONSULTOTIO SE GUARDO CORRECTAMENTE');
 			loadConsultorios();
 		}
 		setOpenModalConsultorio(false);

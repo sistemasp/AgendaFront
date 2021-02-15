@@ -227,7 +227,7 @@ export const AgendarFacialContainer = (props) => {
 								value={values.frecuencia}
 								onChange={onChangeFrecuencia}
 								label="FRECUENCIA" >
-								{frecuencias.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+								{frecuencias.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
 					</Grid>
@@ -272,7 +272,7 @@ export const AgendarFacialContainer = (props) => {
 								error={Boolean(errors.promovendedor)}
 								onChange={onChangePromovendedor}
 								label="PROMOVENDEDOR" >
-								{promovendedores.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+								{promovendedores.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
 					</Grid>
@@ -286,7 +286,7 @@ export const AgendarFacialContainer = (props) => {
 								error={Boolean(errors.cosmetologa)}
 								onChange={onChangeCosmetologa}
 								label="COSMETOLOGA" >
-								{cosmetologas.sort().map((item, index) => <MenuItem key={index} value={item}>{item.nombre}</MenuItem>)}
+								{cosmetologas.sort().map((item, index) => <MenuItem key={index} value={item._id}>{item.nombre}</MenuItem>)}
 							</Select>
 						</FormControl>
 					</Grid>

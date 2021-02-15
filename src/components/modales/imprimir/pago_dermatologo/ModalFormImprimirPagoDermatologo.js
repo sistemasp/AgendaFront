@@ -143,6 +143,8 @@ const ModalFormImprimirPagoDermatologo = (props) => {
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
 
+  const frecuenciaPrimeraVezId = process.env.REACT_APP_FRECUENCIA_PRIMERA_VEZ_ID;
+
   const {
     sucursal,
     corte,
@@ -996,13 +998,13 @@ const ModalFormImprimirPagoDermatologo = (props) => {
                           aparatologia.tratamientos.forEach(tratamiento => {
 
                             tratamiento.areasSeleccionadas.map(area => {
-                              const itemPrecio =
+                              const itemPrecio = 
                                 sucursal._id === sucursalManuelAcunaId ? area.precio_ma // Precio Manuel Acuña
                                   : (sucursal._id === sucursalOcciId ? area.precio_oc // Precio Occidental
                                     : (sucursal._id === sucursalFedeId ? area.precio_fe // Precio Federalismo
                                       : (sucursal._id === sucursalRubenDarioId ? area.precio_rd // PRECIO RUBEN DARIO
                                         : 0))); // Error
-                              comisionDermatologo += (Number(itemPrecio) * Number(dermatologo.esquema.porcentaje_laser) / 100);
+                              comisionDermatologo += (Number(itemPrecio) * Number(aparatologia.frecuencia === frecuenciaPrimeraVezId ? dermatologo.esquema.porcentaje_laser : 0) / 100);
                             });
                           });
                           let pagoDermatologo = comisionDermatologo - ((comisionDermatologo * (aparatologia.porcentaje_descuento_clinica ? aparatologia.porcentaje_descuento_clinica : 0)) / 100);

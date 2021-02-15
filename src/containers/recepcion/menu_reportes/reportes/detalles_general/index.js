@@ -302,22 +302,22 @@ const ReportesDetallesGeneral = (props) => {
 				}
 				producto.areasSeleccionadas.forEach(areaSeleccionada => {
 					pago.total = Number(pago.total);
-					areaSeleccionada.precio_real = Number(areaSeleccionada.precio_real);
-					while (pago.total !== 0 && areaSeleccionada.precio_real !== 0) {
+					let precioReal = Number(areaSeleccionada.precio_real);
+					while (pago.total !== 0 && precioReal !== 0) {
 
 						totalPagos++;
 						let total = 0;
-						if (pago.total > areaSeleccionada.precio_real) {
-							total = areaSeleccionada.precio_real;
-							pago.total -= areaSeleccionada.precio_real;
-							areaSeleccionada.precio_real = 0;
-						} else if (pago.total < areaSeleccionada.precio_real) {
+						if (pago.total > precioReal) {
+							total = precioReal;
+							pago.total -= precioReal;
+							precioReal = 0;
+						} else if (pago.total < precioReal) {
 							total = pago.total;
-							areaSeleccionada.precio_real -= pago.total;
+							precioReal -= pago.total;
 							pago.total = 0;
 						} else {
-							total = areaSeleccionada.precio_real;
-							areaSeleccionada.precio_real = 0;
+							total = precioReal;
+							precioReal = 0;
 							pago.total = 0;
 						}
 
@@ -327,7 +327,7 @@ const ReportesDetallesGeneral = (props) => {
 						const descuentoPorcentaje = 100 - (total * 100 / producto.importe1);
 						const descuentoCantidad = (producto.importe1 * descuentoPorcentaje / 100);
 						const pagoDermatologo = aparatologia.dermatologo._id !== dermatologoDirectoId
-							? (total * areaSeleccionada.comision_real / producto.importe1)
+							? (total * areaSeleccionada.comision_real / areaSeleccionada.precio_real)
 							: 0;
 						const pagoClinica = total - pagoDermatologo;
 						const descuentoClinicaPorcentaje = aparatologia.porcentaje_descuento_clinica ? aparatologia.porcentaje_descuento_clinica : 0;

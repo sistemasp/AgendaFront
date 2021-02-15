@@ -1,5 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 
+const drawerWidth = 250;
+
 const myStyles = makeStyles(theme => ({
     paper: {
         position: 'absolute',
@@ -16,7 +18,12 @@ const myStyles = makeStyles(theme => ({
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
-      },
+    },
+    paper_principal: {
+        width: "95%",
+        margin: 25,
+        boxShadow: theme.shadows[5],
+    },
     textField: {
         width: '100%',
     },
@@ -74,7 +81,71 @@ const myStyles = makeStyles(theme => ({
     gridItem: {
         display: 'flex',
         flexWrap: 'wrap',
-    }
+    },
+    root: {
+        display: 'flex',
+    },
+    appBar: {
+        backgroundColor: process.env.REACT_APP_TOP_BAR_COLOR,
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+    },
+    appBarShift: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: drawerWidth,
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
+    hide: {
+        display: 'none',
+    },
+    drawer: {
+        width: drawerWidth,
+        flexShrink: 0,
+    },
+    drawerPaper: {
+        width: drawerWidth,
+    },
+    drawerHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        // necessary for content to be below app bar
+        ...theme.mixins.toolbar,
+        justifyContent: 'flex-end',
+    },
+    content: {
+        flexGrow: 1,
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        marginLeft: -drawerWidth,
+        padding: '0px',
+    },
+    contentShift: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginLeft: 0,
+        padding: '0px',
+    },
+    title: {
+        flexGrow: 1,
+    },
+    fragment: {
+        width: '100%',
+        padding: '0px',
+    },
 }));
 
 export default myStyles;

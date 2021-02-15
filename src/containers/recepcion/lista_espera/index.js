@@ -3,10 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Backdrop, CircularProgress, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import { ListaEsperaContainer } from './lista_espera';
 import {
-	findSurgeryBySucursalIdWaitingList,
 	waitingListTratamiento,
-	updateSurgery,
-	breakFreeSurgeryByIdPaciente,
 	findCabinaBySucursalId,
 	findDateById,
 	updateDate,
@@ -51,7 +48,16 @@ import {
 	updateAparatologia,
 	waitingAparatologiaList,
 } from "../../../services/aparatolgia";
-import { findDermapenById, updateDermapen, waitingDermapenList } from "../../../services/dermapens";
+import { 
+	findDermapenById,
+	updateDermapen,
+	waitingDermapenList
+} from "../../../services/dermapens";
+import { 
+	breakFreeSurgeryByIdPaciente,
+	findSurgeryBySucursalIdWaitingList,
+	updateSurgery
+} from "../../../services/consultorios";
 
 function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;

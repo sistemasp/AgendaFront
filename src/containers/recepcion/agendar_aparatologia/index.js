@@ -71,6 +71,9 @@ const AgendarAparatologia = (props) => {
 	const dermatologoDirectoId = process.env.REACT_APP_DERMATOLOGO_DIRECTO_ID;
 	const directoTipoCitaId = process.env.REACT_APP_TIPO_CITA_DIRECTO_ID;
 	const servicioAparatologiaId = process.env.REACT_APP_APARATOLOGIA_SERVICIO_ID;
+	const cosmetologaSinAsignarId = process.env.REACT_APP_COSMETOLOGA_SIN_ASIGNAR_ID;
+	const promovendedorSinAsignarId = process.env.REACT_APP_PROMOVENDEDOR_SIN_ASIGNAR_ID;
+	const frecuenciaPrimeraVezId = process.env.REACT_APP_FRECUENCIA_PRIMERA_VEZ_ID;
 
 	const [openAlert, setOpenAlert] = useState(false);
 	const [message, setMessage] = useState('');
@@ -101,6 +104,9 @@ const AgendarAparatologia = (props) => {
 		porcentaje_descuento_clinica: 0,
 		descuento_clinica: 0,
 		descuento_dermatologo: 0,
+		cosmetologa: cosmetologaSinAsignarId,
+		promovendedor: promovendedorSinAsignarId,
+		frecuencia: frecuenciaPrimeraVezId,
 	});
 	const [aparatologias, setAparatologia] = useState([]);
 	const [areas, setAreas] = useState([]);
@@ -486,7 +492,7 @@ const AgendarAparatologia = (props) => {
 	const handleChangeFrecuencia = (e) => {
 		setValues({
 			...values,
-			frecuencia: e.target.value._id,
+			frecuencia: e.target.value,
 			//producto: frecuencia === frecuenciaPrimeraVezId ? productoConsultaId : values.producto,
 		});
 	}
