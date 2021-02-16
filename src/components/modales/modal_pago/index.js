@@ -9,7 +9,7 @@ import {
   updatePago,
 } from '../../../services';
 import {
-  createIngreso, findIngresoByPago, updateIngreso,
+  createIngreso, /*findIngresoByPago,*/ updateIngreso,
 } from '../../../services/ingresos';
 import { generateFolio } from '../../../utils/utils';
 import ModalFormPago from './ModalFormPago';
@@ -248,7 +248,8 @@ const ModalPago = (props) => {
       forma_pago: rowData.forma_pago,
       pago_anticipado: rowData.pago_anticipado,
     }
-    const resExistIngreso = await findIngresoByPago(pago._id);
+    //TODO: CUIDADO AQUI
+    /*const resExistIngreso = await findIngresoByPago(pago._id);
     if (`${resExistIngreso.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
       const existIngreso = resExistIngreso.data;
 
@@ -257,6 +258,12 @@ const ModalPago = (props) => {
       } else {
         response = await createIngreso(ingreso);
       }
+    }*/
+
+    if (pago.ingreso) {
+      response = await updateIngreso(pago.ingreso, ingreso);
+    } else {
+      response = await createIngreso(ingreso);
     }
 
     if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_CREATED

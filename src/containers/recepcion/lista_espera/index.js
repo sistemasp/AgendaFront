@@ -3,10 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Backdrop, CircularProgress, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import { ListaEsperaContainer } from './lista_espera';
 import {
-	waitingListTratamiento,
 	findCabinaBySucursalId,
-	findDateById,
-	updateDate,
 	updateCabina,
 	breakFreeCabinaByIdPaciente,
 	findSalaCirugiaBySucursalId,
@@ -247,19 +244,6 @@ const ListaEspera = (props) => {
 				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
 			});
 			setListaEsperaDermapens(response.data);
-		}
-	}
-
-	const loadListaEsperaLasers = async () => {
-		const response = await waitingLaserList(sucursal, asistioStatusId);
-		if (`${response.status}` === process.env.REACT_APP_RESPONSE_CODE_OK) {
-			response.data.forEach(item => {
-				item.folio = generateFolio(item);
-				item.paciente_nombre = item.paciente ? `${item.paciente.nombres} ${item.paciente.apellidos}` : 'ALGUN ERROR ESTA PASANDO';
-				item.cosmetologa_nombre = item.cosmetologa ? item.cosmetologa.nombre : 'SIN ASIGNAR';
-				item.dermatologo_nombre = item.dermatologo ? item.dermatologo.nombre : 'DIRECTO';
-			});
-			setListaEsperaLasers(response.data);
 		}
 	}
 
@@ -616,7 +600,6 @@ const ListaEspera = (props) => {
 		await loadConsultorios();
 		await loadListaEsperaConsultas();
 		await loadListaEsperaFaciales();
-		await loadListaEsperaLasers();
 		await loadListaEsperaAparatologias();
 		await loadListaEsperaDermapens();
 		await loadCabinas();

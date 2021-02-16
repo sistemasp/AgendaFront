@@ -65,7 +65,7 @@ export const findIngresoById = async (ingresoId) => {
     }
 }
 
-export const findIngresoByPago = async (pagoId) => {
+/*export const findIngresoByPago = async (pagoId) => {
     try {
         const response = await axios({
             url: `${baseUrl}/ingreso/pago/${pagoId}`,
@@ -75,7 +75,7 @@ export const findIngresoByPago = async (pagoId) => {
     } catch (error) {
         console.log('findIngresoByPago', error);
     }
-}
+}*/
 
 export const updateIngreso = async (ingresoId, ingreso) => {
     try {
